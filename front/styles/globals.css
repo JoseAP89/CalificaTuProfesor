@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+
 html,
 body {
   padding: 0;
@@ -13,4 +15,9 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+p {
+  font-family: 'Indie Flower', cursive;
+  letter-spacing: 1.9px;
 }
