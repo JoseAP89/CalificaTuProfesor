@@ -1,12 +1,14 @@
-DROP TABLE IF EXISTS grade; 
-DROP TABLE IF EXISTS scale; 
-DROP TABLE IF EXISTS vote; 
-DROP TABLE IF EXISTS comment; 
-DROP TABLE IF EXISTS roster; 
-DROP TABLE IF EXISTS campus; 
-DROP TABLE IF EXISTS state; 
-DROP TABLE IF EXISTS university; 
-DROP TABLE IF EXISTS teacher; 
+import pandas as pd
+query = """-- creating tables
+DROP TABLE IF EXISTS grade;
+DROP TABLE IF EXISTS scale;
+DROP TABLE IF EXISTS vote;
+DROP TABLE IF EXISTS comment;
+DROP TABLE IF EXISTS roster;
+DROP TABLE IF EXISTS campus;
+DROP TABLE IF EXISTS state;
+DROP TABLE IF EXISTS university;
+DROP TABLE IF EXISTS teacher;
 
 CREATE TABLE state (
     StateID SERIAL PRIMARY KEY,
@@ -71,7 +73,7 @@ CREATE TABLE comment (
 CREATE TABLE vote (
     VoteID SERIAL PRIMARY KEY,
     CommentID int NOT NULL,
-    Approval boolean,
+    Approval boolean NOT NULL,
     OwnerIP varchar(20),
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
     ModifiedAt TIMESTAMP,
@@ -101,3 +103,37 @@ CREATE TABLE grade (
         REFERENCES scale (ScaleID)
 );
 
+"""
+df = pd.read_csv('./universities_db.csv')
+
+states = [i.strip() for i in  df.ESTADO.unique()]
+states.sort()
+query += "\n-- filling state table\n\n"
+query += "INSERT INTO state (Name) VALUES\n"
+for i in states:
+    query += f"  ('{i.strip()}'),\n"
+query = query[:-2] + ";\n"
+
+uni = [i.strip() for i in  df.UNIVERSIDAD.unique()]
+uni.sort()
+query += "\n-- filling state table\n\n"
+query += "INSERT INTO university (Name) VALUES\n"
+for i in uni:
+    query += f"  ('{i.strip()}'),\n"
+query = query[:-2] + ";\n"
+
+campus = []
+for i in df.values:
+    s = states.index(i[0]) +1
+    u = uni.index(i[1]) + 1
+    c = i[2].strip()
+    campus.append((s,u,c))
+campus.sort(key=lambda x: x[2])
+query += "\n-- filling state table\n\n"
+query += "INSERT INTO campus(StateID, UniversityID, Name) VALUES\n"
+for i  in campus:
+    query += f"  ({i[0]}, {i[1]}, '{i[2]}'),\n"
+query = query[:-2] +  ";\n"
+with open("./migrations.sql","w") as f:
+    f.write(query)
+print("Migrations done properly.\n")
