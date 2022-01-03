@@ -1,4 +1,10 @@
 import pandas as pd
+import unicodedata
+
+def strip_accents(s):
+   return ''.join(c for c in unicodedata.normalize('NFD', s)
+                  if unicodedata.category(c) != 'Mn')
+
 query = """-- creating tables
 DROP TABLE IF EXISTS grade;
 DROP TABLE IF EXISTS scale;
@@ -107,7 +113,7 @@ CREATE TABLE grade (
 df = pd.read_csv('./universities_db.csv')
 
 states = [i.strip() for i in  df.ESTADO.unique()]
-states.sort()
+states.sort(key=lambda x: strip_accents(x))
 query += "\n-- filling state table\n\n"
 query += "INSERT INTO state (Name) VALUES\n"
 for i in states:
@@ -115,7 +121,7 @@ for i in states:
 query = query[:-2] + ";\n"
 
 uni = [i.strip() for i in  df.UNIVERSIDAD.unique()]
-uni.sort()
+uni.sort(key=lambda x: strip_accents(x))
 query += "\n-- filling state table\n\n"
 query += "INSERT INTO university (Name) VALUES\n"
 for i in uni:
@@ -128,7 +134,7 @@ for i in df.values:
     u = uni.index(i[1]) + 1
     c = i[2].strip()
     campus.append((s,u,c))
-campus.sort(key=lambda x: x[2])
+campus.sort(key=lambda x: strip_accents(x[2]))
 query += "\n-- filling state table\n\n"
 query += "INSERT INTO campus(StateID, UniversityID, Name) VALUES\n"
 for i  in campus:
