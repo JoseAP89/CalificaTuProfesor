@@ -20,6 +20,8 @@ public class TeacherController {
     private UniversityRepository universityRepository;
     @Autowired
     private CampusRepository campusRepository;
+    @Autowired
+    private TeacherRepository teacherRepository;
 
     @Autowired
     JdbcTemplate database;
@@ -49,5 +51,22 @@ public class TeacherController {
             queryForObject("select count(*) from campus", Integer.class);
         System.out.println("\n*****count compus:" + rowCount);
         return campusRepository.findAll();
+    }
+
+    @PostMapping(path="/teacher")
+    public @ResponseBody String addTeacher(@RequestParam String name,@RequestParam String firstLastName,
+    @RequestParam String secondLastName) {
+        Teacher teacher = new Teacher();
+        teacher.setName(name);
+        teacher.setFirstLastName(firstLastName);
+        teacher.setSecondLastName(secondLastName);
+
+        // This returns a JSON or XML with the users
+        //int rowCount = this.database.
+        //        queryForObject("select count(*) from campus", Integer.class);
+        //System.out.println("\n*****count compus:" + rowCount);
+        System.out.println("** teacher\n:" + teacher);
+        teacherRepository.save(teacher);
+        return "Saved teacher";
     }
 }
