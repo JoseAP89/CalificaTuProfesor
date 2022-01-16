@@ -61,7 +61,7 @@ CREATE TABLE comment (
     CommentID SERIAL PRIMARY KEY,
     RosterID int NOT NULL,
     Comment varchar(250) NOT NULL,
-    OwnerIP varchar(20),
+    OwnerIP varchar(40),
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
     ModifiedAt TIMESTAMP,
     FOREIGN KEY (RosterID)
@@ -72,7 +72,7 @@ CREATE TABLE vote (
     VoteID SERIAL PRIMARY KEY,
     CommentID int NOT NULL,
     Approval boolean NOT NULL,
-    OwnerIP varchar(20),
+    OwnerIP varchar(40),
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
     ModifiedAt TIMESTAMP,
     FOREIGN KEY (CommentID)
@@ -81,7 +81,7 @@ CREATE TABLE vote (
 
 CREATE TABLE scale (
     ScaleID SERIAL PRIMARY KEY,
-    ShortName varchar(30),
+    Name varchar(30),
     Description varchar(250),
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
     ModifiedAt TIMESTAMP
