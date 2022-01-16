@@ -9941,3 +9941,13 @@ INSERT INTO campus(StateID, UniversityID, Name) VALUES
   (15, 3574, 'VISIONARIOS HERBART'),
   (6, 3575, 'WASHINGTON INSTITUTO DE NEGOCIOS'),
   (21, 3576, 'WILBING CENTRO UNIVERSITARIO');
+
+INSERT INTO scale(Name, Description) VALUES
+('Modelo','Rol modelo para otros.'),
+('Claridad','Claridad en la instrucción  y remarca puntos importantes y/o difíciles.'),
+('Competencia','Dominio de los temas manejados en el curso.'),
+('Preparación','La preparación, atención y detalle que le da a sus clases.'),
+('Expresión','Capacidad de comunicación clara y concisa con su clase.'),
+('Métodos','Uso de metodos de presentación que generan atención e interes en la clase.'),
+('Organización','Buena organicación de la enseñanza de los temas en la clase.'),
+('Realidad','Capacidad de explicar aplicaciones de la materia a la práctica o a su uso en el mundo laboral.');
