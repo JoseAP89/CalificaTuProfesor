@@ -1,0 +1,74 @@
+# https://app.quickdatabasediagrams.com/#/
+
+University
+--
+UniversityID int pk
+Name varchar
+CreatedAt date
+ModifiedAt date
+
+State
+--
+StateID int pk
+Name varchar
+CreatedAt date
+ModifiedAt date
+
+Campus
+--
+CampusID int pk
+Name varchar
+UniversityID int fk >- University.UniversityID
+StateID int fk  >- State.StateID
+CreatedAt date
+ModifiedAt date
+
+Teacher
+--
+TeacherID int pk
+Name varchar
+FirstLastName varchar
+SecondLastName varchar
+CreatedAt date
+ModifiedAt date
+
+Roster
+--
+RosterID int pk
+CampusID int fk >- Campus.CampusID
+TeacherID int fk >- Teacher.TeacherID
+CreatedAt date
+ModifiedAt date
+
+Comment
+--
+CommentID int pk
+RosterID int fk >- Roster.RosterID
+Comment varchar
+OwnerIP varchar
+CreatedAt date
+ModifiedAt date
+
+Vote
+--
+VoteID int pk
+CommentID int fk >- Comment.CommentID
+Approval boolean
+OwnerIP int
+CreatedAt date
+ModifiedAt date
+
+Scale
+--
+ScaleID int pk
+Name varchar
+Description varchar
+CreatedAt date
+ModifiedAt date
+
+Grade
+--
+GradeID int pk
+ScaleID int fk >- Scale.ScaleID
+CreatedAt date
+ModifiedAt date
