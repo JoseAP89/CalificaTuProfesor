@@ -48,13 +48,15 @@ CREATE TABLE teacher (
 CREATE TABLE roster (
     RosterID SERIAL PRIMARY KEY,
     CampusID int NOT NULL,
-    TeacherID int NOT NULL,
+    TeacherName varchar(100),
+    TeacherLastName1 varchar(100),
+    TeacherLastName2 varchar(100),
+    SubjectName varchar(100),
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
     ModifiedAt TIMESTAMP,
+    UNIQUE(CampusID,TeacherName, TeacherLastName1, SubjectName),
     FOREIGN KEY (CampusID)
-        REFERENCES campus (CampusID),
-    FOREIGN KEY (TeacherID)
-        REFERENCES teacher (TeacherID)
+        REFERENCES campus (CampusID)
 );
 
 CREATE TABLE comment (

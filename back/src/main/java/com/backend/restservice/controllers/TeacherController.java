@@ -23,7 +23,7 @@ public class TeacherController {
     @Autowired
     private CampusRepository campusRepository;
     @Autowired
-    private TeacherRepository teacherRepository;
+    private RosterRepository rosterRepository;
 
     @Autowired
     JdbcTemplate database;
@@ -55,30 +55,20 @@ public class TeacherController {
         return campusRepository.findAll();
     }
 
-    @GetMapping(path="/teacher")
-    public @ResponseBody Teacher addTeacher(@RequestParam Integer teacherID) {
-        Optional<Teacher> teacher = teacherRepository.findById(teacherID);
-        if (teacher.isPresent()) {
-            return teacher.get();
-        } else {
-            return null;
-        }
-    }
+    @PostMapping(path="/roster")
+    public @ResponseBody String addRoster(@RequestParam String teacherName,@RequestParam String teacherLastName1,
+    @RequestParam String teacherLastName2, @RequestParam Integer campusID, @RequestParam String subjectName) {
+        teacherLastName2 = teacherLastName2 == null ? "" : teacherLastName2;
+        Roster roster = new Roster();
+        roster.setCampusID(campusID);
+        roster.setTeacherName(teacherName);
+        roster.setTeacherLastName1(teacherLastName1);
+        roster.setTeacherLastName2(teacherLastName2);
+        roster.setSubjectName(subjectName); 
+        System.out.println("*********************");
+        rosterRepository.save(roster);
 
-    @PostMapping(path="/teacher")
-    public @ResponseBody String getTeacher(@RequestParam String name,@RequestParam String firstLastName,
-    @RequestParam String secondLastName) {
-        Teacher teacher = new Teacher();
-        teacher.setName(name);
-        teacher.setFirstLastName(firstLastName);
-        teacher.setSecondLastName(secondLastName);
-
-        // This returns a JSON or XML with the users
-        //int rowCount = this.database.
-        //        queryForObject("select count(*) from campus", Integer.class);
-        //System.out.println("\n*****count compus:" + rowCount);
-        System.out.println("** teacher\n:" + teacher);
-        teacherRepository.save(teacher);
         return "Saved";
     }
+
 }
