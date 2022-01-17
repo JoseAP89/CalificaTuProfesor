@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import java.util.Optional;
+
 
 @Controller // This means that this class is a Controller
 @RequestMapping(path="/api") // This means URL's start with /demo (after Application path)
@@ -53,8 +55,18 @@ public class TeacherController {
         return campusRepository.findAll();
     }
 
+    @GetMapping(path="/teacher")
+    public @ResponseBody Teacher addTeacher(@RequestParam Integer teacherID) {
+        Optional<Teacher> teacher = teacherRepository.findById(teacherID);
+        if (teacher.isPresent()) {
+            return teacher.get();
+        } else {
+            return null;
+        }
+    }
+
     @PostMapping(path="/teacher")
-    public @ResponseBody String addTeacher(@RequestParam String name,@RequestParam String firstLastName,
+    public @ResponseBody String getTeacher(@RequestParam String name,@RequestParam String firstLastName,
     @RequestParam String secondLastName) {
         Teacher teacher = new Teacher();
         teacher.setName(name);
@@ -67,6 +79,6 @@ public class TeacherController {
         //System.out.println("\n*****count compus:" + rowCount);
         System.out.println("** teacher\n:" + teacher);
         teacherRepository.save(teacher);
-        return "Saved teacher";
+        return "Saved";
     }
 }
