@@ -23,20 +23,14 @@ StateID int fk  >- State.StateID
 CreatedAt date
 ModifiedAt date
 
-Teacher
---
-TeacherID int pk
-Name varchar
-FirstLastName varchar
-SecondLastName varchar
-CreatedAt date
-ModifiedAt date
-
 Roster
 --
 RosterID int pk
 CampusID int fk >- Campus.CampusID
-TeacherID int fk >- Teacher.TeacherID
+TeacherName varchar
+TeacherLastName1 varchar
+TeacherLastName2 varchar
+SubjectName varchar
 CreatedAt date
 ModifiedAt date
 
