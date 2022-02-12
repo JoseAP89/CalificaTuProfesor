@@ -1,6 +1,11 @@
 pub mod controllers;
+use sqlx::postgres::PgPoolOptions;
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
-pub use self::controllers::{manual_hello, echo, hello};
+pub use self::controllers::{
+    manual_hello,
+    echo,
+    hello
+};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -13,4 +18,6 @@ async fn main() -> std::io::Result<()> {
     .bind("127.0.0.1:8080")?
     .run()
     .await
+
+
 }
