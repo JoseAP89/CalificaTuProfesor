@@ -1,5 +1,7 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 use sqlx::postgres::PgPoolOptions;
+use crate::repositories::universities::universityRepo::Repository;
+use crate::repositories::universities::universityRepo::UniversityRepo;
 
 async fn getTest() -> Result<String, sqlx::Error> {
     let pool = PgPoolOptions::new()
@@ -17,6 +19,18 @@ pub async fn hello() -> impl Responder {
     match res {
         Ok(r) => HttpResponse::Ok().body(r),
         Err(_) => HttpResponse::Ok().body("Hello world!")
+    }
+    
+}
+
+#[get("/university")]
+pub async fn get_university_by_id() -> impl Responder {
+    let unirepo = UniversityRepo::new().await;
+    let res = getTest().await;
+    let  resp = unirepo.get_by_id(3).await;
+    match resp {
+        Ok(r) => HttpResponse::Ok().body(r.name),
+        Err(e) => HttpResponse::Ok().body(e)
     }
     
 }
