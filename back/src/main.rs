@@ -1,6 +1,7 @@
 pub mod controllers;
 pub mod models;
 pub mod repositories;
+pub mod contracts;
 use sqlx::postgres::PgPoolOptions;
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 pub use self::controllers::{

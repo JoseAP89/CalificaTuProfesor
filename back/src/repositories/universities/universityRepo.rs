@@ -2,19 +2,18 @@ use async_trait::async_trait;
 use sqlx::postgres::{PgPoolOptions, Postgres, PgRow};
 use sqlx::{Pool, Row};
 use crate::models::University;
-use sqlx::types::chrono::{DateTime, Utc};
-
-#[async_trait]
-pub trait Repository<T,E> {
-    async fn get_by_id(&self, id: i32) -> Result<T,E>; 
-}
+use crate::contracts::Repository;
+use sqlx::types::chrono::{DateTime, Utc, Local};
 
 pub struct UniversityRepo {
     pool: Option<Pool<Postgres>>,
 }
 
-impl UniversityRepo {
-    pub async fn new() -> Self {
+
+#[async_trait]
+impl Repository<University, String> for UniversityRepo {
+
+    async fn new() -> Self {
         let pool = PgPoolOptions::new()
             .max_connections(5)
             .connect("postgres://joseap:J1o2s3e4@localhost/teachers").await;
@@ -24,7 +23,7 @@ impl UniversityRepo {
                     pool: Some(p)
                 }
             }
-            Err(e) => {
+            Err(_) => {
                 Self {
                     pool: None
                 }
@@ -33,10 +32,6 @@ impl UniversityRepo {
         }
 
     }
-}
-
-#[async_trait]
-impl Repository<University, String> for UniversityRepo {
 
     async fn get_by_id(&self, id: i32) -> Result<University, String> {
         match &self.pool {
@@ -48,9 +43,13 @@ impl Repository<University, String> for UniversityRepo {
                         let uni = University {
                             university_id: row.get(0),
                             name: row.get(1),
-                            created_at: Utc::now(),
-                            modified_at: Utc::now()
+                            created_at: row.try_get_unchecked(2).unwrap(),
+                            modified_at: match row.try_get_unchecked(3) {
+                                Ok(d) => Some(d),
+                                Err(_) => None
+                            }
                         };
+                        println!("{:?}",uni);
                         uni
                     })
                     .fetch_one(p).await;

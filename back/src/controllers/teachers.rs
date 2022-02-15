@@ -1,7 +1,7 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 use sqlx::postgres::PgPoolOptions;
-use crate::repositories::universities::universityRepo::Repository;
 use crate::repositories::universities::universityRepo::UniversityRepo;
+use crate::contracts::repository::Repository;
 
 async fn getTest() -> Result<String, sqlx::Error> {
     let pool = PgPoolOptions::new()
