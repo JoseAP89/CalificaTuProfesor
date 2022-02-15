@@ -64,4 +64,37 @@ impl Repository<University, String> for UniversityRepo {
             }
         }
     }
+
+    async fn get_by_name(&self, name: String, page_size: i32) -> Result<Vec<University>, String> {
+        match &self.pool {
+            Some(p) => {
+                let name_ = name.to_lowercase().split("+").filter(|x| !x.is_empty()).collect::<Vec<_>>().join(" ");
+                let query = format!("SELECT * FROM university WHERE LOWER(name) LIKE '%{}%' ORDER BY name  LIMIT {}", name_,page_size);
+                let resp = sqlx::query(&query)
+                    .map(|row: PgRow| {
+                        let uni = University {
+                            university_id: row.get(0),
+                            name: row.get(1),
+                            created_at: row.try_get_unchecked(2).unwrap(),
+                            modified_at: match row.try_get_unchecked(3) {
+                                Ok(d) => Some(d),
+                                Err(_) => None
+                            }
+                        };
+                        uni
+                    })
+                    .fetch_all(p).await;
+                match resp {
+                    Ok(uni) => Ok(uni),
+                    _ => Err(format!("No existen universidades para la búsqueda ({}). Revise que la palabra este bien escrita.", name))
+                }
+            },
+            None => {
+                Err("Hubo un error estableciendo la conexión con la base de datos.".to_owned())
+
+            }
+        }
+
+    }
+
 }
