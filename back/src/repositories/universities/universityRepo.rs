@@ -69,7 +69,7 @@ impl Repository<University, String> for UniversityRepo {
         match &self.pool {
             Some(p) => {
                 let name_ = name.to_lowercase().split("+").filter(|x| !x.is_empty()).collect::<Vec<_>>().join(" ");
-                let query = format!("SELECT * FROM university WHERE LOWER(name) LIKE '%{}%' ORDER BY name  LIMIT {}", name_,page_size);
+                let query = format!("SELECT * FROM university WHERE LOWER(UNACCENT(name)) LIKE '%{0}%' OR LOWER(name) LIKE '%{0}%' ORDER BY name  LIMIT {1}", name_, page_size);
                 let resp = sqlx::query(&query)
                     .map(|row: PgRow| {
                         let uni = University {
