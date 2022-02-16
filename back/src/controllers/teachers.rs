@@ -1,10 +1,8 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Error, error};
-use serde_json::json;
 use sqlx::postgres::PgPoolOptions;
-use crate::{dtos::UniversityDTO, repositories::universities};
+use crate::{dtos::UniversityDTO};
 use crate::repositories::universities::universityRepo::UniversityRepo;
 use crate::contracts::repository::Repository;
-use serde::{Deserialize, Serialize};
 
 async fn getTest() -> Result<String, sqlx::Error> {
     let pool = PgPoolOptions::new()
@@ -26,10 +24,14 @@ pub async fn hello() -> impl Responder {
     
 }
 
-#[get("/university/one")]
-pub async fn get_university_by_id (mut payload: web::Payload) -> Result<HttpResponse, Error> {
+#[get("/university/{university_id}")]
+pub async fn get_university_by_id(university_id : web::Path<i32>) -> Result<HttpResponse, Error> {
+//pub async fn get_university_by_id (mut payload: web::Payload) -> Result<HttpResponse, Error> {
     let unirepo = UniversityRepo::new().await;
-    let  resp = unirepo.get_by_id(3).await;
+    if *university_id < 1 {
+        return Err(error::ErrorBadRequest("No existen universidades con ese ID."));
+    }
+    let  resp = unirepo.get_by_id(*university_id).await;
     match resp {
         Ok(r) => Ok(HttpResponse::Ok().body(r.name)),
         Err(e) => Err(error::ErrorBadRequest(e))

@@ -3,7 +3,6 @@ use sqlx::postgres::{PgPoolOptions, Postgres, PgRow};
 use sqlx::{Pool, Row};
 use crate::models::University;
 use crate::contracts::Repository;
-use sqlx::types::chrono::{DateTime, Utc, Local};
 
 pub struct UniversityRepo {
     pool: Option<Pool<Postgres>>,
@@ -11,7 +10,7 @@ pub struct UniversityRepo {
 
 
 #[async_trait]
-impl Repository<University, String> for UniversityRepo {
+impl Repository<Self, University, String> for UniversityRepo {
 
     async fn new() -> Self {
         let pool = PgPoolOptions::new()
