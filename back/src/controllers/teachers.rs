@@ -1,7 +1,7 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Error, error};
 use sqlx::postgres::PgPoolOptions;
 use crate::{dtos::UniversityDTO};
-use crate::repositories::universities::universityRepo::UniversityRepo;
+use crate::repositories::search_name::search_name_repo::SearchNameRepository;
 use crate::contracts::repository::Repository;
 
 async fn getTest() -> Result<String, sqlx::Error> {
@@ -24,37 +24,31 @@ pub async fn hello() -> impl Responder {
     
 }
 
-#[get("/university/{university_id}")]
-pub async fn get_university_by_id(university_id : web::Path<i32>) -> Result<HttpResponse, Error> {
-//pub async fn get_university_by_id (mut payload: web::Payload) -> Result<HttpResponse, Error> {
-    let unirepo = UniversityRepo::new().await;
-    if *university_id < 1 {
+// table must have property name
+#[get("/search-id/{table_name}/{table_name_id}")]
+pub async fn get_table_name_by_id(params: web::Path<(String, i32)>) -> Result<HttpResponse, Error> {
+    let (table_name, table_name_id) = params.into_inner();
+    let unirepo = SearchNameRepository::new().await;
+    if table_name_id < 1 {
         return Err(error::ErrorBadRequest("No existen universidades con ese ID."));
     }
-    let  resp = unirepo.get_by_id(*university_id).await;
+    let  resp = unirepo.get_by_id(&table_name,table_name_id).await;
     match resp {
-        Ok(r) => Ok(HttpResponse::Ok().body(r.name)),
+        Ok(r) => Ok(HttpResponse::Ok().json(r)),
         Err(e) => Err(error::ErrorBadRequest(e))
     }
     
 }
 
-#[get("/university/{name}/{num_elements}")]
-pub async fn get_university_by_name (payload: web::Path<UniversityDTO>) -> Result<HttpResponse, Error> {
-    let name = payload.name.clone();
-    let num_el = payload.num_elements.clone();
-    let unirepo = UniversityRepo::new().await;
-    let  resp = unirepo.get_by_name( name,num_el).await;
+// table must have property name
+#[get("/search-name/{table_name}/{name}/{num_elements}")]
+pub async fn get_table_name_by_name (params: web::Path<(String, String, i32)>) -> Result<HttpResponse, Error> {
+    let (table_name, name, num_elements) = params.into_inner();
+    let unirepo = SearchNameRepository::new().await;
+    let  resp = unirepo.get_by_name( &name,&table_name,num_elements).await;
     match resp {
         Ok(r) => {
-            let universities: Vec<UniversityDTO> = r.into_iter().map(|u| {
-                UniversityDTO{
-                    name: u.name,
-                    university_id: Some(u.university_id),
-                    num_elements: num_el
-                }
-            }).collect();
-            Ok(HttpResponse::Ok().json(universities))
+            Ok(HttpResponse::Ok().json(r))
         },
         Err(e) => Err(error::ErrorBadRequest(e))
     }

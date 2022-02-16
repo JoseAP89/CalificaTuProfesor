@@ -1,3 +1,3 @@
-pub mod universityDTO;
+pub mod university_dto;
 
-pub use self::universityDTO::{UniversityDTO};
+pub use self::university_dto::{UniversityDTO};
