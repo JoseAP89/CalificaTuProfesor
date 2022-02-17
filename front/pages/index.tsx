@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { Container, Box, SimpleGrid, Flex,
-  Heading, Button, InputGroup, Input, InputRightAddon, InputLeftAddon, IconButton
+  Heading, Button, InputGroup, Input, InputRightAddon, InputLeftAddon, IconButton, Select
 } from '@chakra-ui/react'
 import starPic from '../public/star_pic.jpg';
 import classroom from '../public/classroom.jpg';
@@ -11,9 +11,16 @@ import anonymous from '../public/anonymous.jpg';
 import datapic from '../public/data.jpg';
 import HomeContainer from '../styles/styledComponents/home';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch, faBuilding } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faBuilding, faPerson } from '@fortawesome/free-solid-svg-icons'
+import React, { ReactElement, useEffect, useState } from 'react'
+import TeacherSearch from '../_models/teacherSearch';
 
 const Home: NextPage = () => {
+  
+  const [teacherSearchBy, setTeacherSearchBy] = useState<TeacherSearch>(TeacherSearch.NAME);
+  const [searchIcon, setSearchIcon] = useState<ReactElement>(<FontAwesomeIcon icon={faPerson}/>);
+  
+
   return (
     <>
       <Head>
@@ -21,6 +28,7 @@ const Home: NextPage = () => {
         <link href="../node_modules/@fortawesome/fontawesome-free/brands.css" rel="stylesheet" />
         <link href="../node_modules/@fortawesome/fontawesome-free/solid.css" rel="stylesheet" />
       </Head>
+
       <HomeContainer inputColor='white'>
         <SimpleGrid columns={{ sm: 1 }} spacing='40px'>
           <Flex h='60px' justify='center'>
@@ -28,10 +36,29 @@ const Home: NextPage = () => {
               Comienza buscando tu profesor
             </Heading>
           </Flex>
-          <Flex h='100px' justify='center'>
-            <InputGroup size='lg' className='search-bar-container'>
+          <Flex  justify='center' direction={'column'} className='search-bar-container'>
+
+            <select
+              defaultValue={"teacher"}
+              color='white'
+              className='select-search'
+              onChange={(e) => {
+                if(e.target.value == "teacher"){
+                  setTeacherSearchBy(TeacherSearch.NAME);
+                  setSearchIcon(<FontAwesomeIcon icon={faPerson} />)
+                } else { // it was selected by campus
+                  setTeacherSearchBy(TeacherSearch.CAMPUS);
+                  setSearchIcon(<FontAwesomeIcon icon={faBuilding} />)
+                }
+              }}
+            >
+              <option value="teacher" >Profesor</option>
+              <option value="campus">Campus</option>
+            </select>
+
+            <InputGroup size='lg'>
               <InputLeftAddon 
-                children={<FontAwesomeIcon icon={faBuilding} />} 
+                children={searchIcon} 
                 className='left-icon'
               />
               <Input placeholder='mysite' />
@@ -49,6 +76,7 @@ const Home: NextPage = () => {
                 } 
               />
             </InputGroup>
+
           </Flex>
         </SimpleGrid>
       </HomeContainer>

@@ -20,6 +20,21 @@ const HomeContainer = styled.div<Props>`
                 font-size: large;
             }
         }
+
+        .select-search{
+            width: 200px;
+            height: 50px;
+            border-radius: 5%;
+            padding: 6px;
+            background-color: #dcdcdc;
+            border: 1px solid gray;
+            cursor: pointer;
+            margin-bottom: 40px;
+            font-size: 18px;
+        }
+        .select-search:hover{
+            border: 2px solid #1e90ff;
+        }
     }
 
     @media (max-width: 700px) {
