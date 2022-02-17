@@ -4,7 +4,7 @@ interface Props {
     inputColor?: string
 }
 const HomeContainer = styled.div<Props>`
-    padding: 60px 100px ;
+    padding: 60px 200px ;
     background-color: ${props => props.inputColor ||  "#90cdf4"};
     .search-bar-container {
         width: calc(100vw - 300px);
@@ -35,8 +35,14 @@ const HomeContainer = styled.div<Props>`
         .select-search:hover{
             border: 2px solid #1e90ff;
         }
+        label.select-search-lbl {
+            font-size: 20px;
+        }
     }
 
+    @media (max-width: 1200px) {
+        padding: 60px 90px ;
+    }
     @media (max-width: 700px) {
         padding: 60px 20px ;
         .search-bar-container {
@@ -44,7 +50,6 @@ const HomeContainer = styled.div<Props>`
         }
         
     }
-
     @media (max-width: 480px) {
         padding: 60px 14px ;
         .search-bar-container {

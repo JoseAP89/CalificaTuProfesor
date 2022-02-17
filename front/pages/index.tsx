@@ -37,8 +37,9 @@ const Home: NextPage = () => {
             </Heading>
           </Flex>
           <Flex  justify='center' direction={'column'} className='search-bar-container'>
-
+            <label htmlFor="search-by" className='select-search-lbl'>Busca por:</label>
             <select
+              id='search-by'
               defaultValue={"teacher"}
               color='white'
               className='select-search'
