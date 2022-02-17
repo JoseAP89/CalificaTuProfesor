@@ -57,7 +57,7 @@ const Home: NextPage = () => {
               <option value="campus">Campus</option>
             </select>
 
-            <InputGroup size='lg'>
+            <InputGroup size='lg' width={{ base: '100%', md: '90%' ,  lg:'80%' , xl:'70%'}} className='search-bar'>
               <InputLeftAddon 
                 children={searchIcon} 
                 className='left-icon'

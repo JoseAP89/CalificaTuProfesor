@@ -4,10 +4,14 @@ interface Props {
     inputColor?: string
 }
 const HomeContainer = styled.div<Props>`
+    @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
     padding: 60px 200px ;
     background-color: ${props => props.inputColor ||  "#90cdf4"};
     .search-bar-container {
         width: calc(100vw - 300px);
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-items: center;
         .search-bar {
             background-color: white;
             padding: 0;
@@ -36,7 +40,8 @@ const HomeContainer = styled.div<Props>`
             border: 2px solid #1e90ff;
         }
         label.select-search-lbl {
-            font-size: 20px;
+            font-family: 'Indie Flower', cursive;
+            font-size: 24px;
         }
     }
 
