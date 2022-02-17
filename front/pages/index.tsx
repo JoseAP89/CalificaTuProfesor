@@ -11,7 +11,7 @@ import anonymous from '../public/anonymous.jpg';
 import datapic from '../public/data.jpg';
 import HomeContainer from '../styles/styledComponents/home';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch, faBuilding, faPerson } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faBuilding, faPerson, faAngleDoubleDown } from '@fortawesome/free-solid-svg-icons'
 import React, { ReactElement, useEffect, useState } from 'react'
 import TeacherSearch from '../_models/teacherSearch';
 
@@ -23,16 +23,11 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <link href="../node_modules/@fortawesome/fontawesome-free/fontawesome.css" rel="stylesheet" />
-        <link href="../node_modules/@fortawesome/fontawesome-free/brands.css" rel="stylesheet" />
-        <link href="../node_modules/@fortawesome/fontawesome-free/solid.css" rel="stylesheet" />
-      </Head>
 
-      <HomeContainer inputColor='white'>
+      <HomeContainer inputColor='white' className='home-container-search-bar'>
         <SimpleGrid columns={{ sm: 1 }} spacing='40px'>
           <Flex h='60px' justify='center'>
-            <Heading>
+            <Heading color={'white'}>
               Comienza buscando tu profesor
             </Heading>
           </Flex>
@@ -80,9 +75,12 @@ const Home: NextPage = () => {
 
           </Flex>
         </SimpleGrid>
+        <FontAwesomeIcon  icon={faAngleDoubleDown} className='arrow-down'
+          onClick={() => {window.location.href="/#grade"}}
+        />
       </HomeContainer>
 
-      <HomeContainer >
+      <HomeContainer  id='grade'>
         <section className='grade'>
           <Heading py='3' size='2xl'>Calificalos</Heading>
           <SimpleGrid columns={{ sm: 1, md: 2 }} spacing='40px'>

@@ -7,6 +7,25 @@ const HomeContainer = styled.div<Props>`
     @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
     padding: 60px 200px ;
     background-color: ${props => props.inputColor ||  "#90cdf4"};
+
+    &.home-container-search-bar {
+        h1, label {
+            color: whitesmoke;
+        }
+        background-image: url('/chalkboard.jpg');
+        background-size: cover;
+        height: 100vh;
+        .arrow-down {
+            color:white;
+            z-index: 10;
+            font-size:130px;
+            cursor: pointer;
+            position: absolute;
+            top:78vh;
+            left: 48vw;
+        }
+    }
+
     .search-bar-container {
         width: calc(100vw - 300px);
         display: grid;
