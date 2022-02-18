@@ -23,6 +23,7 @@ const Home: NextPage = () => {
   const [searchIcon, setSearchIcon] = useState<ReactElement>(<FontAwesomeIcon icon={faPerson}/>);
   const [searchTarget, setSearchTarget] = useState<string>("");
   const [searchedData, setSearchedData] = useState<Array<Array<Vessel>>>([]);
+  const [searchBarWidth, setsearchBarWidth] = useState<number>(300);
   
   useEffect(() => {
     let data = [
@@ -30,6 +31,10 @@ const Home: NextPage = () => {
       [new Vessel(2, "Diana Cartagena"), new Vessel(1, "UAM AZCAPOTZALCO")]
     ];
     let type = TeacherSearch.NAME;
+    let w = window.document.querySelector("#full-search-bar");
+    if(!!w){
+      setsearchBarWidth(w.clientWidth);
+    }
     setSearchedData(data);
     setTeacherSearchBy(type);
 
@@ -105,7 +110,7 @@ const Home: NextPage = () => {
               </InputGroup>
               {
                 searchedData.length>0 && 
-                <ListOptions type={teacherSearchBy} data={searchedData} />
+                <ListOptions type={teacherSearchBy} data={searchedData} width={searchBarWidth}/>
                 
               }
             </div>

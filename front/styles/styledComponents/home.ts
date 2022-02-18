@@ -27,10 +27,13 @@ const HomeContainer = styled.div<Props>`
     }
 
     .search-bar-container {
-        width: calc(100vw - 300px);
+        width: 100%;
         display: grid;
         grid-template-columns: 1fr;
         justify-items: center;
+        .search-bar-list-container{
+            width: 70vw;
+        }
         .search-bar {
             background-color: white;
             padding: 0;
@@ -66,17 +69,20 @@ const HomeContainer = styled.div<Props>`
 
     @media (max-width: 1200px) {
         padding: 60px 90px ;
+        .search-bar-list-container {
+            width: 85vw;
+        }
     }
     @media (max-width: 700px) {
         padding: 60px 20px ;
-        .search-bar-container {
+        .search-bar-list-container {
             width: 95vw;
         }
         
     }
     @media (max-width: 480px) {
         padding: 60px 14px ;
-        .search-bar-container {
+        .search-bar-list-container {
             width: 95vw;
             margin-top: 20px;
 

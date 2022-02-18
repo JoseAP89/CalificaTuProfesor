@@ -13,13 +13,14 @@ interface Props {
     /// if type is NAME then data is -> [[teacher1, camapus1], ...  ] 
     /// with their respective index positions
     data: AAVessel,
-    type: TeacherSearch
+    type: TeacherSearch,
+    width: number
 }
 
 export default function ListOptions(props: Props) {
     const [data, setdata] = useState<AAVessel>(props.data);
     const [type, settype] = useState<TeacherSearch>(props.type);
-    const [searchBarWidth, setsearchBarWidth] = useState<number>(200);
+    const [searchBarWidth, setsearchBarWidth] = useState<number>(props.width);
 
     useEffect(() => {
         console.log(props);
