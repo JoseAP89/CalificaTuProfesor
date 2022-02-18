@@ -6,7 +6,11 @@ const ListOptionsStyled = styled.div`
 height: fit-content;
 margin: 3px 0;
 background-color: white;
-z-index: 10;
+z-index: 100;
+max-height: 50vh;
+overflow-y: scroll;
+position: absolute;
+top:50px;
 .list-row {
     padding: 3px;
     box-shadow: 1px 1px 5px grey;

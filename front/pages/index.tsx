@@ -26,8 +26,15 @@ const Home: NextPage = () => {
   
   useEffect(() => {
     let data = [
-      [new Vessel(1, "Juan Fernandez"), new Vessel(1, "UNAM FES ARAGÓN")],
-      [new Vessel(2, "Diana Cartagena"), new Vessel(1, "UAM AZCAPOTZALCO")]
+      [new Vessel(1, "Juan FOrraly"), new Vessel(1, "UNAM FES ARAGÓN")],
+      [new Vessel(2, "Jessica Jones"), new Vessel(2, "UAM AZCAPOTZALCO")],
+      [new Vessel(3, "Pepe Alvarez"), new Vessel(3, "UNAM CU")],
+      [new Vessel(4, "Daniel Danilo"), new Vessel(4, "UAM AZCAPOTZALCO")],
+      [new Vessel(5, "Angel Fernandez"), new Vessel(5, "UNAM FES ARAGÓN")],
+      [new Vessel(6, "Karla Romagnoli"), new Vessel(6, "UTGZ")],
+      [new Vessel(7, "Jane Dumasco"), new Vessel(6, "UNIVERSIDAD AUTONOMA METROPOLITANA XHOCHIMILCO")],
+      [new Vessel(8, "Omar Valdez"), new Vessel(6, "UAM AZCAPOTZALCO")],
+      [new Vessel(9, "Karina Castro"), new Vessel(6, "UAM AZCAPOTZALCO")],
     ];
     let type = TeacherSearch.NAME;
     setSearchedData(data);
