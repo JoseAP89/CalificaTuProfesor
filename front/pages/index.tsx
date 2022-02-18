@@ -31,12 +31,17 @@ const Home: NextPage = () => {
       [new Vessel(2, "Diana Cartagena"), new Vessel(1, "UAM AZCAPOTZALCO")]
     ];
     let type = TeacherSearch.NAME;
-    let w = window.document.querySelector("#full-search-bar");
-    if(!!w){
-      setsearchBarWidth(w.clientWidth);
-    }
     setSearchedData(data);
     setTeacherSearchBy(type);
+
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
 
   }, []);
 
@@ -47,6 +52,14 @@ const Home: NextPage = () => {
     }
   }
 
+  function handleResize(e:Event) {
+    e.preventDefault();
+    let w = window.document.querySelector("#full-search-bar");
+    if(!!w){
+      console.log("changing -> ", w.clientWidth);
+      setsearchBarWidth(w.clientWidth);
+    }
+  };
 
   return (
     <>

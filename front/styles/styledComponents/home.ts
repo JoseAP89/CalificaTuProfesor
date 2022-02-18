@@ -32,6 +32,8 @@ const HomeContainer = styled.div<Props>`
         grid-template-columns: 1fr;
         justify-items: center;
         .search-bar-list-container{
+            display: grid;
+            justify-items: center;
             width: 70vw;
         }
         .search-bar {

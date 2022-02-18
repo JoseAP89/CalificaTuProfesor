@@ -6,14 +6,11 @@ interface Props {
 const ListOptionsStyled = styled.div<Props>`
 
 @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
-width: ${ props => (String( .90 * Number(props.width) )  + "px") || "300px"} !important;
+width: ${ props => (String( Number(props.width) )  + "px") || "300px"} !important;
 height: fit-content;
 margin: 3px 0;
 background-color: white;
 z-index: 10;
-position: absolute ;
-top: 50px;
-left: 1px;
 .list-row {
     padding: 3px;
     box-shadow: 1px 1px 5px grey;
