@@ -1,12 +1,8 @@
 import styled from 'styled-components';
-interface Props {
-    width: Number
-}
 
-const ListOptionsStyled = styled.div<Props>`
+const ListOptionsStyled = styled.div`
 
 @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
-width: ${ props => (String( Number(props.width) )  + "px") || "300px"} !important;
 height: fit-content;
 margin: 3px 0;
 background-color: white;
@@ -49,6 +45,26 @@ z-index: 10;
         color: white;
         font-weight: bolder;
         font-size: 1.1em;
+    }
+}
+
+& {
+    width: 70%;
+}
+@media (max-width: 1200px) {
+    & {
+        width: 85%;
+    }
+}
+@media (max-width: 700px) {
+    & {
+        width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    & {
+        width: 95%;
     }
 }
 

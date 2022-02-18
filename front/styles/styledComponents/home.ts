@@ -30,11 +30,12 @@ const HomeContainer = styled.div<Props>`
         width: 100%;
         display: grid;
         grid-template-columns: 1fr;
+        margin: 0 20px 0 20px;
         justify-items: center;
         .search-bar-list-container{
             display: grid;
             justify-items: center;
-            width: 70vw;
+            width: 70%;
         }
         .search-bar {
             background-color: white;
@@ -72,20 +73,20 @@ const HomeContainer = styled.div<Props>`
     @media (max-width: 1200px) {
         padding: 60px 90px ;
         .search-bar-list-container {
-            width: 85vw;
+            width: 85%;
         }
     }
     @media (max-width: 700px) {
         padding: 60px 20px ;
         .search-bar-list-container {
-            width: 95vw;
+            width: 90%;
         }
         
     }
     @media (max-width: 480px) {
         padding: 60px 14px ;
         .search-bar-list-container {
-            width: 95vw;
+            width: 95%;
             margin-top: 20px;
 
             .left-icon {

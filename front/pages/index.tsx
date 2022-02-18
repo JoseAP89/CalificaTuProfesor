@@ -23,7 +23,6 @@ const Home: NextPage = () => {
   const [searchIcon, setSearchIcon] = useState<ReactElement>(<FontAwesomeIcon icon={faPerson}/>);
   const [searchTarget, setSearchTarget] = useState<string>("");
   const [searchedData, setSearchedData] = useState<Array<Array<Vessel>>>([]);
-  const [searchBarWidth, setsearchBarWidth] = useState<number>(300);
   
   useEffect(() => {
     let data = [
@@ -36,14 +35,6 @@ const Home: NextPage = () => {
 
   }, []);
 
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-
-  }, []);
 
   function process_search(e: any) {
     e.preventDefault() ;
@@ -52,14 +43,6 @@ const Home: NextPage = () => {
     }
   }
 
-  function handleResize(e:Event) {
-    e.preventDefault();
-    let w = window.document.querySelector("#full-search-bar");
-    if(!!w){
-      console.log("changing -> ", w.clientWidth);
-      setsearchBarWidth(w.clientWidth);
-    }
-  };
 
   return (
     <>
@@ -123,7 +106,7 @@ const Home: NextPage = () => {
               </InputGroup>
               {
                 searchedData.length>0 && 
-                <ListOptions type={teacherSearchBy} data={searchedData} width={searchBarWidth}/>
+                <ListOptions type={teacherSearchBy} data={searchedData} />
                 
               }
             </div>

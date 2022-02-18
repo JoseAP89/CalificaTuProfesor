@@ -14,28 +14,20 @@ interface Props {
     /// with their respective index positions
     data: AAVessel,
     type: TeacherSearch,
-    width: number
 }
 
 export default function ListOptions(props: Props) {
     const [data, setdata] = useState<AAVessel>(props.data);
     const [type, settype] = useState<TeacherSearch>(props.type);
-    const [searchBarWidth, setsearchBarWidth] = useState<number>(props.width);
 
     useEffect(() => {
         console.log(props);
         setdata(props.data)
         settype(props.type)
-        let w = window.document.querySelector("#full-search-bar");
-        if (!!w) {
-            console.log(w.clientWidth)
-            setsearchBarWidth(w.clientWidth);
-            
-        }
     }, [props.data, props.type]);
 
     return (
-        <ListOptionsStyled width={searchBarWidth}>
+        <ListOptionsStyled >
             {
                 data.map((v: Array<Vessel>) => {
                     return (
