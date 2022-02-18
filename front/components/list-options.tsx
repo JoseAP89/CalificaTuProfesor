@@ -21,7 +21,6 @@ export default function ListOptions(props: Props) {
     const [type, settype] = useState<TeacherSearch>(props.type);
 
     useEffect(() => {
-        console.log(props);
         setdata(props.data)
         settype(props.type)
     }, [props.data, props.type]);

@@ -30,12 +30,12 @@ top:50px;
 
     .sub-top-row {
         display: grid;
-        grid-template-columns: 2fr 11fr;
+        grid-template-columns: 1fr 12fr;
     }
     .sub-bottom-row {
         padding-left: 20px;
         display: grid;
-        grid-template-columns: 2fr 11fr;
+        grid-template-columns: 1fr 12fr;
         p {
             color: grey;
             font-weight: bold;

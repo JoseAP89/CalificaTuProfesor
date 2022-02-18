@@ -12,7 +12,7 @@ import datapic from '../public/data.jpg';
 import HomeContainer from '../styles/styledComponents/home';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch, faBuilding, faPerson, faAngleDoubleDown } from '@fortawesome/free-solid-svg-icons'
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import TeacherSearch from '../_models/teacherSearch';
 import ListOptions from '../components/list-options'
 import { Vessel } from '../_models/vessel'
@@ -22,7 +22,10 @@ const Home: NextPage = () => {
   const [teacherSearchBy, setTeacherSearchBy] = useState<TeacherSearch>(TeacherSearch.NAME);
   const [searchIcon, setSearchIcon] = useState<ReactElement>(<FontAwesomeIcon icon={faPerson}/>);
   const [searchTarget, setSearchTarget] = useState<string>("");
-  const [searchedData, setSearchedData] = useState<Array<Array<Vessel>>>([]);
+  const [sourceData, setSourceData] = useState<Array<Array<Vessel>>>([]);
+  const selectRef = useRef<HTMLInputElement>(null);
+  const [showSourceData, setShowSourceData] = useState<boolean>(false);
+  
   
   useEffect(() => {
     let data = [
@@ -37,7 +40,7 @@ const Home: NextPage = () => {
       [new Vessel(9, "Karina Castro"), new Vessel(6, "UAM AZCAPOTZALCO")],
     ];
     let type = TeacherSearch.NAME;
-    setSearchedData(data);
+    setSourceData(data);
     setTeacherSearchBy(type);
 
   }, []);
@@ -56,12 +59,15 @@ const Home: NextPage = () => {
 
       <HomeContainer inputColor='white' className='home-container-search-bar'>
         <SimpleGrid columns={{ sm: 1 }} spacing='40px'>
+
           <Flex h='60px' justify='center'>
             <Heading color={'white'}>
               Comienza buscando tu profesor
             </Heading>
           </Flex>
+
           <Flex  justify='center' direction={'column'} className='search-bar-container'>
+
             <label htmlFor="search-by" className='select-search-lbl'>Busca por:</label>
             <select
               id='search-by'
@@ -69,6 +75,11 @@ const Home: NextPage = () => {
               color='white'
               className='select-search'
               onChange={(e) => {
+                if (!!selectRef?.current) {
+                  selectRef.current.value = "";
+                }
+                setSearchTarget("");
+                setShowSourceData(false);
                 if(e.target.value == "teacher"){
                   setTeacherSearchBy(TeacherSearch.NAME);
                   setSearchIcon(<FontAwesomeIcon icon={faPerson} />)
@@ -83,17 +94,25 @@ const Home: NextPage = () => {
             </select>
 
             <div className='search-bar-list-container'>
-              <InputGroup size='lg' width={{ base: '100%', md: '90%' ,  lg:'80%' , xl:'70%'}} className='search-bar' id='full-search-bar'>
+              <InputGroup size='lg' className='search-bar' id='full-search-bar' width={{ base: '100%', md: '90%' ,  lg:'80%' , xl:'70%'}}>
                 <InputLeftAddon 
                   children={searchIcon} 
                   className='left-icon'
                 />
                 <Input placeholder='mysite' 
+                  ref={selectRef}
                   onChange={ (e) =>{
-                    setSearchTarget(e.target.value);
+                    let val = e.target.value;
+                    setSearchTarget(val);
+                    if(val!=="") setShowSourceData(true);
                   }}
                   onFocus={ (e) =>{
-                    setSearchTarget(e.target.value);
+                    let val = e.target.value;
+                    setSearchTarget(val);
+                    if(val!=="") setShowSourceData(true);
+                  }}
+                  onBlur={ () => {
+                    setShowSourceData(false);
                   }}
                 />
                 <InputRightAddon 
@@ -112,14 +131,13 @@ const Home: NextPage = () => {
                 />
               </InputGroup>
               {
-                searchedData.length>0 && 
-                <ListOptions type={teacherSearchBy} data={searchedData} />
+                showSourceData && searchTarget!=="" && sourceData.length>0 && 
+                <ListOptions type={teacherSearchBy} data={sourceData} />
                 
               }
             </div>
-
-
           </Flex>
+
         </SimpleGrid>
         <FontAwesomeIcon  icon={faAngleDoubleDown} className='arrow-down'
           onClick={() => {window.location.href="/#grade"}}
