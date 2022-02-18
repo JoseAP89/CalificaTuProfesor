@@ -14,12 +14,34 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch, faBuilding, faPerson, faAngleDoubleDown } from '@fortawesome/free-solid-svg-icons'
 import React, { ReactElement, useEffect, useState } from 'react'
 import TeacherSearch from '../_models/teacherSearch';
+import ListOptions from '../components/list-options'
+import { Vessel } from '../_models/vessel'
 
 const Home: NextPage = () => {
   
   const [teacherSearchBy, setTeacherSearchBy] = useState<TeacherSearch>(TeacherSearch.NAME);
   const [searchIcon, setSearchIcon] = useState<ReactElement>(<FontAwesomeIcon icon={faPerson}/>);
+  const [searchTarget, setSearchTarget] = useState<string>("");
+  const [searchedData, setSearchedData] = useState<Array<Array<Vessel>>>([]);
   
+  useEffect(() => {
+    let data = [
+      [new Vessel(1, "Juan Fernandez"), new Vessel(1, "UNAM FES ARAGÓN")],
+      [new Vessel(2, "Diana Cartagena"), new Vessel(1, "UAM AZCAPOTZALCO")]
+    ];
+    let type = TeacherSearch.NAME;
+    setSearchedData(data);
+    setTeacherSearchBy(type);
+
+  }, []);
+
+  function process_search(e: any) {
+    e.preventDefault() ;
+    if (searchTarget !== "") {
+      console.log(`\{"teacherSearchby": "${teacherSearchBy}", "searchTarget": "${searchTarget}"\}`) ;
+    }
+  }
+
 
   return (
     <>
@@ -52,26 +74,42 @@ const Home: NextPage = () => {
               <option value="campus">Campus</option>
             </select>
 
-            <InputGroup size='lg' width={{ base: '100%', md: '90%' ,  lg:'80%' , xl:'70%'}} className='search-bar'>
-              <InputLeftAddon 
-                children={searchIcon} 
-                className='left-icon'
-              />
-              <Input placeholder='mysite' />
-              <InputRightAddon 
-                className='search-bar'
-                children={
-                  <IconButton
-                  style={{width:"100%"}}
-                  colorScheme='blue'
-                  aria-label='Search database'
-                  size='sm'
-                  className='search-icon'
-                  icon={<FontAwesomeIcon icon={faSearch} />}
-                  />
-                } 
-              />
-            </InputGroup>
+            <div className='search-bar-list-container'>
+              <InputGroup size='lg' width={{ base: '100%', md: '90%' ,  lg:'80%' , xl:'70%'}} className='search-bar' id='full-search-bar'>
+                <InputLeftAddon 
+                  children={searchIcon} 
+                  className='left-icon'
+                />
+                <Input placeholder='mysite' 
+                  onChange={ (e) =>{
+                    setSearchTarget(e.target.value);
+                  }}
+                  onFocus={ (e) =>{
+                    setSearchTarget(e.target.value);
+                  }}
+                />
+                <InputRightAddon 
+                  className='search-bar'
+                  children={
+                    <IconButton
+                    style={{width:"100%"}}
+                    colorScheme='blue'
+                    aria-label='Search database'
+                    size='sm'
+                    className='search-icon'
+                    onClick={(e) => { process_search(e) }}
+                    icon={<FontAwesomeIcon icon={faSearch} />}
+                    />
+                  } 
+                />
+              </InputGroup>
+              {
+                searchedData.length>0 && 
+                <ListOptions type={teacherSearchBy} data={searchedData} />
+                
+              }
+            </div>
+
 
           </Flex>
         </SimpleGrid>
@@ -79,6 +117,7 @@ const Home: NextPage = () => {
           onClick={() => {window.location.href="/#grade"}}
         />
       </HomeContainer>
+
 
       <HomeContainer  id='grade'>
         <section className='grade'>
