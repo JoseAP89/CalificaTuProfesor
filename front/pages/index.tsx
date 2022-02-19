@@ -16,6 +16,7 @@ import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import TeacherSearch from '../_models/teacherSearch';
 import ListOptions from '../components/list-options'
 import { Vessel } from '../_models/vessel'
+import TeacherService  from '../_services/teacherService'
 
 const Home: NextPage = () => {
   
@@ -59,6 +60,15 @@ const Home: NextPage = () => {
       selectRef.current.value = selectedOption.value;
     }
   }, [selectedOption]);
+
+  useEffect(() => {
+    if (searchTarget!="") {
+/*       let tableName = x;
+      TeacherService.getNameVessels(); */
+      
+    }
+    
+  }, [searchTarget]);
 
 
   function process_search(e: any) {
