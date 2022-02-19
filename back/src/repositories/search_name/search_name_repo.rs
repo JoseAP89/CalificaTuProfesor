@@ -48,7 +48,6 @@ impl Repository<Self, Vessel, String> for SearchNameRepository {
                             id: row.get(0),
                             name: row.get(1),
                         };
-                        println!("{:?}",uni);
                         uni
                     })
                     .fetch_one(p).await;
