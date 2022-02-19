@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TeacherSearch from "../_models/teacherSearch";
 import { Vessel } from "../_models/vessel";
 import ListOptionsStyled from '../styles/styledComponents/listOptions';
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { type } from "os";
 
 type AAVessel = Vessel[][];
@@ -14,6 +14,8 @@ interface Props {
     /// with their respective index positions
     data: AAVessel,
     type: TeacherSearch,
+    show: Function,
+    setOption: Function
 }
 
 export default function ListOptions(props: Props) {
@@ -27,26 +29,32 @@ export default function ListOptions(props: Props) {
 
     return (
         <ListOptionsStyled >
-            {
-                data.map((v: Array<Vessel>) => {
-                    return (
-                        <div key={v[0].value + v[1].id} className="list-row">
-                            <div className="sub-top-row">
-                                <FontAwesomeIcon icon={type == TeacherSearch.NAME ? faPerson : faGraduationCap} className="row-icon"/>
-                                <div key={v[0].id} className="main-info-row">
-                                    <p>{v[0].value}</p>
-                                </div>
-                            </div>
-                            <div className="sub-bottom-row">
-                                <FontAwesomeIcon icon={type == TeacherSearch.NAME ? faGraduationCap : faBuilding} className="row-icon" />
-                                <div key={v[1].id} className="secondary-info-row">
-                                    <p>{v[1].value}</p>
-                                </div>
+        {
+            data.map((v: Array<Vessel>) => {
+                return (
+                    <div key={v[0].id} className="list-row"
+                        onMouseDown={(e) =>{
+                            let valSelected = type == TeacherSearch.NAME? v[0] : v[1];
+                            props.setOption(valSelected)
+                            props.show(false);
+                        }}
+                    >
+                        <div className="sub-top-row">
+                            <FontAwesomeIcon icon={type == TeacherSearch.NAME ? faPerson : faGraduationCap} className="row-icon"/>
+                            <div key={v[0].id} className="main-info-row">
+                                <p>{v[0].value}</p>
                             </div>
                         </div>
-                    );
-                })
-            }
+                        <div className="sub-bottom-row">
+                            <FontAwesomeIcon icon={type == TeacherSearch.NAME ? faGraduationCap : faBuilding} className="row-icon" />
+                            <div key={v[1].id} className="secondary-info-row">
+                                <p>{v[1].value}</p>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })
+        }
         </ListOptionsStyled>
     )
 }

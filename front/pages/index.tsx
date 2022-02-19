@@ -21,11 +21,20 @@ const Home: NextPage = () => {
   
   const [teacherSearchBy, setTeacherSearchBy] = useState<TeacherSearch>(TeacherSearch.NAME);
   const [searchIcon, setSearchIcon] = useState<ReactElement>(<FontAwesomeIcon icon={faPerson}/>);
-  const [searchTarget, setSearchTarget] = useState<string>("");
+  const [searchTarget, setSearchTarget] = useState<string>(""); // incomplete target search to be looked up in the DB
   const [sourceData, setSourceData] = useState<Array<Array<Vessel>>>([]);
   const selectRef = useRef<HTMLInputElement>(null);
   const [showSourceData, setShowSourceData] = useState<boolean>(false);
+  const [selectedOption, setselectedOption] = useState<Vessel | null>(); // completed and selected search word comming forn the DB
   
+  useEffect(() => {
+    // initialization of data
+    setSearchTarget("");
+    setselectedOption(null);
+    if (!!selectRef?.current) {
+      selectRef.current.value = "";
+    }
+  }, []);
   
   useEffect(() => {
     let data = [
@@ -45,11 +54,17 @@ const Home: NextPage = () => {
 
   }, []);
 
+  useEffect(() => {
+    if(!!selectRef?.current && selectedOption!= null){
+      selectRef.current.value = selectedOption.value;
+    }
+  }, [selectedOption]);
+
 
   function process_search(e: any) {
     e.preventDefault() ;
-    if (searchTarget !== "") {
-      console.log(`\{"teacherSearchby": "${teacherSearchBy}", "searchTarget": "${searchTarget}"\}`) ;
+    if (!!selectedOption && selectedOption?.value !== "") {
+      console.log("form data: ", selectedOption) ;
     }
   }
 
@@ -93,8 +108,9 @@ const Home: NextPage = () => {
               <option value="campus">Campus</option>
             </select>
 
-            <div className='search-bar-list-container'>
-              <InputGroup size='lg' className='search-bar' id='full-search-bar' width={{ base: '100%', md: '90%' ,  lg:'80%' , xl:'70%'}}>
+            <div className='search-bar-list-container'
+            >
+              <InputGroup size='lg' className='search-bar' id='full-search-bar' width={{ base: '100%', md: '90%' ,  lg:'70%'}}>
                 <InputLeftAddon 
                   children={searchIcon} 
                   className='left-icon'
@@ -111,7 +127,7 @@ const Home: NextPage = () => {
                     setSearchTarget(val);
                     if(val!=="") setShowSourceData(true);
                   }}
-                  onBlur={ () => {
+                  onBlur={ (e) =>{
                     setShowSourceData(false);
                   }}
                 />
@@ -119,6 +135,7 @@ const Home: NextPage = () => {
                   className='search-bar'
                   children={
                     <IconButton
+                    disabled={!(!!selectedOption && selectedOption.value!= "")}
                     style={{width:"100%"}}
                     colorScheme='blue'
                     aria-label='Search database'
@@ -132,7 +149,9 @@ const Home: NextPage = () => {
               </InputGroup>
               {
                 showSourceData && searchTarget!=="" && sourceData.length>0 && 
-                <ListOptions type={teacherSearchBy} data={sourceData} />
+                <ListOptions type={teacherSearchBy} data={sourceData} setOption={setselectedOption} 
+                  show={setShowSourceData}
+                />
                 
               }
             </div>
