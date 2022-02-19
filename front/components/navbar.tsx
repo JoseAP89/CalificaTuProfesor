@@ -1,12 +1,21 @@
+import Link from 'next/link';
 import nav_st from '../styles/NavBar.module.css';
 
 export default function Navbar() {
   return (
     <div className={nav_st.topnav} id="myNavbar">
-      <a href="/">Inicio</a>
-      <a href="#search">Buscar</a>
-      <a href="#grade">Calificar</a>
-      <a href="#about">Acerca de nosotros</a>
+      <Link href="/">
+        <a >Inicio</a>
+      </Link>
+      <Link href="/#search">
+        <a >Buscar</a>
+      </Link>
+      <Link href="/grade">
+        <a >Calificar</a>
+      </Link>
+      <Link href="/#about">
+        <a >Acerca de nosotros</a>
+      </Link>
     </div> 
   )
 }
