@@ -20,7 +20,7 @@ import TeacherService  from '../_services/teacherService'
 
 const Home: NextPage = () => {
   
-  const [teacherSearchBy, setTeacherSearchBy] = useState<TeacherSearch>(TeacherSearch.NAME);
+  const [typeSearchBy, setTypeSearchBy] = useState<TeacherSearch>(TeacherSearch.NAME);
   const [searchIcon, setSearchIcon] = useState<ReactElement>(<FontAwesomeIcon icon={faPerson}/>);
   const [searchTarget, setSearchTarget] = useState<string>(""); // incomplete target search to be looked up in the DB
   const [sourceData, setSourceData] = useState<Array<Array<Vessel>>>([]);
@@ -51,7 +51,7 @@ const Home: NextPage = () => {
     ];
     let type = TeacherSearch.NAME;
     setSourceData(data);
-    setTeacherSearchBy(type);
+    setTypeSearchBy(type);
 
   }, []);
 
@@ -62,9 +62,25 @@ const Home: NextPage = () => {
   }, [selectedOption]);
 
   useEffect(() => {
-    if (searchTarget!="") {
-/*       let tableName = x;
-      TeacherService.getNameVessels(); */
+    if (searchTarget!=="") {
+      if(typeSearchBy == TeacherSearch.CAMPUS) {
+        console.log("target: ", searchTarget)
+        TeacherService.getCampusWithUniversity(searchTarget,20)
+          .then( resp =>{
+            let data = resp.data;
+            let dataVessel = data.map( campuses => {
+              return [
+                new Vessel(campuses.campus_id,campuses.name),
+                 new Vessel(campuses.university.university_id,campuses.university.name)
+              ]
+            })
+            setSourceData(dataVessel);
+          })
+          .catch( err => {
+            console.log("Hubo un error obteniendo los campus con universidades.")
+          });
+
+      }
       
     }
     
@@ -106,10 +122,10 @@ const Home: NextPage = () => {
                 setSearchTarget("");
                 setShowSourceData(false);
                 if(e.target.value == "teacher"){
-                  setTeacherSearchBy(TeacherSearch.NAME);
+                  setTypeSearchBy(TeacherSearch.NAME);
                   setSearchIcon(<FontAwesomeIcon icon={faPerson} />)
                 } else { // it was selected by campus
-                  setTeacherSearchBy(TeacherSearch.CAMPUS);
+                  setTypeSearchBy(TeacherSearch.CAMPUS);
                   setSearchIcon(<FontAwesomeIcon icon={faBuilding} />)
                 }
               }}
@@ -159,7 +175,7 @@ const Home: NextPage = () => {
               </InputGroup>
               {
                 showSourceData && searchTarget!=="" && sourceData.length>0 && 
-                <ListOptions type={teacherSearchBy} data={sourceData} setOption={setselectedOption} 
+                <ListOptions type={typeSearchBy} data={sourceData} setOption={setselectedOption} 
                   show={setShowSourceData}
                 />
                 
