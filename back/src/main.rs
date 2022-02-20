@@ -22,20 +22,20 @@ async fn main() -> std::io::Result<()> {
 
         // setting up cors middleware
         let cors = Cors::default()
-              .allowed_origin("http://localhost:3000/")
-              .allowed_methods(vec!["GET", "POST", "PATCH", "DELETE"])
-              .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
-              .allowed_header(http::header::CONTENT_TYPE)
-              .max_age(3600);
+            .allowed_origin("http://localhost:3000")
+            .allowed_methods(vec!["GET", "POST", "PATCH", "DELETE"])
+            .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
+            .allowed_header(http::header::CONTENT_TYPE)
+            .max_age(3600);
 
         App::new()
-            .wrap(cors)
             .service(hello)
             .service(echo)
             .service(get_table_name_by_id)
             .service(get_table_name_by_name)
             .service(get_campuses_search)
             .route("/hey", web::get().to(manual_hello))
+            .wrap(cors)
     })
     .bind(addr)?
     .run()

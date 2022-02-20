@@ -1,4 +1,3 @@
-use async_trait::async_trait;
 use sqlx::postgres::{PgPoolOptions, Postgres, PgRow};
 use sqlx::{Pool, Row};
 use crate::contracts::{ Repository};
@@ -36,6 +35,7 @@ impl CampusRepo {
     }
 
     pub async fn get_campus_with_uni(&self, search: String, num_elements: i32) -> Option<Vec<CampusDTO>> {
+        let search = search.to_lowercase().split("+").filter(|x| !x.is_empty()).collect::<Vec<_>>().join(" ");
         let pool = self.get_pool();
         match pool {
             Some(p) => {
