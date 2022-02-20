@@ -1,68 +1,81 @@
 # https://app.quickdatabasediagrams.com/#/
 
+Uni_Structure
+---
+uni_structure_id int pk
+name varchar
+code varchar
+created_at date
+modified_at date
+
 University
 --
-UniversityID int pk
-Name varchar
-CreatedAt date
-ModifiedAt date
+university_id int pk
+name varchar
+created_at date
+modified_at date
 
 State
 --
-StateID int pk
-Name varchar
-CreatedAt date
-ModifiedAt date
+state_id int pk
+name varchar
+created_at date
+modified_at date
 
 Campus
 --
-CampusID int pk
-Name varchar
-UniversityID int fk >- University.UniversityID
-StateID int fk  >- State.StateID
-CreatedAt date
-ModifiedAt date
+campus_id int pk
+name varchar
+university_id int fk >- University.university_id
+state_id int fk  >- State.state_id
+created_at date
+modified_at date
 
 Roster
 --
-RosterID int pk
-CampusID int fk >- Campus.CampusID
-TeacherName varchar
-TeacherLastName1 varchar
-TeacherLastName2 varchar
-SubjectName varchar
-CreatedAt date
-ModifiedAt date
+roster_id int pk
+campus_id int fk >- Campus.campus_id
+teacher_name varchar
+teacher_lastname1 varchar
+teacher_lastname2 varchar
+subject_name varchar
+uni_structure_id int fk >- Uni_Structure.uni_structure_id
+structure_name varchar
+created_at date
+modified_at date
 
 Comment
 --
-CommentID int pk
-RosterID int fk >- Roster.RosterID
-Comment varchar
-OwnerIP varchar
-CreatedAt date
-ModifiedAt date
+comment_id int pk
+roster_id int fk >- Roster.roster_id
+comment varchar
+owner_ip varchar
+created_at date
+modified_at date
 
 Vote
 --
-VoteID int pk
-CommentID int fk >- Comment.CommentID
-Approval boolean
-OwnerIP int
-CreatedAt date
-ModifiedAt date
+vote_id int pk
+comment_id int fk >- Comment.comment_id
+approval boolean
+owner_ip varchar
+created_at date
+modified_at date
 
 Scale
 --
-ScaleID int pk
-Name varchar
-Description varchar
-CreatedAt date
-ModifiedAt date
+scale_id int pk
+name varchar
+description varchar
+created_at date
+modified_at date
 
 Grade
 --
-GradeID int pk
-ScaleID int fk >- Scale.ScaleID
-CreatedAt date
-ModifiedAt date
+grade_id int pk
+scale_id int fk >- Scale.scale_id
+roster_id int fk >- Roster.roster_id
+owner_ip varchar
+stars int
+created_at date
+modified_at date

@@ -1,4 +1,4 @@
--- creating tables
+-- dropping tables
 DROP TABLE IF EXISTS grade;
 DROP TABLE IF EXISTS scale;
 DROP TABLE IF EXISTS vote;
@@ -7,104 +7,118 @@ DROP TABLE IF EXISTS roster;
 DROP TABLE IF EXISTS campus;
 DROP TABLE IF EXISTS state;
 DROP TABLE IF EXISTS university;
-DROP TABLE IF EXISTS teacher;
+DROP TABLE IF EXISTS uni_structure;
+
+CREATE TABLE uni_structure (
+    uni_structure_id SERIAL PRIMARY KEY,
+    name VARCHAR(300) NOT NULL,
+    code VARCHAR(2) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    modified_at TIMESTAMP
+);
 
 CREATE TABLE state (
-    StateID SERIAL PRIMARY KEY,
-    Name varchar(80),
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP
+    state_id SERIAL PRIMARY KEY,
+    name varchar(80),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    modified_at TIMESTAMP
 );
 
 CREATE TABLE university (
-    UniversityID SERIAL PRIMARY KEY,
-    Name varchar(250),
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP
+    university_id SERIAL PRIMARY KEY,
+    name varchar(250),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    modified_at TIMESTAMP
 );
 
 CREATE TABLE campus (
-    CampusID SERIAL PRIMARY KEY,
-    Name varchar(250),
-    UniversityID int NOT NULL,
-    StateID int NOT NULL,
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP,
-    FOREIGN KEY (UniversityID)
-        REFERENCES university (UniversityID),
-    FOREIGN KEY (StateID)
-        REFERENCES state (StateID)
-);
-
-CREATE TABLE teacher (
-    TeacherID SERIAL PRIMARY KEY,
-    Name varchar(250) NOT NULL,
-    FirstLastName varchar(250) NOT NULL,
-    SecondLastName varchar(250),
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP
+    campus_id SERIAL PRIMARY KEY,
+    name varchar(250),
+    university_id int NOT NULL,
+    state_id int NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    modified_at TIMESTAMP,
+    FOREIGN KEY (university_id)
+        REFERENCES university (university_id),
+    FOREIGN KEY (state_id)
+        REFERENCES state (state_id)
 );
 
 CREATE TABLE roster (
-    RosterID SERIAL PRIMARY KEY,
-    CampusID int NOT NULL,
-    TeacherName varchar(100),
-    TeacherLastName1 varchar(100),
-    TeacherLastName2 varchar(100),
-    SubjectName varchar(100),
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP,
-    UNIQUE(CampusID,TeacherName, TeacherLastName1, SubjectName),
-    FOREIGN KEY (CampusID)
-        REFERENCES campus (CampusID)
+    roster_id SERIAL PRIMARY KEY,
+    campus_id int NOT NULL,
+    teacher_name varchar(100),
+    teacher_lastname1 varchar(100),
+    teacher_lastname2 varchar(100),
+    subject_name varchar(100),
+    uni_structure_id int NOT NULL,
+    structure_name varchar(100),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    modified_at TIMESTAMP,
+    UNIQUE(campus_id,teacher_name, teacher_lastname1, teacher_lastname2),
+    FOREIGN KEY (campus_id)
+        REFERENCES campus (campus_id),
+    FOREIGN KEY (uni_structure_id)
+        REFERENCES uni_structure (uni_structure_id)
 );
 
 CREATE TABLE comment (
-    CommentID SERIAL PRIMARY KEY,
-    RosterID int NOT NULL,
-    Comment varchar(250) NOT NULL,
-    OwnerIP varchar(40),
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP,
-    FOREIGN KEY (RosterID)
-        REFERENCES roster (RosterID)
+    comment_id SERIAL PRIMARY KEY,
+    roster_id int NOT NULL,
+    comment varchar(250) NOT NULL,
+    owner_ip varchar(40),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    modified_at TIMESTAMP,
+    FOREIGN KEY (roster_id)
+        REFERENCES roster (roster_id)
 );
 
 CREATE TABLE vote (
-    VoteID SERIAL PRIMARY KEY,
-    CommentID int NOT NULL,
-    Approval boolean NOT NULL,
-    OwnerIP varchar(40),
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP,
-    FOREIGN KEY (CommentID)
-        REFERENCES comment (CommentID)
+    vote_id SERIAL PRIMARY KEY,
+    comment_id int NOT NULL,
+    approval boolean NOT NULL,
+    owner_ip varchar(40),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    modified_at TIMESTAMP,
+    FOREIGN KEY (comment_id)
+        REFERENCES comment (comment_id)
 );
 
 CREATE TABLE scale (
-    ScaleID SERIAL PRIMARY KEY,
-    Name varchar(30),
-    Description varchar(250),
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP
+    scale_id SERIAL PRIMARY KEY,
+    name varchar(30),
+    description varchar(250),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    modified_at TIMESTAMP
 );
 
 CREATE TABLE grade (
-    GradeID SERIAL PRIMARY KEY,
-    ScaleID int NOT NULL,
-    RosterID int NOT NULL,
-    OwnerIP varchar(20),
-    Stars int DEFAULT 0 CHECK (Stars between 0 and 5),
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP,
-    FOREIGN KEY (RosterID)
-        REFERENCES roster (RosterID),
-    FOREIGN KEY (ScaleID)
-        REFERENCES scale (ScaleID)
+    grade_id SERIAL PRIMARY KEY,
+    scale_id int NOT NULL,
+    roster_id int NOT NULL,
+    owner_ip varchar(20),
+    stars int DEFAULT 0 CHECK (Stars between 0 and 5),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    modified_at TIMESTAMP,
+    FOREIGN KEY (roster_id)
+        REFERENCES roster (roster_id),
+    FOREIGN KEY (scale_id)
+        REFERENCES scale (scale_id)
 );
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO joseap;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO joseap;
+
+-- filling uni_structure table
+
+INSERT INTO uni_structure (name, code) VALUES
+  ('ESCUELA','ES'),
+  ('FACULTAD','FA'),
+  ('DEPARTAMENTO','DE'),
+  ('INSTITUTO DE INVESTIGACIÓN','II'),
+  ('ESCUELA DE POSGRADO','PO')
+;
+
 
 -- filling state table
 
@@ -3724,7 +3738,7 @@ INSERT INTO university (Name) VALUES
 
 -- filling state table
 
-INSERT INTO campus(StateID, UniversityID, Name) VALUES
+INSERT INTO campus(state_id, university_id, Name) VALUES
   (3, 1, 'ACADEMIA DE ARTE CULINARIA INTERNACIONAL'),
   (7, 2, 'ACADEMIA DE ARTE DE FLORENCIA'),
   (8, 3, 'ACADEMIA DE ARTE Y DISEÑO'),

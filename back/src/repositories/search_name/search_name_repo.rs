@@ -3,7 +3,6 @@ use sqlx::postgres::{PgPoolOptions, Postgres, PgRow};
 use sqlx::{Pool, Row};
 use crate::models::{ SearchNameOperations, Vessel};
 use crate::contracts::Repository;
-use std::collections::HashMap;
 
 pub struct SearchNameRepository {
     pool: Option<Pool<Postgres>>,

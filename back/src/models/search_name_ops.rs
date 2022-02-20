@@ -1,8 +1,5 @@
 use std::collections::HashMap;
 
-use actix_web::dev::ResourceDef;
-use sqlx::database::HasArguments;
-
 type TableName = String;
 type Command = String;
 type Result = String;
@@ -23,8 +20,8 @@ impl SearchNameOperations {
         // university
         let mut ops_store: HashMap<Command, Result>= HashMap::new();
         ops_store.insert(String::from("name"), String::from("name")); 
-        ops_store.insert(String::from("id"), String::from("universityID")); 
-        let mut operation = Operation {
+        ops_store.insert(String::from("id"), String::from("university_id")); 
+        let operation = Operation {
             store: ops_store
         };
         searchname_ops.insert(String::from("university"), operation); 
@@ -32,8 +29,8 @@ impl SearchNameOperations {
         // campus
         let mut ops_store: HashMap<Command, Result>= HashMap::new();
         ops_store.insert(String::from("name"), String::from("name")); 
-        ops_store.insert(String::from("id"), String::from("campusID")); 
-        let mut operation = Operation {
+        ops_store.insert(String::from("id"), String::from("campus_id")); 
+        let operation = Operation {
             store: ops_store
         };
         searchname_ops.insert(String::from("campus"), operation); 
@@ -41,8 +38,8 @@ impl SearchNameOperations {
         // state
         let mut ops_store: HashMap<Command, Result>= HashMap::new();
         ops_store.insert(String::from("name"), String::from("name")); 
-        ops_store.insert(String::from("id"), String::from("stateID")); 
-        let mut operation = Operation {
+        ops_store.insert(String::from("id"), String::from("state_id")); 
+        let operation = Operation {
             store: ops_store
         };
         searchname_ops.insert(String::from("state"), operation); 
@@ -50,14 +47,14 @@ impl SearchNameOperations {
         // scale
         let mut ops_store: HashMap<Command, Result>= HashMap::new();
         ops_store.insert(String::from("name"), String::from("name")); 
-        ops_store.insert(String::from("id"), String::from("scaleID")); 
-        let mut operation = Operation {
+        ops_store.insert(String::from("id"), String::from("scale_id")); 
+        let operation = Operation {
             store: ops_store
         };
         searchname_ops.insert(String::from("scale"), operation); 
 
         // adding up everything together
-        let mut search_name_ops = SearchNameOperations{
+        let search_name_ops = SearchNameOperations{
             store: searchname_ops
         };
         search_name_ops
