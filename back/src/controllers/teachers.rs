@@ -1,8 +1,9 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Error, error};
 use sqlx::postgres::PgPoolOptions;
+use crate::repositories::CampusRepo;
 use crate::{dtos::UniversityDTO};
 use crate::repositories::search_name::search_name_repo::SearchNameRepository;
-use crate::contracts::repository::Repository;
+use crate::contracts::repository_name::RepositoryName;
 
 async fn getTest() -> Result<String, sqlx::Error> {
     let pool = PgPoolOptions::new()
@@ -51,6 +52,24 @@ pub async fn get_table_name_by_name (params: web::Path<(String, String, i32)>) -
             Ok(HttpResponse::Ok().json(r))
         },
         Err(e) => Err(error::ErrorBadRequest(e))
+    }
+    
+}
+
+// table must have property name
+#[get("/campus/{search}/{num_elements}")]
+pub async fn get_campuses_search (params: web::Path<(String, i32)>) -> Result<HttpResponse, Error> {
+    let (search,num_elements) = params.into_inner();
+    let campus_repo = CampusRepo::new().await;
+    let  resp = campus_repo.get_campus_with_uni(search, num_elements).await;
+    match resp {
+        Some(r) => {
+            Ok(HttpResponse::Ok().json(r))
+        },
+        None =>{
+            let e = "No hay resultados para la búsqueda.";
+            Err(error::ErrorBadRequest(e))
+        }
     }
     
 }

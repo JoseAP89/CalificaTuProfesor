@@ -2,16 +2,21 @@ use async_trait::async_trait;
 use sqlx::postgres::{PgPoolOptions, Postgres, PgRow};
 use sqlx::{Pool, Row};
 use crate::models::{ SearchNameOperations, Vessel};
-use crate::contracts::Repository;
+use crate::contracts::{RepositoryName, Repository};
 
 pub struct SearchNameRepository {
     pool: Option<Pool<Postgres>>,
     operations: SearchNameOperations
 }
 
+impl Repository for SearchNameRepository {
+    fn get_pool(&self) -> Option<&Pool<Postgres>> {
+        self.pool.as_ref()
+    }
+}
 
 #[async_trait]
-impl Repository<Self, Vessel, String> for SearchNameRepository {
+impl RepositoryName<Self, Vessel, String> for SearchNameRepository {
 
     async fn new() -> Self {
         let pool = PgPoolOptions::new()
@@ -36,7 +41,8 @@ impl Repository<Self, Vessel, String> for SearchNameRepository {
     }
 
     async fn get_by_id(&self,  table_name: &str,id: i32) -> Result<Vessel, String> {
-        match &self.pool {
+        let pool = self.get_pool();
+        match pool {
             Some(p) => {
                 let property = self.operations.get_id_command(table_name.to_owned());
                 let query = format!("SELECT * FROM {} WHERE {}={} LIMIT 1", table_name, property, id);
@@ -63,7 +69,8 @@ impl Repository<Self, Vessel, String> for SearchNameRepository {
     }
 
     async fn get_by_name(&self, name: &str, table_name: &str, page_size: i32) -> Result<Vec<Vessel>, String> {
-        match &self.pool {
+        let pool = self.get_pool();
+        match pool {
             Some(p) => {
                 let name_ = name.to_lowercase().split("+").filter(|x| !x.is_empty()).collect::<Vec<_>>().join(" ");
                 let query = format!("SELECT * FROM {2} WHERE LOWER(UNACCENT(name)) LIKE '%{0}%' OR LOWER(name) LIKE '%{0}%' ORDER BY name  LIMIT {1}", name_, page_size, table_name);

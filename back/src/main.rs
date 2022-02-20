@@ -10,7 +10,8 @@ pub use self::controllers::{
     echo,
     hello,
     get_table_name_by_id,
-    get_table_name_by_name
+    get_table_name_by_name,
+    get_campuses_search
 };
 
 #[actix_web::main]
@@ -33,6 +34,7 @@ async fn main() -> std::io::Result<()> {
             .service(echo)
             .service(get_table_name_by_id)
             .service(get_table_name_by_name)
+            .service(get_campuses_search)
             .route("/hey", web::get().to(manual_hello))
     })
     .bind(addr)?
