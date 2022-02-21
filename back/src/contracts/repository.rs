@@ -1,5 +1,5 @@
 use sqlx::postgres::Postgres;
-use sqlx::Pool;
+use sqlx::{Pool, Error};
 pub trait Repository {
-    fn get_pool(&self) -> Option<&Pool<Postgres>>;
+    fn get_pool(&self) -> Result<&Pool<Postgres>, &Error>;
 }

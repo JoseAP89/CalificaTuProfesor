@@ -1,3 +1,4 @@
+use actix_web::http::header::HttpDate;
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Error, error};
 use sqlx::postgres::PgPoolOptions;
 use crate::repositories::CampusRepo;
@@ -20,7 +21,8 @@ pub async fn hello() -> impl Responder {
     let res = getTest().await;
     match res {
         Ok(r) => HttpResponse::Ok().body(r),
-        Err(_) => HttpResponse::Ok().body("Hello world!")
+        Err(e) => HttpResponse::BadRequest().body("Bad request")
+        
     }
     
 }
@@ -63,12 +65,12 @@ pub async fn get_campuses_search (params: web::Path<(String, i32)>) -> Result<Ht
     let campus_repo = CampusRepo::new().await;
     let  resp = campus_repo.get_campus_with_uni(search, num_elements).await;
     match resp {
-        Some(r) => {
+        Ok(r) => {
             Ok(HttpResponse::Ok().json(r))
         },
-        None =>{
-            let e = "No hay resultados para la búsqueda.";
-            Err(error::ErrorBadRequest(e))
+        Err(e) =>{
+            let e = e;
+            Err(error::ErrorInternalServerError(format!("ERROR:{:?}",e)))
         }
     }
     
