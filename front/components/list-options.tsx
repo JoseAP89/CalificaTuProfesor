@@ -1,4 +1,4 @@
-import { faBuilding, faPerson, faGraduationCap } from "@fortawesome/free-solid-svg-icons";
+import { faBuilding, faPerson, faGraduationCap, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TeacherSearch from "../_models/teacherSearch";
 import { Vessel } from "../_models/vessel";
@@ -30,6 +30,7 @@ export default function ListOptions(props: Props) {
     return (
         <ListOptionsStyled >
         {
+            data.length>0 &&
             data.map((v: Array<Vessel>) => {
                 return (
                     <div key={v[0].id} className="list-row"
@@ -54,6 +55,18 @@ export default function ListOptions(props: Props) {
                     </div>
                 );
             })
+        }
+        {
+            data.length==0 &&
+                    <div className="list-row"
+                    >
+                        <div className="sub-top-row">
+                            <FontAwesomeIcon icon={faCircleInfo} className="row-icon"/>
+                            <div className="main-info-row">
+                                <p>No hay resultados para su búsqueda</p>
+                            </div>
+                        </div>
+                    </div>
         }
         </ListOptionsStyled>
     )

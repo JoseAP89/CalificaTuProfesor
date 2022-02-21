@@ -64,7 +64,6 @@ const Home: NextPage = () => {
   useEffect(() => {
     if (searchTarget!=="") {
       if(typeSearchBy == TeacherSearch.CAMPUS) {
-        console.log("target: ", searchTarget)
         TeacherService.getCampusWithUniversity(searchTarget,20)
           .then( resp =>{
             let data = resp.data;
@@ -143,6 +142,7 @@ const Home: NextPage = () => {
                 />
                 <Input placeholder='mysite' 
                   ref={selectRef}
+                  maxLength={200}
                   onChange={ (e) =>{
                     let val = e.target.value;
                     setSearchTarget(val);
@@ -174,7 +174,7 @@ const Home: NextPage = () => {
                 />
               </InputGroup>
               {
-                showSourceData && searchTarget!=="" && sourceData.length>0 && 
+                showSourceData && searchTarget!=="" && 
                 <ListOptions type={typeSearchBy} data={sourceData} setOption={setselectedOption} 
                   show={setShowSourceData}
                 />

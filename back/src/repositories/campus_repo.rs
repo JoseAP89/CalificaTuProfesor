@@ -1,4 +1,4 @@
-use std::ops::Deref;
+use std::time::Duration;
 
 use sqlx::postgres::{PgPoolOptions, Postgres, PgRow};
 use sqlx::{Pool, Row ,Error};
@@ -19,7 +19,9 @@ impl CampusRepo {
 
     pub async fn new() -> Self {
         let pool = PgPoolOptions::new()
-            .max_connections(12)
+            .max_connections(150)
+            .max_lifetime(Duration::new(3,0))
+            .connect_timeout(Duration::new(3,0))
             .connect("postgres://joseap:J1o2s3e4@localhost/teachers").await;
         match pool {
             Ok(p) => {

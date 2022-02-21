@@ -70,7 +70,7 @@ pub async fn get_campuses_search (params: web::Path<(String, i32)>) -> Result<Ht
         },
         Err(e) =>{
             let e = e;
-            Err(error::ErrorInternalServerError(format!("ERROR:{:?}",e)))
+            Err(error::ErrorTooManyRequests(format!("ERROR:{:?}",e)))
         }
     }
     

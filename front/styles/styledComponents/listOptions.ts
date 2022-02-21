@@ -19,7 +19,7 @@ top:50px;
     grid-template-columns: 1fr;
     p {
         font-size: .98em;
-        letter-spacing: 6px;
+        letter-spacing: 3px;
     }
 
     cursor: pointer;

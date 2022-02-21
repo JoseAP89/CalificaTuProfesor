@@ -20,7 +20,7 @@ impl RepositoryName<Self, Vessel, String> for SearchNameRepository {
 
     async fn new() -> Self {
         let pool = PgPoolOptions::new()
-            .max_connections(12)
+            .max_connections(10)
             .connect("postgres://joseap:J1o2s3e4@localhost/teachers").await;
         match pool {
             Ok(p) => {
