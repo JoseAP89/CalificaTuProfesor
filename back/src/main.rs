@@ -1,3 +1,6 @@
+extern crate simplelog;
+use simplelog::*;
+use std::fs::OpenOptions;
 pub mod controllers;
 pub mod models;
 pub mod repositories;
@@ -12,10 +15,29 @@ pub use self::controllers::{
     add_roster,
 };
 
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let addr = "127.0.0.1:8080";
     println!("running in addr: {}", addr);
+    // logger
+    let mut conf_logger = ConfigBuilder::new();
+    conf_logger.set_time_to_local(true);
+    conf_logger.set_time_format("%a/%d/%m/%YT%H:%M".to_owned());
+    CombinedLogger::init(
+        vec![
+            TermLogger::new(LevelFilter::Warn, conf_logger.build(), TerminalMode::Mixed, ColorChoice::Auto),
+            WriteLogger::new(LevelFilter::Info, conf_logger.build(), 
+                OpenOptions::new()
+                    .write(true)
+                    .append(true)
+                    .open("/home/joseap/Documents/projects/logs/teachers.log")
+                    .unwrap()
+            ),
+        ]
+    ).unwrap();
+    info!("** Teacher App is starting **");
+
     HttpServer::new(|| {
 
         // setting up cors middleware
