@@ -1,31 +1,10 @@
-use actix_web::http::header::HttpDate;
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Error, error};
-use sqlx::postgres::PgPoolOptions;
+use crate::dtos::RosterDTO;
 use crate::repositories::CampusRepo;
-use crate::{dtos::UniversityDTO};
 use crate::repositories::search_name::search_name_repo::SearchNameRepository;
 use crate::contracts::repository_name::RepositoryName;
+use crate::repositories::RosterRepo;
 
-async fn getTest() -> Result<String, sqlx::Error> {
-    let pool = PgPoolOptions::new()
-        .max_connections(5)
-        .connect("postgres://joseap:J1o2s3e4@localhost/teachers").await?;
-    let uni: (String,) = sqlx::query_as("select name from university where LOWER(name) like '%gutierrez%' and LOWER(name) like '%zamora%' limit 1")
-        .fetch_one(&pool).await?;
-    Ok(uni.0)
-
-}
-
-#[get("/")]
-pub async fn hello() -> impl Responder {
-    let res = getTest().await;
-    match res {
-        Ok(r) => HttpResponse::Ok().body(r),
-        Err(e) => HttpResponse::BadRequest().body("Bad request")
-        
-    }
-    
-}
 
 // table must have property name
 #[get("/search-id/{table_name}/{table_name_id}")]
@@ -76,12 +55,28 @@ pub async fn get_campuses_search (params: web::Path<(String, i32)>) -> Result<Ht
     
 }
 
-#[post("/echo")]
-pub async fn echo(req_body: String) -> impl Responder {
-    HttpResponse::Ok().body(req_body)
+#[post("/roster")]
+pub async fn add_roster(form: web::Json<RosterDTO>) -> Result<HttpResponse, Error> {
+    let roster_repo = RosterRepo::new().await;
+    let roster = RosterDTO {
+        roster_id: None,
+        campus_id: form.campus_id,
+        teacher_name: form.teacher_name.trim().to_owned(),
+        teacher_lastname1: form.teacher_lastname1.trim().to_owned(),
+        teacher_lastname2: form.teacher_lastname2.trim().to_owned(),
+        subject_name: form.subject_name.trim().to_owned(),
+        uni_structure_id: form.uni_structure_id,
+        structure_name: form.structure_name.trim().to_owned(),
+    };
+    let resp = roster_repo.add_roster(roster).await;
+    match resp {
+        Ok(r) => {
+            Ok(HttpResponse::Ok().json(r))
+        },
+        Err(e) =>{
+            let e = e;
+            Err(error::ErrorBadRequest(format!("ERROR:{:?}",e)))
+        }
+    }
 }
 
-
-pub async fn manual_hello() -> impl Responder {
-    HttpResponse::Ok().body("Hey there!")
-}

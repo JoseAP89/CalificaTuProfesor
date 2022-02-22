@@ -3,15 +3,13 @@ pub mod models;
 pub mod repositories;
 pub mod contracts;
 pub mod dtos;
-use actix_web::{ web, App, HttpServer, http};
+use actix_web::{  App, HttpServer, http};
 use actix_cors::Cors;
 pub use self::controllers::{
-    manual_hello,
-    echo,
-    hello,
     get_table_name_by_id,
     get_table_name_by_name,
-    get_campuses_search
+    get_campuses_search,
+    add_roster,
 };
 
 #[actix_web::main]
@@ -29,12 +27,10 @@ async fn main() -> std::io::Result<()> {
             .max_age(3600);
 
         App::new()
-            .service(hello)
-            .service(echo)
             .service(get_table_name_by_id)
             .service(get_table_name_by_name)
             .service(get_campuses_search)
-            .route("/hey", web::get().to(manual_hello))
+            .service(add_roster)
             .wrap(cors)
     })
     .bind(addr)?
