@@ -75,7 +75,7 @@ pub async fn add_roster(form: web::Json<RosterDTO>) -> Result<HttpResponse, Erro
         },
         Err(e) =>{
             let e = e;
-            Err(error::ErrorBadRequest(format!("ERROR:{:?}",e)))
+            Err(error::ErrorBadRequest(format!("{:?}",e)))
         }
     }
 }

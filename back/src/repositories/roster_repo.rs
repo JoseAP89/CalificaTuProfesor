@@ -1,5 +1,5 @@
 use std::time::Duration;
-
+use simplelog::*;
 use sqlx::postgres::{PgPoolOptions, Postgres, PgRow};
 use sqlx::{Pool, Row ,Error};
 use crate::contracts::{ Repository};
@@ -39,6 +39,7 @@ impl RosterRepo {
     }
 
     pub async fn add_roster(&self, roster_dto: RosterDTO) -> Result<u64, String> {
+        info!(" ** Adding a Roster **");
         let pool = self.get_pool();
         match pool {
             Ok(p) => {
@@ -55,19 +56,20 @@ impl RosterRepo {
                     roster_dto.structure_name)
                     .execute(p).await;
                 match resp {
-                    Ok(c) => Ok(c.rows_affected()),
+                    Ok(c) => {
+                        info!("Added new roster successfully.");
+                        Ok(c.rows_affected())
+                    },
                     Err(e) => {
-                        let err = format!("{:?}",e);
-                        println!("Error adding roster: {}",err);
-                        Err(err)
+                        error!("Error: {}", e);
+                        Err("Hubó un error al agregar el nuevo roster. Porfavor intentarlo más tarde.".to_owned())
                     }
 
                 }
             },
             Err(e) => {
-                let err = format!("{:?}",e);
-                println!("{}",err);
-                Err(err)
+                error!("Error: {}",e);
+                Err("Hubó un error de servidor. Porfavor intentarlo más tarde.".to_owned())
             }
         }
 
