@@ -57,7 +57,9 @@ impl RosterRepo {
                     .execute(p).await;
                 match resp {
                     Ok(c) => {
-                        info!("Added new roster successfully.");
+                        let fullname = format!("{} {} {}",roster_dto.teacher_name,
+                            roster_dto.teacher_lastname1, roster_dto.teacher_lastname2);
+                        info!("Added new roster({}) successfully.", fullname);
                         Ok(c.rows_affected())
                     },
                     Err(e) => {
