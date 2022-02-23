@@ -19,8 +19,8 @@ impl CampusRepo {
 
     pub async fn new() -> Self {
         let pool = PgPoolOptions::new()
-            .max_connections(150)
-            .max_lifetime(Duration::new(3,0))
+            .max_connections(10)
+            .max_lifetime(Duration::new(2,0))
             .connect_timeout(Duration::new(3,0))
             .connect("postgres://joseap:J1o2s3e4@localhost/teachers").await;
         match pool {
