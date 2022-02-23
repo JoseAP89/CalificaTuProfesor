@@ -13,6 +13,7 @@ pub use self::controllers::{
     get_table_name_by_name,
     get_campuses_search,
     add_roster,
+    add_campus,
 };
 
 
@@ -53,6 +54,7 @@ async fn main() -> std::io::Result<()> {
             .service(get_table_name_by_name)
             .service(get_campuses_search)
             .service(add_roster)
+            .service(add_campus)
             .wrap(cors)
     })
     .bind(addr)?

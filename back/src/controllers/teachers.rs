@@ -1,5 +1,5 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Error, error};
-use crate::dtos::RosterDTO;
+use crate::dtos::{RosterDTO, CampusDTO};
 use crate::repositories::CampusRepo;
 use crate::repositories::search_name::search_name_repo::SearchNameRepository;
 use crate::contracts::repository_name::RepositoryName;
@@ -69,6 +69,27 @@ pub async fn add_roster(form: web::Json<RosterDTO>) -> Result<HttpResponse, Erro
         structure_name: form.structure_name.trim().to_owned(),
     };
     let resp = roster_repo.add_roster(roster).await;
+    match resp {
+        Ok(r) => {
+            Ok(HttpResponse::Ok().json(r))
+        },
+        Err(e) =>{
+            let e = e;
+            Err(error::ErrorBadRequest(format!("{:?}",e)))
+        }
+    }
+}
+
+#[post("/campus")]
+pub async fn add_campus(form: web::Json<CampusDTO>) -> Result<HttpResponse, Error> {
+    let campus_repo = CampusRepo::new().await;
+    let campus = CampusDTO {
+        campus_id: None,
+        name: form.name.trim().to_owned(),
+        university_id: form.university_id,
+        state_id: form.state_id
+    };
+    let resp = campus_repo.add_campus(campus).await;
     match resp {
         Ok(r) => {
             Ok(HttpResponse::Ok().json(r))

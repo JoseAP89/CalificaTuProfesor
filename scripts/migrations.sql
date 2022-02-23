@@ -26,18 +26,19 @@ CREATE TABLE state (
 
 CREATE TABLE university (
     university_id SERIAL PRIMARY KEY,
-    name varchar(250),
+    name varchar(250) NOT NULL UNIQUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     modified_at TIMESTAMP
 );
 
 CREATE TABLE campus (
     campus_id SERIAL PRIMARY KEY,
-    name varchar(250),
+    name varchar(250) NOT NULL,
     university_id int NOT NULL,
     state_id int NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     modified_at TIMESTAMP,
+    UNIQUE(name, university_id, state_id),
     FOREIGN KEY (university_id)
         REFERENCES university (university_id),
     FOREIGN KEY (state_id)

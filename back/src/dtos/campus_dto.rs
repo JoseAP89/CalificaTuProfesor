@@ -1,11 +1,10 @@
 use serde::{Deserialize, Serialize};
 
-use super::UniversityDTO;
-
 #[derive(Serialize, Deserialize)]
 #[derive(Debug)]
 pub struct CampusDTO {
-    pub campus_id : i32,
+    pub campus_id : Option<i32>,
     pub name : String,
-    pub university: UniversityDTO
+    pub university_id: i32,
+    pub state_id: i32
 }
