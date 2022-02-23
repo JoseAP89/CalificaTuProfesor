@@ -9,6 +9,11 @@ DROP TABLE IF EXISTS state;
 DROP TABLE IF EXISTS university;
 DROP TABLE IF EXISTS uni_structure;
 
+-- extentions
+CREATE EXTENSION IF NOT EXISTS "unaccent";
+
+-- create tables
+
 CREATE TABLE uni_structure (
     uni_structure_id SERIAL PRIMARY KEY,
     name VARCHAR(300) NOT NULL,
@@ -27,6 +32,7 @@ CREATE TABLE state (
 CREATE TABLE university (
     university_id SERIAL PRIMARY KEY,
     name varchar(250) NOT NULL UNIQUE,
+    img_path BYTEA,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     modified_at TIMESTAMP
 );
