@@ -87,7 +87,8 @@ pub async fn add_campus(form: web::Json<CampusDTO>) -> Result<HttpResponse, Erro
         campus_id: None,
         name: form.name.trim().to_owned(),
         university_id: form.university_id,
-        state_id: form.state_id
+        state_id: form.state_id,
+        img_path: form.img_path.to_owned()
     };
     let resp = campus_repo.add_campus(campus).await;
     match resp {

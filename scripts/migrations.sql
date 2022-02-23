@@ -42,6 +42,7 @@ CREATE TABLE campus (
     name varchar(250) NOT NULL,
     university_id int NOT NULL,
     state_id int NOT NULL,
+    img_path BYTEA,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     modified_at TIMESTAMP,
     UNIQUE(name, university_id, state_id),
