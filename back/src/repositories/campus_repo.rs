@@ -53,7 +53,7 @@ impl CampusRepo {
                     .execute(p).await;
                 match resp {
                     Ok(c) => {
-                        info!("Added new campus successfully.");
+                        info!("Added new campus({}) successfully.", campus_dto.name);
                         Ok(c.rows_affected())
                     },
                     Err(e) => {
@@ -83,6 +83,7 @@ impl CampusRepo {
                         let uni = UniversityDTO {
                            university_id: row.get(2),
                             name: row.get(3),
+                            img_path: None,
                         };
                         CampusUniversityDTO {
                             campus_id: row.get(0),

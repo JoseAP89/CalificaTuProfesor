@@ -5,4 +5,5 @@ pub use self::teachers::{
     get_campuses_search,
     add_roster,
     add_campus,
+    add_university,
 };

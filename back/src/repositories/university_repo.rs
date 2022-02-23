@@ -1,5 +1,5 @@
 use std::time::Duration;
-
+use simplelog::*;
 use sqlx::postgres::{PgPoolOptions, Postgres, PgRow};
 use sqlx::{Pool, Row ,Error};
 use crate::contracts::{ Repository};
@@ -38,43 +38,51 @@ impl UniversityRepo {
         }
     }
 
-    pub async fn get_campus_with_uni(&self, search: String, num_elements: i32) -> Result<Vec<CampusDTO>, String> {
-        let search = search.to_lowercase().split("+").filter(|x| !x.is_empty()).collect::<Vec<_>>().join(" ");
+
+    pub async fn add_university(&self, university_dto : UniversityDTO) -> Result< u64, String> {
+        info!(" ** Adding a University **");
         let pool = self.get_pool();
         match pool {
             Ok(p) => {
-                let query = format!("select c.campus_id, c.name as campus, u.university_id, u.name as uni from campus c join university u on u.university_id=c.university_id WHERE LOWER(UNACCENT(c.name)) LIKE '%{0}%' OR LOWER(c.name) LIKE '%{0}%' ORDER BY c.name LIMIT {1}",
-                search, num_elements );
-                let resp = sqlx::query(&query)
-                    .map(|row: PgRow| {
-                        let uni = UniversityDTO {
-                           university_id: row.get(2),
-                            name: row.get(3),
-                        };
-                        CampusDTO {
-                            campus_id: row.get(0),
-                            name: row.get(1),
-                            university: uni
-                        }
-                    })
-                    .fetch_all(p).await;
+                let resp = match university_dto.img_path {
+                    Some(i) => {
+                        sqlx::query!( 
+                        r#"INSERT INTO university(
+                            name, img_path)
+                            values($1, $2)"#,
+                        university_dto.name,
+                        i.as_bytes())
+                        .execute(p).await
+
+                    },
+                    None => {
+                        sqlx::query!( 
+                        r#"INSERT INTO university(
+                            name)
+                            values($1)"#,
+                        university_dto.name)
+                        .execute(p).await
+                    }
+                };
                 match resp {
-                    Ok(c) => Ok(c),
+                    Ok(c) => {
+                        info!("Added new university({}) successfully.", university_dto.name);
+                        Ok(c.rows_affected())
+                    },
                     Err(e) => {
-                        let err = format!("{:?}",e);
-                        println!("{}",err);
-                        Err(err)
+                        error!("Error: {}", e);
+                        Err("Hubó un error al agregar la nueva universidad. Porfavor intentarlo más tarde.".to_owned())
                     }
 
                 }
             },
             Err(e) => {
-                let err = format!("{:?}",e);
-                println!("{}",err);
-                Err(err)
+                error!("Error: {}",e);
+                Err("Hubó un error de servidor. Porfavor intentarlo más tarde.".to_owned())
             }
         }
 
     }
+
 
 }
