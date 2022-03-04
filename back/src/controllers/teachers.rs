@@ -37,7 +37,6 @@ pub async fn get_table_name_by_name (params: web::Path<(String, String, i32)>) -
     
 }
 
-// table must have property name
 #[get("/campus/{search}/{num_elements}")]
 pub async fn get_campuses_search (params: web::Path<(String, i32)>) -> Result<HttpResponse, Error> {
     let (search,num_elements) = params.into_inner();

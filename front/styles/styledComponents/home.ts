@@ -70,6 +70,29 @@ const HomeContainer = styled.div<Props>`
         }
     }
 
+    .alert-add-request {
+        margin-top: 50px;
+        border-radius: 25px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        .info-icon {
+            display: inline-block;
+        }
+        .left-side {
+            a {
+                color: #00bfff;
+                font-weight: bolder;
+            }
+        }
+        .right-side {
+            justify-self: flex-end;
+            .close-icon {
+                cursor: pointer;
+            }
+        }
+    }
+
     @media (max-width: 1200px) {
         padding: 60px 90px ;
         .search-bar-list-container {

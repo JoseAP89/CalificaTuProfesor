@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { Container, Box, SimpleGrid, Flex,
-  Heading, Button, InputGroup, Input, InputRightAddon, InputLeftAddon, IconButton, Select
+  Heading, Button, InputGroup, Input, InputRightAddon, InputLeftAddon, IconButton, Select, AlertIcon, Alert
 } from '@chakra-ui/react'
 import starPic from '../public/star_pic.jpg';
 import classroom from '../public/classroom.jpg';
@@ -11,12 +11,15 @@ import anonymous from '../public/anonymous.jpg';
 import datapic from '../public/data.jpg';
 import HomeContainer from '../styles/styledComponents/home';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch, faBuilding, faPerson, faAngleDoubleDown } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faBuilding, faPerson, faAngleDoubleDown,
+  faCircleXmark
+} from '@fortawesome/free-solid-svg-icons'
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import TeacherSearch from '../_models/teacherSearch';
 import ListOptions from '../components/list-options'
 import { Vessel } from '../_models/vessel'
 import TeacherService  from '../_services/teacherService'
+import Link from 'next/link'
 
 const Home: NextPage = () => {
   
@@ -26,6 +29,7 @@ const Home: NextPage = () => {
   const [sourceData, setSourceData] = useState<Array<Array<Vessel>>>([]);
   const selectRef = useRef<HTMLInputElement>(null);
   const [showSourceData, setShowSourceData] = useState<boolean>(false);
+  const [showAddItem, setShowAddItem] = useState<boolean>(false); // show alert with the link to add a new item(uni, campus, roster)
   const [selectedOption, setselectedOption] = useState<Vessel | null>(); // completed and selected search word comming forn the DB
   
   useEffect(() => {
@@ -84,6 +88,14 @@ const Home: NextPage = () => {
     }
     
   }, [searchTarget]);
+
+  useEffect(() => {
+    if (!!sourceData && sourceData.length>0) {
+      setShowAddItem(false);
+    } else {
+      setShowAddItem(true);
+    }
+  }, [sourceData]);
 
 
   function process_search(e: any) {
@@ -184,6 +196,22 @@ const Home: NextPage = () => {
           </Flex>
 
         </SimpleGrid>
+
+        { showAddItem &&
+          <Alert status='info' className='alert-add-request'>
+            <div className='left-side'>
+              <AlertIcon className='info-icon' />
+              Si no se encuentra tu profesor, campus o universidad,{' '} 
+              <Link href="/campus-university/add" ><a>agregalo</a></Link>
+            </div>
+            <div className='right-side'>
+              <FontAwesomeIcon icon={faCircleXmark} className='close-icon' 
+                onClick={()=> setShowAddItem(false)}
+              />
+            </div>
+          </Alert>
+        }
+
         <FontAwesomeIcon  icon={faAngleDoubleDown} className='arrow-down'
           onClick={() => {window.location.href="/#grade"}}
         />

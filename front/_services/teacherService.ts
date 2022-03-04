@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, AxiosResponseHeaders } from 'axios';
-import Campus from '../_models/campus';
+import CampusUniversity from '../_models/campus';
 import {Vessel} from '../_models/vessel'
 
 const TeacherService = {
@@ -15,7 +15,7 @@ async function getNameVessels(tableName: string, target: string, numResults: num
     return axios.get(url);
 }
 
-async function getCampusWithUniversity(target: String, numResults: number): Promise<AxiosResponse<Array<Campus>>>{
+async function getCampusWithUniversity(target: String, numResults: number): Promise<AxiosResponse<Array<CampusUniversity>>>{
     target = target.replaceAll(/\s+/g,"+");
     const url = `${backendsrc}/campus/${target}/${numResults}`;
     return axios.get(url);
