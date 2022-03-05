@@ -15,6 +15,7 @@ pub use self::controllers::{
     add_roster,
     add_campus,
     add_university,
+    get_teacher_campus_search,
 };
 
 
@@ -57,6 +58,7 @@ async fn main() -> std::io::Result<()> {
             .service(add_roster)
             .service(add_campus)
             .service(add_university)
+            .service(get_teacher_campus_search)
             .wrap(cors)
     })
     .bind(addr)?

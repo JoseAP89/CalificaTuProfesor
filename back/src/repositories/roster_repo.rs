@@ -3,7 +3,7 @@ use simplelog::*;
 use sqlx::postgres::{PgPoolOptions, Postgres, PgRow};
 use sqlx::{Pool, Row ,Error};
 use crate::contracts::{ Repository};
-use crate::dtos::{CampusUniversityDTO, UniversityDTO, RosterDTO};
+use crate::dtos::{CampusUniversityDTO, UniversityDTO, RosterDTO, TeacherCampusDTO, CampusDTO};
 
 pub struct RosterRepo {
     pool: Result<Pool<Postgres>, Error>,
@@ -72,6 +72,58 @@ impl RosterRepo {
             Err(e) => {
                 error!("Error: {}",e);
                 Err("Hubó un error de servidor. Porfavor intentarlo más tarde.".to_owned())
+            }
+        }
+
+    }
+
+    pub async fn get_roster_with_campus(&self, search: String, num_elements: i32) -> Result<Vec<TeacherCampusDTO>, String> {
+        let search = search.to_lowercase().split("+").filter(|x| !x.is_empty()).collect::<Vec<_>>().join(" ");
+        let pool = self.get_pool();
+        match pool {
+            Ok(p) => {
+                let query = format!("SELECT r.roster_id, r.teacher_name, r.teacher_lastname1, \
+                    r.teacher_lastname2, r.subject_name, c.campus_id, c.name, c.university_id, c.state_id \
+                    FROM roster r \
+                    JOIN campus c ON c.campus_id = r.campus_id \
+                    WHERE LOWER(UNACCENT(CONCAT(r.teacher_name,' ',r.teacher_lastname1,' ',r.teacher_lastname2))) LIKE '%{0}%' OR  \
+                    LOWER(CONCAT(r.teacher_name,' ',r.teacher_lastname1,' ',r.teacher_lastname2)) LIKE '%{0}%' \
+                    ORDER BY r.teacher_name, c.name LIMIT {1}",
+                search, num_elements );
+                let resp = sqlx::query(&query)
+                    .map(|row: PgRow| {
+                        let campus = CampusDTO {
+                            campus_id: Some(row.get(5)),
+                            name: row.get(6),
+                            university_id : row.get(7),
+                            state_id : row.get(8),
+                            img_path: None
+                        };
+                        TeacherCampusDTO {
+                            roster_id: row.get(0),
+                            teacher_name: row.get(1),
+                            teacher_lastname1: row.get(2),
+                            teacher_lastname2:  match row.try_get(3){
+                                Ok(t) => Some(t),
+                                _ => None
+                            },
+                            campus,
+                            subject_name: row.get(4),
+                        }
+                    })
+                    .fetch_all(p).await;
+                match resp {
+                    Ok(c) => Ok(c),
+                    Err(e) => {
+                        error!("Error: {}",e);
+                        Err("Hubo un error obteniendo la información del profesor con su campus.".to_owned())
+                    }
+
+                }
+            },
+            Err(e) => {
+                error!("Error: {}",e);
+                Err("Hubo un error conectandose a la Base de Datos. Intenta más tarde.".to_owned())
             }
         }
 

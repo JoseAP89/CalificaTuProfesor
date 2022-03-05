@@ -83,6 +83,8 @@ const Home: NextPage = () => {
             console.log("Hubo un error obteniendo los campus con universidades.")
           });
 
+      } else {
+
       }
       
     }

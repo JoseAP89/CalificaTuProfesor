@@ -121,3 +121,20 @@ pub async fn add_university(form: web::Json<UniversityDTO>) -> Result<HttpRespon
     }
 }
 
+#[get("/teacher-campus/{search}/{num_elements}")]
+pub async fn get_teacher_campus_search (params: web::Path<(String, i32)>) -> Result<HttpResponse, Error> {
+    let (search,num_elements) = params.into_inner();
+    let roster_repo = RosterRepo::new().await;
+    let  resp = roster_repo.get_roster_with_campus(search, num_elements).await;
+    match resp {
+        Ok(r) => {
+            Ok(HttpResponse::Ok().json(r))
+        },
+        Err(e) =>{
+            let e = e;
+            Err(error::ErrorTooManyRequests(format!("ERROR:{:?}",e)))
+        }
+    }
+    
+}
+

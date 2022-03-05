@@ -91,7 +91,10 @@ impl CampusRepo {
         let pool = self.get_pool();
         match pool {
             Ok(p) => {
-                let query = format!("select c.campus_id, c.name as campus, u.university_id, u.name as uni from campus c join university u on u.university_id=c.university_id WHERE LOWER(UNACCENT(c.name)) LIKE '%{0}%' OR LOWER(c.name) LIKE '%{0}%' ORDER BY c.name LIMIT {1}",
+                let query = format!("select c.campus_id, c.name as campus, u.university_id, \
+                u.name as uni from campus c join university u on u.university_id=c.university_id \
+                WHERE LOWER(UNACCENT(c.name)) LIKE '%{0}%' OR LOWER(c.name) LIKE '%{0}%' \
+                ORDER BY c.name LIMIT {1}",
                 search, num_elements );
                 let resp = sqlx::query(&query)
                     .map(|row: PgRow| {
@@ -110,17 +113,15 @@ impl CampusRepo {
                 match resp {
                     Ok(c) => Ok(c),
                     Err(e) => {
-                        let err = format!("{:?}",e);
-                        println!("{}",err);
-                        Err(err)
+                        error!("Error: {}",e);
+                        Err("Hubo un error obteniendo la información del campus con su universidad.".to_owned())
                     }
 
                 }
             },
             Err(e) => {
-                let err = format!("{:?}",e);
-                println!("{}",err);
-                Err(err)
+                error!("Error: {}",e);
+                Err("Hubo un error conectandose a la Base de Datos. Intenta más tarde.".to_owned())
             }
         }
 
