@@ -26,7 +26,7 @@ const Home: NextPage = () => {
   const [typeSearchBy, setTypeSearchBy] = useState<TeacherSearch>(TeacherSearch.NAME);
   const [searchIcon, setSearchIcon] = useState<ReactElement>(<FontAwesomeIcon icon={faPerson}/>);
   const [searchTarget, setSearchTarget] = useState<string>(""); // incomplete target search to be looked up in the DB
-  const [sourceData, setSourceData] = useState<Array<Array<Vessel>>>([]);
+  const [sourceData, setSourceData] = useState<Array<Array<Vessel>> | null>(null);
   const selectRef = useRef<HTMLInputElement>(null);
   const [showSourceData, setShowSourceData] = useState<boolean>(false);
   const [showAddItem, setShowAddItem] = useState<boolean>(false); // show alert with the link to add a new item(uni, campus, roster)
@@ -40,30 +40,14 @@ const Home: NextPage = () => {
       selectRef.current.value = "";
     }
   }, []);
-  
-  useEffect(() => {
-    let data = [
-      [new Vessel(1, "Juan FOrraly"), new Vessel(1, "UNAM FES ARAGÓN")],
-      [new Vessel(2, "Jessica Jones"), new Vessel(2, "UAM AZCAPOTZALCO")],
-      [new Vessel(3, "Pepe Alvarez"), new Vessel(3, "UNAM CU")],
-      [new Vessel(4, "Daniel Danilo"), new Vessel(4, "UAM AZCAPOTZALCO")],
-      [new Vessel(5, "Angel Fernandez"), new Vessel(5, "UNAM FES ARAGÓN")],
-      [new Vessel(6, "Karla Romagnoli"), new Vessel(6, "UTGZ")],
-      [new Vessel(7, "Jane Dumasco"), new Vessel(6, "UNIVERSIDAD AUTONOMA METROPOLITANA XHOCHIMILCO")],
-      [new Vessel(8, "Omar Valdez"), new Vessel(6, "UAM AZCAPOTZALCO")],
-      [new Vessel(9, "Karina Castro"), new Vessel(6, "UAM AZCAPOTZALCO")],
-    ];
-    let type = TeacherSearch.NAME;
-    setSourceData(data);
-    setTypeSearchBy(type);
-
-  }, []);
 
   useEffect(() => {
-    if(!!selectRef?.current && selectedOption!= null){
+    if (!!selectRef?.current && selectedOption!=null) {
       selectRef.current.value = selectedOption.value;
     }
+    
   }, [selectedOption]);
+  
 
   useEffect(() => {
     if (searchTarget!=="") {
@@ -74,7 +58,7 @@ const Home: NextPage = () => {
             let dataVessel = data.map( campuses => {
               return [
                 new Vessel(campuses.campus_id,campuses.name),
-                 new Vessel(campuses.university.university_id,campuses.university.name)
+                new Vessel(campuses.university.university_id,campuses.university.name)
               ]
             })
             setSourceData(dataVessel);
@@ -84,9 +68,23 @@ const Home: NextPage = () => {
           });
 
       } else {
-
+        TeacherService.getTeacherWithCampus(searchTarget,20)
+          .then( resp =>{
+            let data = resp.data;
+            let dataVessel = data.map( teacher => {
+              let teacher_fullname = `${teacher.teacher_name} ${teacher.teacher_lastname1} ${teacher.teacher_lastname2 ?? ""}`.trim(); 
+              return [
+                new Vessel(teacher.roster_id, teacher_fullname),
+                new Vessel(teacher.campus.campus_id,teacher.campus.name),
+                new Vessel(teacher.roster_id,teacher.subject_name)
+              ];
+            })
+            setSourceData(dataVessel);
+          })
+          .catch( err => {
+            console.log("Hubo un error obteniendo los campus con universidades.")
+          });
       }
-      
     }
     
   }, [searchTarget]);
@@ -132,6 +130,7 @@ const Home: NextPage = () => {
                 if (!!selectRef?.current) {
                   selectRef.current.value = "";
                 }
+                setSourceData(null);
                 setSearchTarget("");
                 setShowSourceData(false);
                 if(e.target.value == "teacher"){
@@ -199,7 +198,7 @@ const Home: NextPage = () => {
 
         </SimpleGrid>
 
-        { showAddItem &&
+        { showAddItem && sourceData!=null &&
           <Alert status='info' className='alert-add-request'>
             <div className='left-side'>
               <AlertIcon className='info-icon' />
