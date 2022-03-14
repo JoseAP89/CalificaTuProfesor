@@ -203,7 +203,7 @@ const Home: NextPage = () => {
             <div className='left-side'>
               <AlertIcon className='info-icon' />
               Si no se encuentra tu profesor, campus o universidad,{' '} 
-              <Link href="/campus-university/add" ><a>agregalo</a></Link>
+              <Link href="/add-item" ><a>agregalo</a></Link>
             </div>
             <div className='right-side'>
               <FontAwesomeIcon icon={faCircleXmark} className='close-icon' 

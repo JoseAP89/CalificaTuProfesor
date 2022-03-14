@@ -18,7 +18,7 @@ a {
   box-sizing: border-box;
 }
 
-p {
+p, h1, h2, h3, h4 {
   font-family: 'Indie Flower', cursive;
   letter-spacing: 1.9px;
   font-size: 22px;
@@ -27,4 +27,85 @@ p {
 .search-bar-list-container {
   position: relative;
   width: 100%;
+}
+
+.hero-title {
+  padding: 50px 30px;
+  background-color: antiquewhite;
+  text-transform: capitalize;
+  background: #63856a; /* Old browsers */
+  background: -moz-radial-gradient(center, ellipse cover,  #63856a 1%, #3c5a40 100%); /* FF3.6+ */
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,#63856a), color-stop(100%,#3c5a40)); /* Chrome,Safari4+ */
+  background: -webkit-radial-gradient(center, ellipse cover,  #63856a 1%,#3c5a40 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-radial-gradient(center, ellipse cover,  #63856a 1%,#3c5a40 100%); /* Opera 12+ */
+  background: -ms-radial-gradient(center, ellipse cover,  #63856a 1%,#3c5a40 100%); /* IE10+ */
+  background: radial-gradient(ellipse at center,  #63856a 1%,#3c5a40 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#63856a', endColorstr='#3c5a40',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+.hero-title p,
+.hero-title h1,
+.hero-title h2,
+.hero-title h3,
+.hero-title h4
+{
+  color:whitesmoke;
+  text-shadow: 1px 1px 2px black;
+  font-size: 2.2rem;
+}
+
+#hero-add-item {
+  background-color: #242124;
+  font-size: 1.5rem;
+  color: white;
+  padding: 30px;
+  display: grid;
+  grid-template-columns: 1fr ;
+  justify-items: center;
+  width: 100%;
+  gap: 30px;
+}
+#hero-add-item .classroom-pic {
+  border-radius: 20px;
+}
+#hero-add-item .item-image-bg {
+  filter: brightness(100%);
+  background-size: cover;
+  background-position: center;
+  border-radius: 16px;
+  height: 320px;
+  cursor: pointer;
+  padding: 10px;
+  width: 80vw;
+}
+#hero-add-item .item-image-bg .item-lbl{
+  background-color: rgb(172,172,172, .8);
+  width: fit-content;
+  padding: 5px;
+  border-radius: 4px;
+}
+#hero-add-item .button-classroom {
+  background-image: url('../public/classroom.jpg');
+}
+#hero-add-item .button-campus {
+  background-image: url('../public/campus.jpg');
+  filter: brightness(90%);
+}
+#hero-add-item .button-university {
+  background-image: url('../public/university.jpg');
+}
+#hero-add-item .item-image-bg:hover {
+  filter: brightness(84%);
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  transition: all 1s ease;
+  font-weight: bold;
+}
+@media screen and (min-width: 2000px){
+  
+  #hero-add-item .item-image-bg {
+    width: 66vw;
+    height: 360px;
+  }
 }
