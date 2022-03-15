@@ -18,8 +18,11 @@ a {
   box-sizing: border-box;
 }
 
-p, h1, h2, h3, h4 {
+p, h1, h2, h3, h4, label, div {
   font-family: 'Indie Flower', cursive;
+}
+
+p, h1, h2, h3, h4 {
   letter-spacing: 1.9px;
   font-size: 22px;
 }
@@ -62,7 +65,7 @@ p, h1, h2, h3, h4 {
   grid-template-columns: 1fr ;
   justify-items: center;
   width: 100%;
-  gap: 30px;
+  gap: 40px;
 }
 #hero-add-item .classroom-pic {
   border-radius: 20px;
@@ -107,5 +110,15 @@ p, h1, h2, h3, h4 {
   #hero-add-item .item-image-bg {
     width: 66vw;
     height: 360px;
+  }
+}
+
+#chakra-modal-item {
+  max-width: 70vw ;
+  background-color: white;
+}
+@media screen and (max-width: 800px){
+  #chakra-modal-item {
+    max-width: 100vw;
   }
 }

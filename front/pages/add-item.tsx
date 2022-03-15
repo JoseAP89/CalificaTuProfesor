@@ -10,8 +10,10 @@ import { Vessel } from '../_models/vessel'
 import TeacherService  from '../_services/teacherService'
 import Link from 'next/link'
 import classroom from '../public/classroom.jpg';
+import AddTeacherModal from '../components/addTeacherModal';
 
 const AddItem: NextPage = () => {
+    const [teacherModal, setTeacherModal] = useState<boolean>(false);
 
     return (
         <>
@@ -20,24 +22,27 @@ const AddItem: NextPage = () => {
                     Agrega tu profesor, campus o universidad si aun no se encuentra.
                 </h1>
             </div>
+
             <div id='hero-add-item'>
-                <div className='button-classroom item-image-bg' >
+                <div className='button-classroom item-image-bg' onClick={()=> setTeacherModal(true)}>
                     <div className='item-lbl'>
                         <p>Agrega un Profesor</p>
                     </div>
                 </div>
-                <div className='button-campus item-image-bg' >
+                <div className='button-campus item-image-bg'  onClick={()=> setTeacherModal(true)}>
                     <div className='item-lbl'>
                         <p>Agrega un Campus</p>
                     </div>
                 </div>
-                <div className='button-university item-image-bg' >
+                <div className='button-university item-image-bg' onClick={()=> setTeacherModal(true)} >
                     <div className='item-lbl'>
                         <p>Agrega una Universidad</p>
                     </div>
                 </div>
 
             </div>
+            
+            <AddTeacherModal isOpen={teacherModal} setIsOpen={setTeacherModal}/>
         </>
     )
 }
