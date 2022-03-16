@@ -191,7 +191,6 @@ const Home: NextPage = () => {
                 <ListOptions type={typeSearchBy} data={sourceData} setOption={setselectedOption} 
                   show={setShowSourceData}
                 />
-                
               }
             </div>
           </Flex>
