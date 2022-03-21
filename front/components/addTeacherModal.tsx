@@ -1,4 +1,4 @@
-import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton,
+import { Button, FormControl, FormHelperText, FormLabel, Input, Modal, ModalBody, ModalCloseButton,
   ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select as ChakraSelect
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
@@ -12,8 +12,33 @@ interface Props {
   setIsOpen: Function
 }
 
+interface FormData {
+  name: string;
+  lastname1: string;
+  lastname2: string;
+  subject: string;
+  uniStructureId: number;
+  campusId: number;
+  structureName: string,
+}
+
+interface IFormInputs {
+  name: string;
+  lastname1: string;
+  lastname2: string;
+  subject: string;
+  uniStructureId: number;
+  campus: OptionCampus;
+  structureName: string,
+}
+
+interface OptionCampus {
+  value: number;
+  label: string;
+}
+
 export default function AddTeacherModal(props: Props) {
-  const { register, handleSubmit, control, formState: { errors } } = useForm();
+  const { register, handleSubmit, control, formState: { errors } } = useForm<IFormInputs>();
   const [searchTarget, setSearchTarget] = useState<string>(""); // incomplete target search to be looked up in the DB
   const [selectedOption, setselectedOption] = useState<Vessel | null>(); // completed and selected search word comming forn the DB
   const selectRef = useRef<any>(null);
@@ -72,6 +97,19 @@ export default function AddTeacherModal(props: Props) {
   function onClose() {
     props.setIsOpen(false);
   }
+
+  function onSubmit(data: IFormInputs) {
+    let formData: FormData  =  {
+      name : data.name,
+      lastname1: data.lastname1,
+      lastname2: data.lastname2,
+      subject: data.subject,
+      uniStructureId: Number(data.uniStructureId),
+      campusId: data.campus.value,
+      structureName: data.structureName,
+    }
+    console.log("form data:", formData);
+  }
   
   return (
     <>
@@ -81,30 +119,32 @@ export default function AddTeacherModal(props: Props) {
           <ModalHeader className='item-header'>Agrega a tu Maestro</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form action="" className='add-item-form'>
+            <form action="" className='add-item-form' onSubmit={handleSubmit(onSubmit)}>
+
               <FormControl>
                 <FormLabel htmlFor='name'>Nombre</FormLabel>
-                <Input id='name' type='text' {...register("name")}/>
+                <Input id='name' type='text' {...register("name", { required: true })}/>
               </FormControl>
 
               <FormControl>
                 <FormLabel htmlFor='lastname1'>Apellido Paterno</FormLabel>
-                <Input id='lastname1' type='text' {...register("lastname1")}/>
+                <Input id='lastname1' type='text' {...register("lastname1", { required: true })}/>
               </FormControl>
 
               <FormControl>
                 <FormLabel htmlFor='lastname2'>Apellido Materno</FormLabel>
-                <Input id='lastname2' type='text'  {...register("lastname2")}/>
+                <Input id='lastname2' type='text'  {...register("lastname2", { required: true })}/>
               </FormControl>
 
               <FormControl>
                 <FormLabel htmlFor='subject'>Materia</FormLabel>
-                <Input id='subject' type='text' {...register("subject")} />
+                <Input id='subject' type='text' {...register("subject", { required: true })} />
               </FormControl>
 
               <Controller
                 name="campus"
                 control={control}
+                rules={{ required: true }}
                 render={({ field }) => 
                   <FormControl>
                     <FormLabel htmlFor='campus'>Campus</FormLabel>
@@ -130,22 +170,35 @@ export default function AddTeacherModal(props: Props) {
               <FormControl>
                 <FormLabel htmlFor='uni-structure'>Estructura Universitaria</FormLabel>
                 <ChakraSelect id='uni-structure' placeholder='Selecciona una opción' 
-                  {...register("uni-structure")}
+                  {...register("uniStructureId", { required: true })}
                    >
                   { !!uniStructures && uniStructures.length>0 &&
                     uniStructures.map(structure =>
                       <option key={structure.id} value={structure.id}>{structure.value}</option>
                     )
-
                   }
                 </ChakraSelect>
               </FormControl>
+
+              <FormControl>
+                <FormLabel htmlFor='structureName'>Nombre de la estructura universitaria</FormLabel>
+                <Input id='structureName' type='text' {...register("structureName", { required: true })}/>
+                <FormHelperText style={{fontWeight:"bold"}}>Por ejemplo: Economía, Energía, Mecánica, Derecho, etc.</FormHelperText>
+              </FormControl>
+
+              <input type="submit" id="submitFormBtn" hidden/>
 
             </form>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue'>
+            <Button colorScheme='blue' type='submit'
+              onClick={() =>{
+                let sendForm_btn = window.document.querySelector("#submitFormBtn") as HTMLButtonElement;
+                if (!!sendForm_btn) {
+                  sendForm_btn.click();
+                }
+              }}>
               Agregar
             </Button>
             <Button colorScheme='pink' ml={3} variant='solid' onClick={() => props.setIsOpen(false)}>
