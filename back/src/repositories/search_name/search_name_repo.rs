@@ -51,7 +51,7 @@ impl RepositoryName<Self, Vessel, String> for SearchNameRepository {
                         // map the row into a user-defined domain type
                         let uni = Vessel {
                             id: row.get(0),
-                            name: row.get(1),
+                            value: row.get(1),
                         };
                         uni
                     })
@@ -80,7 +80,7 @@ impl RepositoryName<Self, Vessel, String> for SearchNameRepository {
                     .map(|row: PgRow| {
                         let uni = Vessel {
                            id: row.get(0),
-                            name: row.get(1),
+                            value: row.get(1),
                         };
                         uni
                     })

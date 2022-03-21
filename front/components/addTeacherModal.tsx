@@ -1,4 +1,6 @@
-import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
+import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton,
+  ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select as ChakraSelect
+} from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Select from 'react-select';
@@ -16,6 +18,7 @@ export default function AddTeacherModal(props: Props) {
   const [selectedOption, setselectedOption] = useState<Vessel | null>(); // completed and selected search word comming forn the DB
   const selectRef = useRef<any>(null);
   const [sourceCampusData, setSourceCampusData] = useState<Array<Vessel> | null>(null);
+  const [uniStructures, setUniStructures] = useState<Array<Vessel> | null>(null);
 
   useEffect(() => {
     console.log("changing: ", props.isOpen)
@@ -54,6 +57,17 @@ export default function AddTeacherModal(props: Props) {
     }
     
   }, [searchTarget]);
+
+  useEffect(() => {
+    TeacherService.getUniStructures()
+      .then(res => {
+        let data = res.data;
+        console.log("data uni structures: ", data);
+        setUniStructures(data);
+      }).catch(err => {
+        console.log("Hubo un error obteniendo las estructuras universitarias.")
+      });
+  }, []);
 
   function onClose() {
     props.setIsOpen(false);
@@ -112,6 +126,21 @@ export default function AddTeacherModal(props: Props) {
                   </FormControl>
                   }
               />
+
+              <FormControl>
+                <FormLabel htmlFor='uni-structure'>Estructura Universitaria</FormLabel>
+                <ChakraSelect id='uni-structure' placeholder='Selecciona una opción' 
+                  {...register("uni-structure")}
+                   >
+                  { !!uniStructures && uniStructures.length>0 &&
+                    uniStructures.map(structure =>
+                      <option key={structure.id} value={structure.id}>{structure.value}</option>
+                    )
+
+                  }
+                </ChakraSelect>
+              </FormControl>
+
             </form>
           </ModalBody>
 

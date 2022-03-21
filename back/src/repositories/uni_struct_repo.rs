@@ -49,7 +49,7 @@ impl UniStructureRepo {
                     .map(|row: PgRow| {
                         Vessel {
                             id: row.get(0),
-                            name: row.get(1),
+                            value: row.get(1),
                         }
                     })
                     .fetch_all(p).await;

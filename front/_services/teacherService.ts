@@ -7,6 +7,7 @@ const TeacherService = {
     getNameVessels,
     getCampusWithUniversity,
     getTeacherWithCampus,
+    getUniStructures,
 }
 
 const backendsrc = "http://localhost:8080"
@@ -26,6 +27,11 @@ async function getCampusWithUniversity(target: String, numResults: number = 20):
 async function getTeacherWithCampus(target: String, numResults: number = 20): Promise<AxiosResponse<Array<TeacherWithCampus>>>{
     target = target.replaceAll(/\s+/g,"+");
     const url = `${backendsrc}/teacher-campus/${target}/${numResults}`;
+    return axios.get(url);
+}
+
+async function getUniStructures(): Promise<AxiosResponse<Array<Vessel>>>{
+    const url = `${backendsrc}/uni-structure`;
     return axios.get(url);
 }
 
