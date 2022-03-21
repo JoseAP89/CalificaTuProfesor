@@ -3,7 +3,6 @@ use simplelog::*;
 use sqlx::postgres::{PgPoolOptions, Postgres, PgRow};
 use sqlx::{Pool, Row ,Error};
 use crate::contracts::{ Repository};
-use crate::dtos::{CampusUniversityDTO, UniversityDTO, CampusDTO};
 use crate::models::Vessel;
 
 pub struct UniStructureRepo {
@@ -40,6 +39,7 @@ impl UniStructureRepo {
     }
 
     pub async fn get_uni_structures(&self) -> Result<Vec<Vessel>, String> {
+        info!(" ** Consulting University Structures **");
         let pool = self.get_pool();
         match pool {
             Ok(p) => {

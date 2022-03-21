@@ -3,7 +3,7 @@ use simplelog::*;
 use sqlx::postgres::{PgPoolOptions, Postgres, PgRow};
 use sqlx::{Pool, Row ,Error};
 use crate::contracts::{ Repository};
-use crate::dtos::{CampusUniversityDTO, UniversityDTO, RosterDTO, TeacherCampusDTO, CampusDTO};
+use crate::dtos::{RosterDTO, TeacherCampusDTO, CampusDTO};
 
 pub struct RosterRepo {
     pool: Result<Pool<Postgres>, Error>,
