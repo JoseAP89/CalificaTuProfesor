@@ -1,6 +1,6 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Error, error};
 use crate::dtos::{RosterDTO, CampusDTO, UniversityDTO};
-use crate::repositories::{CampusRepo, UniversityRepo};
+use crate::repositories::{CampusRepo, UniversityRepo, UniStructureRepo};
 use crate::repositories::search_name::search_name_repo::SearchNameRepository;
 use crate::contracts::repository_name::RepositoryName;
 use crate::repositories::RosterRepo;
@@ -122,7 +122,7 @@ pub async fn add_university(form: web::Json<UniversityDTO>) -> Result<HttpRespon
 }
 
 #[get("/teacher-campus/{search}/{num_elements}")]
-pub async fn get_teacher_campus_search (params: web::Path<(String, i32)>) -> Result<HttpResponse, Error> {
+pub async fn get_teacher_campus_search(params: web::Path<(String, i32)>) -> Result<HttpResponse, Error> {
     let (search,num_elements) = params.into_inner();
     let roster_repo = RosterRepo::new().await;
     let  resp = roster_repo.get_roster_with_campus(search, num_elements).await;
@@ -138,3 +138,20 @@ pub async fn get_teacher_campus_search (params: web::Path<(String, i32)>) -> Res
     
 }
 
+
+#[get("/uni-structure")]
+pub async fn get_uni_structure() -> Result<HttpResponse, Error> {
+    let uni_structure_repo = UniStructureRepo::new().await;
+    let  resp = uni_structure_repo.get_uni_structures().await;
+    match resp {
+        Ok(r) => {
+            Ok(HttpResponse::Ok().json(r))
+        },
+        Err(e) =>{
+            let e = e;
+            Err(error::ErrorTooManyRequests(format!("ERROR:{:?}",e)))
+        }
+        
+    }
+    
+}
