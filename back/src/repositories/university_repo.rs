@@ -1,9 +1,9 @@
 use std::time::Duration;
 use simplelog::*;
-use sqlx::postgres::{PgPoolOptions, Postgres, PgRow};
-use sqlx::{Pool, Row ,Error};
+use sqlx::postgres::{PgPoolOptions, Postgres};
+use sqlx::{Pool, Error};
 use crate::contracts::{ Repository};
-use crate::dtos::{CampusDTO, UniversityDTO};
+use crate::dtos::{UniversityDTO};
 
 pub struct UniversityRepo {
     pool: Result<Pool<Postgres>, Error>,
