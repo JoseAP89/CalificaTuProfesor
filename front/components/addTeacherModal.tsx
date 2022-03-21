@@ -4,22 +4,13 @@ import { Button, FormControl, FormHelperText, FormLabel, Input, Modal, ModalBody
 import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Select from 'react-select';
+import { Roster } from '../_models/roster';
 import { Vessel } from '../_models/vessel';
 import TeacherService from '../_services/teacherService';
 
 interface Props {
   isOpen: boolean,
   setIsOpen: Function
-}
-
-interface FormData {
-  name: string;
-  lastname1: string;
-  lastname2: string;
-  subject: string;
-  uniStructureId: number;
-  campusId: number;
-  structureName: string,
 }
 
 interface IFormInputs {
@@ -99,15 +90,21 @@ export default function AddTeacherModal(props: Props) {
   }
 
   function onSubmit(data: IFormInputs) {
-    let formData: FormData  =  {
-      name : data.name,
-      lastname1: data.lastname1,
-      lastname2: data.lastname2,
-      subject: data.subject,
-      uniStructureId: Number(data.uniStructureId),
-      campusId: data.campus.value,
-      structureName: data.structureName,
+    let formData: Roster  =  {
+      teacher_name : data.name,
+      teacher_lastname1: data.lastname1,
+      teacher_lastname2: data.lastname2,
+      subject_name: data.subject,
+      uni_structure_id: Number(data.uniStructureId),
+      campus_id: data.campus.value,
+      structure_name: data.structureName,
     }
+    TeacherService.addRoster(formData)
+      .then(res => {
+        console.log("roster response: ", res);
+      }).catch(err => {
+        console.log("Hubo un error agregando el roster. ", err);
+      });
     console.log("form data:", formData);
   }
   
@@ -133,7 +130,7 @@ export default function AddTeacherModal(props: Props) {
 
               <FormControl>
                 <FormLabel htmlFor='lastname2'>Apellido Materno</FormLabel>
-                <Input id='lastname2' type='text'  {...register("lastname2", { required: true })}/>
+                <Input id='lastname2' type='text'  {...register("lastname2")}/>
               </FormControl>
 
               <FormControl>
