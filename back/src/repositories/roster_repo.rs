@@ -1,3 +1,4 @@
+use std::ops::Add;
 use std::time::Duration;
 use simplelog::*;
 use sqlx::postgres::{PgPoolOptions, Postgres, PgRow};
@@ -48,12 +49,12 @@ impl RosterRepo {
                         campus_id, teacher_name, teacher_lastname1, teacher_lastname2, subject_name, uni_structure_id, structure_name)
                         values($1, $2, $3, $4, $5, $6, $7)"#,
                     roster_dto.campus_id,
-                    roster_dto.teacher_name,
-                    roster_dto.teacher_lastname1,
-                    roster_dto.teacher_lastname2,
-                    roster_dto.subject_name,
+                    RosterRepo::to_capitalize(&roster_dto.teacher_name),
+                    RosterRepo::to_capitalize(&roster_dto.teacher_lastname1),
+                    RosterRepo::to_capitalize(&roster_dto.teacher_lastname2),
+                    RosterRepo::to_capitalize(&roster_dto.subject_name),
                     roster_dto.uni_structure_id,
-                    roster_dto.structure_name)
+                    RosterRepo::to_capitalize(&roster_dto.structure_name))
                     .execute(p).await;
                 match resp {
                     Ok(c) => {
@@ -127,6 +128,26 @@ impl RosterRepo {
             }
         }
 
+    }
+
+    fn to_capitalize(word: &str) -> String {
+        let word = word.trim().to_lowercase();
+        let mut res = String::new();
+        let mut space = false;
+        for c in word.chars().enumerate() {
+            if c.1 == ' ' {
+                space = true;
+            }
+            if c.0 == 0 {
+                res.push(c.1.to_uppercase().last().unwrap());
+            } else if space && c.1!=' ' {
+                res.push(c.1.to_uppercase().last().unwrap());
+                space = false;
+            } else {
+                res.push(c.1.to_lowercase().last().unwrap());
+            }
+        }
+        res
     }
 
 }
