@@ -39,10 +39,6 @@ export default function AddTeacherModal(props: Props) {
   const [uniStructures, setUniStructures] = useState<Array<Vessel> | null>(null);
 
   useEffect(() => {
-    console.log("changing: ", props.isOpen)
-  }, [props.isOpen]);
-
-  useEffect(() => {
     // initialization of data
     setSearchTarget("");
     setselectedOption(null);

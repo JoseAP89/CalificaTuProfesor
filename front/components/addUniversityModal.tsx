@@ -1,11 +1,11 @@
 import { Button, FormControl, FormHelperText, FormLabel, Input, Modal, ModalBody, ModalCloseButton,
   ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select as ChakraSelect
 } from '@chakra-ui/react';
-import { useEffect, useRef, useState } from 'react';
+import { read } from 'fs';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import Select from 'react-select';
+import AddUniversity from '../_models/add_university';
 import { HttpResponseMessage } from '../_models/httpResponseMessage';
-import { Roster } from '../_models/roster';
 import { Vessel } from '../_models/vessel';
 import TeacherService from '../_services/teacherService';
 
@@ -17,7 +17,7 @@ interface Props {
 
 interface IFormInputs {
   name: string;
-  img_file: File
+  img_file: FileList
 }
 
 interface OptionCampus {
@@ -27,31 +27,7 @@ interface OptionCampus {
 
 export default function AddUniversityModal(props: Props) {
   const { register, handleSubmit, control, formState: { errors }, reset } = useForm<IFormInputs>();
-  const [searchTarget, setSearchTarget] = useState<string>(""); // incomplete target search to be looked up in the DB
   const [selectedOption, setselectedOption] = useState<Vessel | null>(); // completed and selected search word comming forn the DB
-  const selectRef = useRef<any>(null);
-
-  useEffect(() => {
-    console.log("changing: ", props.isOpen)
-  }, [props.isOpen]);
-
-  useEffect(() => {
-    // initialization of data
-    setSearchTarget("");
-    setselectedOption(null);
-    if (!!selectRef?.current) {
-      selectRef.current.value = "";
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!!selectRef?.current && selectedOption!=null) {
-      selectRef.current.value = selectedOption.value;
-    }
-    
-  }, [selectedOption]);
-
-
 
   function onClose() {
     props.setIsOpen(false);
@@ -85,7 +61,15 @@ export default function AddUniversityModal(props: Props) {
         reset();
         onClose();
       });*/
-    console.log("form data:", data);
+    let file = data.img_file[0];
+    let reader = new FileReader();
+    let uni_data = null;
+    reader.onload = function () {
+      // reader.results contains the base64 string to send to the server
+      uni_data = new AddUniversity(data.name, reader.result as any)
+      console.log("form data:", uni_data);
+    }
+    reader.readAsBinaryString(file);
   }
   
   return (
