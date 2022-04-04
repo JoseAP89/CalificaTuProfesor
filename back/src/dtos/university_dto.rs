@@ -5,5 +5,5 @@ use serde::{Deserialize, Serialize};
 pub struct UniversityDTO {
     pub university_id : Option<i32>,
     pub name : String,
-    pub img_path : Option<String>
+    pub img_file : Option<String>
 }

@@ -4,13 +4,15 @@ import { Button, FormControl, FormHelperText, FormLabel, Input, Modal, ModalBody
 import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Select from 'react-select';
+import { HttpResponseMessage } from '../_models/httpResponseMessage';
 import { Roster } from '../_models/roster';
 import { Vessel } from '../_models/vessel';
 import TeacherService from '../_services/teacherService';
 
 interface Props {
   isOpen: boolean,
-  setIsOpen: Function
+  setIsOpen: Function,
+  setHttpResponseMessage: Function
 }
 
 interface IFormInputs {
@@ -29,7 +31,7 @@ interface OptionCampus {
 }
 
 export default function AddTeacherModal(props: Props) {
-  const { register, handleSubmit, control, formState: { errors } } = useForm<IFormInputs>();
+  const { register, handleSubmit, control, formState: { errors }, reset } = useForm<IFormInputs>();
   const [searchTarget, setSearchTarget] = useState<string>(""); // incomplete target search to be looked up in the DB
   const [selectedOption, setselectedOption] = useState<Vessel | null>(); // completed and selected search word comming forn the DB
   const selectRef = useRef<any>(null);
@@ -78,7 +80,6 @@ export default function AddTeacherModal(props: Props) {
     TeacherService.getUniStructures()
       .then(res => {
         let data = res.data;
-        console.log("data uni structures: ", data);
         setUniStructures(data);
       }).catch(err => {
         console.log("Hubo un error obteniendo las estructuras universitarias.")
@@ -102,8 +103,20 @@ export default function AddTeacherModal(props: Props) {
     TeacherService.addRoster(formData)
       .then(res => {
         console.log("roster response: ", res);
+        const message : HttpResponseMessage = {
+          success: true,
+          message: "Agregado con exito"
+        }
+        props.setHttpResponseMessage(message);
       }).catch(err => {
-        console.log("Hubo un error agregando el roster. ", err);
+        const message : HttpResponseMessage = {
+          success: false,
+          message: err.response.data
+        }
+        props.setHttpResponseMessage(message);
+      }).finally(()=>{
+        reset();
+        onClose();
       });
     console.log("form data:", formData);
   }
@@ -198,7 +211,10 @@ export default function AddTeacherModal(props: Props) {
               }}>
               Agregar
             </Button>
-            <Button colorScheme='pink' ml={3} variant='solid' onClick={() => props.setIsOpen(false)}>
+            <Button colorScheme='pink' ml={3} variant='solid' onClick={() => {
+              reset();
+              props.setIsOpen(false)}
+            }>
               Cerrar
             </Button>
           </ModalFooter>

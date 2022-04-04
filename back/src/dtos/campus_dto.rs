@@ -7,5 +7,5 @@ pub struct CampusDTO {
     pub name : String,
     pub university_id: i32,
     pub state_id: i32,
-    pub img_path : Option<String>
+    pub img_file : Option<String>
 }

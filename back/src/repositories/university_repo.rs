@@ -44,11 +44,11 @@ impl UniversityRepo {
         let pool = self.get_pool();
         match pool {
             Ok(p) => {
-                let resp = match university_dto.img_path {
+                let resp = match university_dto.img_file {
                     Some(i) => {
                         sqlx::query!( 
                         r#"INSERT INTO university(
-                            name, img_path)
+                            name, img_file)
                             values($1, $2)"#,
                         university_dto.name,
                         i.as_bytes())

@@ -98,7 +98,7 @@ impl RosterRepo {
                             name: row.get(6),
                             university_id : row.get(7),
                             state_id : row.get(8),
-                            img_path: None
+                            img_file: None
                         };
                         TeacherCampusDTO {
                             roster_id: row.get(0),

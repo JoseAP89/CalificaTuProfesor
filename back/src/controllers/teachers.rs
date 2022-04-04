@@ -87,7 +87,7 @@ pub async fn add_campus(form: web::Json<CampusDTO>) -> Result<HttpResponse, Erro
         name: form.name.trim().to_owned(),
         university_id: form.university_id,
         state_id: form.state_id,
-        img_path: form.img_path.to_owned()
+        img_file: form.img_file.to_owned()
     };
     let resp = campus_repo.add_campus(campus).await;
     match resp {
@@ -107,7 +107,7 @@ pub async fn add_university(form: web::Json<UniversityDTO>) -> Result<HttpRespon
     let uni = UniversityDTO {
         university_id: None,
         name: form.name.trim().to_owned(),
-        img_path: form.img_path.to_owned()
+        img_file: form.img_file.to_owned()
     };
     let resp = uni_repo.add_university(uni).await;
     match resp {

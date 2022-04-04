@@ -43,11 +43,11 @@ impl CampusRepo {
         let pool = self.get_pool();
         match pool {
             Ok(p) => {
-                let resp = match campus_dto.img_path {
+                let resp = match campus_dto.img_file {
                     Some(i) => {
                         sqlx::query!( 
                         r#"INSERT INTO campus(
-                            name, university_id, state_id, img_path)
+                            name, university_id, state_id, img_file)
                             values($1, $2, $3, $4)"#,
                         campus_dto.name,
                         campus_dto.university_id,
@@ -101,7 +101,7 @@ impl CampusRepo {
                         let uni = UniversityDTO {
                            university_id: row.get(2),
                             name: row.get(3),
-                            img_path: None,
+                            img_file: None,
                         };
                         CampusUniversityDTO {
                             campus_id: row.get(0),

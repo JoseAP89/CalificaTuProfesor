@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import { Container, Box, SimpleGrid, Flex,
-  Heading, Button, InputGroup, Input, InputRightAddon, InputLeftAddon, IconButton, Select, AlertIcon, Alert, Tabs, TabPanels, Tab, TabList, TabPanel, FormControl, FormLabel, Modal, ModalContent, ModalFooter, ModalBody, ModalCloseButton, ModalHeader, ModalOverlay, useDisclosure
+  Heading, Button, InputGroup, Input, InputRightAddon, InputLeftAddon, IconButton, Select, AlertIcon, Alert, Tabs, TabPanels, Tab, TabList, TabPanel, FormControl, FormLabel, Modal, ModalContent, ModalFooter, ModalBody, ModalCloseButton, ModalHeader, ModalOverlay, useDisclosure, CloseButton, AlertDescription, AlertTitle
 } from '@chakra-ui/react'
 import AddItemStyle from '../styles/styledComponents/addItems';
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
@@ -11,9 +11,13 @@ import TeacherService  from '../_services/teacherService'
 import Link from 'next/link'
 import classroom from '../public/classroom.jpg';
 import AddTeacherModal from '../components/addTeacherModal';
+import { HttpResponseMessage } from '../_models/httpResponseMessage';
+import AddUniversityModal from '../components/addUniversityModal';
 
 const AddItem: NextPage = () => {
     const [teacherModal, setTeacherModal] = useState<boolean>(false);
+    const [universityModal, setUniversityModal] = useState<boolean>(false);
+    const [httpResponseMessage, setHttpResponseMessage] = useState<HttpResponseMessage|null>(null);
 
     return (
         <>
@@ -34,15 +38,33 @@ const AddItem: NextPage = () => {
                         <p>Agrega un Campus</p>
                     </div>
                 </div>
-                <div className='button-university item-image-bg' onClick={()=> setTeacherModal(true)} >
+                <div className='button-university item-image-bg' onClick={()=> setUniversityModal(true)} >
                     <div className='item-lbl'>
                         <p>Agrega una Universidad</p>
                     </div>
                 </div>
 
             </div>
+
+            { !!httpResponseMessage && httpResponseMessage.success &&
+                <Alert status='success' className='pop-up-alert'>
+                    <AlertIcon />
+                    <AlertTitle mr={2}>Operación exitosa!</AlertTitle>
+                    <AlertDescription>{httpResponseMessage.message}</AlertDescription>
+                    <CloseButton position='absolute' right='8px' top='8px' onClick={()=> setHttpResponseMessage(null)}/>
+                </Alert>
+            }
+            { !!httpResponseMessage && !httpResponseMessage.success &&
+                <Alert status='error' className='pop-up-alert' onClick={()=> setHttpResponseMessage(null)}>
+                    <AlertIcon />
+                    <AlertTitle mr={2}>Error!</AlertTitle>
+                    <AlertDescription>{httpResponseMessage.message}</AlertDescription>
+                    <CloseButton position='absolute' right='8px' top='8px' />
+                </Alert>
+            }
             
-            <AddTeacherModal isOpen={teacherModal} setIsOpen={setTeacherModal}/>
+            <AddTeacherModal isOpen={teacherModal} setIsOpen={setTeacherModal} setHttpResponseMessage={setHttpResponseMessage}/>
+            <AddUniversityModal isOpen={universityModal} setIsOpen={setUniversityModal} setHttpResponseMessage={setHttpResponseMessage}/>
         </>
     )
 }
