@@ -3,6 +3,7 @@ import {CampusUniversity} from '../_models/campus';
 import { TeacherWithCampus } from '../_models/teacher';
 import { Roster } from '../_models/roster';
 import {Vessel} from '../_models/vessel'
+import AddUniversity from '../_models/add_university';
 
 const TeacherService = {
     getNameVessels,
@@ -39,6 +40,12 @@ async function getUniStructures(): Promise<AxiosResponse<Array<Vessel>>>{
 
 async function addRoster(data: Roster): Promise<AxiosResponse<string>>{
     const url = `${backendsrc}/roster`;
+    // Default options are marked with *
+    return axios.post(url,data);
+}
+
+async function addUniversity(data: AddUniversity): Promise<AxiosResponse<string>>{
+    const url = `${backendsrc}/university`;
     // Default options are marked with *
     return axios.post(url,data);
 }

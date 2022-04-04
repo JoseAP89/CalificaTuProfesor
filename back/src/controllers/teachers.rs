@@ -107,7 +107,8 @@ pub async fn add_university(form: web::Json<UniversityDTO>) -> Result<HttpRespon
     let uni = UniversityDTO {
         university_id: None,
         name: form.name.trim().to_owned(),
-        img_file: form.img_file.to_owned()
+        img_file: form.img_file.to_owned(),
+        img_type: form.img_type.to_owned()
     };
     let resp = uni_repo.add_university(uni).await;
     match resp {

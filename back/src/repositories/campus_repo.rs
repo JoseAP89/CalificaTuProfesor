@@ -43,29 +43,14 @@ impl CampusRepo {
         let pool = self.get_pool();
         match pool {
             Ok(p) => {
-                let resp = match campus_dto.img_file {
-                    Some(i) => {
-                        sqlx::query!( 
-                        r#"INSERT INTO campus(
-                            name, university_id, state_id, img_file)
-                            values($1, $2, $3, $4)"#,
-                        campus_dto.name,
-                        campus_dto.university_id,
-                        campus_dto.state_id,
-                        i.as_bytes())
-                        .execute(p).await
-                    },
-                    None => {
-                        sqlx::query!( 
-                        r#"INSERT INTO campus(
-                            name, university_id, state_id)
-                            values($1, $2, $3)"#,
-                        campus_dto.name,
-                        campus_dto.university_id,
-                        campus_dto.state_id)
-                        .execute(p).await
-                    }
-                };
+                let resp = sqlx::query!( 
+                    r#"INSERT INTO campus(
+                        name, university_id, state_id)
+                        values($1, $2, $3)"#,
+                    campus_dto.name,
+                    campus_dto.university_id,
+                    campus_dto.state_id)
+                    .execute(p).await;
                 match resp {
                     Ok(c) => {
                         info!("Added new campus({}) successfully.", campus_dto.name);
@@ -102,6 +87,7 @@ impl CampusRepo {
                            university_id: row.get(2),
                             name: row.get(3),
                             img_file: None,
+                            img_type: None,
                         };
                         CampusUniversityDTO {
                             campus_id: row.get(0),

@@ -1,3 +1,8 @@
+extern crate base64;
+use std::path::Path;
+use std::fs::File;
+use std::io::prelude::*;
+use base64::decode;
 use std::time::Duration;
 use simplelog::*;
 use sqlx::postgres::{PgPoolOptions, Postgres};
@@ -44,29 +49,45 @@ impl UniversityRepo {
         let pool = self.get_pool();
         match pool {
             Ok(p) => {
-                let resp = match university_dto.img_file {
-                    Some(i) => {
-                        sqlx::query!( 
-                        r#"INSERT INTO university(
-                            name, img_file)
-                            values($1, $2)"#,
-                        university_dto.name,
-                        i.as_bytes())
-                        .execute(p).await
-
-                    },
-                    None => {
-                        sqlx::query!( 
-                        r#"INSERT INTO university(
-                            name)
-                            values($1)"#,
-                        university_dto.name)
-                        .execute(p).await
-                    }
-                };
+                let resp =  sqlx::query!( 
+                    r#"INSERT INTO university(
+                        name)
+                        values($1)"#,
+                    university_dto.name)
+                    .execute(p).await;
                 match resp {
                     Ok(c) => {
                         info!("Added new university({}) successfully.", university_dto.name);
+                        match university_dto.img_file {
+                            Some(f) => {
+                                let binary_file_resp = decode(&f);
+                                //if let Ok(file_b) = binary_file_resp {
+                                match binary_file_resp {
+                                    Ok(file_b) => {
+                                        let path = Path::new("/home/joseap/Documents/projects/CalificaTuProfesor/front/public/universities/");
+                                        let mut file_name = university_dto.name
+                                            .split(" ")
+                                            .filter(|&x| x != " " && x!="")
+                                            .collect::<Vec<&str>>()
+                                            .join("_");
+                                        file_name = path.display().to_string() + &file_name.to_lowercase() +
+                                            "." + &university_dto.img_type.unwrap();
+                                        let file = File::create(file_name);
+                                        match file {
+                                            Ok(mut file_res) => {
+                                                info!("Added new image for university '{}' successfully.", university_dto.name);
+                                                file_res.write_all(&file_b).unwrap_or_default()
+                                            },
+                                            Err(e) => error!("There was a problem creating the file: {}", e)
+                                        }
+                                    },
+                                    Err(e) => {
+                                        error!("There was a problem decoding the base64 file format: {}", e)
+                                    }
+                                }
+                            },
+                            _ => ()
+                        }
                         Ok(c.rows_affected())
                     },
                     Err(e) => {

@@ -66,8 +66,12 @@ export default function AddUniversityModal(props: Props) {
     let uni_data = null;
     reader.onload = function () {
       // reader.results contains the base64 string to send to the server
-      uni_data = new AddUniversity(data.name, reader.result as any)
+      let file_name = data.img_file[0].name; 
+      let pos = file_name.lastIndexOf(".");
+      let file_type = file_name.substring(pos+1);
+      uni_data = new AddUniversity(data.name, reader.result as any, file_type)
       console.log("form data:", uni_data);
+      console.log("data:", data);
     }
     reader.readAsBinaryString(file);
   }
