@@ -6,7 +6,7 @@ pub mod models;
 pub mod repositories;
 pub mod contracts;
 pub mod dtos;
-use actix_web::{  App, HttpServer, http};
+use actix_web::{  App, HttpServer, http, web};
 use actix_cors::Cors;
 pub use self::controllers::{
     get_table_name_by_id,
@@ -53,6 +53,7 @@ async fn main() -> std::io::Result<()> {
             .max_age(3600);
 
         App::new()
+            .app_data(web::PayloadConfig::new(50_242_880))
             .service(get_table_name_by_id)
             .service(get_table_name_by_name)
             .service(get_campuses_search)

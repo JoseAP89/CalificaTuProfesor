@@ -1,8 +1,8 @@
 extern crate base64;
-use std::path::Path;
-use std::fs::File;
 use std::io::prelude::*;
+use std::fs::File;
 use base64::decode;
+use std::path::Path;
 use std::time::Duration;
 use simplelog::*;
 use sqlx::postgres::{PgPoolOptions, Postgres};
@@ -60,29 +60,42 @@ impl UniversityRepo {
                         info!("Added new university({}) successfully.", university_dto.name);
                         match university_dto.img_file {
                             Some(f) => {
-                                let binary_file_resp = decode(&f);
+                                let buffer = f.as_bytes();
+                                let path = Path::new("/home/joseap/Documents/projects/CalificaTuProfesor/front/public/universities/");
+                                let mut file_name = university_dto.name
+                                    .split(" ")
+                                    .filter(|&x| x != " " && x!="")
+                                    .collect::<Vec<&str>>()
+                                    .join("_");
+                                file_name = path.display().to_string() + &file_name.to_lowercase() +
+                                    "." + {
+                                        let formt = university_dto.img_type.as_ref().unwrap();
+                                        if formt.as_str() == "jpg" {
+                                            "jpeg"
+                                        } else {
+                                            university_dto.img_type.as_ref().unwrap().as_str().clone()
+                                        }
+                                    };
+                                let binary_file_resp = decode(buffer);
                                 //if let Ok(file_b) = binary_file_resp {
                                 match binary_file_resp {
-                                    Ok(file_b) => {
-                                        let path = Path::new("/home/joseap/Documents/projects/CalificaTuProfesor/front/public/universities/");
-                                        let mut file_name = university_dto.name
-                                            .split(" ")
-                                            .filter(|&x| x != " " && x!="")
-                                            .collect::<Vec<&str>>()
-                                            .join("_");
-                                        file_name = path.display().to_string() + &file_name.to_lowercase() +
-                                            "." + &university_dto.img_type.unwrap();
-                                        let file = File::create(file_name);
-                                        match file {
-                                            Ok(mut file_res) => {
-                                                info!("Added new image for university '{}' successfully.", university_dto.name);
-                                                file_res.write_all(&file_b).unwrap_or_default()
+                                    Ok(pic) => {
+                                        let file_resp = File::create(file_name);
+                                        match file_resp {
+                                            Ok(mut f) => {
+                                                if let Err(d) = f.write_all(&pic)  {
+                                                    error!("There was a problem saving the image: {}", d)
+                                                } else {
+                                                    info!("Added new image for university '{}' successfully.", university_dto.name);
+                                                }
                                             },
-                                            Err(e) => error!("There was a problem creating the file: {}", e)
+                                            Err(e) =>  {
+                                                error!("There was a problem creating the image file: {}", e)
+                                            }
                                         }
                                     },
                                     Err(e) => {
-                                        error!("There was a problem decoding the base64 file format: {}", e)
+                                        error!("There was a problem decoding the binary file format or the file already exists: {}", e)
                                     }
                                 }
                             },

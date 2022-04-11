@@ -1,4 +1,4 @@
-export default class AddUniversity {
+export default class NewUniversity {
     name: string;
     img_file: string;
     img_type: string;

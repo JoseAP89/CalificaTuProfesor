@@ -1,4 +1,3 @@
-use std::ops::Add;
 use std::time::Duration;
 use simplelog::*;
 use sqlx::postgres::{PgPoolOptions, Postgres, PgRow};

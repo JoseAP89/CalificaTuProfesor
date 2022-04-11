@@ -4,7 +4,7 @@ import { Button, FormControl, FormHelperText, FormLabel, Input, Modal, ModalBody
 import { read } from 'fs';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import AddUniversity from '../_models/add_university';
+import NewUniversity from '../_models/newUniversity';
 import { HttpResponseMessage } from '../_models/httpResponseMessage';
 import { Vessel } from '../_models/vessel';
 import TeacherService from '../_services/teacherService';
@@ -34,33 +34,6 @@ export default function AddUniversityModal(props: Props) {
   }
 
   function onSubmit(data: IFormInputs) {
-/*     let formData: Roster  =  {
-      teacher_name : data.name,
-      teacher_lastname1: data.lastname1,
-      teacher_lastname2: data.lastname2,
-      subject_name: data.subject,
-      uni_structure_id: Number(data.uniStructureId),
-      campus_id: data.campus.value,
-      structure_name: data.structureName,
-    } 
-    TeacherService.addRoster(formData)
-      .then(res => {
-        console.log("roster response: ", res);
-        const message : HttpResponseMessage = {
-          success: true,
-          message: "Agregado con exito"
-        }
-        props.setHttpResponseMessage(message);
-      }).catch(err => {
-        const message : HttpResponseMessage = {
-          success: false,
-          message: err.response.data
-        }
-        props.setHttpResponseMessage(message);
-      }).finally(()=>{
-        reset();
-        onClose();
-      });*/
     let file = data.img_file[0];
     let reader = new FileReader();
     let uni_data = null;
@@ -68,10 +41,26 @@ export default function AddUniversityModal(props: Props) {
       // reader.results contains the base64 string to send to the server
       let file_name = data.img_file[0].name; 
       let pos = file_name.lastIndexOf(".");
-      let file_type = file_name.substring(pos+1);
-      uni_data = new AddUniversity(data.name, reader.result as any, file_type)
-      console.log("form data:", uni_data);
-      console.log("data:", data);
+      let file_type = file_name.substring(pos+1).toLowerCase();
+      let base64_data = window.btoa(reader.result as string);
+      uni_data = new NewUniversity(data.name, base64_data, file_type)
+      TeacherService.addUniversity(uni_data)
+        .then(res => {
+          const message : HttpResponseMessage = {
+            success: true,
+            message: "Agregado con exito"
+          }
+          props.setHttpResponseMessage(message);
+        }).catch(err => {
+          const message : HttpResponseMessage = {
+            success: false,
+            message: err.response.data
+          }
+          props.setHttpResponseMessage(message);
+        }).finally(()=>{
+          reset();
+          onClose();
+        });
     }
     reader.readAsBinaryString(file);
   }
