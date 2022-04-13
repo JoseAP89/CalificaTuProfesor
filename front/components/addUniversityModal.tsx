@@ -27,7 +27,7 @@ interface OptionCampus {
 
 export default function AddUniversityModal(props: Props) {
   const { register, handleSubmit, control, formState: { errors }, reset } = useForm<IFormInputs>();
-  const [selectedOption, setselectedOption] = useState<Vessel | null>(); // completed and selected search word comming forn the DB
+  const [previewImg, setPreviewImg] = useState<string | null>();
 
   function onClose() {
     props.setIsOpen(false);
@@ -85,8 +85,23 @@ export default function AddUniversityModal(props: Props) {
 
               <FormControl>
                 <FormLabel htmlFor='image-file'>Selecciona una imagen (Opcional)</FormLabel>
-                <Input id='image-file' type='file' {...register("img_file", { required: true })}/>
+                <Input id='image-file' type='file' {...register("img_file", { required: true })}
+                  onChange={(event) =>{
+                    if(!!event?.target?.files){
+                      let preview_img = URL.createObjectURL(event.target.files[0]);
+                      setPreviewImg(preview_img);
+                    }
+                  }}
+                />
               </FormControl>
+
+              {
+                !!previewImg && 
+                <div className='preview-img-container'>
+                  <label htmlFor="preview-img">Vista Previa:</label>
+                  <img src={previewImg} id='preview-img' className='preview-img' alt="preview university image" height={350} width={350}/>
+                </div>
+              }
 
               <input type="submit" id="submitFormBtn" hidden/>
 
@@ -105,8 +120,9 @@ export default function AddUniversityModal(props: Props) {
             </Button>
             <Button colorScheme='pink' ml={3} variant='solid' onClick={() => {
               reset();
-              props.setIsOpen(false)}
-            }>
+              props.setIsOpen(false)
+              setPreviewImg(null)
+            }}>
               Cerrar
             </Button>
           </ModalFooter>
