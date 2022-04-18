@@ -49,7 +49,7 @@ async function addUniversity(data: NewUniversity): Promise<AxiosResponse<string>
     const url = `${backendsrc}/university`;
     // Default options are marked with *
     return axios.post(url,data, {
-        maxBodyLength: 20_000_000 // 20MB
+        maxBodyLength: 50_242_880 // 50MiB
     });
 }
 

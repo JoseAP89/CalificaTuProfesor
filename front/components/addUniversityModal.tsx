@@ -8,6 +8,7 @@ import NewUniversity from '../_models/newUniversity';
 import { HttpResponseMessage } from '../_models/httpResponseMessage';
 import { Vessel } from '../_models/vessel';
 import TeacherService from '../_services/teacherService';
+import { json } from 'stream/consumers';
 
 interface Props {
   isOpen: boolean,
@@ -26,10 +27,14 @@ interface OptionCampus {
 }
 
 export default function AddUniversityModal(props: Props) {
+  const MAX_FILE_SIZE = 4; //MiB
+  const ALLOWED_FILE_FORMATS = ["jpeg", "jpg" ,"gif", "bmp", "tiff" , "png", "webp"];
   const { register, handleSubmit, control, formState: { errors }, reset } = useForm<IFormInputs>();
   const [previewImg, setPreviewImg] = useState<string | null>();
 
   function onClose() {
+    reset();
+    setPreviewImg(null)
     props.setIsOpen(false);
   }
 
@@ -39,7 +44,7 @@ export default function AddUniversityModal(props: Props) {
     let uni_data = null;
     reader.onload = function () {
       // reader.results contains the base64 string to send to the server
-      let file_name = data.img_file[0].name; 
+      let file_name = file.name; 
       let pos = file_name.lastIndexOf(".");
       let file_type = file_name.substring(pos+1).toLowerCase();
       let base64_data = window.btoa(reader.result as string);
@@ -54,11 +59,13 @@ export default function AddUniversityModal(props: Props) {
         }).catch(err => {
           const message : HttpResponseMessage = {
             success: false,
-            message: err.response.data
+            message: err?.response?.data
           }
+          console.log("unexpected error:",err);
           props.setHttpResponseMessage(message);
         }).finally(()=>{
           reset();
+          setPreviewImg(null)
           onClose();
         });
     }
@@ -78,6 +85,11 @@ export default function AddUniversityModal(props: Props) {
               <FormControl>
                 <FormLabel htmlFor='name'>Nombre de la Universidad</FormLabel>
                 <Input id='name' type='text' {...register("name", { required: true })}/>
+                {errors.name && 
+                  <p className='error-form-msg'>
+                    {`Campo requerido.`}
+                  </p>
+                }
                 <FormHelperText id="email-helper-text">
                   Debe ser el nombre completo, sin acrónimos ni siglas.
                 </FormHelperText>
@@ -85,14 +97,34 @@ export default function AddUniversityModal(props: Props) {
 
               <FormControl>
                 <FormLabel htmlFor='image-file'>Selecciona una imagen (Opcional)</FormLabel>
-                <Input id='image-file' type='file' {...register("img_file", { required: true })}
+                <Input id='image-file' type='file' {...register("img_file", { required: true, validate:{
+                    fileSize: fs => (fs[0].size/Math.pow(2,20)) <= MAX_FILE_SIZE ,
+                    fileFormat: fs => {
+                      let name = fs[0].name.toLowerCase();
+                      let dotPos = name.lastIndexOf(".");
+                      let file_format = name.slice(dotPos+1);
+                      return ALLOWED_FILE_FORMATS.some(f => f==file_format);
+                    }
+                  } 
+                })}
                   onChange={(event) =>{
                     if(!!event?.target?.files){
-                      let preview_img = URL.createObjectURL(event.target.files[0]);
+                      let file = event.target.files[0];
+                      let preview_img = URL.createObjectURL(file.slice());
                       setPreviewImg(preview_img);
                     }
                   }}
                 />
+                {errors.img_file && errors.img_file.type=="fileSize" &&
+                  <p className='error-form-msg'>
+                    {`Máximo tamaño de archivo superado. Tamaño debe ser menor a ${MAX_FILE_SIZE} MiB.`}
+                  </p>
+                }
+                {errors.img_file && errors.img_file.type=="fileFormat" &&
+                  <p className='error-form-msg'>
+                    {`Formato de archivo inválido. Formatos válidos: ${ALLOWED_FILE_FORMATS.join(", ")}.`}
+                  </p>
+                }
               </FormControl>
 
               {
