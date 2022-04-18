@@ -53,6 +53,7 @@ async fn main() -> std::io::Result<()> {
             .max_age(3600);
 
         App::new()
+            .app_data(web::JsonConfig::default().limit(1024 * 1024 * 50))
             .app_data(web::PayloadConfig::new(50_242_880))
             .service(get_table_name_by_id)
             .service(get_table_name_by_name)
