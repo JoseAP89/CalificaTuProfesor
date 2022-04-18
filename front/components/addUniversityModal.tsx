@@ -21,11 +21,6 @@ interface IFormInputs {
   img_file: FileList
 }
 
-interface OptionCampus {
-  value: number;
-  label: string;
-}
-
 export default function AddUniversityModal(props: Props) {
   const MAX_FILE_SIZE = 4; //MiB
   const ALLOWED_FILE_FORMATS = ["jpeg", "jpg" ,"gif", "bmp", "tiff" , "png", "webp"];
@@ -77,7 +72,7 @@ export default function AddUniversityModal(props: Props) {
       <Modal isOpen={props.isOpen} onClose={onClose} id='item'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader className='item-header'>Agrega a tu Maestro</ModalHeader>
+          <ModalHeader className='item-header'>Agrega a tu Universidad</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form action="" className='add-item-form' onSubmit={handleSubmit(onSubmit)}>
