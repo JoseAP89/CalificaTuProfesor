@@ -53,7 +53,7 @@ impl UniversityRepo {
                     r#"INSERT INTO university(
                         name)
                         values($1)"#,
-                    university_dto.name)
+                    university_dto.name.to_uppercase())
                     .execute(p).await;
                 match resp {
                     Ok(c) => {

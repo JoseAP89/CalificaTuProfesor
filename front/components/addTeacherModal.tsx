@@ -21,13 +21,13 @@ interface IFormInputs {
   lastname2: string;
   subject: string;
   uniStructureId: number;
-  campus: OptionCampus;
+  campus: SelectOption;
   structureName: string,
 }
 
-interface OptionCampus {
-  value: number;
+interface SelectOption {
   label: string;
+  value: number;
 }
 
 export default function AddTeacherModal(props: Props) {
@@ -98,7 +98,6 @@ export default function AddTeacherModal(props: Props) {
     }
     TeacherService.addRoster(formData)
       .then(res => {
-        console.log("roster response: ", res);
         const message : HttpResponseMessage = {
           success: true,
           message: "Agregado con exito"
@@ -114,7 +113,6 @@ export default function AddTeacherModal(props: Props) {
         reset();
         onClose();
       });
-    console.log("form data:", formData);
   }
   
   return (
@@ -164,9 +162,11 @@ export default function AddTeacherModal(props: Props) {
                         setSearchTarget(val);
                       }}
                       options={
-                        sourceCampusData?.map( campus =>{
-                          return { value: campus.id, label: campus.value }
-                        })
+                        !!sourceCampusData && sourceCampusData.length>0 ?
+                        sourceCampusData.map( campus =>{
+                          const temp  = { value: campus.id, label: campus.value };
+                          return temp as any
+                        }) : [{value:0, label:""}]
                       } 
                     />
                   </FormControl>

@@ -17,6 +17,7 @@ pub use self::controllers::{
     add_university,
     get_teacher_campus_search,
     get_uni_structure,
+    get_states,
 };
 
 
@@ -63,6 +64,7 @@ async fn main() -> std::io::Result<()> {
             .service(add_university)
             .service(get_teacher_campus_search)
             .service(get_uni_structure)
+            .service(get_states)
             .wrap(cors)
     })
     .bind(addr)?

@@ -48,12 +48,12 @@ impl RosterRepo {
                         campus_id, teacher_name, teacher_lastname1, teacher_lastname2, subject_name, uni_structure_id, structure_name)
                         values($1, $2, $3, $4, $5, $6, $7)"#,
                     roster_dto.campus_id,
-                    RosterRepo::to_capitalize(&roster_dto.teacher_name),
-                    RosterRepo::to_capitalize(&roster_dto.teacher_lastname1),
-                    RosterRepo::to_capitalize(&roster_dto.teacher_lastname2),
-                    RosterRepo::to_capitalize(&roster_dto.subject_name),
+                    roster_dto.teacher_name.to_uppercase(),
+                    roster_dto.teacher_lastname1.to_uppercase(),
+                    roster_dto.teacher_lastname2.to_uppercase(),
+                    roster_dto.subject_name.to_uppercase(),
                     roster_dto.uni_structure_id,
-                    RosterRepo::to_capitalize(&roster_dto.structure_name))
+                    roster_dto.structure_name.to_uppercase())
                     .execute(p).await;
                 match resp {
                     Ok(c) => {
@@ -97,7 +97,8 @@ impl RosterRepo {
                             name: row.get(6),
                             university_id : row.get(7),
                             state_id : row.get(8),
-                            img_file: None
+                            img_file: None,
+                            img_type: None
                         };
                         TeacherCampusDTO {
                             roster_id: row.get(0),

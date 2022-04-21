@@ -8,4 +8,5 @@ pub use self::teachers::{
     add_university,
     get_teacher_campus_search,
     get_uni_structure,
+    get_states,
 };

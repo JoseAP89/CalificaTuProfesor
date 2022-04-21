@@ -1,6 +1,6 @@
 use actix_web::{get, post, web,  HttpResponse, Error, error};
 use crate::dtos::{RosterDTO, CampusDTO, UniversityDTO};
-use crate::repositories::{CampusRepo, UniversityRepo, UniStructureRepo};
+use crate::repositories::{CampusRepo, UniversityRepo, UniStructureRepo, StateRepo};
 use crate::repositories::search_name::search_name_repo::SearchNameRepository;
 use crate::contracts::repository_name::RepositoryName;
 use crate::repositories::RosterRepo;
@@ -87,8 +87,10 @@ pub async fn add_campus(form: web::Json<CampusDTO>) -> Result<HttpResponse, Erro
         name: form.name.trim().to_owned(),
         university_id: form.university_id,
         state_id: form.state_id,
-        img_file: form.img_file.to_owned()
+        img_file: form.img_file.to_owned(),
+        img_type: form.img_type.to_owned(),
     };
+    println!("**** Campus data: {}, {}, {}", campus.name, campus.state_id, campus.university_id);
     let resp = campus_repo.add_campus(campus).await;
     match resp {
         Ok(r) => {
@@ -144,6 +146,23 @@ pub async fn get_teacher_campus_search(params: web::Path<(String, i32)>) -> Resu
 pub async fn get_uni_structure() -> Result<HttpResponse, Error> {
     let uni_structure_repo = UniStructureRepo::new().await;
     let  resp = uni_structure_repo.get_uni_structures().await;
+    match resp {
+        Ok(r) => {
+            Ok(HttpResponse::Ok().json(r))
+        },
+        Err(e) =>{
+            let e = e;
+            Err(error::ErrorTooManyRequests(format!("ERROR:{:?}",e)))
+        }
+        
+    }
+    
+}
+
+#[get("/state")]
+pub async fn get_states() -> Result<HttpResponse, Error> {
+    let state_repo = StateRepo::new().await;
+    let  resp = state_repo.get_states().await;
     match resp {
         Ok(r) => {
             Ok(HttpResponse::Ok().json(r))

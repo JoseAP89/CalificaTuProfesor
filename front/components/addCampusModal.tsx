@@ -2,13 +2,15 @@ import { Button, FormControl, FormHelperText, FormLabel, Input, Modal, ModalBody
   ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select as ChakraSelect
 } from '@chakra-ui/react';
 import { read } from 'fs';
-import { useEffect, useState } from 'react';
+import Select from 'react-select';
+import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import NewUniversity from '../_models/newUniversity';
 import { HttpResponseMessage } from '../_models/httpResponseMessage';
 import { Vessel } from '../_models/vessel';
 import TeacherService from '../_services/teacherService';
 import { json } from 'stream/consumers';
+import NewCampus from '../_models/newCampus';
 
 interface Props {
   isOpen: boolean,
@@ -18,14 +20,55 @@ interface Props {
 
 interface IFormInputs {
   name: string;
-  img_file: FileList
+  img_file: FileList;
+  university: SelectOption;
+  state: SelectOption;
 }
 
-export default function AddUniversityModal(props: Props) {
+interface SelectOption {
+  value: number;
+  label: string;
+}
+
+export default function AddCampusModal(props: Props) {
   const MAX_FILE_SIZE = 4; //MiB
   const ALLOWED_FILE_FORMATS = ["jpeg", "jpg" ,"gif", "bmp", "tiff" , "png", "webp"];
   const { register, handleSubmit, control, formState: { errors }, reset } = useForm<IFormInputs>();
   const [previewImg, setPreviewImg] = useState<string | null>();
+  const selectRef = useRef<any>(null);
+  const [sourceUniversityData, setSourceUniversityData] = useState<Array<Vessel> | null>(null);
+  const [sourceStateData, setSourceStateData] = useState<Array<Vessel> | null>(null);
+  const [searchTarget, setSearchTarget] = useState<string>(""); // incomplete target search to be looked up in the DB
+  const [selectedOption, setselectedOption] = useState<Vessel | null>(); // completed and selected search word comming forn the DB
+
+  useEffect(() => {
+    // initialization of data
+    setSearchTarget("");
+    setselectedOption(null);
+    if (!!selectRef?.current) {
+      selectRef.current.value = "";
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!!selectRef?.current && selectedOption!=null) {
+      selectRef.current.value = selectedOption.value;
+    }
+    
+  }, [selectedOption]);
+
+  useEffect(() => {
+    // get states source data
+    TeacherService.getStates()
+      .then(resp => {
+        let data = resp.data;
+        setSourceStateData(data);
+      })
+      .catch(err => {
+        console.log("Hubo un error obteniendo los Estados.")
+      });
+    
+  }, []);
 
   function onClose() {
     reset();
@@ -33,18 +76,33 @@ export default function AddUniversityModal(props: Props) {
     props.setIsOpen(false);
   }
 
+  useEffect(() => {
+    if (searchTarget !== "") {
+      TeacherService.getUniversities(searchTarget, 20)
+        .then(resp => {
+          let data = resp.data;
+          setSourceUniversityData(data);
+        })
+        .catch(err => {
+          console.log("Hubo un error obteniendo los campus con universidades.")
+        });
+
+    }
+    
+  }, [searchTarget]);
+
   function onSubmit(data: IFormInputs) {
-    let file  = data?.img_file[0];
+    let file = data?.img_file[0];
     let reader = new FileReader();
-    let uni_data = null;
+    let campus_data = null;
     reader.onload = function () {
       // reader.results contains the base64 string to send to the server
-      let file_name =  file.name;  
-      let pos = file_name.lastIndexOf("."); 
+      let file_name = file.name; 
+      let pos = file_name.lastIndexOf(".");
       let file_type = file_name.substring(pos+1).toLowerCase();
       let base64_data = window.btoa(reader.result as string);
-      uni_data = new NewUniversity(data.name, base64_data, file_type)
-      TeacherService.addUniversity(uni_data)
+      campus_data= new NewCampus(data.name, data.state.value, data.university.value, base64_data, file_type)
+      TeacherService.addCampus(campus_data)
         .then(res => {
           const message : HttpResponseMessage = {
             success: true,
@@ -67,8 +125,8 @@ export default function AddUniversityModal(props: Props) {
     if (!!file) {
       reader.readAsBinaryString(file);
     } else {
-      uni_data = new NewUniversity(data.name, undefined, undefined)
-      TeacherService.addUniversity(uni_data)
+      campus_data= new NewCampus(data.name, data.state.value, data.university.value, undefined, undefined)
+      TeacherService.addCampus(campus_data)
         .then(res => {
           const message : HttpResponseMessage = {
             success: true,
@@ -87,7 +145,6 @@ export default function AddUniversityModal(props: Props) {
           setPreviewImg(null)
           onClose();
         });
-      
     }
   }
   
@@ -96,13 +153,13 @@ export default function AddUniversityModal(props: Props) {
       <Modal isOpen={props.isOpen} onClose={onClose} id='item'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader className='item-header'>Agrega a tu Universidad</ModalHeader>
+          <ModalHeader className='item-header'>Agrega a tu Campus</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form action="" className='add-item-form' onSubmit={handleSubmit(onSubmit)}>
 
               <FormControl>
-                <FormLabel htmlFor='name'>Nombre de la Universidad</FormLabel>
+                <FormLabel htmlFor='name'>Nombre del Campus</FormLabel>
                 <Input id='name' type='text' {...register("name", { required: true })}/>
                 {errors.name && 
                   <p className='error-form-msg'>
@@ -113,6 +170,55 @@ export default function AddUniversityModal(props: Props) {
                   Debe ser el nombre completo, sin acrónimos ni siglas.
                 </FormHelperText>
               </FormControl>
+
+              <Controller
+                name="university"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => 
+                  <FormControl>
+                    <FormLabel htmlFor='university'>Universidad</FormLabel>
+                    <Select 
+                      {...field} 
+                      ref={selectRef}
+                      id='university'
+                      placeholder='selecciona...'
+                      isClearable={true}
+                      onInputChange={ (val: string) =>{
+                        setSearchTarget(val);
+                      }}
+                      options={
+                        sourceUniversityData?.map( uni =>{
+                          return { value: uni.id, label: uni.value } as any
+                        })
+                      } 
+                    />
+                  </FormControl>
+                  }
+              />
+
+              <Controller
+                name="state"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => 
+                  <FormControl>
+                    <FormLabel htmlFor='state'>Estado</FormLabel>
+                    <Select 
+                      {...field} 
+                      id='state'
+                      placeholder='selecciona...'
+                      isClearable={true}
+                      isSearchable={true}
+                      options={
+                        sourceStateData?.map( state =>{
+                          return { value: state.id, label: state.value } as any
+                        })
+                      } 
+                    />
+                  </FormControl>
+                  }
+              />
 
               <FormControl>
                 <FormLabel htmlFor='image-file'>Selecciona una imagen (Opcional)</FormLabel>
