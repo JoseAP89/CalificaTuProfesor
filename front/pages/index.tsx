@@ -109,6 +109,9 @@ const Home: NextPage = () => {
   return (
     <>
 
+      <Head>
+          <title>Inicio</title>
+      </Head>
       <HomeContainer inputColor='white' className='home-container-search-bar'>
         <SimpleGrid columns={{ sm: 1 }} spacing='40px'>
 

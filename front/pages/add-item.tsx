@@ -20,6 +20,9 @@ const AddItem: NextPage = () => {
 
     return (
         <>
+            <Head>
+                <title>Agregar</title>
+            </Head>
             <div className='hero-title'>
                 <h1 className=''>
                     Agrega tu profesor, campus o universidad si aun no se encuentra.

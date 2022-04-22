@@ -117,9 +117,9 @@ export default function AddCampusModal(props: Props) {
           console.log("unexpected error:",err);
           props.setHttpResponseMessage(message);
         }).finally(()=>{
+          onClose();
           reset();
           setPreviewImg(null)
-          onClose();
         });
     }
     if (!!file) {
@@ -141,9 +141,9 @@ export default function AddCampusModal(props: Props) {
           console.log("unexpected error:",err);
           props.setHttpResponseMessage(message);
         }).finally(()=>{
+          onClose();
           reset();
           setPreviewImg(null)
-          onClose();
         });
     }
   }

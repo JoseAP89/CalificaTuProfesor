@@ -30,7 +30,7 @@ interface SelectOption {
   value: number;
 }
 
-export default function AddTeacherModal(props: Props) {
+export default function ShowFacility(props: Props) {
   const { register, handleSubmit, control, formState: { errors }, reset } = useForm<IFormInputs>();
   const [searchTarget, setSearchTarget] = useState<string>(""); // incomplete target search to be looked up in the DB
   const [selectedOption, setselectedOption] = useState<Vessel | null>(); // completed and selected search word comming forn the DB
