@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // connection to postgres
 var connString = builder.Configuration.GetConnectionString("TeachersDB");
-builder.Services.AddDbContext<teachersContext>(opt =>{
+builder.Services.AddDbContext<TeachersContext>(opt =>{
     opt.UseNpgsql(connString);
 });
 

@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace back_csharp._data
 {
-    public partial class teachersContext : DbContext
+    public class TeachersContext : DbContext
     {
-        public teachersContext()
+        public TeachersContext()
         {
         }
 
-        public teachersContext(DbContextOptions<teachersContext> options)
+        public TeachersContext(DbContextOptions<TeachersContext> options)
             : base(options)
         {
         }
@@ -330,9 +327,9 @@ namespace back_csharp._data
                     .HasConstraintName("vote_comment_id_fkey");
             });
 
-            OnModelCreatingPartial(modelBuilder);
+            //OnModelCreatingPartial(modelBuilder);
         }
 
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        //partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
