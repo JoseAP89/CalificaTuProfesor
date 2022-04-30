@@ -44,7 +44,7 @@ export default function ListOptions(props: Props) {
                         }}
                     >
                         <div className="sub-top-row">
-                            <FontAwesomeIcon icon={type == TeacherSearch.NAME ? faPerson : faGraduationCap} className="row-icon"/>
+                            <FontAwesomeIcon icon={type == TeacherSearch.NAME ? faPerson : faBuilding} className="row-icon"/>
                             <div key={v[0].id} className="main-info-row">
                                 <p>{v[0].value}</p>
                             </div>
@@ -58,7 +58,7 @@ export default function ListOptions(props: Props) {
                             </div>
                         }
                         <div className="sub-bottom-row">
-                            <FontAwesomeIcon icon={type == TeacherSearch.NAME ? faGraduationCap : faBuilding} className="row-icon" />
+                            <FontAwesomeIcon icon={type == TeacherSearch.NAME ? faBuilding: faGraduationCap } className="row-icon" />
                             <div key={v[1].id} className="secondary-info-row">
                                 <p>{v[1].value}</p>
                             </div>

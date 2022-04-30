@@ -17,10 +17,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+const string POLICY = "AllowAll";
 builder.Services.AddCors(opt => {
-    opt.AddPolicy("AllowAll",
-        b => b.AllowAnyHeader()
-            .AllowAnyOrigin()
+    opt.AddPolicy(POLICY,
+        policy => policy
+            .WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
             .AllowAnyMethod()
     );
 });
@@ -35,8 +37,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
 
-app.UseCors("AllowAll");
+app.UseCors(POLICY);
 
 app.UseAuthorization();
 
