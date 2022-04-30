@@ -24,9 +24,9 @@ namespace back_csharp.Controllers
         [HttpGet("{quantity}")]
         public async Task<ActionResult<IEnumerable<Vessel>>> GetCampus(int quantity)
         {
-            var universities = from uni in _context.Campuses
-                orderby uni.Name select uni;
-            var res = (await universities.Take(quantity).ToListAsync())?.Select( x => 
+            var campus = from c in _context.Campuses
+                orderby c.Name select c;
+            var res = (await campus.Take(quantity).ToListAsync())?.Select( x => 
                 new Vessel{Id = x.CampusId, Value = x.Name});
             if (res==null)
             {
@@ -34,5 +34,32 @@ namespace back_csharp.Controllers
             }
             return Ok(res);
         }
+        
+        [HttpGet("university/{search}")]
+        public async Task<ActionResult<IEnumerable<CampusUniversity>>> GetCampusUniversity(string search)
+        {
+            const int MAX_RESULTS = 20;
+            search = search.Replace("+", " ").Trim();
+            search = search.ToLower();
+            var campus_ids = await _context.Campuses.FromSqlRaw<Campus>(
+                $"SELECT * FROM campus c WHERE LOWER(UNACCENT(c.name)) LIKE '%{search}%' OR LOWER(c.name) LIKE '%{search}%' LIMIT {MAX_RESULTS} ")
+                .Select(x => x.CampusId)
+                .ToListAsync();
+            var res = await (from c in _context.Campuses
+                join u in _context.Universities on c.UniversityId equals u.UniversityId
+                where campus_ids.Contains(c.CampusId)
+                select new CampusUniversity
+                {
+                    CampusId = c.CampusId,
+                    Name = c.Name,
+                    University = new UniversityDto {UniversityId = u.UniversityId, Name = u.Name}
+                }).ToListAsync();
+            if (res==null)
+            {
+                return NoContent();
+            }
+            return Ok(res);
+        }
+        
     }
 }
