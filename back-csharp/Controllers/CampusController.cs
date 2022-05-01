@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using back_csharp._data;
 using back_csharp._dtos;
+using back_csharp._helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace back_csharp.Controllers
@@ -39,10 +40,13 @@ namespace back_csharp.Controllers
         public async Task<ActionResult<IEnumerable<CampusUniversity>>> GetCampusUniversity(string search)
         {
             const int MAX_RESULTS = 20;
-            search = search.Replace("+", " ").Trim();
-            search = search.ToLower();
+            search = search
+                .Replace("+", " ")
+                .Trim()
+                .ToLower()
+                .RemoveDiacritics();
             var campus_ids = await _context.Campuses.FromSqlRaw<Campus>(
-                $"SELECT * FROM campus c WHERE LOWER(UNACCENT(c.name)) LIKE '%{search}%' OR LOWER(c.name) LIKE '%{search}%' LIMIT {MAX_RESULTS} ")
+                $"SELECT * FROM campus c WHERE LOWER(UNACCENT(c.name)) LIKE '%{search}%' LIMIT {MAX_RESULTS} ")
                 .Select(x => x.CampusId)
                 .ToListAsync();
             var res = await (from c in _context.Campuses
