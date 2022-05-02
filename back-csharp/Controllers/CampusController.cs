@@ -47,6 +47,7 @@ namespace back_csharp.Controllers
                 .RemoveDiacritics();
             var campus_ids = await _context.Campuses.FromSqlRaw<Campus>(
                 $"SELECT * FROM campus c WHERE LOWER(UNACCENT(c.name)) LIKE '%{search}%' LIMIT {MAX_RESULTS} ")
+                .AsNoTracking()
                 .Select(x => x.CampusId)
                 .ToListAsync();
             var res = await (from c in _context.Campuses
@@ -57,7 +58,7 @@ namespace back_csharp.Controllers
                     CampusId = c.CampusId,
                     Name = c.Name,
                     University = new UniversityDto {UniversityId = u.UniversityId, Name = u.Name}
-                }).ToListAsync();
+                }).AsNoTracking().ToListAsync();
             if (res==null)
             {
                 return NoContent();

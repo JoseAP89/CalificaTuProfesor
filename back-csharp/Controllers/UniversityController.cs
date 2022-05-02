@@ -31,6 +31,20 @@ namespace back_csharp.Controllers
                 return NoContent();
             }
 
+            return Ok(await universities.AsNoTracking().ToListAsync());
+
+        }
+        
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<UniversityDto>>> AddUniversity()
+        {
+            var universities = from uni in _context.Universities 
+                orderby uni.Name select uni;
+            if (universities==null)
+            {
+                return NoContent();
+            }
+
             return Ok(await universities.ToListAsync());
 
         }

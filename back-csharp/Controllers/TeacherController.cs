@@ -33,6 +33,7 @@ namespace back_csharp.Controllers
                 .RemoveDiacritics();
             var teacher_ids = await _context.Rosters.FromSqlRaw<Roster>(
                 $"SELECT * FROM roster r WHERE LOWER(UNACCENT(CONCAT(r.teacher_name,' ', r.teacher_lastname1, ' ', r.teacher_lastname2))) LIKE '%{search}%'  LIMIT {MAX_RESULTS} ")
+                .AsNoTracking()
                 .Select(x => x.RosterId)
                 .ToListAsync();
             var res = await (from c in _context.Campuses
@@ -44,8 +45,9 @@ namespace back_csharp.Controllers
                     TeacherName = r.TeacherName,
                     TeacherLastname1 = r.TeacherLastname1,
                     TeacherLastname2 = r.TeacherLastname2,
-                    Campus = new CampusDto {Name = c.Name, CampusId = c.CampusId, UniversityId = c.UniversityId}
-                }).ToListAsync();
+                    Campus = new CampusDto {Name = c.Name, CampusId = c.CampusId, UniversityId = c.UniversityId},
+                    SubjectName = r.SubjectName
+                }).AsNoTracking().ToListAsync();
             if (res==null)
             {
                 return NoContent();
