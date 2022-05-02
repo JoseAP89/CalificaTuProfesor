@@ -44,8 +44,14 @@ async function getUniStructures(): Promise<AxiosResponse<Array<Vessel>>>{
     return axios.get(url);
 }
 
+async function getUniversities(target: String, numResults: number = 20): Promise<AxiosResponse<Array<Vessel>>>{
+    target = target.trim().replaceAll(/\s+/g,"+");
+    const url = `${backend_csharp}/university/search/${target}`;
+    return axios.get(url);
+}
+
 async function getStates(): Promise<AxiosResponse<Array<Vessel>>>{
-    const url = `${backend_rust}/state`;
+    const url = `${backend_csharp}/state`;
     return axios.get(url);
 }
 
@@ -64,24 +70,11 @@ async function addUniversity(data: NewUniversity): Promise<AxiosResponse<string>
 }
 
 async function addCampus(data: NewCampus): Promise<AxiosResponse<string>>{
-    const url = `${backend_rust}/campus`;
+    const url = `${backend_csharp}/campus`;
     // Default options are marked with *
     return axios.post(url,data, {
         maxBodyLength: 50_242_880 // 50MiB
     });
 }
-
-async function getUniversities(target: String, numResults: number = 20): Promise<AxiosResponse<Array<Vessel>>>{
-    target = target.replaceAll(/\s+/g,"+");
-    const url = `${backend_rust}/search-name/university/${target}/${numResults}`;
-    return axios.get(url);
-}
-
-// search-name/university/zam/100
-/* async function cleanCache(token : string): Promise<AxiosResponse<string>>{
-    const url = `${backendsrc}/api/usuario/clean-cache`;
-    // Default options are marked with *
-    return axios.delete(url, {params: {token}});
-} */
 
 export default TeacherService;

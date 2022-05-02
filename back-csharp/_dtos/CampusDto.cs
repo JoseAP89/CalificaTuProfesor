@@ -14,4 +14,6 @@ public class CampusDto
     public int StateId { get; set; } 
     [JsonPropertyName("img_file")]
     public string? ImgFile { get; set; } 
+    [JsonPropertyName("img_type")]
+    public string? ImgType { get; set; }
 }

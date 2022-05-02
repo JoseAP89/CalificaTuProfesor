@@ -59,6 +59,31 @@ namespace back_csharp.Controllers
 
         }
         
+        [HttpGet("search/{search}")]
+        public async Task<ActionResult<Vessel>> GetUniversitySearch(string search)
+        {
+            const int MAX_RESULTS = 20;
+            search = search
+                .Replace("+", " ")
+                .Trim()
+                .ToLower()
+                .RemoveDiacritics();
+            var university_ids = await _context.Universities.FromSqlRaw<University>(
+                $"SELECT * FROM university u WHERE LOWER(UNACCENT(u.name)) LIKE '%{search}%'  LIMIT {MAX_RESULTS} ")
+                .AsNoTracking()
+                .Select(x => x.UniversityId)
+                .ToListAsync();
+            var uni = from u in _context.Universities
+                where university_ids.Contains(u.UniversityId) select u;
+            var res = (await uni.AsNoTracking().ToListAsync())?.Select( x => 
+                new Vessel{Id = x.UniversityId, Value = x.Name}).ToList();
+            if (res==null)
+            {
+                return NoContent();
+            }
+            return Ok(res);
+        }
+        
         [HttpPost]
         public async Task<ActionResult<IEnumerable<UniversityDto>>> AddUniversity(UniversityDto universitydto)
         {
@@ -84,7 +109,7 @@ namespace back_csharp.Controllers
                 return CreatedAtAction(
                     nameof(GetUniversity),
                     new { id = universitydto.UniversityId},
-                    universitydto
+                    university
                 );
             }
             catch (Exception e)
