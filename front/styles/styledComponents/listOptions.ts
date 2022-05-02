@@ -33,6 +33,7 @@ top:50px;
         grid-template-columns: 1fr 12fr;
     }
     .sub-bottom-row {
+        font-size: 0.83rem;
         padding-left: 20px;
         display: grid;
         grid-template-columns: 1fr 12fr;

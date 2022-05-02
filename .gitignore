@@ -19,3 +19,4 @@ tags
 [._]*.un~
 
 front/public/universities/*
+front/public/campuses/*

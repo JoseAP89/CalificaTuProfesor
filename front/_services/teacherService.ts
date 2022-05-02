@@ -56,7 +56,7 @@ async function addRoster(data: Roster): Promise<AxiosResponse<string>>{
 }
 
 async function addUniversity(data: NewUniversity): Promise<AxiosResponse<string>>{
-    const url = `${backend_rust}/university`;
+    const url = `${backend_csharp}/university`;
     // Default options are marked with *
     return axios.post(url,data, {
         maxBodyLength: 50_242_880 // 50MiB

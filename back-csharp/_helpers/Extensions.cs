@@ -1,3 +1,5 @@
+using System.Drawing;
+
 namespace back_csharp._helpers;
 using System.Text;
 using System.Globalization;
@@ -23,4 +25,13 @@ public static class Extensions
             .ToString()
             .Normalize(NormalizationForm.FormC);
     }
+    public static byte[] Base64Decode(this string data) {
+        if (data == null)
+        {
+            return default;
+        }
+        var base64EncodedBytes = System.Convert.FromBase64String(data);
+        return base64EncodedBytes;
+    }
+    
 }
