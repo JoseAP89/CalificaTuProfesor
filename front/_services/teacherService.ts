@@ -35,12 +35,12 @@ async function getCampusWithUniversity(target: String, numResults: number = 20):
 
 async function getTeacherWithCampus(target: String, numResults: number = 20): Promise<AxiosResponse<Array<TeacherWithCampus>>>{
     target = target.replaceAll(/\s+/g,"+");
-    const url = `${backend_csharp}/teacher/campus/${target}/`;
+    const url = `${backend_csharp}/roster/campus/${target}/`;
     return axios.get(url);
 }
 
 async function getUniStructures(): Promise<AxiosResponse<Array<Vessel>>>{
-    const url = `${backend_rust}/uni-structure`;
+    const url = `${backend_csharp}/unistructure`;
     return axios.get(url);
 }
 
@@ -56,7 +56,7 @@ async function getStates(): Promise<AxiosResponse<Array<Vessel>>>{
 }
 
 async function addRoster(data: Roster): Promise<AxiosResponse<string>>{
-    const url = `${backend_rust}/roster`;
+    const url = `${backend_csharp}/roster`;
     // Default options are marked with *
     return axios.post(url,data);
 }
