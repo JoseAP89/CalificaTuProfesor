@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using back_csharp._data;
@@ -16,9 +17,11 @@ namespace back_csharp.Controllers
     public class CampusController : ControllerBase
     {
         private readonly TeachersContext _context;
+        private readonly IMapper _autoMapper;
 
-        public CampusController(TeachersContext context)
+        public CampusController(TeachersContext context, IMapper _mapper)
         {
+            _autoMapper = _mapper;
             _context = context;
         }
 
@@ -96,13 +99,8 @@ namespace back_csharp.Controllers
         {
             try
             {
-                var campus = new Campus()
-                {
-                    CampusId = 0,
-                    Name = campusDto.Name.Trim().ToUpper(),
-                    StateId = campusDto.StateId,
-                    UniversityId = campusDto.UniversityId
-                };
+                var campus = _autoMapper.Map<Campus>(campusDto);
+                campus.Name = campus.Name.Trim().ToUpper();
                 if (campusDto.ImgFile != null)
                 {
                     string img_name = campusDto.Name.Replace(" ", "_").ToLower().Trim();

@@ -1,3 +1,4 @@
+using back_csharp._configs;
 using back_csharp._data;
 using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
@@ -26,7 +27,7 @@ builder.Services.AddCors(opt => {
             .AllowAnyMethod()
     );
 });
-
+builder.Services.AddAutoMapper(typeof(AutoMapperConfigs));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
