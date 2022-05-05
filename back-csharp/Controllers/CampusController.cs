@@ -18,23 +18,39 @@ namespace back_csharp.Controllers
     {
         private readonly TeachersContext _context;
         private readonly IMapper _autoMapper;
+        private readonly IConfiguration _config;
 
-        public CampusController(TeachersContext context, IMapper _mapper)
+        public CampusController(TeachersContext context, IMapper _mapper, IConfiguration config)
         {
+            _config = config;
             _autoMapper = _mapper;
             _context = context;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Vessel>> GetCampus(int id)
+        [HttpGet("info/{id}")]
+        public async Task<ActionResult<CampusDto>> GetCampus(int id)
         {
+            string path = _config["Images:campus"];
+            string[] allowedFormats = _config.GetSection("Images:allowedFormats").Get<string[]>();
             var campus = from c in _context.Campuses
                 where c.CampusId == id select c;
-            var res = (await campus.AsNoTracking().ToListAsync())?.Select( x => 
-                new Vessel{Id = x.CampusId, Value = x.Name}).SingleOrDefault();
+            var res = (await campus.AsNoTracking()
+                .Select(x => new CampusDto
+                {
+                    Name = x.Name,
+                    CampusId = x.CampusId,
+                    UniversityId = x.UniversityId,
+                    StateId = x.StateId
+                })
+                .SingleOrDefaultAsync());
             if (res==null)
             {
                 return NoContent();
+            } 
+            var fileName =  res.Name.Replace(" ", "_").ToLower().Trim() ;
+            if (Directory.GetFiles(path, $"{fileName}.*").Length>0) 
+            {
+                res.HaveImage = true;
             }
             return Ok(res);
         }

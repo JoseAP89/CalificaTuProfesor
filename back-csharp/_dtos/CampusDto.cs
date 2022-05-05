@@ -16,4 +16,6 @@ public class CampusDto
     public string? ImgFile { get; set; } 
     [JsonPropertyName("img_type")]
     public string? ImgType { get; set; }
+
+    public bool HaveImage { get; set; } = false;
 }

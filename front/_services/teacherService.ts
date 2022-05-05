@@ -7,7 +7,6 @@ import NewUniversity from '../_models/newUniversity';
 import NewCampus from '../_models/newCampus';
 
 const TeacherService = {
-    getNameVessels,
     getCampusWithUniversity,
     getTeacherWithCampus,
     getUniStructures,
@@ -20,12 +19,6 @@ const TeacherService = {
 
 const backend_rust = "http://localhost:8080"
 const backend_csharp = "https://localhost:7167/api"
-
-async function getNameVessels(tableName: string, target: string, numResults: number = 20): Promise<AxiosResponse<Array<Vessel>>>{
-    target = target.replaceAll(/\s+/g,"+");
-    const url = `${backend_rust}/search-name/${tableName}/${target}/${numResults}`;
-    return axios.get(url);
-}
 
 async function getCampusWithUniversity(target: String, numResults: number = 20): Promise<AxiosResponse<Array<CampusUniversity>>>{
     target = target.replaceAll(/\s+/g,"+");
