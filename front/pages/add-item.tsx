@@ -1,8 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
-import { Container, Box, SimpleGrid, Flex,
-  Heading, Button, InputGroup, Input, InputRightAddon, InputLeftAddon, IconButton, Select, AlertIcon, Alert, Tabs, TabPanels, Tab, TabList, TabPanel, FormControl, FormLabel, Modal, ModalContent, ModalFooter, ModalBody, ModalCloseButton, ModalHeader, ModalOverlay, useDisclosure, CloseButton, AlertDescription, AlertTitle
+import { 
+  AlertIcon, Alert, CloseButton, AlertDescription, AlertTitle,
 } from '@chakra-ui/react'
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { Vessel } from '../_models/vessel'

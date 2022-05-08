@@ -48,10 +48,15 @@ namespace back_csharp.Controllers
                 return NoContent();
             } 
             var fileName =  res.Name.Replace(" ", "_").ToLower().Trim() ;
-            if (Directory.GetFiles(path, $"{fileName}.*").Length>0) 
+            var files = Directory.GetFiles(path, $"{fileName}.*");
+            string fullFileName = files.FirstOrDefault();
+            if (fullFileName != null)
             {
-                res.HaveImage = true;
+                var pos = fullFileName.LastIndexOf("/");
+                fullFileName = fullFileName.Substring(pos+1);
             }
+            res.FullFileName = fullFileName;
+            Console.WriteLine("********* " + fullFileName);
             return Ok(res);
         }
         
