@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react'
 import TeacherService from '../../_services/teacherService'
 import {Campus} from '../../_models/campus'
 import noAvailable from '../../public/no_available.jpg'
+import CampusInfoStyle from '../../styles/styledComponents/campusInfo'
+import { Table, TableCaption, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
 
 const CampusPage = () => {
     const router = useRouter()
-    const [campusId, setCampusId] = useState<Number|null>(null);
+    const [campusId, setCampusId] = useState<number|null>(null);
     const [campus, setCampus] = useState<Campus|null>(null);
     const [campusImage, setCampusImage] = useState<any>(null);
     const {id} = router.query;
@@ -21,7 +23,7 @@ const CampusPage = () => {
     useEffect(() => {
         if (campusId!=null) {
             if (campusId>0) {
-                TeacherService.getCampusInfo(campusId as number)
+                TeacherService.getCampusInfo(campusId)
                     .then(d =>{
                         let data = d.data;
                         let campus = new Campus(
@@ -30,7 +32,9 @@ const CampusPage = () => {
                             data.university_id,
                             data.state_id,
                             data.img_file,
-                            data.full_file_name
+                            data.full_file_name,
+                            data.university_name,
+                            data.state_name
                         );
                         if (!!campus && campus.full_file_name!= null) {
                             import(`../../public/campuses/${campus.full_file_name}`).then( img => {
@@ -56,17 +60,51 @@ const CampusPage = () => {
         </Head>
         <div className='hero-title'>
             <h1 className=''>
-                Agrega tu profesor, campus o universidad si aun no se encuentra.
+                {'  ' + campus?.name}
             </h1>
         </div>
-        <p>Post: {campusId}</p>
-        {
-            !!campus && 
-            <>
-                <div>Nombre del campus: {campus.name}</div>
-            </>
-        }
-        <img src={!!campusImage?campusImage: noAvailable.src} alt="imagen del campus"  height={330} width={300}/>
+
+        <CampusInfoStyle>
+            <img className='building-img' src={!!campusImage ? campusImage : noAvailable.src} alt="imagen del campus" />
+
+            <div className='campus-brief-info'>
+                <div className='label-brief'>Estado</div>
+                <div className='content-brief'>{campus?.state_name}</div>
+                <div className='label-brief'>Universidad</div>
+                <div className='content-brief'>{campus?.university_name}</div>
+            </div>
+
+
+            <div className='table-title'>Profesores pertenecientes al campus</div>
+            <TableContainer className='teachers-table'>
+                <Table variant='striped' colorScheme='blue'>
+                    <Thead>
+                    <Tr>
+                        <Th>Profesor</Th>
+                        <Th>Materia</Th>
+                        <Th isNumeric>Puntaje</Th>
+                    </Tr>
+                    </Thead>
+                    <Tbody>
+                    <Tr>
+                        <Td>inches</Td>
+                        <Td>millimetres (mm)</Td>
+                        <Td isNumeric>25.4</Td>
+                    </Tr>
+                    <Tr>
+                        <Td>feet</Td>
+                        <Td>centimetres (cm)</Td>
+                        <Td isNumeric>30.48</Td>
+                    </Tr>
+                    <Tr>
+                        <Td>yards</Td>
+                        <Td>metres (m)</Td>
+                        <Td isNumeric>0.91444</Td>
+                    </Tr>
+                    </Tbody>
+                </Table>
+            </TableContainer>
+        </CampusInfoStyle>
     </>
 }
 

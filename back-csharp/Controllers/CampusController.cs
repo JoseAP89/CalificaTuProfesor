@@ -33,14 +33,26 @@ namespace back_csharp.Controllers
             string path = _config["Images:campus"];
             string[] allowedFormats = _config.GetSection("Images:allowedFormats").Get<string[]>();
             var campus = from c in _context.Campuses
-                where c.CampusId == id select c;
+                join u in _context.Universities on c.UniversityId equals u.UniversityId 
+                join s in _context.States on c.StateId equals s.StateId 
+                where c.CampusId == id select new
+                {
+                    Name = c.Name,
+                    CampusId = c.CampusId,
+                    UniversityId = c.UniversityId,
+                    UniversityName = u.Name,
+                    StateId = c.StateId,
+                    StateName = s.Name,
+                };
             var res = (await campus.AsNoTracking()
                 .Select(x => new CampusDto
                 {
                     Name = x.Name,
                     CampusId = x.CampusId,
                     UniversityId = x.UniversityId,
-                    StateId = x.StateId
+                    UniversityName = x.UniversityName,
+                    StateId = x.StateId,
+                    StateName = x.StateName,
                 })
                 .SingleOrDefaultAsync());
             if (res==null)
