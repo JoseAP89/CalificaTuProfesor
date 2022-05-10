@@ -36,6 +36,9 @@ const CampusPage = () => {
                             data.university_name,
                             data.state_name
                         );
+                        if (!!!campus.campus_id) {
+                            router.push("/404");
+                        }
                         if (!!campus && campus.full_file_name!= null) {
                             import(`../../public/campuses/${campus.full_file_name}`).then( img => {
                                 setCampusImage(img.default.src);
@@ -82,6 +85,7 @@ const CampusPage = () => {
                     <Tr>
                         <Th>Profesor</Th>
                         <Th>Materia</Th>
+                        <Th isNumeric>Comentarios</Th>
                         <Th isNumeric>Puntaje</Th>
                     </Tr>
                     </Thead>
@@ -89,16 +93,19 @@ const CampusPage = () => {
                     <Tr>
                         <Td>inches</Td>
                         <Td>millimetres (mm)</Td>
+                        <Td isNumeric>25</Td>
                         <Td isNumeric>25.4</Td>
                     </Tr>
                     <Tr>
                         <Td>feet</Td>
                         <Td>centimetres (cm)</Td>
+                        <Td isNumeric>3</Td>
                         <Td isNumeric>30.48</Td>
                     </Tr>
                     <Tr>
                         <Td>yards</Td>
                         <Td>metres (m)</Td>
+                        <Td isNumeric>9</Td>
                         <Td isNumeric>0.91444</Td>
                     </Tr>
                     </Tbody>

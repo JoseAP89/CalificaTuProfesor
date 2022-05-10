@@ -7,8 +7,8 @@ export default function Navbar() {
       <Link href="/">
         <a >Inicio</a>
       </Link>
-      <Link href="/#search">
-        <a >Buscar</a>
+      <Link href="/add-item">
+        <a >Agregar</a>
       </Link>
       <Link href="/grade">
         <a >Calificar</a>

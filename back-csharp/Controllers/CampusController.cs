@@ -27,7 +27,7 @@ namespace back_csharp.Controllers
             _context = context;
         }
 
-        [HttpGet("info/{id}")]
+        [HttpGet("info/{id:int}")]
         public async Task<ActionResult<CampusDto>> GetCampus(int id)
         {
             string path = _config["Images:campus"];

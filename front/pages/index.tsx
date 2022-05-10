@@ -20,12 +20,14 @@ import ListOptions from '../components/list-options'
 import { Vessel } from '../_models/vessel'
 import TeacherService  from '../_services/teacherService'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const Home: NextPage = () => {
   
+  const router = useRouter()
   const [typeSearchBy, setTypeSearchBy] = useState<TeacherSearch>(TeacherSearch.NAME);
   const [searchIcon, setSearchIcon] = useState<ReactElement>(<FontAwesomeIcon icon={faPerson}/>);
-  const [searchTarget, setSearchTarget] = useState<string>(""); // incomplete target search to be looked up in the DB
+  const [searchTarget, setSearchTarget] = useState<string>(""); // incomplete/complete target search to be looked up in the DB
   const [sourceData, setSourceData] = useState<Array<Array<Vessel>> | null>(null);
   const selectRef = useRef<HTMLInputElement>(null);
   const [showSourceData, setShowSourceData] = useState<boolean>(false);
@@ -101,7 +103,11 @@ const Home: NextPage = () => {
   function process_search(e: any) {
     e.preventDefault() ;
     if (!!selectedOption && selectedOption?.value !== "") {
-      console.log("form data: ", selectedOption) ;
+      if (typeSearchBy == TeacherSearch.CAMPUS) {
+        router.push(`/campus/${selectedOption.id}`);
+      } else if(typeSearchBy == TeacherSearch.NAME){
+        router.push(`/roster/${selectedOption.id}`);
+      }
     }
   }
 

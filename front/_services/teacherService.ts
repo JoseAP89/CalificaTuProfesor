@@ -11,10 +11,11 @@ const TeacherService = {
     getTeacherWithCampus,
     getUniStructures,
     getUniversities,
+    getTeacherInfo,
     getCampusInfo,
     getStates,
-    addRoster,
     addUniversity,
+    addRoster,
     addCampus,
 }
 
@@ -43,7 +44,12 @@ async function addCampus(data: NewCampus): Promise<AxiosResponse<string>>{
 }
 
 
-/** teacher */
+/** roster */
+
+async function getTeacherInfo(id: number): Promise<AxiosResponse<Roster>>{
+    const url = `${backend_csharp}/roster/info/${id}/`;
+    return axios.get(url);
+}
 
 async function getTeacherWithCampus(target: String, numResults: number = 20): Promise<AxiosResponse<Array<TeacherWithCampus>>>{
     target = target.replaceAll(/\s+/g,"+");

@@ -21,9 +21,15 @@ public class RosterDto
 
         [JsonPropertyName("uni_structure_id")] 
         public int UniStructureId { get; set; }
+        
+        [JsonPropertyName("structure_type")] 
+        public string StructureType { get; set; }
 
         [JsonPropertyName("campus_id")] 
         public int CampusId { get; set; }
+        
+        [JsonPropertyName("campus_name")] 
+        public string CampusName { get; set; }
 
         [JsonPropertyName("structure_name")] 
         public string StructureName { get; set; }

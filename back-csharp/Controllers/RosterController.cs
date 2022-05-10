@@ -22,11 +22,25 @@ namespace back_csharp.Controllers
             _context = context;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("info/{id:int}")]
         public async Task<ActionResult<RosterDto>> GetRoster(int id)
         {
             var roster = from c in _context.Rosters
-                where c.RosterId == id select c;
+                join s in _context.UniStructures on c.UniStructureId equals s.UniStructureId 
+                join m in _context.Campuses on c.CampusId equals m.CampusId 
+                where c.RosterId == id select new
+                {
+                    RosterId = c.RosterId,
+                    TeacherName = c.TeacherName,
+                    TeacherLastname1 = c.TeacherLastname1,
+                    TeacherLastname2 = c.TeacherLastname2,
+                    UniStructureId = c.UniStructureId,
+                    StructureType = s.Name,
+                    StructureName = c.StructureName,
+                    SubjectName = c.SubjectName,
+                    CampusId = c.CampusId,
+                    CampusName = m.Name
+                };
             var res = (await roster.AsNoTracking().ToListAsync())?.Select( x => 
                 new RosterDto
                 {
@@ -35,9 +49,11 @@ namespace back_csharp.Controllers
                     TeacherLastname1 = x.TeacherLastname1,
                     TeacherLastname2 = x.TeacherLastname2,
                     UniStructureId = x.UniStructureId,
+                    StructureType = x.StructureType,
                     StructureName = x.StructureName,
                     SubjectName = x.SubjectName,
-                    CampusId = x.CampusId
+                    CampusId = x.CampusId,
+                    CampusName = x.CampusName,
                 }).SingleOrDefault();
             if (res==null)
             {
