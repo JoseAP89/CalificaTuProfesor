@@ -61,7 +61,7 @@ CREATE TABLE roster (
     structure_name varchar(100),
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     modified_at TIMESTAMP,
-    UNIQUE(campus_id,teacher_name, teacher_lastname1, teacher_lastname2),
+    UNIQUE(campus_id,teacher_name, teacher_lastname1, teacher_lastname2, subject_name),
     FOREIGN KEY (campus_id)
         REFERENCES campus (campus_id),
     FOREIGN KEY (uni_structure_id)
@@ -72,7 +72,7 @@ CREATE TABLE comment (
     comment_id SERIAL PRIMARY KEY,
     roster_id int NOT NULL,
     comment varchar(250) NOT NULL,
-    owner_ip varchar(40),
+    token_id varchar(40),
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     modified_at TIMESTAMP,
     FOREIGN KEY (roster_id)
@@ -83,7 +83,7 @@ CREATE TABLE vote (
     vote_id SERIAL PRIMARY KEY,
     comment_id int NOT NULL,
     approval boolean NOT NULL,
-    owner_ip varchar(40),
+    token_id varchar(40),
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     modified_at TIMESTAMP,
     FOREIGN KEY (comment_id)
@@ -102,7 +102,7 @@ CREATE TABLE grade (
     grade_id SERIAL PRIMARY KEY,
     scale_id int NOT NULL,
     roster_id int NOT NULL,
-    owner_ip varchar(20),
+    token_id varchar(40),
     stars int DEFAULT 0 CHECK (Stars between 0 and 5),
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     modified_at TIMESTAMP,

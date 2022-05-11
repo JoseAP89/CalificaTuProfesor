@@ -96,7 +96,7 @@ namespace back_csharp.Controllers
         }
         
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<RosterDto>>> AddRoster(RosterDto rosterDto)
+        public async Task<ActionResult<IEnumerable<RosterDto>>> AddRoster(CreateRosterDto rosterDto)
         {
             try
             {

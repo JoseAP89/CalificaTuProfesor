@@ -13,7 +13,7 @@ namespace back_csharp._data
         public int CommentId { get; set; }
         public int RosterId { get; set; }
         public string Comment1 { get; set; } = null!;
-        public string? OwnerIp { get; set; }
+        public string? TokenId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
 
