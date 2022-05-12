@@ -14,10 +14,10 @@ public class CampusDto
     public int UniversityId { get; set; } 
     
     [JsonPropertyName("university_name")]
-    public string UniversityName { get; set; } 
+    public string? UniversityName { get; set; } 
     
     [JsonPropertyName("state_name")]
-    public string StateName { get; set; } 
+    public string? StateName { get; set; } 
     
     [JsonPropertyName("state_id")]
     public int StateId { get; set; } 

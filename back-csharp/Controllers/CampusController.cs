@@ -114,6 +114,7 @@ namespace back_csharp.Controllers
             var res = await (from c in _context.Campuses
                 join u in _context.Universities on c.UniversityId equals u.UniversityId
                 where campus_ids.Contains(c.CampusId)
+                orderby c.Name
                 select new CampusUniversity
                 {
                     CampusId = c.CampusId,
@@ -128,12 +129,17 @@ namespace back_csharp.Controllers
         }
         
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<UniversityDto>>> AddCampus(CampusDto campusDto)
+        public async Task<ActionResult<Campus>> AddCampus(CampusDto campusDto)
         {
             try
             {
-                var campus = _autoMapper.Map<Campus>(campusDto);
-                campus.Name = campus.Name.Trim().ToUpper();
+                var campus = new Campus
+                {
+                    CampusId = 0,
+                    Name = campusDto.Name.Trim().ToUpper(),
+                    StateId = campusDto.StateId,
+                    UniversityId = campusDto.UniversityId,
+                };
                 if (campusDto.ImgFile != null)
                 {
                     string img_name = campusDto.Name.Replace(" ", "_").ToLower().Trim();

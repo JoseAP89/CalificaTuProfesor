@@ -79,6 +79,7 @@ namespace back_csharp.Controllers
             var res = await (from c in _context.Campuses
                 join r in _context.Rosters on c.CampusId equals r.CampusId
                 where teacher_ids.Contains(r.RosterId)
+                orderby r.TeacherName, r.TeacherLastname1, r.TeacherLastname2, c.Name
                 select new TeacherCampus()
                 {
                     RosterId = r.RosterId,
@@ -96,7 +97,7 @@ namespace back_csharp.Controllers
         }
         
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<RosterDto>>> AddRoster(CreateRosterDto rosterDto)
+        public async Task<ActionResult<RosterDto>> AddRoster(CreateRosterDto rosterDto)
         {
             try
             {

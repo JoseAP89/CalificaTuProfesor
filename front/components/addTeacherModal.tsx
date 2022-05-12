@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Select from 'react-select';
 import { HttpResponseMessage } from '../_models/httpResponseMessage';
-import { Roster } from '../_models/roster';
+import  Roster  from '../_models/roster';
 import { Vessel } from '../_models/vessel';
 import TeacherService from '../_services/teacherService';
 
@@ -104,11 +104,17 @@ export default function AddTeacherModal(props: Props) {
         }
         props.setHttpResponseMessage(message);
       }).catch(err => {
+        console.log("error **", err);
         const message : HttpResponseMessage = {
           success: false,
           message: err.response.data
         }
-        props.setHttpResponseMessage(message);
+        try {
+          props.setHttpResponseMessage(message);
+        } catch (error) {
+          message.message = "Hubo un error en la solicitud. Favor de informar al administrador para solucionar el error.";
+          props.setHttpResponseMessage(message);
+        }
       }).finally(()=>{
         onClose();
         reset();

@@ -6,9 +6,9 @@ export default class Roster {
     subject_name: string;
     uni_structure_id: number;
     structure_name: string;
-    structure_type: string;
+    structure_type?: string;
     campus_id: number;
-    campus_name: string;
+    campus_name?: string;
     /**
      *
      */

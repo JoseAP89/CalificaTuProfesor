@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, AxiosResponseHeaders } from 'axios';
 import {Campus, CampusUniversity} from '../_models/campus';
 import { TeacherWithCampus } from '../_models/teacher';
-import { Roster } from '../_models/roster';
+import  Roster  from '../_models/roster';
 import {Vessel} from '../_models/vessel'
 import NewUniversity from '../_models/newUniversity';
 import NewCampus from '../_models/newCampus';
