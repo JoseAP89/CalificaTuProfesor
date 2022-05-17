@@ -165,17 +165,17 @@ const Home: NextPage = () => {
                 <Input placeholder='mysite' 
                   ref={selectRef}
                   maxLength={200}
-                  onChange={ (e) =>{
+                  onChange={ (e: any) =>{
                     let val = e.target.value;
                     setSearchTarget(val);
                     if(val!=="") setShowSourceData(true);
                   }}
-                  onFocus={ (e) =>{
+                  onFocus={ (e: any) =>{
                     let val = e.target.value;
                     setSearchTarget(val);
                     if(val!=="") setShowSourceData(true);
                   }}
-                  onBlur={ (e) =>{
+                  onBlur={ (e: any) =>{
                     setShowSourceData(false);
                   }}
                 />
@@ -189,7 +189,7 @@ const Home: NextPage = () => {
                     aria-label='Search database'
                     size='sm'
                     className='search-icon'
-                    onClick={(e) => { process_search(e) }}
+                    onClick={(e: any) => { process_search(e) }}
                     icon={<FontAwesomeIcon icon={faSearch} />}
                     />
                   } 

@@ -3,13 +3,11 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import TeacherService from '../../_services/teacherService'
 import Roster from '../../_models/roster'
-import noAvailable from '../../public/no_available.jpg'
 import RosterInfoStyle from '../../styles/styledComponents/rosterInfo'
-import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
-import { getDefaultLibFileName } from 'typescript'
-import { stringify } from 'querystring'
+import { Button, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faThumbsUp, faThumbsDown, faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faThumbsUp, faThumbsDown, faWarning, faStar } from "@fortawesome/free-solid-svg-icons";
+import Star from '../../public/star.svg'
 
 const RosterPage = () => {
     const router = useRouter()
@@ -48,9 +46,19 @@ const RosterPage = () => {
         return `${name} ${lastname1} ${lastname2 ?? ""}`.trim();
     }
 
+    function test(): Array<any>{
+        let i = 0;
+        let obj = [];
+        while (i<=5) {
+            obj.push(<><i data-star={i} key={i}></i><br /></>)
+            i += 0.1;
+        }
+        return obj;
+    }
+
     return <>
         <Head>
-            <title>Campus</title>
+            <title>Maestro</title>
         </Head>
         <div className='hero-title'>
             <h1 className=''>
@@ -59,7 +67,10 @@ const RosterPage = () => {
         </div>
 
         <RosterInfoStyle>
-            <img className='building-img' src={!!campusImage ? campusImage : noAvailable.src} alt="imagen del campus" />
+
+            {
+               test().map( x => x)
+            }
 
             <div className='campus-brief-info'>
                 <div className='label-brief'>Materia</div>
@@ -68,11 +79,16 @@ const RosterPage = () => {
                 <div className='content-brief'>{roster?.campus_name}</div>
             </div>
 
+            <Button colorScheme='blue' variant='outline' className='add-comment-btn'>
+                Agregar comentario
+            </Button>
+
+
             <section className='comments-container'>
                 {
-                    [1, 2, 3].map( _ => {
+                    [1, 2, 3].map( i => {
                         return (
-                            <div className='comment-block'>
+                            <div className='comment-block' key={i}>
                                 <div className='teacher-logo-block'>
                                     <FontAwesomeIcon icon={faUser} className="user-logo"/>
                                 </div>

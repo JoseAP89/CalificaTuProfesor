@@ -1,14 +1,13 @@
 import styled from 'styled-components';
 
 const RosterInfoStyle = styled.div`
-    @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
-    padding: 60px 100px ;
-    .building-img {
-        display: block;
-        margin: 0 auto;
-        height: 450px;
-        width: 700px;
-        border-radius: 14px;
+    @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+    padding: 5px 100px ;
+    * {
+        font-family: 'Courier Prime', monospace;
+    }
+    .add-comment-btn {
+        margin: 40px 0;
     }
     .table-title {
         padding: 40px 0px;
@@ -17,8 +16,41 @@ const RosterInfoStyle = styled.div`
         font-weight: 700;
     }
     .campus-brief-info {
-        margin-top: 70px;
+        margin-top: 4px;
         font-size: 1.3rem;
+        --star-size: 4.9rem;
+        .grade-system {
+            width: 300px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            #star1 {
+                grid-column: 1 / 2;
+                fill: yellow;
+                color: #ebddcc;
+            }
+            #star2 {
+                grid-column: 2 / 3;
+            }
+            #star3 {
+                grid-column: 3 / 4;
+            }
+            #star4 {
+                grid-column: 4 / 5;
+            }
+            #star5 {
+                grid-column: 5 / 6;
+                grid-row: 1;
+            }
+            #star5_grey {
+                grid-column: 5 / 6;
+                grid-row: 1;
+                width: 80%;
+                background-color: yellow;
+                color: yellow;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+        }
         .label-brief{
             margin-top: 20px;
             font-weight: 700;
@@ -68,6 +100,7 @@ const RosterInfoStyle = styled.div`
                 }
             }
             .text-block {
+                padding: 8px 8px 8px 0;
                 grid-row: 2;
                 grid-column: 2 / calc( var(--num-cols) + 1 );
             }
@@ -88,6 +121,7 @@ const RosterInfoStyle = styled.div`
             }
         }
     }
+
 
 `
 //
