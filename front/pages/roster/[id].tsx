@@ -15,6 +15,7 @@ const RosterPage = () => {
     const [roster, setRoster] = useState<Roster|null>(null);
     const [campusImage, setCampusImage] = useState<any>(null);
     const {id} = router.query;
+    const starHeight = "6rem";
 
     useEffect(() => {
         if(!isNaN(Number(id))){
@@ -46,16 +47,6 @@ const RosterPage = () => {
         return `${name} ${lastname1} ${lastname2 ?? ""}`.trim();
     }
 
-    function test(): Array<any>{
-        let i = 0;
-        let obj = [];
-        while (i<=5) {
-            obj.push(<><i data-star={i} key={i}></i><br /></>)
-            i += 0.1;
-        }
-        return obj;
-    }
-
     return <>
         <Head>
             <title>Maestro</title>
@@ -68,16 +59,38 @@ const RosterPage = () => {
 
         <RosterInfoStyle>
 
-            {
-               test().map( x => x)
-            }
-
-            <div className='campus-brief-info'>
-                <div className='label-brief'>Materia</div>
-                <div className='content-brief'>{roster?.subject_name}</div>
-                <div className='label-brief'>Campus</div>
-                <div className='content-brief'>{roster?.campus_name}</div>
-            </div>
+            <section className='roster-info-box'>
+                <div className='box-info'>
+                    <div className='title-box'>DATOS GLOBALES</div>
+                    <div className='label-brief'>Calificación General</div>
+                    <i data-star="2.7"></i>
+                    <div className='label-brief'>{roster?.structure_type?.toLocaleLowerCase()}</div>
+                    <div className='content-brief'>{roster?.structure_name}</div>
+                    <div className='label-brief'>campus</div>
+                    <div className='content-brief'>{roster?.campus_name}</div>
+                </div>
+                <div className='box-info'>
+                    <div className='title-box'>Habilidades</div>
+                    <div className='skills-box'>
+                        <div className='label-brief'>Claridad</div>
+                        <i data-star="0.3" style={{fontSize:"60px",lineHeight:"60px"}}></i>
+                        <div className='label-brief'>Competencia</div>
+                        <i data-star="0.8" style={{fontSize:"60px",lineHeight:"60px"}}></i>
+                        <div className='label-brief'>Expresión</div>
+                        <i data-star="1.0" style={{fontSize:"60px",lineHeight:"60px"}}></i>
+                        <div className='label-brief'>Métodos</div>
+                        <i data-star="1.5" style={{fontSize:"60px",lineHeight:"60px"}}></i>
+                        <div className='label-brief'>Modelo</div>
+                        <i data-star="2.0" style={{fontSize:"60px",lineHeight:"60px"}}></i>
+                        <div className='label-brief'>Organización</div>
+                        <i data-star="3.2" style={{fontSize:"60px",lineHeight:"60px"}}></i>
+                        <div className='label-brief'>Preparación</div>
+                        <i data-star="2.5" style={{fontSize:"60px",lineHeight:"60px"}}></i>
+                        <div className='label-brief'>Realidad</div>
+                        <i data-star="2.3" style={{fontSize:"60px",lineHeight:"60px"}}></i>
+                    </div>
+                </div>
+            </section>
 
             <Button colorScheme='blue' variant='outline' className='add-comment-btn'>
                 Agregar comentario

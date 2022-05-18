@@ -168,11 +168,16 @@ p.error-form-msg {
 
 /** start rating system  */
 i[data-star] {
-  font-size: 6.0rem;
+  --star-height: 180px;
+  /** star line-heght and font-size must be equal to avoid different dimensions between grey and yellow stars*/
+  font-size: var(--star-height);
+  line-height: var(--star-height);
   font-style:normal;
   display:inline-block;
+  font-family: sans-serif;
   position: relative;
   unicode-bidi: bidi-override;
+  height: fit-content;
 }
 i[data-star]::before {
   display:block;
@@ -181,12 +186,12 @@ i[data-star]::before {
 }
 i[data-star]::after {
   position: absolute;
-  top: 0;
   content: '★★★★★';
   width: 0;
+  top: 0;
   color: orange;
   overflow: hidden;
-  height: 100%;
+  height: fit-content;
   display: flex;
 }
 i[data-star^="0.1"]::after,i[data-star^=".1"]::after{width:2%}

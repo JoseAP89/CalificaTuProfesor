@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 const RosterInfoStyle = styled.div`
     @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+    overflow: scroll;
     padding: 5px 100px ;
     * {
         font-family: 'Courier Prime', monospace;
@@ -15,50 +16,63 @@ const RosterInfoStyle = styled.div`
         color: black;
         font-weight: 700;
     }
-    .campus-brief-info {
-        margin-top: 4px;
-        font-size: 1.3rem;
-        --star-size: 4.9rem;
-        .grade-system {
-            width: 300px;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            #star1 {
-                grid-column: 1 / 2;
-                fill: yellow;
-                color: #ebddcc;
-            }
-            #star2 {
-                grid-column: 2 / 3;
-            }
-            #star3 {
-                grid-column: 3 / 4;
-            }
-            #star4 {
-                grid-column: 4 / 5;
-            }
-            #star5 {
-                grid-column: 5 / 6;
-                grid-row: 1;
-            }
-            #star5_grey {
-                grid-column: 5 / 6;
-                grid-row: 1;
-                width: 80%;
-                background-color: yellow;
-                color: yellow;
-                overflow: hidden;
-                white-space: nowrap;
-            }
+
+    .roster-info-box {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        .title-box {
+            color: black;
+            font-weight: bold;
+            font-size: 1.6rem;
+            text-shadow: 1px 1px grey;
+            text-transform: uppercase;
+            margin-bottom: 40px;
         }
         .label-brief{
             margin-top: 20px;
             font-weight: 700;
+            text-transform: capitalize;
         }
         .content-brief {
             margin-left: 50px;
             color: gray;
             font-weight: 700;
+        }
+        .box-info {
+            margin-top: 20px;
+            padding: 14px;
+            font-size: 1.3rem;
+            border: solid gray;
+            background-color: #faf0e6;
+            border-radius: 10px;
+            .skills-box{
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+            }
+        }
+    }
+    @media (max-width: 944px){
+        i[data-star] {
+            --star-height: 100px;
+            /** star line-heght and font-size must be equal to avoid different dimensions between grey and yellow stars*/
+            font-size: var(--star-height);
+            line-height: var(--star-height);
+        }        
+    }
+    @media (max-width: 1840px){
+        .roster-info-box {
+            grid-template-columns: 1fr;
+        }        
+    }
+    @media (max-width: 995px){
+        .box-info {
+            .skills-box{
+                display: grid;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 0;
+            }
         }
     }
 
