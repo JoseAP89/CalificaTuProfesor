@@ -49,7 +49,7 @@ Comment
 comment_id int pk
 roster_id int fk >- Roster.roster_id
 comment varchar
-owner_ip varchar
+token_id varchar
 created_at date
 modified_at date
 
@@ -58,7 +58,7 @@ Vote
 vote_id int pk
 comment_id int fk >- Comment.comment_id
 approval boolean
-owner_ip varchar
+token_id varchar
 created_at date
 modified_at date
 
@@ -75,7 +75,7 @@ Grade
 grade_id int pk
 scale_id int fk >- Scale.scale_id
 roster_id int fk >- Roster.roster_id
-owner_ip varchar
+token_id varchar
 stars int
 created_at date
 modified_at date
