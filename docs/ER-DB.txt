@@ -79,3 +79,10 @@ token_id varchar
 stars int
 created_at date
 modified_at date
+
+RosterScale
+--
+rosterscale_id int pk
+roster_id int fk >- Roster.roster_id
+scale_id int fk >- Scale.scale_id
+grade numeric
