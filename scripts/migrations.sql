@@ -1,4 +1,5 @@
 -- dropping tables
+DROP TABLE IF EXISTS roster_scale;
 DROP TABLE IF EXISTS grade;
 DROP TABLE IF EXISTS scale;
 DROP TABLE IF EXISTS vote;
@@ -103,7 +104,20 @@ CREATE TABLE grade (
     scale_id int NOT NULL,
     roster_id int NOT NULL,
     token_id varchar(40),
-    stars int DEFAULT 0 CHECK (Stars between 0 and 5),
+    stars int DEFAULT 0 CHECK (stars between 0 and 5),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    modified_at TIMESTAMP,
+    FOREIGN KEY (roster_id)
+        REFERENCES roster (roster_id),
+    FOREIGN KEY (scale_id)
+        REFERENCES scale (scale_id)
+);
+
+CREATE TABLE roster_scale (
+    roster_scale_id SERIAL PRIMARY KEY,
+    roster_id int NOT NULL,
+    scale_id int NOT NULL,
+    grade float(4) DEFAULT 0 CHECK (grade between 0 and 5),
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     modified_at TIMESTAMP,
     FOREIGN KEY (roster_id)
@@ -9972,4 +9986,5 @@ INSERT INTO scale(Name, Description) VALUES
 ('Expresión','Capacidad de comunicación clara y concisa con su clase.'),
 ('Métodos','Uso de metodos de presentación que generan atención e interes en la clase.'),
 ('Organización','Buena organicación de la enseñanza de los temas en la clase.'),
-('Realidad','Capacidad de explicar aplicaciones de la materia a la práctica o a su uso en el mundo laboral.');
+('Realidad','Capacidad de explicar aplicaciones de la materia a la práctica o a su uso en el mundo laboral.'),
+('General','Contiene el rendimiento promedio considerando el resto de las escalas.');
