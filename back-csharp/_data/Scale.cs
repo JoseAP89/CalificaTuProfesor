@@ -8,6 +8,7 @@ namespace back_csharp._data
         public Scale()
         {
             Grades = new HashSet<Grade>();
+            RosterScales = new HashSet<RosterScale>();
         }
 
         public int ScaleId { get; set; }
@@ -17,5 +18,6 @@ namespace back_csharp._data
         public DateTime? ModifiedAt { get; set; }
 
         public virtual ICollection<Grade> Grades { get; set; }
+        public virtual ICollection<RosterScale> RosterScales { get; set; }
     }
 }

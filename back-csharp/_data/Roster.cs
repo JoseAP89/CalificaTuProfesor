@@ -9,6 +9,7 @@ namespace back_csharp._data
         {
             Comments = new HashSet<Comment>();
             Grades = new HashSet<Grade>();
+            RosterScales = new HashSet<RosterScale>();
         }
 
         public int RosterId { get; set; }
@@ -26,5 +27,6 @@ namespace back_csharp._data
         public virtual UniStructure UniStructure { get; set; } = null!;
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Grade> Grades { get; set; }
+        public virtual ICollection<RosterScale> RosterScales { get; set; }
     }
 }

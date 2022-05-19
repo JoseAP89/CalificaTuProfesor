@@ -1,8 +1,11 @@
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace back_csharp._data
 {
-    public class TeachersContext : DbContext
+    public partial class TeachersContext : DbContext
     {
         public TeachersContext()
         {
@@ -22,17 +25,14 @@ namespace back_csharp._data
         public virtual DbSet<UniStructure> UniStructures { get; set; } = null!;
         public virtual DbSet<University> Universities { get; set; } = null!;
         public virtual DbSet<Vote> Votes { get; set; } = null!;
+        public virtual DbSet<RosterScale> RosterScales { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                IConfiguration myConfig = new ConfigurationBuilder()
-                    .SetBasePath(Path.GetDirectoryName("../appsettings.json"))
-                    .AddJsonFile("appsettings.json")
-                    .Build();
-                string connString = myConfig.GetValue<string>("appsettings.json");
-                optionsBuilder.UseNpgsql(connString);
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseNpgsql("Host=localhost;Username=joseap;Password=J1o2s3e4;Database=teachers");
             }
         }
 
@@ -98,11 +98,11 @@ namespace back_csharp._data
                     .HasColumnType("timestamp without time zone")
                     .HasColumnName("modified_at");
 
+                entity.Property(e => e.RosterId).HasColumnName("roster_id");
+
                 entity.Property(e => e.TokenId)
                     .HasMaxLength(40)
                     .HasColumnName("token_id");
-
-                entity.Property(e => e.RosterId).HasColumnName("roster_id");
 
                 entity.HasOne(d => d.Roster)
                     .WithMany(p => p.Comments)
@@ -126,10 +126,6 @@ namespace back_csharp._data
                     .HasColumnType("timestamp without time zone")
                     .HasColumnName("modified_at");
 
-                entity.Property(e => e.TokenId)
-                    .HasMaxLength(40)
-                    .HasColumnName("token_id");
-
                 entity.Property(e => e.RosterId).HasColumnName("roster_id");
 
                 entity.Property(e => e.ScaleId).HasColumnName("scale_id");
@@ -137,6 +133,10 @@ namespace back_csharp._data
                 entity.Property(e => e.Stars)
                     .HasColumnName("stars")
                     .HasDefaultValueSql("0");
+
+                entity.Property(e => e.TokenId)
+                    .HasMaxLength(20)
+                    .HasColumnName("token_id");
 
                 entity.HasOne(d => d.Roster)
                     .WithMany(p => p.Grades)
@@ -327,9 +327,45 @@ namespace back_csharp._data
                     .HasConstraintName("vote_comment_id_fkey");
             });
 
-            //OnModelCreatingPartial(modelBuilder);
+            modelBuilder.Entity<RosterScale>(entity =>
+            {
+                entity.ToTable("roster_scale");
+
+                entity.Property(e => e.RosterScaleId).HasColumnName("roster_scale_id");
+
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("timestamp without time zone")
+                    .HasColumnName("created_at")
+                    .HasDefaultValueSql("now()");
+
+                entity.Property(e => e.ModifiedAt)
+                    .HasColumnType("timestamp without time zone")
+                    .HasColumnName("modified_at");
+
+                entity.Property(e => e.RosterId).HasColumnName("roster_id");
+
+                entity.Property(e => e.ScaleId).HasColumnName("scale_id");
+                
+                entity.Property(e => e.Grade)
+                    .HasColumnName("grade")
+                    .HasDefaultValueSql("0");
+
+                entity.HasOne(d => d.Roster)
+                    .WithMany(p => p.RosterScales)
+                    .HasForeignKey(d => d.RosterId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("rosterscale_roster_id_fkey");
+
+                entity.HasOne(d => d.Scale)
+                    .WithMany(p => p.RosterScales)
+                    .HasForeignKey(d => d.ScaleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("rosterscale_scale_id_fkey");
+            });
+
+            OnModelCreatingPartial(modelBuilder);
         }
 
-        //partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
