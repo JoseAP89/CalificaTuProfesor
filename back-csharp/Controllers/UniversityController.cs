@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Text;
+using back_csharp._contracts;
 using Microsoft.AspNetCore.Mvc;
 using back_csharp._data;
 using back_csharp._dtos;
@@ -17,10 +18,12 @@ namespace back_csharp.Controllers
     [ApiController]
     public class UniversityController : ControllerBase
     {
+        private readonly IUnitOfWork _uow;
         private readonly TeachersContext _context;
 
-        public UniversityController(TeachersContext context)
+        public UniversityController(IUnitOfWork uow, TeachersContext context)
         {
+            _uow = uow;
             _context = context;
         }
 
@@ -29,13 +32,12 @@ namespace back_csharp.Controllers
         {
             try
             {
-                var universities = from uni in _context.Universities 
-                    where uni.UniversityId==id select uni;
-                if (universities==null)
+                var university = await _uow.Universities.GetById(id);
+                if (university==null)
                 {
                     return NoContent();
                 }
-                return Ok(await universities.AsNoTracking().SingleAsync());
+                return Ok(university);
             }
             catch (Exception e)
             {
@@ -45,18 +47,23 @@ namespace back_csharp.Controllers
 
         }
         
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<UniversityDto>>> GetUniversities()
+        [HttpGet("all/{numOfResults?}")]
+        public async Task<ActionResult<IEnumerable<UniversityDto>>> GetUniversities(int? numOfResults)
         {
-            var universities = from uni in _context.Universities 
-                orderby uni.Name select uni;
-            if (universities==null)
+            try
             {
-                return NoContent();
+                var universities = await _uow.Universities.GetAll(x => x.Name, numOfResults);
+                if (universities==null)
+                {
+                    return NoContent();
+                }
+                return Ok(universities);
             }
-
-            return Ok(await universities.AsNoTracking().ToListAsync());
-
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest($"Hubo un error al buscar todas las universidades.");
+            }
         }
         
         [HttpGet("search/{search}")]
