@@ -67,28 +67,23 @@ namespace back_csharp.Controllers
         }
         
         [HttpGet("search/{search}")]
-        public async Task<ActionResult<Vessel>> GetUniversitySearch(string search)
+        public async Task<ActionResult<IEnumerable<Vessel>>> GetUniversitySearch(string search)
         {
-            const int MAX_RESULTS = 20;
-            search = search
-                .Replace("+", " ")
-                .Trim()
-                .ToLower()
-                .RemoveDiacritics();
-            var university_ids = await _context.Universities.FromSqlRaw<University>(
-                $"SELECT * FROM university u WHERE LOWER(UNACCENT(u.name)) LIKE '%{search}%'  LIMIT {MAX_RESULTS} ")
-                .AsNoTracking()
-                .Select(x => x.UniversityId)
-                .ToListAsync();
-            var uni = from u in _context.Universities
-                where university_ids.Contains(u.UniversityId) select u;
-            var res = (await uni.AsNoTracking().ToListAsync())?.Select( x => 
-                new Vessel{Id = x.UniversityId, Value = x.Name}).ToList();
-            if (res==null)
+            try
             {
-                return NoContent();
+                var res = await _uow.Universities.Search(search);
+                if (res==null)
+                {
+                    return NoContent();
+                }
+                return Ok(res);
+
             }
-            return Ok(res);
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest($"Hubo un error al buscar las universidades.");
+            }
         }
         
         [HttpPost]
@@ -96,23 +91,9 @@ namespace back_csharp.Controllers
         {
             try
             {
-                var university = new University
-                {
-                    UniversityId = 0,
-                    Name = universitydto.Name.Trim().ToUpper()
-                };
-                if (universitydto.ImgFile != null)
-                {
-                    string img_name = universitydto.Name.Replace(" ", "_").ToLower().Trim();
-                    string path = "/home/joseap/Documents/projects/CalificaTuProfesor/front/public/universities/";
-                    path += img_name + "." + universitydto.ImgType;
-                    var data = universitydto.ImgFile.Base64Decode();
-                    System.IO.File.WriteAllBytesAsync(path,data);
-                }
-                
-                _context.Universities.Add(university);
-                await _context.SaveChangesAsync();
-
+                var university = await _uow.Universities.Add(universitydto);
+                _uow.Universities.AddImage(universitydto);
+                await _uow.Save();
                 return CreatedAtAction(
                     nameof(GetUniversity),
                     new { id = universitydto.UniversityId},
