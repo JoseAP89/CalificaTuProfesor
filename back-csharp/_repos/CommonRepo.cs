@@ -9,21 +9,24 @@ public class CommonRepo<T>: ICommonRepo<T>
     where T: class
 {
 
-    protected DbContext _context;
+    protected readonly DbContext _context;
+    protected readonly DbSet<T> _dbset;
 
     public CommonRepo(DbContext context)
     {
         _context = context;
+        _dbset = context.Set<T>();
     }
 
     public virtual async Task Add(T entity)
     {
-        await _context.Set<T>().AddAsync(entity);
+        await _dbset.AddAsync(entity);
     }
 
-    public virtual async Task Update(T entity)
+    public virtual void Update(T entity)
     {
-        _context.Set<T>().Update(entity);
+        _dbset.Attach(entity);
+        _context.Entry(entity).State = EntityState.Modified;
     }
 
     public virtual async Task Delete(int id)
@@ -31,18 +34,18 @@ public class CommonRepo<T>: ICommonRepo<T>
         var data = await _context.Set<T>().FindAsync(id);
         if (data!= null)
         {
-            _context.Set<T>().Remove(data);
+            _dbset.Remove(data);
         }
     }
 
     public virtual async Task<T> GetById(int id)
     {
-        return await _context.Set<T>().FindAsync(id);
+        return await _dbset.FindAsync(id);
     }
 
     public virtual async Task<IEnumerable<T>> GetAll<E>(Expression<Func<T,E>>? exp = null, int? numOfResults = null)
     {
-        var data =  _context.Set<T>().AsNoTracking();
+        var data =  _dbset.AsNoTracking();
         IEnumerable<T> results = (exp != null, numOfResults != null) switch
         {
             (false, false) => await data.ToListAsync(),
@@ -55,6 +58,6 @@ public class CommonRepo<T>: ICommonRepo<T>
 
     public virtual async Task<IEnumerable<T>> Find(Expression<Func<T, bool>> exp)
     {
-        return await _context.Set<T>().Where(exp).ToListAsync();
+        return await _dbset.Where(exp).ToListAsync();
     }
 }

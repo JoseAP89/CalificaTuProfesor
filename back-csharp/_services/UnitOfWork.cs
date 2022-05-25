@@ -7,26 +7,16 @@ namespace back_csharp._services;
 
 public class UnitOfWork: IUnitOfWork
 {
-    private DbContext _context;
-    public IUniversityRepo _unirepo;
+    private readonly DbContext _context;
+    private IUniversityRepo _universities;
 
     public UnitOfWork(TeachersContext context)
     {
         _context = context;
     }
 
-    public IUniversityRepo Universities
-    {
-        get
-        {
-            // ReSharper disable once ConvertIfStatementToNullCoalescingExpression
-            if (_unirepo == null)
-            {
-                _unirepo = new UniversityRepo(_context);
-            }
-            return _unirepo;
-        }
-    }
+
+    public IUniversityRepo Universities => _universities ??= new UniversityRepo(_context);
 
     public async Task Save()
     {
