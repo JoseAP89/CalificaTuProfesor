@@ -19,12 +19,9 @@ namespace back_csharp.Controllers
     public class UniversityController : ControllerBase
     {
         private readonly IUnitOfWork _uow;
-        private readonly TeachersContext _context;
-
         public UniversityController(IUnitOfWork uow, TeachersContext context)
         {
             _uow = uow;
-            _context = context;
         }
 
         [HttpGet("{id}")]

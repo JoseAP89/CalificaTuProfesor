@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using back_csharp._contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using back_csharp._data;
@@ -15,11 +16,11 @@ namespace back_csharp.Controllers
     [ApiController]
     public class StateController : ControllerBase
     {
-        private readonly TeachersContext _context;
+        private readonly IUnitOfWork _uow;
 
-        public StateController(TeachersContext context)
+        public StateController(IUnitOfWork uow, TeachersContext context)
         {
-            _context = context;
+            _uow = uow;
         }
 
         [HttpGet]
@@ -27,10 +28,7 @@ namespace back_csharp.Controllers
         {
             try
             {
-                var state = from c in _context.States
-                    select c;
-                var res = (await state.AsNoTracking().ToListAsync())?.Select( x => 
-                    new Vessel{Id = x.StateId, Value = x.Name});
+                var res = await _uow.States.GetAllInVessels();
                 if (res==null)
                 {
                     return NoContent();

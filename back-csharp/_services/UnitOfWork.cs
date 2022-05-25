@@ -9,14 +9,15 @@ public class UnitOfWork: IUnitOfWork
 {
     private readonly DbContext _context;
     private IUniversityRepo _universities;
+    private IStateRepo _states;
 
     public UnitOfWork(TeachersContext context)
     {
         _context = context;
     }
 
-
     public IUniversityRepo Universities => _universities ??= new UniversityRepo(_context);
+    public IStateRepo States => _states ??= new StateRepo(_context);
 
     public async Task Save()
     {
