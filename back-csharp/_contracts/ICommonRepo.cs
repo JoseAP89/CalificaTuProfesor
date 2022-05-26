@@ -9,6 +9,6 @@ public interface ICommonRepo<T>
     void Update(T entity);
     Task Delete(int id);
     Task<T> GetById(int id);
-    Task<IEnumerable<T>> GetAll<E>(Expression<Func<T,E>>? exp, int? numOfResults);
+    Task<IEnumerable<T>> GetAll<E>(Expression<Func<T,E>>? orderBy, int? numOfResults);
     Task<IEnumerable<T>> Find(Expression<Func<T, bool>> exp);
 }

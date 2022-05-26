@@ -6,5 +6,6 @@ public interface IUnitOfWork
 {
     IUniversityRepo Universities { get; }
     IStateRepo States { get; }
+    IUniStructureRepo UniStructures { get; }
     Task Save();
 }

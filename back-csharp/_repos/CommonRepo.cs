@@ -43,15 +43,15 @@ public class CommonRepo<T>: ICommonRepo<T>
         return await _dbset.FindAsync(id);
     }
 
-    public virtual async Task<IEnumerable<T>> GetAll<E>(Expression<Func<T,E>>? exp = null, int? numOfResults = null)
+    public virtual async Task<IEnumerable<T>> GetAll<E>(Expression<Func<T,E>>? orderBy = null, int? numOfResults = null)
     {
         var data =  _dbset.AsNoTracking();
-        IEnumerable<T> results = (exp != null, numOfResults != null) switch
+        IEnumerable<T> results = (orderBy != null, numOfResults != null) switch
         {
             (false, false) => await data.ToListAsync(),
-            (true, false) => await data.OrderBy(exp).ToListAsync(),
+            (true, false) => await data.OrderBy(orderBy).ToListAsync(),
             (false, true) => await data.Take((int)numOfResults).ToListAsync(),
-            (true, true) => await data.Take((int)numOfResults).OrderBy(exp).ToListAsync()
+            (true, true) => await data.Take((int)numOfResults).OrderBy(orderBy).ToListAsync()
         };
         return results;
     }

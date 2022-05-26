@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using back_csharp._contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using back_csharp._data;
@@ -16,24 +17,32 @@ namespace back_csharp.Controllers
     public class UniStructureController : ControllerBase
     {
         private readonly TeachersContext _context;
+        private readonly IUnitOfWork _uow;
 
-        public UniStructureController(TeachersContext context)
+        public UniStructureController(TeachersContext context, IUnitOfWork uow)
         {
             _context = context;
+            _uow = uow;
         }
 
         [HttpGet]
         public async Task<ActionResult<Vessel>> GetUniStructures()
         {
-            var structure = from c in _context.UniStructures
-                select c;
-            var res = (await structure.AsNoTracking().ToListAsync())?.Select( x => 
-                new Vessel{Id = x.UniStructureId, Value = x.Name}).ToList();
-            if (res==null)
+            try
             {
-                return NoContent();
+                var res = await _uow.UniStructures.GetAllUniStructuresInVessels();
+                if (res==null)
+                {
+                    return NoContent();
+                }
+                return Ok(res);
+
             }
-            return Ok(res);
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
         
         

@@ -10,6 +10,7 @@ public class UnitOfWork: IUnitOfWork
     private readonly DbContext _context;
     private IUniversityRepo _universities;
     private IStateRepo _states;
+    private IUniStructureRepo _uniStructures;
 
     public UnitOfWork(TeachersContext context)
     {
@@ -18,6 +19,7 @@ public class UnitOfWork: IUnitOfWork
 
     public IUniversityRepo Universities => _universities ??= new UniversityRepo(_context);
     public IStateRepo States => _states ??= new StateRepo(_context);
+    public IUniStructureRepo UniStructures => _uniStructures ??= new UniStructureRepo(_context);
 
     public async Task Save()
     {
