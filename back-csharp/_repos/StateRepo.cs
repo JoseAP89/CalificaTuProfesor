@@ -7,7 +7,7 @@ namespace back_csharp._repos;
 
 public class StateRepo: CommonRepo<State>, IStateRepo
 {
-    public StateRepo(DbContext context) : base(context)
+    public StateRepo(DbContext context, IConfiguration config) : base(context, config)
     {
     }
 

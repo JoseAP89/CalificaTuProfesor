@@ -8,7 +8,7 @@ namespace back_csharp._repos;
 
 public class UniversityRepo: CommonRepo<University>, IUniversityRepo
 {
-    public UniversityRepo(DbContext ctx): base(ctx)
+    public UniversityRepo(DbContext context, IConfiguration config) : base(context, config)
     {
         
     }

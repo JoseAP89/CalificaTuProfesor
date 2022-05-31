@@ -7,7 +7,7 @@ namespace back_csharp._repos;
 
 public class UniStructureRepo: CommonRepo<UniStructure>, IUniStructureRepo
 {
-    public UniStructureRepo(DbContext context) : base(context)
+    public UniStructureRepo(DbContext context, IConfiguration config) : base(context, config)
     {
     }
 

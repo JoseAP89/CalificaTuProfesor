@@ -11,13 +11,16 @@ public class CommonRepo<T>: ICommonRepo<T>
 
     protected readonly DbContext _context;
     protected readonly DbSet<T> _dbset;
+    protected readonly IConfiguration _config; 
+    protected const int MAX_RESULTS = 20;
 
-    public CommonRepo(DbContext context)
+    public CommonRepo(DbContext context, IConfiguration config)
     {
         _context = context;
+        _config = config;
         _dbset = context.Set<T>();
     }
-
+    
     public virtual async Task Add(T entity)
     {
         await _dbset.AddAsync(entity);
