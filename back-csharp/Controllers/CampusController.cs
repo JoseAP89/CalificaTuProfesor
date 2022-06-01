@@ -17,17 +17,11 @@ namespace back_csharp.Controllers
     [ApiController]
     public class CampusController : ControllerBase
     {
-        private readonly TeachersContext _context;
-        private readonly IMapper _autoMapper;
-        private readonly IConfiguration _config;
         private readonly IUnitOfWork _uow;
 
-        public CampusController(TeachersContext context, IMapper _mapper, IConfiguration config, IUnitOfWork uow)
+        public CampusController(IUnitOfWork uow)
         {
-            _config = config;
             _uow = uow;
-            _autoMapper = _mapper;
-            _context = context;
         }
 
         [HttpGet("info/{id:int}")]

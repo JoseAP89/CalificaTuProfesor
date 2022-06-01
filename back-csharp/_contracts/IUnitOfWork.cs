@@ -8,5 +8,6 @@ public interface IUnitOfWork
     IStateRepo States { get; }
     IUniStructureRepo UniStructures { get; }
     ICampusRepo Campus { get; }
+    IRosterRepo Roster { get; }
     Task Save();
 }
