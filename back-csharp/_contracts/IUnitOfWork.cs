@@ -9,5 +9,6 @@ public interface IUnitOfWork
     IUniStructureRepo UniStructures { get; }
     ICampusRepo Campus { get; }
     IRosterRepo Roster { get; }
+    IScaleRepo Scale { get; }
     Task Save();
 }

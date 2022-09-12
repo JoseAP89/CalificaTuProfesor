@@ -14,6 +14,7 @@ public class UnitOfWork: IUnitOfWork
     private IUniStructureRepo _uniStructures;
     private ICampusRepo _campus;
     private IRosterRepo _roster;
+    private IScaleRepo _scale;
 
     public UnitOfWork(TeachersContext context, IConfiguration config)
     {
@@ -26,6 +27,7 @@ public class UnitOfWork: IUnitOfWork
     public IUniStructureRepo UniStructures => _uniStructures ??= new UniStructureRepo(_context, _config);
     public ICampusRepo Campus => _campus ??= new CampusRepo(_context, _config);
     public IRosterRepo Roster => _roster ??= new RosterRepo(_context, _config);
+    public IScaleRepo Scale => _scale ??= new ScaleRepo(_context, _config);
 
     public async Task Save()
     {
