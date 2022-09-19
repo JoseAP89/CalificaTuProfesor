@@ -5,6 +5,9 @@ import  Roster  from '../_models/roster';
 import {Vessel} from '../_models/vessel'
 import NewUniversity from '../_models/newUniversity';
 import NewCampus from '../_models/newCampus';
+import { environment } from '../environments/environment';
+import { Scale } from '../_models/scale';
+import { firstValueFrom, from, lastValueFrom, map, Observable, tap } from 'rxjs';
 
 const TeacherService = {
     getCampusWithUniversity,
@@ -14,12 +17,13 @@ const TeacherService = {
     getTeacherInfo,
     getCampusInfo,
     getStates,
+    getScales,
     addUniversity,
     addRoster,
     addCampus,
 }
 
-const backend_csharp = "https://localhost:7167/api"
+const backend_csharp = environment.API_URL;
 
 
 /** campus*/
@@ -91,6 +95,22 @@ async function addUniversity(data: NewUniversity): Promise<AxiosResponse<string>
 async function getStates(): Promise<AxiosResponse<Array<Vessel>>>{
     const url = `${backend_csharp}/state`;
     return axios.get(url);
+}
+
+/** scale */
+
+function getScales(): Observable<AxiosResponse<Array<Scale>, any>>{
+    const url = `${backend_csharp}/scale`;
+    let response =  from(axios.get(url));
+    return response.pipe(
+        map( s => {
+            let res = s.data.slice();
+            s.data = res.map( (scale: any) => {
+                return new Scale(scale.scale_id, scale.name , scale.description);
+            })
+            return s;
+        })
+    );
 }
 
 export default TeacherService;

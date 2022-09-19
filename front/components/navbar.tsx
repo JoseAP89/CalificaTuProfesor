@@ -10,9 +10,6 @@ export default function Navbar() {
       <Link href="/add-item">
         <a >Agregar</a>
       </Link>
-      <Link href="/grade">
-        <a >Calificar</a>
-      </Link>
       <Link href="/#about">
         <a >Acerca de nosotros</a>
       </Link>

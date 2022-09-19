@@ -8,6 +8,7 @@ import { Button, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faThumbsUp, faThumbsDown, faWarning, faStar } from "@fortawesome/free-solid-svg-icons";
 import Star from '../../public/star.svg'
+import Link from 'next/link'
 
 const RosterPage = () => {
     const router = useRouter()
@@ -92,9 +93,11 @@ const RosterPage = () => {
                 </div>
             </section>
 
-            <Button colorScheme='blue' variant='outline' className='add-comment-btn'>
-                Agregar comentario
-            </Button>
+            <Link href={`/grade/${rosterId}`}>
+                <Button colorScheme='blue' variant='outline' className='add-comment-btn'>
+                    Calificar
+                </Button>
+            </Link>
 
 
             <section className='comments-container'>

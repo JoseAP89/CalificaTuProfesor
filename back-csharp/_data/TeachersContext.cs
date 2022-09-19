@@ -40,6 +40,7 @@ namespace back_csharp._data
         {
             modelBuilder.HasPostgresExtension("unaccent");
 
+            // CAMPUS
             modelBuilder.Entity<Campus>(entity =>
             {
                 entity.ToTable("campus");
@@ -79,6 +80,7 @@ namespace back_csharp._data
                     .HasConstraintName("campus_university_id_fkey");
             });
 
+            // COMMENT
             modelBuilder.Entity<Comment>(entity =>
             {
                 entity.ToTable("comment");
@@ -111,6 +113,7 @@ namespace back_csharp._data
                     .HasConstraintName("comment_roster_id_fkey");
             });
 
+            // GRADE
             modelBuilder.Entity<Grade>(entity =>
             {
                 entity.ToTable("grade");
@@ -151,6 +154,7 @@ namespace back_csharp._data
                     .HasConstraintName("grade_scale_id_fkey");
             });
 
+            // ROSTER
             modelBuilder.Entity<Roster>(entity =>
             {
                 entity.ToTable("roster");
@@ -206,6 +210,7 @@ namespace back_csharp._data
                     .HasConstraintName("roster_uni_structure_id_fkey");
             });
 
+            // SCALE
             modelBuilder.Entity<Scale>(entity =>
             {
                 entity.ToTable("scale");
@@ -230,6 +235,7 @@ namespace back_csharp._data
                     .HasColumnName("name");
             });
 
+            // STATE
             modelBuilder.Entity<State>(entity =>
             {
                 entity.ToTable("state");
@@ -250,6 +256,7 @@ namespace back_csharp._data
                     .HasColumnName("name");
             });
 
+            // UNISTRUCTURE
             modelBuilder.Entity<UniStructure>(entity =>
             {
                 entity.ToTable("uni_structure");
@@ -274,6 +281,7 @@ namespace back_csharp._data
                     .HasColumnName("name");
             });
 
+            // UNIVERSITY
             modelBuilder.Entity<University>(entity =>
             {
                 entity.ToTable("university");
@@ -297,6 +305,7 @@ namespace back_csharp._data
                     .HasColumnName("name");
             });
 
+            // VOTE
             modelBuilder.Entity<Vote>(entity =>
             {
                 entity.ToTable("vote");
@@ -327,6 +336,7 @@ namespace back_csharp._data
                     .HasConstraintName("vote_comment_id_fkey");
             });
 
+            // ROSTER_SCALE
             modelBuilder.Entity<RosterScale>(entity =>
             {
                 entity.ToTable("roster_scale");

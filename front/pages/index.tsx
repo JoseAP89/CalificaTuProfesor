@@ -222,13 +222,13 @@ const Home: NextPage = () => {
         }
 
         <FontAwesomeIcon  icon={faAngleDoubleDown} className='arrow-down'
-          onClick={() => {window.location.href="/#grade"}}
+          onClick={() => {window.location.href="/#about"}}
         />
       </HomeContainer>
 
 
-      <HomeContainer  id='grade'>
-        <section className='grade'>
+      <HomeContainer  id='about'>
+        <section className='about'>
           <Heading py='3' size='2xl'>Calificalos</Heading>
           <SimpleGrid columns={{ sm: 1, md: 2 }} spacing='40px'>
             <Box h='fit-content'>
