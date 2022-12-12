@@ -6,7 +6,7 @@ using AutoMapper;
 using back_csharp._contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using back_csharp._data;
+using back_csharp._models;
 using back_csharp._dtos;
 using back_csharp._helpers;
 using Microsoft.EntityFrameworkCore;

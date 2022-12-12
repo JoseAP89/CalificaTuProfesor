@@ -1,5 +1,5 @@
 using back_csharp._contracts;
-using back_csharp._data;
+using back_csharp._models;
 using back_csharp._dtos;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace back_csharp._data
+namespace back_csharp._models
 {
-    public partial class University
+    public partial class State
     {
-        public University()
+        public State()
         {
             Campuses = new HashSet<Campus>();
         }
 
-        public int UniversityId { get; set; }
-        public string Name { get; set; } = null!;
+        public int StateId { get; set; }
+        public string? Name { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
 

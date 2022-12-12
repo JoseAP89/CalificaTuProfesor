@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace back_csharp._data
+namespace back_csharp._models
 {
     public partial class Scale
     {
