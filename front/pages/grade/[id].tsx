@@ -7,6 +7,7 @@ import GradeFormStyle from '../../styles/styledComponents/gradeForm';
 import { ComponentWithAs, Slider, SliderFilledTrack, SliderMark, SliderThumb, SliderTrack, Textarea, TextareaProps, Tooltip } from '@chakra-ui/react'
 import { Scale } from '../../_models/scale'
 import { GradeContainer } from '../../_models/business'
+import StarSelector from '../../components/starSelector'
 
 const GradePage = () => {
     const router = useRouter()
@@ -87,7 +88,6 @@ const GradePage = () => {
             let tmp = gradeTooltipList.slice();
             tmp[id - 1] = val;
             setGradeTooltipList(tmp);
-            console.log("tooltips:", tmp);
         }
     }
 
@@ -189,6 +189,10 @@ const GradePage = () => {
                     </div>
                 }
             </section>
+
+            <div>
+                <StarSelector onChangeHandler={() => null} grade={3}/>
+            </div>
 
         </GradeFormStyle>
     </>

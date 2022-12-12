@@ -244,3 +244,36 @@ i[data-star^="4.7"]::after{width:94%}
 i[data-star^="4.8"]::after{width:96%}
 i[data-star^="4.9"]::after{width:98%}
 i[data-star^="5"]::after{width:100%}
+
+/*** star grade component*/
+i[not-selected-star] {
+  --star-height: 60px;
+  /** star line-heght and font-size must be equal to avoid different dimensions between grey and yellow stars*/
+  font-size: var(--star-height);
+  line-height: var(--star-height);
+  font-style:normal;
+  display:inline-block;
+  font-family: sans-serif;
+  position: relative;
+  unicode-bidi: bidi-override;
+  height: fit-content;
+  cursor: pointer;
+}
+i[not-selected-star]::before {
+  content: '★';
+  color: #ddd;
+}
+i[selected-star]::before {
+  --star-height: 60px;
+  /** star line-heght and font-size must be equal to avoid different dimensions between grey and yellow stars*/
+  font-size: var(--star-height);
+  line-height: var(--star-height);
+  font-style:normal;
+  content: '★';
+  color: orange;
+  font-family: sans-serif;
+  position: relative;
+  unicode-bidi: bidi-override;
+  height: fit-content;
+  cursor: pointer;
+}
