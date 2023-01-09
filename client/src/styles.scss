@@ -85,3 +85,6 @@ i[data-star^="4.7"]::after{width:94%}
 i[data-star^="4.8"]::after{width:96%}
 i[data-star^="4.9"]::after{width:98%}
 i[data-star^="5"]::after{width:100%}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
