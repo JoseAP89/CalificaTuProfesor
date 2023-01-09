@@ -1,0 +1,29 @@
+.home-container {
+  background-image: url("../../../assets/images/chalkboard.jpg");
+  height: calc( 100vh - 110px );
+  color: white;
+  .search-container {
+    $widthBar: 800px;
+    width: $widthBar;
+    mat-form-field {
+      width: $widthBar;
+    }
+    .search-options-container{
+      width: $widthBar;
+      padding: 0px;
+      color: black;
+      background-color:  rgb(255,250,250);
+      .option-item {
+        font-weight: 400;
+        padding: 20px;
+      }
+      .option-item:hover {
+        background-color: aqua;
+      }
+
+    }
+    ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+      display: none !important;
+    }
+  }
+}

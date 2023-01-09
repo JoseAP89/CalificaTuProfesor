@@ -1,1 +1,24 @@
-<p>home works!</p>
+<section class="box home-container">
+  <div class="search-container">
+    <!-- CAMPO DE BUSQUEDA -->
+    <mat-form-field class="example-form-field">
+      <mat-label>Buscar</mat-label>
+      <input matInput
+        #SearchVal
+        type="search"
+        [(ngModel)]="searchValue"
+        autocomplete="off"
+        (keyup)="onSearch(SearchVal.value)"
+      >
+      <button  matSuffix mat-icon-button aria-label="Clear" (click)="searchValue=''">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <!-- CONTENEDOR DE OPCIONES -->
+    <ng-container *ngIf="searchValue!='' && showOptions">
+      <div class="search-options-container" *ngFor="let item of options">
+        <div class="option-item" (click)="onSelectedOption(item)">{{item}}</div>
+      </div>
+    </ng-container>
+  </div>
+</section>
