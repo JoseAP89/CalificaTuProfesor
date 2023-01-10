@@ -1,7 +1,10 @@
 <section class="box home-container">
+  <div class="home-title">
+    Comienza buscando tu profesor
+  </div>
   <div class="search-container">
     <!-- CAMPO DE BUSQUEDA -->
-    <mat-form-field class="example-form-field">
+    <mat-form-field class="search-form-field">
       <mat-label>Buscar</mat-label>
       <input matInput
         #SearchVal
@@ -9,16 +12,25 @@
         [(ngModel)]="searchValue"
         autocomplete="off"
         (keyup)="onSearch(SearchVal.value)"
+        (focus)="showOptions = true"
       >
       <button  matSuffix mat-icon-button aria-label="Clear" (click)="searchValue=''">
         <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
+    <!--SEARCH BTN -->
+    <div class="search-btn">
+      <button mat-raised-button color="primary">Buscar</button>
+    </div>
     <!-- CONTENEDOR DE OPCIONES -->
-    <ng-container *ngIf="searchValue!='' && showOptions">
-      <div class="search-options-container" *ngFor="let item of options">
-        <div class="option-item" (click)="onSelectedOption(item)">{{item}}</div>
+    <div class="search-options-container" *ngIf="searchValue!='' && showOptions && (options | async ) as opts">
+      <div class="search-options-box" *ngFor="let item of opts; index as i">
+        <mat-icon class="hide-options-btn" *ngIf="i == 0" (click)="showOptions = false">expand_less</mat-icon>
+        <div class="option-item" (click)="onSelectedOption(item[0])">
+          <div class="children-option">{{item[0].value}}</div>
+          <div class="parent-option">{{item[1].value}}</div>
+        </div>
       </div>
-    </ng-container>
+    </div>
   </div>
 </section>

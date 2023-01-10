@@ -112,7 +112,7 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
                 string path = "/home/joseap/Documents/projects/CalificaTuProfesor/front/public/campuses/";
                 path += img_name + "." + campusDto.ImgType;
                 var data = campusDto.ImgFile.Base64Decode();
-                System.IO.File.WriteAllBytesAsync(path,data);
+                await System.IO.File.WriteAllBytesAsync(path,data);
             }
             
             _context.Set<Campus>().Add(campus);

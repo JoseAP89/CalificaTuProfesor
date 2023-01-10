@@ -2,23 +2,51 @@
   background-image: url("../../../assets/images/chalkboard.jpg");
   height: calc( 100vh - 110px );
   color: white;
+  .home-title {
+    font-size: 2.6rem;
+    margin: 30px auto 80px auto;
+    text-align: center;
+    font-weight: bold;
+  }
   .search-container {
-    $widthBar: 800px;
+    $widthBar: 50vw;
     width: $widthBar;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     mat-form-field {
       width: $widthBar;
     }
-    .search-options-container{
-      width: $widthBar;
-      padding: 0px;
-      color: black;
-      background-color:  rgb(255,250,250);
-      .option-item {
-        font-weight: 400;
-        padding: 20px;
-      }
-      .option-item:hover {
-        background-color: aqua;
+    .search-btn button {
+      height: 60px;
+      margin-left: 20px;
+    }
+    .search-options-container {
+      max-height: 300px;
+      overflow: scroll;
+      max-width: $widthBar;
+      .search-options-box{
+        padding: 0px;
+        color: black;
+        background-color:  rgb(255,250,250);
+        .option-item {
+          font-weight: 400;
+          padding: 14px;
+          .children-option {
+            color: black;
+            font-weight: 500;
+          }
+          .parent-option {
+            padding-left: 14px;
+            color: #989898;
+          }
+        }
+        .option-item:hover {
+          background-color: aqua;
+        }
+        .hide-options-btn {
+          cursor: pointer;
+        }
+
       }
 
     }

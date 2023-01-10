@@ -1,3 +1,12 @@
+-- initial setup 
+drop DATABASE if EXISTS teachers;
+create DATABASE teachers;
+create user joseap ;
+-- privileges
+alter user joseap with encrypted password 'J1o2s3e4';
+GRANT ALL PRIVILEGES ON DATABASE teachers TO joseap;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO joseap;
+
 -- dropping tables
 DROP TABLE IF EXISTS roster_scale;
 DROP TABLE IF EXISTS grade;
@@ -126,8 +135,6 @@ CREATE TABLE roster_scale (
         REFERENCES scale (scale_id)
 );
 
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO joseap;
-GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO joseap;
 
 -- filling uni_structure table
 
@@ -9988,3 +9995,4 @@ INSERT INTO scale(Name, Description) VALUES
 ('Organización','Buena organicación de la enseñanza de los temas en la clase.'),
 ('Realidad','Capacidad de explicar aplicaciones de la materia a la práctica o a su uso en el mundo laboral.'),
 ('General','Contiene el rendimiento promedio considerando el resto de las escalas.');
+SET AUTOCOMMIT = OFF;

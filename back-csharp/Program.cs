@@ -28,7 +28,7 @@ const string POLICY = "AllowAll";
 builder.Services.AddCors(opt => {
     opt.AddPolicy(POLICY,
         policy => policy
-            .WithOrigins("http://localhost:3000")
+            .WithOrigins("http://localhost:3000", "http://localhost:4200")
             .AllowAnyHeader()
             .AllowAnyMethod()
     );
