@@ -14,14 +14,14 @@
         (keyup)="onSearch(SearchVal.value)"
         (focus)="showOptions = true"
       >
-      <button  matSuffix mat-icon-button aria-label="Clear" (click)="searchValue=''">
+      <button  class="close-options-btn" matSuffix mat-icon-button aria-label="Clear" (click)="searchValue=''">
         <mat-icon>close</mat-icon>
       </button>
+      <!--SEARCH BTN -->
+      <div class="search-btn">
+        <button mat-raised-button color="primary">Buscar</button>
+      </div>
     </mat-form-field>
-    <!--SEARCH BTN -->
-    <div class="search-btn">
-      <button mat-raised-button color="primary">Buscar</button>
-    </div>
     <!-- CONTENEDOR DE OPCIONES -->
     <div class="search-options-container" *ngIf="searchValue!='' && showOptions && (options | async ) as opts">
       <div class="search-options-box" *ngFor="let item of opts; index as i">

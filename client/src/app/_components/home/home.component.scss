@@ -11,14 +11,22 @@
   .search-container {
     $widthBar: 50vw;
     width: $widthBar;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
     mat-form-field {
       width: $widthBar;
     }
-    .search-btn button {
-      height: 60px;
-      margin-left: 20px;
+    .search-form-field {
+      position: relative;
+      .close-options-btn {
+        margin-right: 85px;
+      }
+      .search-btn {
+        position: absolute;
+        button {
+          height: 55px;
+        }
+        top: 0;
+        right: -140px;
+      }
     }
     .search-options-container {
       max-height: 300px;
