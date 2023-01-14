@@ -1,0 +1,60 @@
+.box {
+  background-color: #242124;
+}
+
+.hero-add-item {
+  background-color: #242124;
+  font-size: 1.5rem;
+  color: white;
+  padding: 30px;
+  display: grid;
+  grid-template-columns: 1fr ;
+  justify-items: center;
+  width: 100%;
+  gap: 40px;
+  .classroom-pic {
+    border-radius: 20px;
+  }
+  .item-image-bg {
+    filter: brightness(100%);
+    background-size: cover;
+    background-position: center;
+    border-radius: 16px;
+    height: 320px;
+    cursor: pointer;
+    padding: 10px;
+    width: 80vw;
+  }
+  .item-image-bg .item-lbl{
+    background-color: rgb(172,172,172, .8);
+    width: fit-content;
+    padding: 16px 10px 10px 10px;
+    border-radius: 4px;
+  }
+  .button-classroom {
+    background-image: url('../../../assets/images/classroom.jpg');
+  }
+  .button-campus {
+    background-image: url('../../../assets/images/campus.jpg');
+    filter: brightness(90%);
+  }
+  .button-university {
+    background-image: url('../../../assets/images/university.jpg');
+  }
+  .item-image-bg:hover {
+    filter: brightness(84%);
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    transition: all 1s ease;
+    font-weight: bold;
+  }
+}
+@media screen and (min-width: 2000px){
+
+  .hero-add-item .item-image-bg {
+    width: 66vw;
+    height: 360px;
+  }
+}

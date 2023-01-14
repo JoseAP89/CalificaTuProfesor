@@ -11,12 +11,14 @@ import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
+import { AddItemsComponent } from './_components/add-items/add-items.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     NavbarComponent,
+    AddItemsComponent,
   ],
   imports: [
     BrowserModule,
