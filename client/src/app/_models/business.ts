@@ -162,3 +162,9 @@ export class NewUniversity {
         this.img_type = img_type;
     }
 }
+
+export class UniStructure {
+  uniStructureId: number;
+  name: string;
+  code: string;
+}

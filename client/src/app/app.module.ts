@@ -12,6 +12,11 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { AddItemsComponent } from './_components/add-items/add-items.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import { AddTeacherComponent } from './_components/dialogs/add-teacher/add-teacher.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -19,6 +24,7 @@ import { AddItemsComponent } from './_components/add-items/add-items.component';
     HomeComponent,
     NavbarComponent,
     AddItemsComponent,
+    AddTeacherComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,6 +35,10 @@ import { AddItemsComponent } from './_components/add-items/add-items.component';
     MatButtonModule,
     FormsModule,
     HttpClientModule,
+    MatDialogModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

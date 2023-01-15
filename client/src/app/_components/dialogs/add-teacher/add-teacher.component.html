@@ -1,0 +1,66 @@
+<section class="dialog-box">
+  <h1 mat-dialog-title>Agrega tu Profesor</h1>
+  <div mat-dialog-content>
+    <form [formGroup]="teacherForm">
+
+      <!-- NAME -->
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+
+      <!-- FATHER LASTNAME -->
+      <mat-form-field appearance="outline">
+        <mat-label>Apellido Paterno</mat-label>
+        <input matInput formControlName="lastname1">
+      </mat-form-field>
+
+      <!-- MOTHER LASTNAME -->
+      <mat-form-field appearance="outline">
+        <mat-label>Apellido Materno</mat-label>
+        <input matInput formControlName="lastname2">
+      </mat-form-field>
+
+      <!-- SUBJECT -->
+      <mat-form-field appearance="outline">
+        <mat-label>Materia</mat-label>
+        <input matInput formControlName="subject">
+      </mat-form-field>
+
+      <!-- SUBJECT -->
+      <mat-form-field appearance="fill">
+        <mat-label>Estructura Universitaria</mat-label>
+        <mat-select formControlName="uniStructureId" required>
+          <mat-option>--</mat-option>
+          <ng-container *ngIf="(uniStructures | async) as structures">
+            <mat-option *ngFor="let s of structures" [value]="s.id">
+              {{s.value}}
+            </mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- UNI STRUCTURE NAME -->
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre de la Estructura Universitaria</mat-label>
+        <input matInput formControlName="uniStructureName" autocomplete="off">
+      </mat-form-field>
+
+      <!-- CAMPUS -->
+      <mat-form-field appearance="outline">
+        <mat-label>Campus</mat-label>
+        <input list="campus" matInput formControlName="uniStructureName" #CampusElement (keyup)="onSearchCampus(CampusElement.value)">
+        <datalist id="campus">
+          <ng-container *ngIf="(campusSearchOptions | async) as opts">
+            <option value="{{item.value}}" *ngFor="let item of opts">{{item.value}}</option>
+          </ng-container>
+        </datalist>
+      </mat-form-field>
+
+    </form>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button mat-button color="accent" mat-dialog-close>No</button>
+    <button mat-button mat-raised-button color="primary" mat-dialog-close>Guardar</button>
+  </div>
+</section>

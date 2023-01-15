@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Campus, CampusUniversity, NewCampus } from '../_models/business';
+import { Campus, CampusUniversity, NewCampus, Vessel } from '../_models/business';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +26,11 @@ export class CampusService {
   public getCampusInfo(campusId: number): Observable<Campus>{
     const url = `${this.baseUrl}/info/${campusId}`;
     return this.http.get<Campus>(url);
+  }
+
+  public getCampusSearch(value: string): Observable<Vessel[]>{
+    const url = `${this.baseUrl}/${value}`;
+    return this.http.get<Vessel[]>(url);
   }
 
   public addCampus(data: NewCampus): Observable<string> {

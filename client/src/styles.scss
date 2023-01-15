@@ -119,3 +119,17 @@ i[data-star^="5"]::after{width:100%}
   font-size: 2.2rem;
 }
 
+/*dialog container styles*/
+.dialog-box {
+  background-color: rgb(140,146,172);
+  border-radius: 4px;
+  .mat-mdc-dialog-title.mat-mdc-dialog-title {
+    color: black ;
+  }
+  .mat-mdc-dialog-content.mat-mdc-dialog-content {
+    color: black ;
+  }
+  input {
+    color: black !important;
+  }
+}

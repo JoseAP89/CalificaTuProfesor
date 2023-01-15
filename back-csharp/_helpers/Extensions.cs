@@ -25,6 +25,7 @@ public static class Extensions
             .ToString()
             .Normalize(NormalizationForm.FormC);
     }
+
     public static byte[] Base64Decode(this string data) {
         if (data == null)
         {

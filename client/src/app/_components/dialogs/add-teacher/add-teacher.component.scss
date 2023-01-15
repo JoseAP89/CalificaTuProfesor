@@ -1,0 +1,14 @@
+.dialog-box {
+  width: 800px !important;
+  form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 4px;
+    #campus {
+      option {
+        font-size: .5rem;
+      }
+    }
+  }
+}
