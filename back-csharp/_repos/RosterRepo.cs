@@ -12,7 +12,7 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
     {
     }
 
-    public async Task<RosterDto> GetRoster(int id)
+    public async Task<RosterDto> GetRosterDTO(int id)
     {
         var roster = from c in _context.Set<Roster>()
             join s in _context.Set<UniStructure>() on c.UniStructureId equals s.UniStructureId 
@@ -45,6 +45,12 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
                 CampusName = x.CampusName,
             }).SingleOrDefault();
         return res;
+    }
+
+    public async Task<Roster> GetRoster(int id)
+    {
+        var roster = await _context.Set<Roster>().FirstOrDefaultAsync(r => r.RosterId == id);
+        return roster;
     }
 
     public async Task<IEnumerable<TeacherCampus>> GetTeacherCampus(string search)

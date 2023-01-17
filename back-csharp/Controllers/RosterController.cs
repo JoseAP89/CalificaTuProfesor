@@ -23,13 +23,24 @@ namespace back_csharp.Controllers
             _uow = uow;
         }
 
-        [HttpGet("info/{id:int}")]
-        public async Task<ActionResult<RosterDto>> GetRoster(int id)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Roster>> GetRoster(int id)
         {
             var res = await _uow.Roster.GetRoster(id);
             if (res==null)
             {
-                return NoContent();
+                return NotFound();
+            }
+            return Ok(res);
+        }
+        
+        [HttpGet("info/{id:int}")]
+        public async Task<ActionResult<RosterDto>> GetRosterInfo(int id)
+        {
+            var res = await _uow.Roster.GetRosterDTO(id);
+            if (res==null)
+            {
+                return NotFound();
             }
             return Ok(res);
         }
@@ -40,17 +51,21 @@ namespace back_csharp.Controllers
             var res = await _uow.Roster.GetTeacherCampus(search);
             if (res==null)
             {
-                return NoContent();
+                return NotFound();
             }
             return Ok(res);
         }
         
         [HttpPost]
-        public async Task<ActionResult<Roster>> AddRoster(CreateRosterDto rosterDto)
+        public async Task<ActionResult<RosterDto>> AddRoster(CreateRosterDto rosterDto)
         {
             try
             {
                 var roster = await _uow.Roster.AddRoster(rosterDto);
+                if (roster == null)
+                {
+                    return BadRequest();
+                }
                 await _uow.Save();
 
                 return CreatedAtAction(

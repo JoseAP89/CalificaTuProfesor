@@ -20,6 +20,7 @@ public class ScaleController : ControllerBase
         _uow = uow;
     }
 
+    [HttpGet]
     public async Task<ActionResult<IEnumerable<ScaleDto>>> GetScales()
     {
         try

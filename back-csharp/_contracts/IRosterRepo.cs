@@ -5,7 +5,8 @@ namespace back_csharp._contracts;
 
 public interface IRosterRepo: ICommonRepo<Roster>
 {
-    Task<RosterDto> GetRoster(int id);
+    Task<RosterDto> GetRosterDTO(int id);
+    Task<Roster> GetRoster(int id);
     Task<IEnumerable<TeacherCampus>> GetTeacherCampus(string search);
     Task<Roster> AddRoster(CreateRosterDto rosterDto);
 }

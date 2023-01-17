@@ -18,30 +18,43 @@ namespace back_csharp.Controllers
     public class CampusController : ControllerBase
     {
         private readonly IUnitOfWork _uow;
+        private readonly IMapper _mapper;
 
-        public CampusController(IUnitOfWork uow)
+        public CampusController(IUnitOfWork uow, IMapper mapper)
         {
             _uow = uow;
+            _mapper = mapper;
         }
 
+        [HttpGet("{name}")]
+        public async Task<ActionResult<ShortCampusDTO>> GetShortCampusByName(string name)
+        {
+            var res = await _uow.Campus.GetShortCampus(name);
+            if (res==null)
+            {
+                return NotFound();
+            } 
+            return Ok(_mapper.Map<ShortCampusDTO>(res));
+        }
+        
         [HttpGet("info/{id:int}")]
         public async Task<ActionResult<CampusDto>> GetCampus(int id)
         {
             var res = await _uow.Campus.GetCampus(id);
             if (res==null)
             {
-                return NoContent();
+                return NotFound();
             } 
             return Ok(res);
         }
         
-        [HttpGet("{search}")]
+        [HttpGet("search/{search}")]
         public async Task<ActionResult<IEnumerable<Vessel>>> GetCampusSearch(string search)
         {
             var res = await _uow.Campus.GetCampusSearch(search);
             if (res==null)
             {
-                return NoContent();
+                return NotFound();
             }
             return Ok(res);
         }
@@ -52,7 +65,7 @@ namespace back_csharp.Controllers
             var res = await _uow.Campus.GetCampusUniversity(search);
             if (res==null)
             {
-                return NoContent();
+                return NotFound();
             }
             return Ok(res);
         }
@@ -63,7 +76,10 @@ namespace back_csharp.Controllers
             try
             {
                 var campus = await _uow.Campus.AddCampus(campusDto);
-                
+                if (campus == null)
+                {
+                    return BadRequest();
+                } 
                 await _uow.Save();
 
                 return CreatedAtAction(

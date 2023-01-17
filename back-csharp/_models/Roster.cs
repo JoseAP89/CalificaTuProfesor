@@ -14,12 +14,12 @@ namespace back_csharp._models
 
         public int RosterId { get; set; }
         public int CampusId { get; set; }
-        public string? TeacherName { get; set; }
-        public string? TeacherLastname1 { get; set; }
-        public string? TeacherLastname2 { get; set; }
-        public string? SubjectName { get; set; }
+        public string TeacherName { get; set; }
+        public string TeacherLastname1 { get; set; }
+        public string TeacherLastname2 { get; set; }
+        public string SubjectName { get; set; }
         public int UniStructureId { get; set; }
-        public string? StructureName { get; set; }
+        public string StructureName { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
 

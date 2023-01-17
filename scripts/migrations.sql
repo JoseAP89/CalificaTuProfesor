@@ -5,7 +5,8 @@ create user joseap ;
 -- privileges
 alter user joseap with encrypted password 'J1o2s3e4';
 GRANT ALL PRIVILEGES ON DATABASE teachers TO joseap;
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO joseap;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO joseap;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO joseap;
 
 -- dropping tables
 DROP TABLE IF EXISTS roster_scale;

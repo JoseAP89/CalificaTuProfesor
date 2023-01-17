@@ -12,6 +12,11 @@ body {
   font-family: 'Indie Flower', cursive;
 }
 
+/*input errors*/
+.input-error {
+  color: #e62020;
+}
+
 /** start rating system  */
 i[data-star] {
   --star-height: 180px;
@@ -121,15 +126,25 @@ i[data-star^="5"]::after{width:100%}
 
 /*dialog container styles*/
 .dialog-box {
-  background-color: rgb(140,146,172);
+  background-color: #006633;
   border-radius: 4px;
   .mat-mdc-dialog-title.mat-mdc-dialog-title {
-    color: black ;
+    color: white ;
   }
   .mat-mdc-dialog-content.mat-mdc-dialog-content {
-    color: black ;
+    color: white ;
   }
   input {
-    color: black !important;
+    color: white !important;
   }
+}
+
+/* buttons */
+.cancel-btn.cancel-btn.cancel-btn {
+  background-color: #536878;
+  color: white
+}
+.ok-btn.ok-btn.ok-btn {
+  background-color: #0070b8;
+  color: white
 }

@@ -6,31 +6,31 @@
       <!-- NAME -->
       <mat-form-field appearance="outline">
         <mat-label>Nombre</mat-label>
-        <input matInput formControlName="name">
+        <input matInput formControlName="teacher_name" required>
       </mat-form-field>
 
       <!-- FATHER LASTNAME -->
       <mat-form-field appearance="outline">
         <mat-label>Apellido Paterno</mat-label>
-        <input matInput formControlName="lastname1">
+        <input matInput formControlName="teacher_lastname1" required>
       </mat-form-field>
 
       <!-- MOTHER LASTNAME -->
       <mat-form-field appearance="outline">
         <mat-label>Apellido Materno</mat-label>
-        <input matInput formControlName="lastname2">
+        <input matInput formControlName="teacher_lastname2">
       </mat-form-field>
 
       <!-- SUBJECT -->
       <mat-form-field appearance="outline">
         <mat-label>Materia</mat-label>
-        <input matInput formControlName="subject">
+        <input matInput formControlName="subject_name" required>
       </mat-form-field>
 
-      <!-- SUBJECT -->
+      <!-- UNI STRUCTURE ID -->
       <mat-form-field appearance="fill">
         <mat-label>Estructura Universitaria</mat-label>
-        <mat-select formControlName="uniStructureId" required>
+        <mat-select formControlName="uni_structure_id" required>
           <mat-option>--</mat-option>
           <ng-container *ngIf="(uniStructures | async) as structures">
             <mat-option *ngFor="let s of structures" [value]="s.id">
@@ -43,24 +43,38 @@
       <!-- UNI STRUCTURE NAME -->
       <mat-form-field appearance="outline">
         <mat-label>Nombre de la Estructura Universitaria</mat-label>
-        <input matInput formControlName="uniStructureName" autocomplete="off">
+        <input matInput formControlName="structure_name" autocomplete="off" required>
       </mat-form-field>
 
       <!-- CAMPUS -->
-      <mat-form-field appearance="outline">
+      <mat-form-field class="example-full-width" appearance="fill">
         <mat-label>Campus</mat-label>
-        <input list="campus" matInput formControlName="uniStructureName" #CampusElement (keyup)="onSearchCampus(CampusElement.value)">
-        <datalist id="campus">
-          <ng-container *ngIf="(campusSearchOptions | async) as opts">
-            <option value="{{item.value}}" *ngFor="let item of opts">{{item.value}}</option>
-          </ng-container>
-        </datalist>
+        <input type="text" required
+          placeholder="Busca el campus"
+          aria-label="Number"
+          matInput
+          formControlName="campus_name"
+          #CampusElement (keyup)="onSearchCampus(CampusElement.value)"
+          (blur)="onSelectCampus()"
+          (select)="onSelectCampus()"
+          [matAutocomplete]="campus"
+        />
+        <mat-autocomplete autoActiveFirstOption #campus="matAutocomplete">
+          <mat-option *ngFor="let option of campusSearchOptions | async" [value]="option.value">
+            {{option.value}}
+          </mat-option>
+        </mat-autocomplete>
       </mat-form-field>
+
+      <!-- CAMPUS INPUT ERROR -->
+      <div class="input-error" *ngIf="this.campusError">
+        <p>El campus seleccionado no existe.</p>
+      </div>
 
     </form>
   </div>
   <div mat-dialog-actions>
-    <button mat-button mat-button color="accent" mat-dialog-close>No</button>
-    <button mat-button mat-raised-button color="primary" mat-dialog-close>Guardar</button>
+    <button mat-button mat-raised-button class="cancel-btn" mat-dialog-close>No</button>
+    <button mat-button mat-raised-button class="ok-btn" mat-dialog-close (click)="onSubmit()">Guardar</button>
   </div>
 </section>

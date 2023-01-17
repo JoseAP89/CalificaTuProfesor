@@ -52,9 +52,10 @@
   }
 }
 @media screen and (min-width: 2000px){
-
-  .hero-add-item .item-image-bg {
-    width: 66vw;
-    height: 360px;
+  .hero-add-item {
+    .item-image-bg {
+      width: 66vw;
+      height: 360px;
+    }
   }
 }

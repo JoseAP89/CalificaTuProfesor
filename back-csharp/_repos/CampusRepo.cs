@@ -12,6 +12,20 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
     {
     }
 
+    public async Task<Campus> GetShortCampus(int id)
+    {
+        var campus = await _context.Set<Campus>().FirstOrDefaultAsync( c => c.CampusId == id);
+        return campus;
+
+    }
+
+    public async Task<Campus> GetShortCampus(string name)
+    {
+        name = name.Replace("+", " ").Trim().ToLower();
+        var campus = await _context.Set<Campus>().FirstOrDefaultAsync(c => c.Name.ToLower().Equals(name));
+        return campus;
+    }
+
     public async Task<CampusDto> GetCampus(int id)
     {
         string path = _config["Images:campus"];
@@ -60,14 +74,11 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
             .Trim()
             .ToLower()
             .RemoveDiacritics();
-        var campus_ids = await _context.Set<Campus>().FromSqlRaw<Campus>(
+        var campus= await _context.Set<Campus>().FromSqlRaw<Campus>(
             $"SELECT * FROM campus c WHERE LOWER(UNACCENT(c.name)) LIKE '%{search}%'  LIMIT {MAX_RESULTS} ")
             .AsNoTracking()
-            .Select(x => x.CampusId)
             .ToListAsync();
-        var campus = from c in _context.Set<Campus>()
-            where campus_ids.Contains(c.CampusId) select c;
-        var res = (await campus.AsNoTracking().ToListAsync())?.Select( x => 
+        var res = campus?.Select( x => 
             new Vessel{Id = x.CampusId, Value = x.Name});
         return res;
     }

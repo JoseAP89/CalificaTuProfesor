@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { UniStructure, Vessel } from 'src/app/_models/business';
+import { Observable, catchError, firstValueFrom, of, tap } from 'rxjs';
+import { Campus, RosterDB, UniStructure, Vessel } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
+import { RosterService } from 'src/app/_services/roster.service';
 import { UnistructureService } from 'src/app/_services/unistructure.service';
 
 @Component({
@@ -15,29 +16,72 @@ export class AddTeacherComponent implements OnInit {
   public teacherForm: FormGroup;
   public uniStructures: Observable<Vessel[]>;
   public campusSearchOptions: Observable<Vessel[]>
+  public campusError: boolean = false;
+  public campusSelected: Campus;
 
   constructor(
     private fb: FormBuilder,
     private unistructureService: UnistructureService,
     private campusService: CampusService,
+    private rosterService: RosterService,
   ) {
   }
 
   ngOnInit(): void {
     this.uniStructures = this.unistructureService.getUniStructures();
     this.teacherForm = this.fb.group({
-      name: ['', Validators.required],
-      lastname1: ['', Validators.required],
-      lastname2: ['', Validators.required],
-      subject: ['', Validators.required],
-      campusId: ['', Validators.required],
-      uniStructureId: ['', Validators.required],
-      uniStructureName: ['', Validators.required],
+      teacher_name: ['', Validators.required],
+      teacher_lastname1: ['', Validators.required],
+      teacher_lastname2: [''],
+      subject_name: ['', Validators.required],
+      campus_name: ['', Validators.required],
+      uni_structure_id: ['', Validators.required],
+      structure_name: ['', Validators.required],
     });
   }
 
   onSearchCampus(search: string){
+    this.campusError = false;
     this.campusSearchOptions = this.campusService.getCampusSearch(search);
+  }
+
+  async onSelectCampus() {
+    setTimeout( async () => {
+      this.campusError = false;
+      let campusName = (this.teacherForm.get("campus_name")?.value as string)?.trim().replaceAll(" ", "+");
+      let campus = await firstValueFrom(
+        this.campusService.getShortCampusByName(campusName).pipe(
+          tap(() => this.campusError = false),
+          catchError(() => {
+            this.campusError = true;
+            return of(null)
+          })
+        )
+      );
+      if (campus == null) {
+        this.campusError = true;
+      } else {
+        this.campusSelected = campus;
+        this.campusError = false;
+      }
+
+    }, 1_000 * 0.2);
+  }
+
+  async onSubmit(){
+    if (this.teacherForm.valid && !this.campusError) {
+      let teacher: RosterDB = Object.assign(new RosterDB(), this.teacherForm.value);
+      teacher.campus_id = this.campusSelected.campus_id;
+      this.rosterService.addRoster(teacher).subscribe({
+        next: res => {
+          console.log("res:", res);
+          alert(`Maestro ${res.teacherName} ${res.teacherLastname1} ${res.teacherLastname2} fue agregado correctamente.`);
+        },
+        error: error => {
+          alert(`Hubo un error agregando al maestro. ${error}`);
+        }
+      });
+    }
   }
 
 }

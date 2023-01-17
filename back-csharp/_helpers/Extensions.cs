@@ -6,6 +6,9 @@ using System.Globalization;
 
 public static class Extensions
 {
+    /// <summary>
+    /// Removes all diacritics from a string.
+    /// </summary>
     public static string RemoveDiacritics(this string text) 
     {
         var normalizedString = text.Normalize(NormalizationForm.FormD);
