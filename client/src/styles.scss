@@ -17,6 +17,11 @@ body {
   color: #e62020;
 }
 
+/*disabled buttons*/
+.disabled-btn.disabled-btn.disabled-btn.disabled-btn {
+  background-color: rgba(black, 0.5);
+}
+
 /** start rating system  */
 i[data-star] {
   --star-height: 180px;

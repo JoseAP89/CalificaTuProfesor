@@ -75,6 +75,10 @@
   </div>
   <div mat-dialog-actions>
     <button mat-button mat-raised-button class="cancel-btn" mat-dialog-close>No</button>
-    <button mat-button mat-raised-button class="ok-btn" mat-dialog-close (click)="onSubmit()">Guardar</button>
+    <button mat-button mat-raised-button class="ok-btn"
+      [ngClass]="{'disabled-btn': !teacherForm.valid || campusError}"
+      mat-dialog-close (click)="onSubmit()" [disabled]="!teacherForm.valid || campusError">
+      Guardar
+    </button>
   </div>
 </section>
