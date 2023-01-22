@@ -84,12 +84,12 @@ namespace back_csharp.Controllers
         }
         
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<UniversityDto>>> AddUniversity(UniversityDto universitydto)
+        public async Task<ActionResult<UniversityDto>> AddUniversity(UniversityDto universitydto)
         {
             try
             {
                 var university = await _uow.Universities.Add(universitydto);
-                _uow.Universities.AddImage(universitydto);
+                await _uow.Universities.AddImage(universitydto);
                 await _uow.Save();
                 return CreatedAtAction(
                     nameof(GetUniversity),

@@ -131,13 +131,17 @@ i[data-star^="5"]::after{width:100%}
 
 /*dialog container styles*/
 .dialog-box {
-  background-color: #006633;
+  background-color: rgb(35,43,43,.7);
   border-radius: 4px;
   .mat-mdc-dialog-title.mat-mdc-dialog-title {
+    background-color: #4682b4;
     color: white ;
   }
   .mat-mdc-dialog-content.mat-mdc-dialog-content {
     color: white ;
+  }
+  .mat-mdc-dialog-actions.mat-mdc-dialog-actions{
+    background-color: #4682b4;
   }
   input {
     color: white !important;

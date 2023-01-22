@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddTeacherComponent } from '../dialogs/add-teacher/add-teacher.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AddUniversityComponent } from '../dialogs/add-university/add-university.component';
 
 @Component({
   selector: 'app-add-items',
@@ -21,6 +22,14 @@ export class AddItemsComponent implements OnInit {
 
   openAddTeacherDialog(enterAnimationDuration: string = '500ms', exitAnimationDuration: string= '500ms'): void {
     this.dialog.open(AddTeacherComponent, {
+      enterAnimationDuration,
+      exitAnimationDuration,
+      panelClass: 'dialog-box'
+    });
+  }
+
+  openAddUniversityDialog(enterAnimationDuration: string = '500ms', exitAnimationDuration: string= '500ms'): void {
+    this.dialog.open(AddUniversityComponent, {
       enterAnimationDuration,
       exitAnimationDuration,
       panelClass: 'dialog-box'

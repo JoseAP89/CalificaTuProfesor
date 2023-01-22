@@ -18,6 +18,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { AddUniversityComponent } from './_components/dialogs/add-university/add-university.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     NavbarComponent,
     AddItemsComponent,
     AddTeacherComponent,
+    AddUniversityComponent,
   ],
   imports: [
     BrowserModule,
