@@ -1,0 +1,61 @@
+<section class="dialog-box">
+  <h1 mat-dialog-title>Agrega tu Campus</h1>
+  <div mat-dialog-content>
+    <form [formGroup]="campusForm">
+
+      <!-- NAME -->
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="name" required>
+      </mat-form-field>
+
+      <!-- STATES -->
+      <mat-form-field appearance="fill">
+        <mat-label>Estado</mat-label>
+        <mat-select formControlName="state_id" required>
+          <mat-option>--</mat-option>
+          <ng-container *ngIf="(states | async) as states">
+            <mat-option *ngFor="let s of states" [value]="s.id">
+              {{s.value}}
+            </mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- UNIVERSITY -->
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Universidad</mat-label>
+        <input type="text" required
+          placeholder="Busca la universidad"
+          aria-label="Number"
+          matInput
+          formControlName="university_name"
+          #CampusElement (keyup)="onSearchUni(CampusElement.value)"
+          (blur)="onSelectUni()"
+          (select)="onSelectUni()"
+          [matAutocomplete]="uni"
+        />
+        <mat-autocomplete autoActiveFirstOption #uni="matAutocomplete">
+          <mat-option *ngFor="let option of uniSearchOptions | async" [value]="option.value">
+            {{option.value}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <!-- UNIVERSITY INPUT ERROR -->
+      <div class="input-error" *ngIf="this.uniError">
+        <p>La universidad seleccionada no existe.</p>
+      </div>
+
+    </form>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button mat-raised-button class="cancel-btn" mat-dialog-close>No</button>
+    <button mat-button mat-raised-button class="ok-btn"
+      [ngClass]="{'disabled-btn': !campusForm.valid}"
+      mat-dialog-close (click)="onSubmit()" [disabled]="!campusForm.valid">
+      Guardar
+    </button>
+  </div>
+</section>
+

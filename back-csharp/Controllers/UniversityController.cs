@@ -11,6 +11,7 @@ using back_csharp._data;
 using back_csharp._dtos;
 using back_csharp._helpers;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace back_csharp.Controllers
 {
@@ -19,12 +20,16 @@ namespace back_csharp.Controllers
     public class UniversityController : ControllerBase
     {
         private readonly IUnitOfWork _uow;
-        public UniversityController(IUnitOfWork uow, TeachersContext context)
+        private readonly IMapper _mapper;
+
+        public UniversityController(IUnitOfWork uow, TeachersContext context, IMapper mapper)
         {
             _uow = uow;
+            _mapper = mapper;
         }
 
-        [HttpGet("{id}")]
+
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<IEnumerable<UniversityDto>>> GetUniversity(int id)
         {
             try

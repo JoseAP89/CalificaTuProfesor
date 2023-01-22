@@ -43,9 +43,9 @@ export class CampusService {
     return this.http.get<Vessel[]>(url);
   }
 
-  public addCampus(data: NewCampus): Observable<string> {
-    const url = this.baseUrl;
-    return this.http.post<string>(url, data);
+  public addCampus(data: NewCampus): Observable<Campus> {
+    const url = `${this.baseUrl}`;
+    return this.http.post<Campus>(url, data);
   }
 
 }

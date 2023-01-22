@@ -19,6 +19,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { AddUniversityComponent } from './_components/dialogs/add-university/add-university.component';
+import { AddCampusComponent } from './_components/dialogs/add-campus/add-campus.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { AddUniversityComponent } from './_components/dialogs/add-university/add
     AddItemsComponent,
     AddTeacherComponent,
     AddUniversityComponent,
+    AddCampusComponent,
   ],
   imports: [
     BrowserModule,

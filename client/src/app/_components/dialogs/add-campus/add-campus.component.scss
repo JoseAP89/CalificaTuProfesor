@@ -1,0 +1,9 @@
+.dialog-box {
+  width: 700px !important;
+  form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 4px;
+  }
+}

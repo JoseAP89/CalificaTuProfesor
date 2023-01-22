@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddTeacherComponent } from '../dialogs/add-teacher/add-teacher.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddUniversityComponent } from '../dialogs/add-university/add-university.component';
+import { AddCampusComponent } from '../dialogs/add-campus/add-campus.component';
 
 @Component({
   selector: 'app-add-items',
@@ -14,8 +15,7 @@ export class AddItemsComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private fb: FormBuilder,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
   }
@@ -30,6 +30,14 @@ export class AddItemsComponent implements OnInit {
 
   openAddUniversityDialog(enterAnimationDuration: string = '500ms', exitAnimationDuration: string= '500ms'): void {
     this.dialog.open(AddUniversityComponent, {
+      enterAnimationDuration,
+      exitAnimationDuration,
+      panelClass: 'dialog-box'
+    });
+  }
+
+  openAddCampusDialog(enterAnimationDuration: string = '500ms', exitAnimationDuration: string= '500ms'): void {
+    this.dialog.open(AddCampusComponent, {
       enterAnimationDuration,
       exitAnimationDuration,
       panelClass: 'dialog-box'

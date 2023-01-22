@@ -28,7 +28,7 @@ export class AddUniversityComponent implements OnInit {
     if (this.universityForm.valid) {
       let uni = Object.assign(new University(), this.universityForm.value);
       console.log(uni);
-      this.universityService.AddUniversity(uni).subscribe({
+      this.universityService.addUniversity(uni).subscribe({
         next: res => {
           alert(`La universidad '${res.name}' fue agregada correctamente.`);
         },

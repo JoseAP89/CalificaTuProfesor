@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { NewUniversity, University } from '../_models/business';
+import { NewUniversity, University, Vessel } from '../_models/business';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -15,9 +15,16 @@ export class UniversityService {
     private http: HttpClient,
   ) { }
 
-  public AddUniversity(uni: University): Observable<NewUniversity>{
+  public addUniversity(uni: University): Observable<NewUniversity>{
     const url = `${this.baseUrl}`;
     return this.http.post<NewUniversity>(url, uni);
   }
+
+  public searchUniversity(target: string): Observable<Vessel[]>{
+    target = target.replaceAll(/\s+/g,"+");
+    const url = `${this.baseUrl}/search/${target}`;
+    return this.http.get<Vessel[]>(url);
+  }
+
 
 }

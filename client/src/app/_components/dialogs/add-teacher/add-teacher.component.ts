@@ -74,7 +74,6 @@ export class AddTeacherComponent implements OnInit {
       teacher.campus_id = this.campusSelected.campus_id;
       this.rosterService.addRoster(teacher).subscribe({
         next: res => {
-          console.log("res:", res);
           alert(`Maestro ${res.teacherName} ${res.teacherLastname1} ${res.teacherLastname2} fue agregado correctamente.`);
         },
         error: error => {
