@@ -45,5 +45,12 @@ export class HomeComponent {
     this.showOptions = false;
   }
 
+  changeShowOptions(value: boolean){
+    this.showOptions = value;
+  }
+
+  clearSearchValue(){
+    this.searchValue = "";
+  }
 
 }

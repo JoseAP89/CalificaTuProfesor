@@ -12,9 +12,9 @@
         [(ngModel)]="searchValue"
         autocomplete="off"
         (keyup)="onSearch(SearchVal.value)"
-        (focus)="showOptions = true"
+        (focus)="changeShowOptions(true)"
       >
-      <button  class="close-options-btn" matSuffix mat-icon-button aria-label="Clear" (click)="searchValue=''">
+      <button  class="close-options-btn" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearchValue()">
         <mat-icon>close</mat-icon>
       </button>
       <!--SEARCH BTN -->
