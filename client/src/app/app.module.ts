@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import {MatRadioModule} from '@angular/material/radio';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {HttpClientModule} from '@angular/common/http';
@@ -45,6 +45,7 @@ import { AddCampusComponent } from './_components/dialogs/add-campus/add-campus.
     MatFormFieldModule,
     MatSelectModule,
     MatAutocompleteModule,
+    MatRadioModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -105,7 +105,7 @@ namespace back_csharp.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return BadRequest($"Hubo un error al agregar la univeridad {universitydto.Name}.");
+                return BadRequest($"Hubo un error al agregar la universidad '{universitydto.Name}'.");
             }
 
         }

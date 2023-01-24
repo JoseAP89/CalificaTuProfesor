@@ -2,10 +2,20 @@
   <div class="home-title">
     Comienza buscando tu profesor
   </div>
+  <div class="type-of-search">
+    <mat-radio-group #SearchType aria-labelledby="example-radio-group-label" class="radio-group" [(ngModel)]="typeOfSearch">
+      <mat-radio-button class="radio-button" [value]="'P'">
+        Por Profesor
+      </mat-radio-button>
+      <mat-radio-button class="radio-button" [value]="'C'">
+        Por Campus
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
   <div class="search-container">
     <!-- CAMPO DE BUSQUEDA -->
     <mat-form-field class="search-form-field">
-      <mat-label>Buscar</mat-label>
+      <mat-label>{{typeOfSearch == "P" ? "Buscar Profesor" : "Buscar Campus"}}</mat-label>
       <input matInput
         #SearchVal
         type="search"
