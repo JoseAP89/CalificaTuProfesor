@@ -36,7 +36,7 @@ export class HomeComponent {
           return res.map( r => {
             // [campus , universidad]
             let fullName = `${r.teacher_name} ${r.teacher_lastname1} ${r.teacher_lastname2}`;
-            return [new Vessel(r.roster_id,fullName), new Vessel(r.campus.campus_id, r.campus.name)];
+            return [new Vessel(r.roster_id,fullName), new Vessel(r.campus.campus_id, `${r.subject_name} * ${r.campus.name}`)];
           });
         })
       );
