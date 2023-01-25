@@ -25,15 +25,35 @@ namespace back_csharp.Controllers
             _uow = uow;
         }
 
+        [HttpGet("{uniStructureId}")]
+        public async Task<ActionResult<Vessel>> GetUniStructure(int uniStructureId)
+        {
+            try
+            {
+                var res = await _uow.UniStructures.GetUniStructureInVessel(uniStructureId);
+                if (res==null)
+                {
+                    return NotFound();
+                }
+                return Ok(res);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+        
         [HttpGet]
-        public async Task<ActionResult<Vessel>> GetUniStructures()
+        public async Task<ActionResult<IEnumerable<Vessel>>> GetUniStructures()
         {
             try
             {
                 var res = await _uow.UniStructures.GetAllUniStructuresInVessels();
                 if (res==null)
                 {
-                    return NoContent();
+                    return NotFound();
                 }
                 return Ok(res);
 

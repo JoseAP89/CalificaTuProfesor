@@ -15,6 +15,11 @@ export class UnistructureService {
     private http: HttpClient,
   ) { }
 
+  public getUniStructure(uniStructureId: number): Observable<Vessel>{
+    const url = `${this.baseUrl}/${uniStructureId}`;
+    return this.http.get<Vessel>(url);
+  }
+
   public getUniStructures(): Observable<Vessel[]>{
     const url = `${this.baseUrl}`;
     return this.http.get<Vessel[]>(url);

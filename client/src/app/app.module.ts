@@ -20,6 +20,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { AddUniversityComponent } from './_components/dialogs/add-university/add-university.component';
 import { AddCampusComponent } from './_components/dialogs/add-campus/add-campus.component';
+import { RosterComponent } from './_components/roster/roster.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { AddCampusComponent } from './_components/dialogs/add-campus/add-campus.
     AddTeacherComponent,
     AddUniversityComponent,
     AddCampusComponent,
+    RosterComponent,
   ],
   imports: [
     BrowserModule,

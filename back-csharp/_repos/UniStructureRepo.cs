@@ -11,6 +11,16 @@ public class UniStructureRepo: CommonRepo<UniStructure>, IUniStructureRepo
     {
     }
 
+    public async Task<Vessel> GetUniStructureInVessel(int uniStructureId)
+    {
+        var res = (await GetAll<string>(u => u.Name, null))
+            .Where(x => x.UniStructureId == uniStructureId )  
+            ?.Select( x => 
+                new Vessel{Id = x.UniStructureId, Value = x.Name})
+            .FirstOrDefault();
+        return res;
+    }
+
     public async Task<IEnumerable<Vessel>> GetAllUniStructuresInVessels()
     {
         var res = (await GetAll<string>(u => u.Name, null))
@@ -18,4 +28,5 @@ public class UniStructureRepo: CommonRepo<UniStructure>, IUniStructureRepo
                 new Vessel{Id = x.UniStructureId, Value = x.Name});
         return res;
     }
+
 }

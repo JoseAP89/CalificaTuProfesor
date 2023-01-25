@@ -5,7 +5,7 @@ namespace back_csharp._contracts;
 
 public interface IUniStructureRepo: ICommonRepo<UniStructure>
 {
-
+    Task<Vessel> GetUniStructureInVessel(int uniStructureId);
     Task<IEnumerable<Vessel>> GetAllUniStructuresInVessels();
 
 }

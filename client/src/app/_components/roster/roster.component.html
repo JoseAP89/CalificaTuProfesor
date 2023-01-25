@@ -1,0 +1,65 @@
+<div class="section-title">
+  <p>{{fullName}}</p>
+</div>
+
+<section class="box">
+  <section class='roster-info-box'>
+    <div class='box-info'>
+      <div class='title-box'>DATOS GLOBALES</div>
+      <div class='label-brief'>Calificación General</div>
+      <i class="global-grade" data-star="2.7"></i>
+      <div class='label-brief'>{{ (uniStructure | async )?.value | titlecase }}</div>
+      <div class='content-brief'>{{roster.structure_name}}</div>
+      <div class='label-brief'>campus</div>
+      <div class='content-brief'>{{roster.campus_name}}</div>
+    </div>
+    <div class='box-info'>
+      <div class='title-box'>Habilidades</div>
+      <div class='skills-box'>
+        <div class='label-brief'>Claridad</div>
+        <i data-star="0.3"></i>
+        <div class='label-brief'>Competencia</div>
+        <i data-star="0.8"></i>
+        <div class='label-brief'>Expresión</div>
+        <i data-star="1.0"></i>
+        <div class='label-brief'>Métodos</div>
+        <i data-star="1.5"></i>
+        <div class='label-brief'>Modelo</div>
+        <i data-star="2.0"></i>
+        <div class='label-brief'>Organización</div>
+        <i data-star="3.2"></i>
+        <div class='label-brief'>Preparación</div>
+        <i data-star="2.5"></i>
+        <div class='label-brief'>Realidad</div>
+        <i data-star="2.3"></i>
+      </div>
+    </div>
+  </section>
+  <section class='comments-container'>
+    <div class='comment-block' *ngFor="let item of [1,2,3,4,5]">
+      <div class='teacher-logo-block'>
+        <mat-icon class="user-logo"> person_pin</mat-icon>
+      </div>
+      <div class='info-block'>
+        <div class='info-content'>
+          <div class='info-item'>
+            <span class='info-title'>Materia:</span> Analisis de algoritmos
+          </div>
+        </div>
+      </div>
+      <div class='text-block'>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iure aliquam autem iusto fugit? Nesciunt vero sed
+        molestiae est ad! Sequi temporibus non impedit rem facilis iusto dicta possimus iste blanditiis hic, obcaecati
+        sunt
+        distinctio deleniti tempora dolorem dignissimos consequatur optio consequuntur corporis. Ab nobis totam porro
+        nisi!
+        Consequatur, tenetur quaerat?
+      </div>
+      <div class='buttons-block'>
+        <mat-icon class="like-it btn" >thumb_up</mat-icon>
+        <mat-icon class="dislike-it btn" >thumb_down</mat-icon>
+        <mat-icon class="report-it btn" >add_alert</mat-icon>
+      </div>
+    </div>
+  </section>
+</section>

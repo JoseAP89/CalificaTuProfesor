@@ -29,15 +29,15 @@ export class University {
 }
 
 export class RosterDB {
-    roster_id?: number;
-    teacher_name: string;
-    teacher_lastname1: string;
-    teacher_lastname2: string;
-    subject_name: string;
-    uni_structure_id: number;
-    structure_name: string;
-    campus_id: number;
-    campus_name?: string;
+  roster_id?: number;
+  teacher_name: string;
+  teacher_lastname1: string;
+  teacher_lastname2: string;
+  subject_name: string;
+  uni_structure_id: number;
+  structure_name: string;
+  campus_id: number;
+  campus_name?: string;
 }
 
 export class Roster {
