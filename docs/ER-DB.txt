@@ -1,88 +1,88 @@
 # https://app.quickdatabasediagrams.com/#/
 
-Uni_Structure
+UniStructure
 ---
-uni_structure_id int pk
+uniStructureId int pk
 name varchar
 code varchar
-created_at date
-modified_at date
+createdAt date
+modifiedAt date
 
 University
 --
-university_id int pk
+universityId int pk
 name varchar
-created_at date
-modified_at date
+createdAt date
+modifiedAt date
 
 State
 --
-state_id int pk
+stateId int pk
 name varchar
-created_at date
-modified_at date
+createdAt date
+modifiedAt date
 
 Campus
 --
-campus_id int pk
+campusId int pk
 name varchar
-university_id int fk >- University.university_id
-state_id int fk  >- State.state_id
-created_at date
-modified_at date
+universityId int fk >- University.universityId
+state_id int fk  >- State.stateId
+createdAt date
+modifiedAt date
 
 Roster
 --
-roster_id int pk
-campus_id int fk >- Campus.campus_id
-teacher_name varchar
-teacher_lastname1 varchar
-teacher_lastname2 varchar
-subject_name varchar
-uni_structure_id int fk >- Uni_Structure.uni_structure_id
-structure_name varchar
-created_at date
-modified_at date
+rosterId int pk
+campusId int fk >- Campus.campusId
+teacherName varchar
+teacherLastname1 varchar
+teacherLastname2 varchar
+subjectName varchar
+uniStructureId int fk >- UniStructure.uniStructureId
+structureName varchar
+createdAt date
+modifiedAt date
 
 Comment
 --
-comment_id int pk
-roster_id int fk >- Roster.roster_id
-comment varchar
-token_id varchar
-created_at date
-modified_at date
+commentId int pk
+rosterId int fk >- Roster.rosterId
+content varchar
+tokenId varchar
+createdAt date
+modifiedAt date
 
 Vote
 --
-vote_id int pk
-comment_id int fk >- Comment.comment_id
+voteId int pk
+commentId int fk >- Comment.commentId
 approval boolean
-token_id varchar
-created_at date
-modified_at date
+tokenId varchar
+createdAt date
+modifiedAt date
 
 Scale
 --
-scale_id int pk
+scaleId int pk
 name varchar
 description varchar
-created_at date
-modified_at date
+createdAt date
+modifiedAt date
 
 Grade
 --
-grade_id int pk
-scale_id int fk >- Scale.scale_id
-roster_id int fk >- Roster.roster_id
-token_id varchar
+gradeId int pk
+scaleId int fk >- Scale.scaleId
+rosterId int fk >- Roster.rosterId
+tokenId varchar
 stars int
-created_at date
-modified_at date
+createdAt date
+modifiedAt date
 
 RosterScale
 --
-rosterscale_id int pk
-roster_id int fk >- Roster.roster_id
-scale_id int fk >- Scale.scale_id
+rosterscaleId int pk
+rosterId int fk >- Roster.rosterId
+scaleId int fk >- Scale.scaleId
 grade float
