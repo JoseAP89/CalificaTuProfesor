@@ -61,7 +61,7 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
             .ToLower()
             .RemoveDiacritics();
         var teacher_ids = await _context.Set<Roster>().FromSqlRaw<Roster>(
-            $"SELECT * FROM roster r WHERE LOWER(UNACCENT(CONCAT(r.teacher_name,' ', r.teacher_lastname1, ' ', r.teacher_lastname2))) LIKE '%{search}%'  LIMIT {MAX_RESULTS} ")
+            $"SELECT * FROM Roster r WHERE LOWER(UNACCENT(CONCAT(r.TeacherName,' ', r.TeacherLastname1, ' ', r.TeacherLastname2))) LIKE '%{search}%'  LIMIT {MAX_RESULTS} ")
             .AsNoTracking()
             .Select(x => x.RosterId)
             .ToListAsync();

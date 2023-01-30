@@ -8,7 +8,7 @@ namespace back_csharp._models
         public int GradeId { get; set; }
         public int ScaleId { get; set; }
         public int RosterId { get; set; }
-        public string? TokenId { get; set; }
+        public string TokenId { get; set; }
         public int? Stars { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }

@@ -35,8 +35,8 @@ export class HomeComponent {
         map( res => {
           return res.map( r => {
             // [campus , universidad]
-            let fullName = `${r.teacher_name} ${r.teacher_lastname1} ${r.teacher_lastname2}`;
-            return [new Vessel(r.roster_id,fullName), new Vessel(r.campus.campus_id, `${r.subject_name} * ${r.campus.name}`)];
+            let fullName = `${r.teacherName} ${r.teacherLastname1} ${r.teacherLastname2}`;
+            return [new Vessel(r.rosterId,fullName), new Vessel(r.campus.campusId, `${r.subjectName} * ${r.campus.name}`)];
           });
         })
       );
@@ -46,7 +46,7 @@ export class HomeComponent {
         map( res => {
           return res.map( r => {
             // [campus , universidad]
-            return [new Vessel(r.campus_id,r.name), new Vessel(r.university.university_id, r.university.name)];
+            return [new Vessel(r.campusId,r.name), new Vessel(r.university.universityId, r.university.name)];
           });
         })
       );

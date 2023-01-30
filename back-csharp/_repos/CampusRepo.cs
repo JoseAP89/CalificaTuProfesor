@@ -75,7 +75,7 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
             .ToLower()
             .RemoveDiacritics();
         var campus= await _context.Set<Campus>().FromSqlRaw<Campus>(
-            $"SELECT * FROM campus c WHERE LOWER(UNACCENT(c.name)) LIKE '%{search}%'  LIMIT {MAX_RESULTS} ")
+            $"SELECT * FROM Campus c WHERE LOWER(UNACCENT(c.Name)) LIKE '%{search}%'  LIMIT {MAX_RESULTS} ")
             .AsNoTracking()
             .ToListAsync();
         var res = campus?.Select( x => 
@@ -90,14 +90,14 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
                 .Trim()
                 .ToLower()
                 .RemoveDiacritics();
-            var campus_ids = await _context.Set<Campus>().FromSqlRaw<Campus>(
-                $"SELECT * FROM campus c WHERE LOWER(UNACCENT(c.name)) LIKE '%{search}%' LIMIT {MAX_RESULTS} ")
+            var campusIds = await _context.Set<Campus>().FromSqlRaw<Campus>(
+                $"SELECT * FROM Campus c WHERE LOWER(UNACCENT(c.Name)) LIKE '%{search}%' LIMIT {MAX_RESULTS} ")
                 .AsNoTracking()
                 .Select(x => x.CampusId)
                 .ToListAsync();
             var res = await (from c in _context.Set<Campus>()
                 join u in _context.Set<University>() on c.UniversityId equals u.UniversityId
-                where campus_ids.Contains(c.CampusId)
+                where campusIds.Contains(c.CampusId)
                 orderby c.Name
                 select new CampusUniversity
                 {
@@ -110,6 +110,15 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
     
         public async Task<Campus> AddCampus(CampusDto campusDto)
         {
+            var name = campusDto.Name.ToLower().Trim().RemoveDiacritics();
+            var campuses = await _context.Set<University>().FromSqlRaw<University>(
+                $"SELECT * FROM campus u WHERE LOWER(UNACCENT(u.name)) LIKE '%{name}%' ")
+                .AsNoTracking()
+                .ToListAsync();
+            if (campuses.Count>0 )
+            {
+                throw new BadHttpRequestException("No puede agregarse ya que ya existe un Campus con ese nombre.");
+            }
             var campus = new Campus
             {
                 CampusId = 0,
@@ -123,7 +132,7 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
                 string path = "/home/joseap/Documents/projects/CalificaTuProfesor/front/public/campuses/";
                 path += img_name + "." + campusDto.ImgType;
                 var data = campusDto.ImgFile.Base64Decode();
-                await System.IO.File.WriteAllBytesAsync(path,data);
+                await File.WriteAllBytesAsync(path,data);
             }
             
             _context.Set<Campus>().Add(campus);

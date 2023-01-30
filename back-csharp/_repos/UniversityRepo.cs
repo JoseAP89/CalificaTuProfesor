@@ -35,6 +35,15 @@ public class UniversityRepo: CommonRepo<University>, IUniversityRepo
 
     public async Task<University> Add(UniversityDto entitydto)
     {
+        var name = entitydto.Name.Trim().ToLower().RemoveDiacritics();
+        var universities = await _context.Set<University>().FromSqlRaw<University>(
+            $"SELECT * FROM university u WHERE LOWER(UNACCENT(u.name)) LIKE '%{name}%' ")
+            .AsNoTracking()
+            .ToListAsync();
+        if (universities.Count>0 )
+        {
+            throw new BadHttpRequestException("No puede agregarse ya que ya existe una Universidad con ese nombre.");
+        }
         var university = new University
         {
             UniversityId = 0,

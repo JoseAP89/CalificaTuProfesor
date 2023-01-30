@@ -8,7 +8,7 @@ namespace back_csharp._models
         public int VoteId { get; set; }
         public int CommentId { get; set; }
         public bool Approval { get; set; }
-        public string? TokenId { get; set; }
+        public string TokenId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
 

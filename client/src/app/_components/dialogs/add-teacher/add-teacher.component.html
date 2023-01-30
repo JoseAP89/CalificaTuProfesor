@@ -6,31 +6,31 @@
       <!-- NAME -->
       <mat-form-field appearance="outline">
         <mat-label>Nombre</mat-label>
-        <input matInput formControlName="teacher_name" required>
+        <input matInput formControlName="teacherName" required>
       </mat-form-field>
 
       <!-- FATHER LASTNAME -->
       <mat-form-field appearance="outline">
         <mat-label>Apellido Paterno</mat-label>
-        <input matInput formControlName="teacher_lastname1" required>
+        <input matInput formControlName="teacherLastname1" required>
       </mat-form-field>
 
       <!-- MOTHER LASTNAME -->
       <mat-form-field appearance="outline">
         <mat-label>Apellido Materno</mat-label>
-        <input matInput formControlName="teacher_lastname2">
+        <input matInput formControlName="teacherLastname2">
       </mat-form-field>
 
       <!-- SUBJECT -->
       <mat-form-field appearance="outline">
         <mat-label>Materia</mat-label>
-        <input matInput formControlName="subject_name" required>
+        <input matInput formControlName="subjectName" required>
       </mat-form-field>
 
       <!-- UNI STRUCTURE ID -->
       <mat-form-field appearance="fill">
         <mat-label>Estructura Universitaria</mat-label>
-        <mat-select formControlName="uni_structure_id" required>
+        <mat-select formControlName="uniStructureId" required>
           <mat-option>--</mat-option>
           <ng-container *ngIf="(uniStructures | async) as structures">
             <mat-option *ngFor="let s of structures" [value]="s.id">
@@ -43,7 +43,7 @@
       <!-- UNI STRUCTURE NAME -->
       <mat-form-field appearance="outline">
         <mat-label>Nombre de la Estructura Universitaria</mat-label>
-        <input matInput formControlName="structure_name" autocomplete="off" required>
+        <input matInput formControlName="structureName" autocomplete="off" required>
       </mat-form-field>
 
       <!-- CAMPUS -->
@@ -53,7 +53,7 @@
           placeholder="Busca el campus"
           aria-label="Number"
           matInput
-          formControlName="campus_name"
+          formControlName="campusName"
           #CampusElement (keyup)="onSearchCampus(CampusElement.value)"
           (blur)="onSelectCampus()"
           (select)="onSelectCampus()"

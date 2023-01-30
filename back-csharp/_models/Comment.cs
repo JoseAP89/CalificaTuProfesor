@@ -12,8 +12,8 @@ namespace back_csharp._models
 
         public int CommentId { get; set; }
         public int RosterId { get; set; }
-        public string Comment1 { get; set; } = null!;
-        public string? TokenId { get; set; }
+        public string Content { get; set; } = null!;
+        public string TokenId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
 

@@ -23,7 +23,7 @@ export class RosterComponent implements OnInit{
   ) {}
 
   get fullName(): string {
-    return `${this.roster?.teacher_name} ${this.roster?.teacher_lastname1} ${this.roster?.teacher_lastname2}`;
+    return `${this.roster?.teacherName} ${this.roster?.teacherLastname1} ${this.roster?.teacherLastname2}`;
   }
 
   ngOnInit(): void {
@@ -31,7 +31,7 @@ export class RosterComponent implements OnInit{
     this.rosterService.getRosterInfo(rosterId).subscribe({
       next: res=>{
         this.roster = res;
-        this.uniStructure = this.uniStructureService.getUniStructure(this.roster.uni_structure_id);
+        this.uniStructure = this.uniStructureService.getUniStructure(this.roster.uniStructureId);
         console.log(this.roster);
       }
     });

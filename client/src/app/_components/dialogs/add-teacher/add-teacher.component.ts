@@ -30,13 +30,13 @@ export class AddTeacherComponent implements OnInit {
   ngOnInit(): void {
     this.uniStructures = this.unistructureService.getUniStructures();
     this.teacherForm = this.fb.group({
-      teacher_name: ['', Validators.required],
-      teacher_lastname1: ['', Validators.required],
-      teacher_lastname2: [''],
-      subject_name: ['', Validators.required],
-      campus_name: ['', Validators.required],
-      uni_structure_id: ['', Validators.required],
-      structure_name: ['', Validators.required],
+      teacherName: ['', Validators.required],
+      teacherLastname1: ['', Validators.required],
+      teacherLastname2: [''],
+      subjectName: ['', Validators.required],
+      campusName: ['', Validators.required],
+      uniStructureId: ['', Validators.required],
+      structureName: ['', Validators.required],
     });
   }
 
@@ -48,7 +48,7 @@ export class AddTeacherComponent implements OnInit {
   async onSelectCampus() {
     setTimeout( async () => {
       this.campusError = false;
-      let campusName = (this.teacherForm.get("campus_name")?.value as string)?.trim().replaceAll(" ", "+");
+      let campusName = (this.teacherForm.get("campusName")?.value as string)?.trim().replaceAll(" ", "+");
       let campus = await firstValueFrom(
         this.campusService.getShortCampusByName(campusName).pipe(
           tap(() => this.campusError = false),
@@ -71,7 +71,7 @@ export class AddTeacherComponent implements OnInit {
   async onSubmit(){
     if (this.teacherForm.valid && !this.campusError) {
       let teacher: RosterDB = Object.assign(new RosterDB(), this.teacherForm.value);
-      teacher.campus_id = this.campusSelected.campus_id;
+      teacher.campusId = this.campusSelected.campusId;
       this.rosterService.addRoster(teacher).subscribe({
         next: res => {
           alert(`Maestro ${res.teacherName} ${res.teacherLastname1} ${res.teacherLastname2} fue agregado correctamente.`);

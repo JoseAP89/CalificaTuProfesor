@@ -12,7 +12,7 @@
       <!-- STATES -->
       <mat-form-field appearance="fill">
         <mat-label>Estado</mat-label>
-        <mat-select formControlName="state_id" required>
+        <mat-select formControlName="stateId" required>
           <mat-option>--</mat-option>
           <ng-container *ngIf="(states | async) as states">
             <mat-option *ngFor="let s of states" [value]="s.id">
@@ -29,7 +29,7 @@
           placeholder="Busca la universidad"
           aria-label="Number"
           matInput
-          formControlName="university_name"
+          formControlName="universityName"
           #CampusElement (keyup)="onSearchUni(CampusElement.value)"
           (blur)="onSelectUni()"
           (select)="onSelectUni()"

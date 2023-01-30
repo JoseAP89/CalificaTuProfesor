@@ -5,39 +5,39 @@ export class BusinessException {
 }
 
 export class CampusUniversity {
-    campus_id: number;
+    campusId: number;
     name: string;
     university: University
 }
 
 
 export class Campus{
-    campus_id: number;
+    campusId: number;
     name: string;
-    university_id: number;
-    university_name: string;
-    state_id: number;
-    state_name: string;
-    img_file: string;
-    full_file_name: string;
+    universityId: number;
+    universityName: string;
+    stateId: number;
+    stateName: string;
+    imgFile: string;
+    fullFileName: string;
 }
 
 export class University {
-    university_id: number;
-    name: string;
-    img_file: string;
+  universityId: number;
+  name: string;
+  imgFile: string;
 }
 
 export class RosterDB {
-  roster_id?: number;
-  teacher_name: string;
-  teacher_lastname1: string;
-  teacher_lastname2: string;
-  subject_name: string;
-  uni_structure_id: number;
-  structure_name: string;
-  campus_id: number;
-  campus_name?: string;
+  rosterId?: number;
+  teacherName: string;
+  teacherLastname1: string;
+  teacherLastname2: string;
+  subjectName: string;
+  uniStructureId: number;
+  structureName: string;
+  campusId: number;
+  campusName?: string;
 }
 
 export class Roster {
@@ -59,12 +59,12 @@ export class Scale {
 }
 
 export class TeacherCampus {
-  roster_id: number;
+  rosterId: number;
   campus: Campus;
-  teacher_name: string;
-  teacher_lastname1: string;
-  teacher_lastname2: string;
-  subject_name: string;
+  teacherName: string;
+  teacherLastname1: string;
+  teacherLastname2: string;
+  subjectName: string;
 
 }
 
@@ -86,16 +86,16 @@ export class Vessel {
 
 export class NewCampus {
     name: string;
-    img_type?: string;
-    state_id: number;
-    university_id: number;
-    img_file?: string;
+    imgType?: string;
+    stateId: number;
+    universityId: number;
+    imgFile?: string;
 }
 
 export class NewUniversity {
     name: string;
-    img_file?: string;
-    img_type?: string;
+    imgFile?: string;
+    imgType?: string;
 }
 
 export class UniStructure {

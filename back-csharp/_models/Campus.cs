@@ -5,6 +5,7 @@ namespace back_csharp._models
 {
     public partial class Campus
     {
+
         public Campus()
         {
             Rosters = new HashSet<Roster>();

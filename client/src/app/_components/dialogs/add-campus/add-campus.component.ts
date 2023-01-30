@@ -31,8 +31,8 @@ export class AddCampusComponent implements OnInit {
     this.states = this.stateService.getStates();
     this.campusForm = this.fb.group({
       name: ['', Validators.required],
-      university_name: ['', Validators.required],
-      state_id: ['', Validators.required],
+      universityName: ['', Validators.required],
+      stateId: ['', Validators.required],
     });
   }
 
@@ -44,7 +44,7 @@ export class AddCampusComponent implements OnInit {
   async onSelectUni() {
     setTimeout( async () => {
       this.uniError = false;
-      let uniName = (this.campusForm.get("university_name")?.value as string)?.trim();
+      let uniName = (this.campusForm.get("universityName")?.value as string)?.trim();
       let uniNameUrl = uniName.replaceAll(" ", "+");
       let uni = await firstValueFrom(
         this.universityService.searchUniversity(uniNameUrl).pipe(
@@ -72,7 +72,7 @@ export class AddCampusComponent implements OnInit {
   async onSubmit(){
     if (this.campusForm.valid && !this.uniError) {
       let campus: NewCampus = Object.assign(new NewCampus(), this.campusForm.value);
-      campus.university_id = this.uniSelected.id;
+      campus.universityId = this.uniSelected.id;
       this.campusService.addCampus(campus).subscribe({
         next: res => {
           alert(`Campus con nombre '${res.name}' fue agregado correctamente.`);
