@@ -21,6 +21,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { AddUniversityComponent } from './_components/dialogs/add-university/add-university.component';
 import { AddCampusComponent } from './_components/dialogs/add-campus/add-campus.component';
 import { RosterComponent } from './_components/roster/roster.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { RosterComponent } from './_components/roster/roster.component';
     MatSelectModule,
     MatAutocompleteModule,
     MatRadioModule,
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

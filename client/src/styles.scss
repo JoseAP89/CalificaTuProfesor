@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+
+$error-color: #ff4040;
+
 html,
 body {
   padding: 0;
@@ -14,7 +17,7 @@ body {
 
 /*input errors*/
 .input-error {
-  color: #e62020;
+  color: $error-color;
 }
 
 /*disabled buttons*/
@@ -156,4 +159,26 @@ i[data-star^="5"]::after{width:100%}
 .ok-btn.ok-btn.ok-btn {
   background-color: #3cb371;
   color: white
+}
+
+
+// success messages
+.success-snackbar.success-snackbar.success-snackbar {
+  .mdc-snackbar__surface{
+    background-color: #3cb371;
+    .mat-mdc-simple-snack-bar .mat-mdc-snack-bar-label ,
+    .mat-mdc-simple-snack-bar .mat-mdc-snack-bar-actions span{
+      color: white;
+    }
+  }
+}
+// error messages
+.error-snackbar.error-snackbar.error-snackbar {
+  .mdc-snackbar__surface{
+    background-color: $error-color;
+    .mat-mdc-simple-snack-bar .mat-mdc-snack-bar-label ,
+    .mat-mdc-simple-snack-bar .mat-mdc-snack-bar-actions span{
+      color: white;
+    }
+  }
 }

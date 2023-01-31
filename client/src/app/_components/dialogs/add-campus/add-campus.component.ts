@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, catchError, firstValueFrom, map, of, tap } from 'rxjs';
 import { Campus, NewCampus, NewUniversity, Vessel } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
+import { SnackbarService } from 'src/app/_services/snackbar.service';
 import { StateService } from 'src/app/_services/state.service';
 import { UniversityService } from 'src/app/_services/university.service';
 
@@ -25,6 +26,7 @@ export class AddCampusComponent implements OnInit {
     private stateService: StateService,
     private universityService: UniversityService,
     private campusService: CampusService,
+    private snackbarService: SnackbarService,
   ) {}
 
   ngOnInit(): void {
@@ -75,10 +77,10 @@ export class AddCampusComponent implements OnInit {
       campus.universityId = this.uniSelected.id;
       this.campusService.addCampus(campus).subscribe({
         next: res => {
-          alert(`Campus con nombre '${res.name}' fue agregado correctamente.`);
+          this.snackbarService.showSuccessMessage(`Campus con nombre '${res.name}' fue agregado correctamente.`);
         },
         error: error => {
-          alert(`Hubo un error agregando al campus. ${error}`);
+          this.snackbarService.showErrorMessage(`Hubo un error agregando al campus. ${error}`);
         }
       });
     }

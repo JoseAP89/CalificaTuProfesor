@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NewUniversity, University } from 'src/app/_models/business';
+import { SnackbarService } from 'src/app/_services/snackbar.service';
 import { UniversityService } from 'src/app/_services/university.service';
 
 @Component({
@@ -15,6 +16,7 @@ export class AddUniversityComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private universityService: UniversityService,
+    private snackbarService: SnackbarService,
   ){
   }
 
@@ -30,10 +32,10 @@ export class AddUniversityComponent implements OnInit {
       console.log(uni);
       this.universityService.addUniversity(uni).subscribe({
         next: res => {
-          alert(`La universidad '${res.name}' fue agregada correctamente.`);
+          this.snackbarService.showSuccessMessage(`La universidad '${res.name}' fue agregada correctamente.`);
         },
         error: e => {
-          alert(`Hubo un error agregando la universidad: ${e?.error}`);
+          this.snackbarService.showErrorMessage(`Hubo un error agregando la universidad: ${e?.error}`);
         }
       });
     }

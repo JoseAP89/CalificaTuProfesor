@@ -3,6 +3,7 @@ import { Observable, delay, map, of } from 'rxjs';
 import { Vessel } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 import { RosterService } from 'src/app/_services/roster.service';
+import { SnackbarService } from 'src/app/_services/snackbar.service';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +24,7 @@ export class HomeComponent {
   constructor(
     private compusService: CampusService,
     private rosterService: RosterService,
+    private snackbarService: SnackbarService,
   ) {
     this.options = of([]);
     this.searchValue = '';

@@ -4,6 +4,7 @@ import { Observable, catchError, firstValueFrom, of, tap } from 'rxjs';
 import { Campus, RosterDB, UniStructure, Vessel } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 import { RosterService } from 'src/app/_services/roster.service';
+import { SnackbarService } from 'src/app/_services/snackbar.service';
 import { UnistructureService } from 'src/app/_services/unistructure.service';
 
 @Component({
@@ -24,6 +25,7 @@ export class AddTeacherComponent implements OnInit {
     private unistructureService: UnistructureService,
     private campusService: CampusService,
     private rosterService: RosterService,
+    private snackbarService: SnackbarService,
   ) {
   }
 
@@ -74,10 +76,10 @@ export class AddTeacherComponent implements OnInit {
       teacher.campusId = this.campusSelected.campusId;
       this.rosterService.addRoster(teacher).subscribe({
         next: res => {
-          alert(`Maestro ${res.teacherName} ${res.teacherLastname1} ${res.teacherLastname2} fue agregado correctamente.`);
+          this.snackbarService.showSuccessMessage(`Maestro ${res.teacherName} ${res.teacherLastname1} ${res.teacherLastname2} fue agregado correctamente.`);
         },
         error: error => {
-          alert(`Hubo un error agregando al maestro. ${error}`);
+          this.snackbarService.showErrorMessage(`Hubo un error agregando al maestro. ${error}`);
         }
       });
     }
