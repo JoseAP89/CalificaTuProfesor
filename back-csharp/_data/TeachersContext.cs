@@ -131,8 +131,8 @@ namespace back_csharp._data
                     .HasColumnName("gradeid");
                 entity.Property(e => e.ScaleId)
                     .HasColumnName("scaleid");
-                entity.Property(e => e.RosterId)
-                    .HasColumnName("rosterid");
+                entity.Property(e => e.CommentId)
+                    .HasColumnName("commentid");
                 entity.Property(e => e.TokenId)
                     .HasColumnName("tokenid");
                 entity.Property(e => e.Stars)
@@ -156,11 +156,10 @@ namespace back_csharp._data
                 entity.Property(e => e.TokenId)
                     .HasMaxLength(20);
 
-                entity.HasOne(d => d.Roster)
-                    .WithMany(p => p.Grades)
-                    .HasForeignKey(d => d.RosterId)
+                entity.HasOne(d => d.Comment)
+                    .WithOne(p => p.Grade)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("grade_roster_id_fkey");
+                    .HasConstraintName("grade_comment_id_fkey");
 
                 entity.HasOne(d => d.Scale)
                     .WithMany(p => p.Grades)

@@ -18,6 +18,7 @@ namespace back_csharp._models
         public DateTime? ModifiedAt { get; set; }
 
         public virtual Roster Roster { get; set; } = null!;
+        public virtual Grade Grade { get; set; } = null!;
         public virtual ICollection<Vote> Votes { get; set; }
     }
 }

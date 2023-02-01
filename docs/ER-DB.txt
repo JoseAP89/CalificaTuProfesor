@@ -48,6 +48,7 @@ Comment
 --
 commentId int pk
 rosterId int fk >- Roster.rosterId
+gradeId int fk - Grade.gradeId
 content varchar
 tokenId varchar
 createdAt date
@@ -74,7 +75,6 @@ Grade
 --
 gradeId int pk
 scaleId int fk >- Scale.scaleId
-rosterId int fk >- Roster.rosterId
 tokenId varchar
 stars int
 createdAt date

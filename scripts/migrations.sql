@@ -115,15 +115,15 @@ CREATE TABLE Scale (
 CREATE TABLE Grade (
     GradeId SERIAL PRIMARY KEY,
     ScaleId int NOT NULL,
-    RosterId int NOT NULL,
+    CommentId int NOT NULL,
     TokenId varchar(40),
     Stars int DEFAULT 0 CHECK (Stars between 0 and 5),
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
     ModifiedAt TIMESTAMP,
-    FOREIGN KEY (RosterId)
-        REFERENCES Roster (RosterId),
     FOREIGN KEY (ScaleId)
-        REFERENCES Scale (ScaleId)
+        REFERENCES Scale (ScaleId),
+    FOREIGN KEY (CommentId)
+        REFERENCES Comment (CommentId)
 );
 
 CREATE TABLE RosterScale (
