@@ -27,15 +27,13 @@ export class RosterComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    const rosterId = Number(this.route.snapshot.paramMap.get('rosterId'));
-    this.rosterService.getRosterInfo(rosterId).subscribe({
+    const signature = this.route.snapshot.paramMap.get('signature') ?? "";
+    this.rosterService.getRosterInfoBySignature(signature).subscribe({
       next: res=>{
         this.roster = res;
         this.uniStructure = this.uniStructureService.getUniStructure(this.roster.uniStructureId);
-        console.log(this.roster);
       }
     });
-    console.log("rosterId:"+rosterId);
   }
 
 }

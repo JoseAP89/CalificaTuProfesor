@@ -21,6 +21,11 @@ export class RosterService {
     return this.http.get<RosterDB>(url);
   }
 
+  public getRosterInfoBySignature(signature: string): Observable<RosterDB> {
+    const url = `${this.baseUrl}/info/signature/${signature}`;
+    return this.http.get<RosterDB>(url);
+  }
+
   public getTeacherCampus(data: string): Observable<TeacherCampus[]> {
     const url = `${this.baseUrl}/campus/${data}`;
     return this.http.get<TeacherCampus[]>(url);

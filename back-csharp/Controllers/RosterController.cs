@@ -45,6 +45,17 @@ namespace back_csharp.Controllers
             return Ok(res);
         }
         
+        [HttpGet("info/signature/{signature}")]
+        public async Task<ActionResult<RosterDto>> GetRosterInfo(Guid signature)
+        {
+            var res = await _uow.Roster.GetRosterDTO(signature);
+            if (res==null)
+            {
+                return NotFound();
+            }
+            return Ok(res);
+        }
+        
         [HttpGet("campus/{search}")]
         public async Task<ActionResult<IEnumerable<TeacherCampus>>> GetTeacherCampus(string search)
         {

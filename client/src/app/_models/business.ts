@@ -60,6 +60,7 @@ export class Scale {
 
 export class TeacherCampus {
   rosterId: number;
+  signature: string;
   campus: Campus;
   teacherName: string;
   teacherLastname1: string;
@@ -75,11 +76,13 @@ export enum TeacherSearch {
 
 export class Vessel {
    readonly id: number;
+   readonly signature: string;
    readonly value: string;
 
-   constructor(id: number, name:string){
+   constructor(id: number, name:string, signature: string = ""){
        this.id = id;
        this.value = name;
+       this.signature = signature;
    }
 
 }

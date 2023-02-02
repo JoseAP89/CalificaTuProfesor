@@ -6,8 +6,8 @@ import { RosterComponent } from './_components/roster/roster.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
-  {path: 'add-items', component: AddItemsComponent},
-  {path: 'teacher/:rosterId', component: RosterComponent},
+  {path: 'agregar', component: AddItemsComponent},
+  {path: 'maestro/:signature', component: RosterComponent},
 /*
   {
     path: '',
@@ -15,9 +15,6 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {path: 'usuarios-sistema', component: UsuariosSistemaComponent},
-      {path: 'avanze-presupuesto', component: AvanzePresupuestoComponent},
-      {path: 'catalogo-presupuesto', component: CatalogoPresupuestalComponent},
-      {path: 'captura-presupuesto', component: CapturaPresupuestoComponent},
       {path: 'ciclos', component: CiclosComponent},
     ]
   },

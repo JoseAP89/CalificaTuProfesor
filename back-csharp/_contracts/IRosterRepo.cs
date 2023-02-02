@@ -9,4 +9,6 @@ public interface IRosterRepo: ICommonRepo<Roster>
     Task<Roster> GetRoster(int id);
     Task<IEnumerable<TeacherCampus>> GetTeacherCampus(string search);
     Task<Roster> AddRoster(CreateRosterDto rosterDto);
+    Task<RosterDto> GetRosterDTO(Guid signature);
+    Task<Roster> GetRoster(Guid signature);
 }

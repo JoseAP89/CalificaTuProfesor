@@ -13,6 +13,7 @@ namespace back_csharp._models
         }
 
         public int RosterId { get; set; }
+        public Guid Signature { get; set; } 
         public int CampusId { get; set; }
         public string TeacherName { get; set; }
         public string TeacherLastname1 { get; set; }
