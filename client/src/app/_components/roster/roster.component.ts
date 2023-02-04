@@ -27,9 +27,9 @@ export class RosterComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    const signature = this.route.snapshot.paramMap.get('signature') ?? "";
-    this.rosterService.getRosterInfoBySignature(signature).subscribe({
-      next: res=>{
+    const recordId = this.route.snapshot.paramMap.get('recordId') ?? "";
+    this.rosterService.getRosterInfoByRecordId(recordId).subscribe({
+      next: (res: RosterDB) => {
         this.roster = res;
         this.uniStructure = this.uniStructureService.getUniStructure(this.roster.uniStructureId);
       }

@@ -176,8 +176,8 @@ namespace back_csharp._data
 
                 entity.Property(e => e.RosterId)
                     .HasColumnName("rosterid");
-                entity.Property(e => e.Signature)
-                    .HasColumnName("signature");
+                entity.Property(e => e.RecordId)
+                    .HasColumnName("recordid");
                 entity.Property(e => e.CampusId)
                     .HasColumnName("campusid");
                 entity.Property(e => e.TeacherName)

@@ -38,6 +38,7 @@ export class RosterDB {
   structureName: string;
   campusId: number;
   campusName?: string;
+  recordId: string;
 }
 
 export class Roster {

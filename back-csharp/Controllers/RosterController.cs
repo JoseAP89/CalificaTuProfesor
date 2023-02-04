@@ -45,10 +45,10 @@ namespace back_csharp.Controllers
             return Ok(res);
         }
         
-        [HttpGet("info/signature/{signature}")]
-        public async Task<ActionResult<RosterDto>> GetRosterInfo(Guid signature)
+        [HttpGet("info/recordid/{recordId}")]
+        public async Task<ActionResult<RosterDto>> GetRosterInfo(Guid recordId)
         {
-            var res = await _uow.Roster.GetRosterDTO(signature);
+            var res = await _uow.Roster.GetRosterDTO(recordId);
             if (res==null)
             {
                 return NotFound();

@@ -7,7 +7,7 @@ import { RosterComponent } from './_components/roster/roster.component';
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'agregar', component: AddItemsComponent},
-  {path: 'maestro/:signature', component: RosterComponent},
+  {path: 'maestro/:recordId', component: RosterComponent},
 /*
   {
     path: '',

@@ -17,10 +17,10 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
         var roster = from c in _context.Set<Roster>()
             join s in _context.Set<UniStructure>() on c.UniStructureId equals s.UniStructureId 
             join m in _context.Set<Campus>() on c.CampusId equals m.CampusId 
-            where c.Signature == signature select new
+            where c.RecordId == signature select new
             {
                 RosterId = c.RosterId,
-                Signature = c.Signature,
+                RecordId = c.RecordId,
                 TeacherName = c.TeacherName,
                 TeacherLastname1 = c.TeacherLastname1,
                 TeacherLastname2 = c.TeacherLastname2,
@@ -44,6 +44,7 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
                 SubjectName = x.SubjectName,
                 CampusId = x.CampusId,
                 CampusName = x.CampusName,
+                RecordId = x.RecordId
             }).SingleOrDefault();
         return res;
     }
@@ -92,7 +93,7 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
 
     public async Task<Roster> GetRoster(Guid signature)
     {
-        var roster = await _context.Set<Roster>().FirstOrDefaultAsync(r => r.Signature == signature);
+        var roster = await _context.Set<Roster>().FirstOrDefaultAsync(r => r.RecordId == signature);
         return roster;
     }
 
@@ -115,7 +116,7 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
             select new TeacherCampus()
             {
                 RosterId = r.RosterId,
-                Signature = r.Signature,
+                Signature = r.RecordId,
                 TeacherName = r.TeacherName,
                 TeacherLastname1 = r.TeacherLastname1,
                 TeacherLastname2 = r.TeacherLastname2,

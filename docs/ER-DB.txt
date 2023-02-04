@@ -34,7 +34,7 @@ modifiedAt date
 Roster
 --
 rosterId int pk
-signature uuid
+recordId uuid
 campusId int fk >- Campus.campusId
 teacherName varchar
 teacherLastname1 varchar

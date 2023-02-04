@@ -66,7 +66,7 @@ CREATE TABLE Campus (
 
 CREATE TABLE Roster (
     RosterId SERIAL PRIMARY KEY,
-    Signature uuid DEFAULT gen_random_uuid();
+    RecordId uuid DEFAULT gen_random_uuid();
     CampusId int NOT NULL,
     TeacherName varchar(100),
     TeacherLastname1 varchar(100),

@@ -3,6 +3,7 @@ namespace back_csharp._dtos;
 public class RosterDto
 { 
         public int RosterId { get; set; }
+        public Guid RecordId { get; set; }
         
         public string TeacherName { get; set; }
 
