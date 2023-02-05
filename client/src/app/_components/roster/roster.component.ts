@@ -45,7 +45,7 @@ export class RosterComponent implements OnInit{
       exitAnimationDuration,
       disableClose: true,
       width: "900px",
-      height: "600px",
+      height: "650px",
       panelClass: 'dialog-box'
     });
   }

@@ -38,14 +38,14 @@
 
       <div class="comment-box">
         <label for="comment">Escribe una reseña de tu experiencia con el Maestro (se respetuoso):</label>
-        <textarea id="comment" formControlName="comment" matInput rows="5" cols="100">
+        <textarea id="comment" formControlName="comment" matInput minlength="2" maxlength="600">
         </textarea>
       </div>
 
     </form>
 
   </div>
-  <div mat-dialog-actions>
+  <div mat-dialog-actions class="dialog-actions-box">
     <button mat-button mat-raised-button class="cancel-btn" mat-dialog-close>Cancelar</button>
     <button mat-button mat-raised-button class="ok-btn"
       [ngClass]="{'disabled-btn': !rateForm.valid || !(averageRate>0)}"
