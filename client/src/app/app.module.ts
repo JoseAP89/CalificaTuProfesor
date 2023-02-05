@@ -24,6 +24,7 @@ import { RosterComponent } from './_components/roster/roster.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { RateComponent } from './_components/dialogs/rate/rate.component';
 import {MatSliderModule} from '@angular/material/slider';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import {MatSliderModule} from '@angular/material/slider';
     MatRadioModule,
     MatSnackBarModule,
     MatSliderModule,
+    MatExpansionModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

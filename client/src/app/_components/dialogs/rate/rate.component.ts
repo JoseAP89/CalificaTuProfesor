@@ -12,14 +12,15 @@ export class RateComponent implements OnInit {
 
   public rateForm: FormGroup;
   public _scales: Scale[];
-  public value: number;
-  private _averageRate: number;
+  public scaleDescriptionStates: boolean[];
+  public averageRate: number = 0;
 
   constructor(
     private fb: FormBuilder,
     private scaleService: ScaleService,
   ) {
-
+    this._scales = []
+    this.scaleDescriptionStates = []
   }
 
   ngOnInit(): void {
@@ -31,6 +32,7 @@ export class RateComponent implements OnInit {
       next: res => {
         this._scales = res;
         this.addScalesToForm();
+        this.addScalesDescriptionStatus();
       }
     })
   }
@@ -42,8 +44,21 @@ export class RateComponent implements OnInit {
   updateAverageRate(): void {
     let value = (this.scales.value as Array<number>).reduce( (a,b) => a+b, 0) / (this._scales.length * 10.0 * 2.0);
     let res = value.toFixed(1);
+    this.averageRate = Number(res);
     let star = document.querySelector(".average-rate");
     star?.setAttribute("data-star",res);
+  }
+
+  updateScaleRate(index: number): void {
+    let value = this.getScale(index) / (2.0 * 10.0);
+    let res = value.toFixed(1);
+    let star = document.querySelector(`.scale-rate-${index}`);
+    star?.setAttribute("data-star",res);
+  }
+
+  updateRates(index: number){
+    this.updateAverageRate();
+    this.updateScaleRate(index);
   }
 
   getScale(i: number): number{
@@ -55,6 +70,13 @@ export class RateComponent implements OnInit {
   addScalesToForm(){
     for (let index = 0; index < this._scales.length; index++) {
       this.scales.push(this.fb.control(0));
+    }
+  }
+
+  /** It sets up the initial description status of the accordion description for scales. */
+  addScalesDescriptionStatus(){
+    for (let index = 0; index < this._scales.length; index++) {
+      this.scaleDescriptionStates[index] = false;
     }
   }
 

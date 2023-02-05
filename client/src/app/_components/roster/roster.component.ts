@@ -43,6 +43,7 @@ export class RosterComponent implements OnInit{
     this.dialog.open(RateComponent, {
       enterAnimationDuration,
       exitAnimationDuration,
+      disableClose: true,
       width: "900px",
       height: "600px",
       panelClass: 'dialog-box'
