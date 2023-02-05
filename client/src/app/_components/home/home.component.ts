@@ -33,6 +33,7 @@ export class HomeComponent {
   }
 
   onSearch(input: string) {
+    this.searchValue = input;
     this.showOptions = true;
     if (this.typeOfSearch == "P") { // Profesor
       this.options = this.rosterService.getTeacherCampus(input).pipe(

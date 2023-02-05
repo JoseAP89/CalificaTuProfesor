@@ -3,12 +3,13 @@
     Comienza buscando tu profesor
   </div>
   <div class="type-of-search">
-    <mat-radio-group #SearchType aria-labelledby="example-radio-group-label" class="radio-group" [(ngModel)]="typeOfSearch">
-      <mat-radio-button class="radio-button" [value]="'P'">
-        Por Profesor
+    <mat-radio-group #SearchType aria-labelledby="example-radio-group-label" class="radio-group" [(ngModel)]="typeOfSearch"
+    color="primary">
+      <mat-radio-button class="radio-btn" [value]="'P'">
+        <p class="radio-txt">Por Profesor</p>
       </mat-radio-button>
-      <mat-radio-button class="radio-button" [value]="'C'">
-        Por Campus
+      <mat-radio-button class="radio-btn" [value]="'C'">
+        <p class="radio-txt">Por Campus</p>
       </mat-radio-button>
     </mat-radio-group>
   </div>
@@ -24,8 +25,8 @@
         (keyup)="onSearch(SearchVal.value)"
         (focus)="changeShowOptions(true)"
       >
-      <button  class="close-options-btn" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearchValue()">
-        <mat-icon>close</mat-icon>
+      <button  class="close-options-btn" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearchValue()" [hidden]="searchValue==null || searchValue.length==0">
+        <mat-icon class="close-search-btn">close</mat-icon>
       </button>
       <!--SEARCH BTN -->
       <div class="search-btn">

@@ -10,11 +10,18 @@
     font-weight: bold;
   }
   .type-of-search {
+    margin: 0 auto;
+    border: 3px solid #673ab7;
+    border-radius: 9px;
     text-align: center;
     margin-bottom: 30px;
-    .radio-group .radio-button{
+    background-color: white;
+    width: 300px;
+    p {
+      color: black !important;
+    }
+    .radio-group .radio-btn.radio-btn.radio-btn{
       font-size: 4rem;
-      color: aqua;
       margin: 0 auto;
     }
   }
@@ -27,6 +34,9 @@
     width: 100%;
     .search-form-field {
       width: $widthBar;
+      .close-search-btn {
+        color: black;
+      }
       .close-options-btn {
         margin-right: 85px;
       }
