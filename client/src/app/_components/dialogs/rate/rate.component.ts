@@ -10,10 +10,13 @@ import { ScaleService } from 'src/app/_services/scale.service';
 })
 export class RateComponent implements OnInit {
 
+  public readonly MAX_LEN_COMMENT = 600;
+  public readonly MIN_LEN_COMMENT = 2;
   public rateForm: FormGroup;
   public _scales: Scale[];
   public scaleDescriptionStates: boolean[];
   public averageRate: number = 0;
+  public comment: string = ""
 
   constructor(
     private fb: FormBuilder,
@@ -78,6 +81,10 @@ export class RateComponent implements OnInit {
     for (let index = 0; index < this._scales.length; index++) {
       this.scaleDescriptionStates[index] = false;
     }
+  }
+
+  onChangeComment(value: string){
+    this.comment = value;
   }
 
   onSubmit(){

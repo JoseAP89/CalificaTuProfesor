@@ -38,8 +38,14 @@
 
       <div class="comment-box">
         <label for="comment">Escribe una reseña de tu experiencia con el Maestro (se respetuoso):</label>
-        <textarea id="comment" formControlName="comment" matInput minlength="2" maxlength="600">
+        <textarea #Comment id="comment" formControlName="comment" matInput
+          [minlength]="MIN_LEN_COMMENT"
+          [maxlength]="MAX_LEN_COMMENT"
+          (keyup)="onChangeComment(Comment.value)">
         </textarea>
+      </div>
+      <div class="comment-data">
+        {{comment.length}}/{{MAX_LEN_COMMENT}}
       </div>
 
     </form>
