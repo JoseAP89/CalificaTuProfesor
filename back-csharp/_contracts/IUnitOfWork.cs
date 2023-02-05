@@ -10,5 +10,6 @@ public interface IUnitOfWork
     ICampusRepo Campus { get; }
     IRosterRepo Roster { get; }
     IScaleRepo Scale { get; }
+    IRatingRepo Ratings { get; }
     Task Save();
 }

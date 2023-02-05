@@ -15,6 +15,7 @@ public class UnitOfWork: IUnitOfWork
     private ICampusRepo _campus;
     private IRosterRepo _roster;
     private IScaleRepo _scale;
+    private IRatingRepo _rating;
 
     public UnitOfWork(TeachersContext context, IConfiguration config)
     {
@@ -28,6 +29,7 @@ public class UnitOfWork: IUnitOfWork
     public ICampusRepo Campus => _campus ??= new CampusRepo(_context, _config);
     public IRosterRepo Roster => _roster ??= new RosterRepo(_context, _config);
     public IScaleRepo Scale => _scale ??= new ScaleRepo(_context, _config);
+    public IRatingRepo Ratings => _rating ??= new RatingRepo(_context, _config);
 
     public async Task Save()
     {
