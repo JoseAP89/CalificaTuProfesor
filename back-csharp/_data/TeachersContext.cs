@@ -242,6 +242,8 @@ namespace back_csharp._data
 
                 entity.Property(e => e.ScaleId)
                     .HasColumnName("scaleid");
+                entity.Property(e => e.Code)
+                    .HasColumnName("code");
                 entity.Property(e => e.Name)
                     .HasColumnName("name");
                 entity.Property(e => e.Description)

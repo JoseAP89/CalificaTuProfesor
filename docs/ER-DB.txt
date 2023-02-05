@@ -67,6 +67,7 @@ modifiedAt date
 Scale
 --
 scaleId int pk
+code varchar
 name varchar
 description varchar
 createdAt date

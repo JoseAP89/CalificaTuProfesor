@@ -107,7 +107,8 @@ CREATE TABLE Vote (
 
 CREATE TABLE Scale (
     ScaleId SERIAL PRIMARY KEY,
-    Name varchar(30),
+    Code varchar(3) UNIQUE,
+    Name varchar(30) UNIQUE,
     Description varchar(250),
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
     ModifiedAt TIMESTAMP
@@ -9990,13 +9991,13 @@ INSERT INTO Campus(StateId, UniversityId, Name) VALUES
   (6, 3575, 'WASHINGTON INSTITUTO DE NEGOCIOS'),
   (21, 3576, 'WILBING CENTRO UNIVERSITARIO');
 
-INSERT INTO Scale(Name, Description) VALUES
-('Modelo','Rol modelo para otros.'),
-('Claridad','Claridad en la instrucción  y remarca puntos importantes y/o difíciles.'),
-('Competencia','Dominio de los temas manejados en el curso.'),
-('Preparación','La preparación, atención y detalle que le da a sus clases.'),
-('Expresión','Capacidad de comunicación clara y concisa con su clase.'),
-('Métodos','Uso de metodos de presentación que generan atención e interes en la clase.'),
-('Organización','Buena organicación de la enseñanza de los temas en la clase.'),
-('Realidad','Capacidad de explicar aplicaciones de la materia a la práctica o a su uso en el mundo laboral.'),
-('General','Contiene el rendimiento promedio considerando el resto de las escalas.');
+INSERT INTO Scale(Code, Name, Description) VALUES
+('MO', 'Modelo','Rol modelo para otros.'),
+('CL', 'Claridad','Claridad en la instrucción  y remarca puntos importantes y/o difíciles.'),
+('CO', 'Competencia','Dominio de los temas manejados en el curso.'),
+('PR', 'Preparación','La preparación, atención y detalle que le da a sus clases.'),
+('EX', 'Expresión','Capacidad de comunicación clara y concisa con su clase.'),
+('ME', 'Métodos','Uso de metodos de presentación que generan atención e interes en la clase.'),
+('OR', 'Organización','Buena organicación de la enseñanza de los temas en la clase.'),
+('RE', 'Realidad','Capacidad de explicar aplicaciones de la materia a la práctica o a su uso en el mundo laboral.'),
+('GE', 'General','Contiene el rendimiento promedio considerando el resto de las escalas.');
