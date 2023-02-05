@@ -1,0 +1,64 @@
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Scale } from 'src/app/_models/business';
+import { ScaleService } from 'src/app/_services/scale.service';
+
+@Component({
+  selector: 'app-rate',
+  templateUrl: './rate.component.html',
+  styleUrls: ['./rate.component.scss']
+})
+export class RateComponent implements OnInit {
+
+  public rateForm: FormGroup;
+  public _scales: Scale[];
+  public value: number;
+  private _averageRate: number;
+
+  constructor(
+    private fb: FormBuilder,
+    private scaleService: ScaleService,
+  ) {
+
+  }
+
+  ngOnInit(): void {
+    this.rateForm = this.fb.group({
+      comment: ['', Validators.required],
+      scales: this.fb.array([])
+    });
+    this.scaleService.getScales().subscribe({
+      next: res => {
+        this._scales = res;
+        this.addScalesToForm();
+      }
+    })
+  }
+
+  get scales() {
+    return this.rateForm.get('scales') as FormArray;
+  }
+
+  updateAverageRate(): void {
+    let value = (this.scales.value as Array<number>).reduce( (a,b) => a+b, 0) / (this._scales.length * 10.0 * 2.0);
+    let res = value.toFixed(1);
+    let star = document.querySelector(".average-rate");
+    star?.setAttribute("data-star",res);
+  }
+
+  getScale(i: number): number{
+    let val =  this.scales.at(i);
+    return Number(val.value);
+  }
+
+  /** It adds the scales in alphabetic order sent by the server. Both _scales and scales controller have the same argument positions.*/
+  addScalesToForm(){
+    for (let index = 0; index < this._scales.length; index++) {
+      this.scales.push(this.fb.control(0));
+    }
+  }
+
+  onSubmit(){
+  }
+
+}

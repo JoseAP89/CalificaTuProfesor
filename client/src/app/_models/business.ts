@@ -57,6 +57,7 @@ export class Scale {
     scaleId : number;
     description: string;
     name: string;
+    code: string;
 }
 
 export class TeacherCampus {

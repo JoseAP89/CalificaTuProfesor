@@ -22,6 +22,8 @@ import { AddUniversityComponent } from './_components/dialogs/add-university/add
 import { AddCampusComponent } from './_components/dialogs/add-campus/add-campus.component';
 import { RosterComponent } from './_components/roster/roster.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { RateComponent } from './_components/dialogs/rate/rate.component';
+import {MatSliderModule} from '@angular/material/slider';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     AddUniversityComponent,
     AddCampusComponent,
     RosterComponent,
+    RateComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +53,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatAutocompleteModule,
     MatRadioModule,
     MatSnackBarModule,
+    MatSliderModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,50 @@
+<section class="dialog-box">
+  <div mat-dialog-title>
+    <div class="title-container" >
+      <div class="left-box">Califica a tu Maestro</div>
+      <div class="right-box">
+        <i class="average-rate" data-star="0"></i>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-content class="dialog-content-box">
+    <form [formGroup]="rateForm">
+
+      <!-- RATING SCALES -->
+      <div formArrayName="scales" class="scales-container">
+        <h2>Califica las habilidades de enseñanza</h2>
+        <div *ngFor="let scale of scales.controls; let i=index">
+          <div class="example-label-container">
+            <label id="scale-{{ i }}" class="example-name-label">{{ _scales[i].name}}:</label>
+            <label class="scale-value">{{getScale(i)}}</label>
+          </div>
+          <mat-slider class="example-margin" [max]="100" [min]="0" [step]="1" [discrete]="false">
+            <input matSliderThumb  [formControlName]="i" [value]="getScale(i)" (change)="updateAverageRate()">
+          </mat-slider>
+        </div>
+      </div>
+
+      <div class="comment-box">
+        <label for="comment">Escribe una reseña de tu experiencia con el Maestro (se respetuoso):</label>
+        <textarea id="comment" formControlName="comment" matInput rows="5" cols="100">
+        </textarea>
+      </div>
+
+      <h2>Result</h2>
+
+
+
+    </form>
+
+    <p>{{ rateForm.value | json }}</p>
+
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button mat-raised-button class="cancel-btn" mat-dialog-close>No</button>
+    <button mat-button mat-raised-button class="ok-btn"
+      [ngClass]="{'disabled-btn': !rateForm.valid}"
+      mat-dialog-close (click)="onSubmit()" [disabled]="!rateForm.valid">
+      Guardar
+    </button>
+  </div>
+</section>

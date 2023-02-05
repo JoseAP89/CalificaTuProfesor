@@ -46,7 +46,7 @@ public class CommonRepo<T>: ICommonRepo<T>
         return await _dbset.FindAsync(id);
     }
 
-    public virtual async Task<IEnumerable<T>> GetAll<E>(Expression<Func<T,E>>? orderBy = null, int? numOfResults = null)
+    public virtual async Task<IEnumerable<T>> GetAll<E>(Expression<Func<T,E>> orderBy = null, int? numOfResults = null)
     {
         var data =  _dbset.AsNoTracking();
         IEnumerable<T> results = (orderBy != null, numOfResults != null) switch

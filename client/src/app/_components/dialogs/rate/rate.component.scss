@@ -1,0 +1,28 @@
+.dialog-box{
+  .dialog-content-box {
+    padding-top: 20px;
+    overflow-y: scroll;
+    .scales-container {
+      .scale-value {
+        margin-left: 20px;
+      }
+    }
+  }
+  .comment-box{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    label {
+      font-weight: bold;
+    }
+  }
+  .title-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    .right-box{
+      .average-rate{
+        font-size: 30px;
+        line-height: 30px;
+      }
+    }
+  }
+}

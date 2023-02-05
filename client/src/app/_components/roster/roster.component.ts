@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { RosterDB, UniStructure, Vessel } from 'src/app/_models/business';
 import { RosterService } from 'src/app/_services/roster.service';
 import { UnistructureService } from 'src/app/_services/unistructure.service';
+import { RateComponent } from '../dialogs/rate/rate.component';
 
 @Component({
   selector: 'app-roster',
@@ -20,6 +22,7 @@ export class RosterComponent implements OnInit{
     private route: ActivatedRoute,
     private rosterService: RosterService,
     private uniStructureService: UnistructureService,
+    private dialog: MatDialog,
   ) {}
 
   get fullName(): string {
@@ -33,6 +36,16 @@ export class RosterComponent implements OnInit{
         this.roster = res;
         this.uniStructure = this.uniStructureService.getUniStructure(this.roster.uniStructureId);
       }
+    });
+  }
+
+  openRateTeacherDialog(enterAnimationDuration: string = '500ms', exitAnimationDuration: string= '500ms'): void {
+    this.dialog.open(RateComponent, {
+      enterAnimationDuration,
+      exitAnimationDuration,
+      width: "900px",
+      height: "600px",
+      panelClass: 'dialog-box'
     });
   }
 

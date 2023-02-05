@@ -6,6 +6,7 @@ using back_csharp._data;
 using back_csharp._dtos;
 using back_csharp._helpers;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace back_csharp.Controllers;
 
@@ -14,10 +15,12 @@ namespace back_csharp.Controllers;
 public class ScaleController : ControllerBase
 {
     private readonly IUnitOfWork _uow;
+    private readonly IMapper _mapper;
 
-    public ScaleController(IUnitOfWork uow)
+    public ScaleController(IUnitOfWork uow, IMapper mapper)
     {
         _uow = uow;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -28,15 +31,9 @@ public class ScaleController : ControllerBase
             var res = await _uow.Scale.GetAll();
             if (res==null)
             {
-                return NoContent();
+                return NotFound();
             }
-
-            var scales = res.Select(s => new ScaleDto()
-            {
-                ScaleId = s.ScaleId,
-                Description = s.Description,
-                Name = s.Name
-            });
+            var scales =_mapper.Map<List<ScaleDto>>(res);
             return Ok(scales);
         }
         catch (Exception e)

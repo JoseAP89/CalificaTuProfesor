@@ -11,5 +11,6 @@ public class AutoMapperConfigs: Profile
         CreateMap<Campus, CampusDto>().ReverseMap();
         CreateMap<Campus, ShortCampusDTO>().ReverseMap();
         CreateMap<CampusDto, ShortCampusDTO>().ReverseMap();
+        CreateMap<ScaleDto, Scale>().ReverseMap();
     }
 }
