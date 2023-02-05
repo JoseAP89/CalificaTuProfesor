@@ -24,6 +24,15 @@
       height: 120px;
     }
   }
+  .bad-comment {
+    color: red;
+  }
+  .good-comment {
+    color: green;
+  }
+  .warning-comment {
+    color: #da9100;
+  }
   .title-container{
     display: grid;
     grid-template-columns: 1fr 1fr;

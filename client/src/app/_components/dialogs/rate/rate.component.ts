@@ -87,6 +87,15 @@ export class RateComponent implements OnInit {
     this.comment = value;
   }
 
+  isCommentValid(): boolean {
+    let len = this.comment.length;
+    return len>= this.MIN_LEN_COMMENT && len<= this.MAX_LEN_COMMENT;
+  }
+
+  isDataValid(): boolean{
+    return this.rateForm.valid && this.isCommentValid() && this.averageRate>0;
+  }
+
   onSubmit(){
   }
 
