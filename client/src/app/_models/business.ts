@@ -39,6 +39,10 @@ export class RosterDB {
   campusId: number;
   campusName?: string;
   recordId: string;
+
+  get fullName(): string {
+    return `${this.teacherName} ${this.teacherLastname1} ${this.teacherLastname2}`.trim();
+  }
 }
 
 export class Roster {
@@ -107,4 +111,27 @@ export class UniStructure {
   uniStructureId: number;
   name: string;
   code: string;
+}
+
+export class Grade {
+  gradeId: number;
+  scaleId: number;
+  commentId: number;
+  stars: number;
+}
+
+export class Vote {
+  voteId: number;
+  commentId: number;
+  approval: boolean|null;
+}
+
+export class CommentDB {
+  commentId: number;
+  recordId: string;
+  rosterId: number;
+  content: string;
+  tokenId: string;
+  grades: Array<Grade>;
+  vote: Vote;
 }

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Scale } from 'src/app/_models/business';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CommentDB, Grade, Roster, RosterDB, Scale, Vote } from 'src/app/_models/business';
 import { ScaleService } from 'src/app/_services/scale.service';
 
 @Component({
@@ -17,13 +18,16 @@ export class RateComponent implements OnInit {
   public scaleDescriptionStates: boolean[];
   public averageRate: number = 0;
   public comment: string = ""
+  public roster: RosterDB;
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: RosterDB,
     private fb: FormBuilder,
     private scaleService: ScaleService,
   ) {
     this._scales = []
     this.scaleDescriptionStates = []
+    this.roster = Object.assign(new RosterDB(), data);
   }
 
   ngOnInit(): void {
@@ -97,6 +101,27 @@ export class RateComponent implements OnInit {
   }
 
   onSubmit(){
+    if (this.isDataValid()) {
+      let comment = new CommentDB();
+      comment.content = this.comment;
+      comment.rosterId = this.roster.rosterId!;
+      comment.grades = [];
+      for (let i = 0; i < this._scales.length; i++) {
+        const esc = this._scales[i];
+        // Create Grades
+        let grade = new Grade();
+        grade.scaleId = esc.scaleId;
+        let value = this.getScale(i) / (2.0 * 10.0);
+        grade.stars = Number(value.toFixed(1));
+        // Create Vote
+        let vote = new Vote();
+        vote.approval = null;
+        comment.vote = vote;
+        // Add them to the Comment
+        comment.grades.push(grade);
+      }
+      console.log("C:",comment);
+    }
   }
 
 }

@@ -40,7 +40,8 @@ export class RosterComponent implements OnInit{
   }
 
   openRateTeacherDialog(enterAnimationDuration: string = '500ms', exitAnimationDuration: string= '500ms'): void {
-    this.dialog.open(RateComponent, {
+    this.dialog.open<RateComponent, RosterDB>(RateComponent, {
+      data: this.roster,
       enterAnimationDuration,
       exitAnimationDuration,
       disableClose: true,
