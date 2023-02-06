@@ -85,6 +85,7 @@ CREATE TABLE Roster (
 
 CREATE TABLE Comment (
     CommentId SERIAL PRIMARY KEY,
+    RecordId uuid DEFAULT gen_random_uuid();
     RosterId int NOT NULL,
     Content varchar(600) NOT NULL,
     TokenId varchar(40),

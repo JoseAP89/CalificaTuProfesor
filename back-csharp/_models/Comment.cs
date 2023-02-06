@@ -7,10 +7,10 @@ namespace back_csharp._models
     {
         public Comment()
         {
-            Votes = new HashSet<Vote>();
+            Grades = new List<Grade>(); 
         }
-
         public int CommentId { get; set; }
+        public Guid RecordId { get; set; }
         public int RosterId { get; set; }
         public string Content { get; set; } = null!;
         public string TokenId { get; set; }
@@ -18,7 +18,7 @@ namespace back_csharp._models
         public DateTime? ModifiedAt { get; set; }
 
         public virtual Roster Roster { get; set; } = null!;
-        public virtual Grade Grade { get; set; } = null!;
-        public virtual ICollection<Vote> Votes { get; set; }
+        public virtual ICollection<Grade> Grades { get; set; }
+        public virtual Vote Vote { get; set; } = null!;
     }
 }

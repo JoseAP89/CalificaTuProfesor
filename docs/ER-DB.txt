@@ -48,6 +48,7 @@ modifiedAt date
 Comment
 --
 commentId int pk
+recordId uuid
 rosterId int fk >- Roster.rosterId
 content varchar
 tokenId varchar
@@ -57,7 +58,7 @@ modifiedAt date
 Vote
 --
 voteId int pk
-commentId int fk >- Comment.commentId
+commentId int fk - Comment.commentId
 approval boolean
 tokenId varchar
 createdAt date
@@ -76,7 +77,7 @@ Grade
 --
 gradeId int pk
 scaleId int fk >- Scale.scaleId
-commentId int fk - Comment.commentId
+commentId int fk >- Comment.commentId
 tokenId varchar
 stars int
 createdAt date
@@ -87,4 +88,3 @@ RosterScale
 rosterscaleId int pk
 rosterId int fk >- Roster.rosterId
 scaleId int fk >- Scale.scaleId
-grade float

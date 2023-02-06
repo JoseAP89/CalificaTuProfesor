@@ -95,6 +95,8 @@ namespace back_csharp._data
 
                 entity.Property(e => e.CommentId)
                     .HasColumnName("commentid");
+                entity.Property(e => e.RecordId)
+                    .HasColumnName("recordid");
                 entity.Property(e => e.Content)
                     .HasMaxLength(250)
                     .HasColumnName("content");
@@ -157,7 +159,7 @@ namespace back_csharp._data
                     .HasMaxLength(20);
 
                 entity.HasOne(d => d.Comment)
-                    .WithOne(p => p.Grade)
+                    .WithMany(p => p.Grades)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("grade_comment_id_fkey");
 
@@ -383,8 +385,7 @@ namespace back_csharp._data
                     .HasMaxLength(40);
 
                 entity.HasOne(d => d.Comment)
-                    .WithMany(p => p.Votes)
-                    .HasForeignKey(d => d.CommentId)
+                    .WithOne(p => p.Vote)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("vote_comment_id_fkey");
             });
