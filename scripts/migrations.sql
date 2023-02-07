@@ -71,7 +71,6 @@ CREATE TABLE Roster (
     TeacherName varchar(100),
     TeacherLastname1 varchar(100),
     TeacherLastname2 varchar(100),
-    SubjectName varchar(100),
     UniStructureId int NOT NULL,
     StructureName varchar(100),
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -87,6 +86,7 @@ CREATE TABLE Comment (
     CommentId SERIAL PRIMARY KEY,
     RecordId uuid DEFAULT gen_random_uuid();
     RosterId int NOT NULL,
+    SubjectName varchar(100),
     Content varchar(600) NOT NULL,
     TokenId varchar(40),
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),

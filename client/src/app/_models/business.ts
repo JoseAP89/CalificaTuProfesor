@@ -33,7 +33,6 @@ export class RosterDB {
   teacherName: string;
   teacherLastname1: string;
   teacherLastname2: string;
-  subjectName: string;
   uniStructureId: number;
   structureName: string;
   campusId: number;
@@ -51,10 +50,8 @@ export class Roster {
   teacherName: string;
   teacherLastname1: string;
   teacherLastname2: string;
-  subjectName: string;
   uniStructureId: number;
   structureName: string;
-
 }
 
 export class Scale {
@@ -71,8 +68,8 @@ export class TeacherCampus {
   teacherName: string;
   teacherLastname1: string;
   teacherLastname2: string;
-  subjectName: string;
-
+  uniStructureName: string;
+  structureName: string;
 }
 
 export enum TeacherSearch {

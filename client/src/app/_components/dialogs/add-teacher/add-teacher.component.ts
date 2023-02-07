@@ -35,7 +35,6 @@ export class AddTeacherComponent implements OnInit {
       teacherName: ['', Validators.required],
       teacherLastname1: ['', Validators.required],
       teacherLastname2: [''],
-      subjectName: ['', Validators.required],
       campusName: ['', Validators.required],
       uniStructureId: ['', Validators.required],
       structureName: ['', Validators.required],

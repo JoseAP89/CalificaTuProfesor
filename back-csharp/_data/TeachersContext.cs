@@ -100,6 +100,8 @@ namespace back_csharp._data
                 entity.Property(e => e.Content)
                     .HasMaxLength(250)
                     .HasColumnName("content");
+                entity.Property(e => e.SubjectName)
+                    .HasColumnName("subjectname");
                 entity.Property(e => e.RosterId )
                     .HasColumnName("rosterid");
                 entity.Property(e => e.TokenId )
@@ -108,6 +110,9 @@ namespace back_csharp._data
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt)
                     .HasColumnName("modifiedat");
+
+                entity.Property(e => e.SubjectName)
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.RecordId)
                     .HasDefaultValueSql("gen_random_uuid()");
@@ -188,8 +193,6 @@ namespace back_csharp._data
                     .HasColumnName("teacherlastname1");
                 entity.Property(e => e.TeacherLastname2)
                     .HasColumnName("teacherlastname2");
-                entity.Property(e => e.SubjectName)
-                    .HasColumnName("subjectname");
                 entity.Property(e => e.UniStructureId)
                     .HasColumnName("unistructureid");
                 entity.Property(e => e.StructureName)
@@ -199,7 +202,7 @@ namespace back_csharp._data
                 entity.Property(e => e.ModifiedAt)
                     .HasColumnName("modifiedat");
 
-                entity.HasIndex(e => new { e.CampusId, e.TeacherName, e.TeacherLastname1, e.TeacherLastname2, e.SubjectName }, "roster_campus_id_teacher_name_teacher_lastname1_teacher_las_key")
+                entity.HasIndex(e => new { e.CampusId, e.TeacherName, e.TeacherLastname1, e.TeacherLastname2 }, "roster_campus_id_teacher_name_teacher_lastname12_key")
                     .IsUnique();
 
                 entity.Property(e => e.CreatedAt)
@@ -210,9 +213,6 @@ namespace back_csharp._data
                     .HasColumnType("timestamp without time zone");
 
                 entity.Property(e => e.StructureName)
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.SubjectName)
                     .HasMaxLength(100);
 
                 entity.Property(e => e.TeacherLastname1)

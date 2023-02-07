@@ -9,4 +9,6 @@ public class TeacherCampus
     public string TeacherLastname1 {get; set;}
     public string TeacherLastname2 {get; set;}
     public string SubjectName {get; set;}
+    public string UniStructureName {get; set;}
+    public string StructureName {get; set;}
 }

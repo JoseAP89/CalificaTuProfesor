@@ -39,7 +39,6 @@ campusId int fk >- Campus.campusId
 teacherName varchar
 teacherLastname1 varchar
 teacherLastname2 varchar
-subjectName varchar
 uniStructureId int fk >- UniStructure.uniStructureId
 structureName varchar
 createdAt date
@@ -50,6 +49,7 @@ Comment
 commentId int pk
 recordId uuid
 rosterId int fk >- Roster.rosterId
+subjectName varchar
 content varchar
 tokenId varchar
 createdAt date
