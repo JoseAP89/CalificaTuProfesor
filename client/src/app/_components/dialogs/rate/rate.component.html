@@ -11,6 +11,11 @@
     <form [formGroup]="rateForm">
 
       <!-- RATING SCALES -->
+      <mat-form-field class="subjectName-box">
+        <mat-label>Nombre de la Materia Cursada</mat-label>
+        <input matInput type="text" formControlName="subjectName" class="subjectName-input">
+      </mat-form-field>
+      <!-- RATING SCALES -->
       <div formArrayName="scales" class="scales-container" *ngIf="_scales!= null && _scales.length>0">
         <h2>Califica las habilidades de enseñanza</h2>
         <div *ngFor="let scale of scales.controls; let i=index">

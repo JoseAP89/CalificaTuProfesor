@@ -8,13 +8,16 @@ namespace back_csharp._data
 {
     public partial class TeachersContext : DbContext
     {
+        private readonly IConfiguration _config;
+
         public TeachersContext()
         {
         }
 
-        public TeachersContext(DbContextOptions<TeachersContext> options)
+        public TeachersContext(DbContextOptions<TeachersContext> options, IConfiguration config)
             : base(options)
         {
+            _config = config;
         }
 
         public virtual DbSet<Campus> Campuses { get; set; } = null!;
@@ -32,7 +35,7 @@ namespace back_csharp._data
         {
             if (!opt.IsConfigured)
             {
-                opt.UseNpgsql("Host=localhost;Username=joseap;Password=J1o2s3e4;Database=teachers");
+                opt.UseNpgsql(_config.GetConnectionString("TeachersDB"));
             }
         }
 
@@ -99,8 +102,10 @@ namespace back_csharp._data
                     .HasColumnName("recordid");
                 entity.Property(e => e.Content)
                     .HasMaxLength(250)
+                    .IsRequired(true)
                     .HasColumnName("content");
                 entity.Property(e => e.SubjectName)
+                    .IsRequired(true)
                     .HasColumnName("subjectname");
                 entity.Property(e => e.RosterId )
                     .HasColumnName("rosterid");

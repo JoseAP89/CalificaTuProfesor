@@ -75,8 +75,6 @@ export class RosterComponent implements OnInit{
             let grade = document.querySelector(`.skill-${i}`);
             let x = this.rosterRating?.grades.find(g => g.scaleId==i);
             let y = this.scales.find(s => s.scaleId== x.scaleId);
-            console.log(grade);
-            console.log(`${y.name}:${x?.stars.toString()}`);
             grade?.setAttribute("data-star",
               this.rosterRating?.grades.find(g => g.scaleId==i)?.stars.toFixed(1)
             );

@@ -128,6 +128,7 @@ export class Vote {
 export class CommentDB {
   commentId: number;
   recordId: string;
+  subjectName: string;
   rosterId: number;
   content: string;
   tokenId: string;

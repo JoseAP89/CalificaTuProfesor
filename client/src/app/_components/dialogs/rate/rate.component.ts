@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CommentDB, Grade, Roster, RosterDB, Scale, Vote } from 'src/app/_models/business';
 import { RatingService } from 'src/app/_services/rating.service';
@@ -36,6 +36,7 @@ export class RateComponent implements OnInit {
 
   ngOnInit(): void {
     this.rateForm = this.fb.group({
+      subjectName: ['', Validators.required],
       comment: ['', Validators.required],
       scales: this.fb.array([])
     });
@@ -48,8 +49,12 @@ export class RateComponent implements OnInit {
     })
   }
 
-  get scales() {
+  get scales() : FormArray {
     return this.rateForm.get('scales') as FormArray;
+  }
+
+  get subjectName(): FormControl {
+    return this.rateForm.get('subjectName') as FormControl;
   }
 
   updateAverageRate(): void {
@@ -110,6 +115,7 @@ export class RateComponent implements OnInit {
       comment.recordId = null;
       comment.content = this.comment;
       comment.rosterId = this.roster.rosterId!;
+      comment.subjectName = this.subjectName.value;
       comment.grades = [];
       for (let i = 0; i < this._scales.length; i++) {
         const esc = this._scales[i];
@@ -130,7 +136,7 @@ export class RateComponent implements OnInit {
           this.snackbarService.showSuccessMessage("Comentario agregado exitosamente.");
         },
         error: error => {
-          this.snackbarService.showErrorMessage(error.message);
+          this.snackbarService.showErrorMessage(error?.message);
         }
       });
     }
