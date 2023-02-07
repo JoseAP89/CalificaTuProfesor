@@ -28,8 +28,10 @@ body {
 
 /** start rating system  */
 i[data-star] {
-  --star-height: 180px;
-  /** star line-heght and font-size must be equal to avoid different dimensions between grey and yellow stars*/
+  --star-height: 109px;
+  /** star line-heght and font-size must be equal to avoid different dimensions between grey and yellow stars
+      and must be adjusted manually with the width property for each special case.
+  */
   font-size: var(--star-height);
   line-height: var(--star-height);
   font-style:normal;
@@ -63,7 +65,7 @@ i[data-star^="0.6"]::after,i[data-star^=".6"]::after{width:12%}
 i[data-star^="0.7"]::after,i[data-star^=".7"]::after{width:14%}
 i[data-star^="0.8"]::after,i[data-star^=".8"]::after{width:16%}
 i[data-star^="0.9"]::after,i[data-star^=".9"]::after{width:18%}
-i[data-star^="1"]::after{width:20%}
+i[data-star^="1"]::after,i[data-star^="1.0"]::after{width:20%}
 i[data-star^="1.1"]::after{width:22%}
 i[data-star^="1.2"]::after{width:24%}
 i[data-star^="1.3"]::after{width:26%}

@@ -30,4 +30,15 @@ public class RatingController : ControllerBase
         }
         return Ok(_mapper.Map<CommentDTO>(res));
     }
+
+    [HttpGet($"{nameof(GetRosterRating)}/{{rosterId}}")]
+    public async Task<ActionResult<RosterRatingDTO>> GetRosterRating(int rosterId)
+    {
+        var res = await _uow.Ratings.GetRosterRatingInfo(rosterId);
+        if (res == null)
+        {
+            return BadRequest("Hubo un error calculando la información general del Profesor.");
+        }
+        return Ok(res);
+    }
 }

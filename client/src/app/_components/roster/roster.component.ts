@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { RosterDB, UniStructure, Vessel } from 'src/app/_models/business';
+import { RosterDB, RosterRating, Scale, UniStructure, Vessel } from 'src/app/_models/business';
 import { RosterService } from 'src/app/_services/roster.service';
 import { UnistructureService } from 'src/app/_services/unistructure.service';
 import { RateComponent } from '../dialogs/rate/rate.component';
+import { RatingService } from 'src/app/_services/rating.service';
+import { ScaleService } from 'src/app/_services/scale.service';
 
 @Component({
   selector: 'app-roster',
@@ -16,12 +18,16 @@ export class RosterComponent implements OnInit{
 
   public rosterId: number;
   public roster: RosterDB;
-  public uniStructure: Observable<Vessel>;
+  public rosterRating: RosterRating;
+  public rosterUniStructure: Vessel;
+  public scales: Scale[];
 
   constructor(
     private route: ActivatedRoute,
     private rosterService: RosterService,
+    private ratingService: RatingService,
     private uniStructureService: UnistructureService,
+    private scaleService: ScaleService,
     private dialog: MatDialog,
   ) {}
 
@@ -34,9 +40,50 @@ export class RosterComponent implements OnInit{
     this.rosterService.getRosterInfoByRecordId(recordId).subscribe({
       next: (res: RosterDB) => {
         this.roster = res;
-        this.uniStructure = this.uniStructureService.getUniStructure(this.roster.uniStructureId);
+        this.getUniStructures();
+        this.getScales();
+        this.ratingService.getRosterRating(this.roster.rosterId).subscribe({
+          next: res=>{
+            this.rosterRating = res;
+            this.updateRatingInfo();
+          }
+        })
       }
     });
+  }
+
+  updateRatingInfo(){
+    let averageGrade = document.querySelector(".average-grade");
+    averageGrade?.setAttribute("data-star", this.rosterRating?.averageGrade?.toString());
+  }
+
+  getUniStructures(){
+    this.uniStructureService.getUniStructure(this.roster?.uniStructureId).subscribe({
+      next: res => {
+        this.rosterUniStructure = res;
+      }
+    })
+  }
+
+  getScales(){
+    this.scaleService.getScales().subscribe({
+      next: res => {
+        this.scales = res;
+        setTimeout(() => {
+          let scaleIds = this.scales.map( s => s.scaleId);
+          for (const i of scaleIds) {
+            let grade = document.querySelector(`.skill-${i}`);
+            let x = this.rosterRating?.grades.find(g => g.scaleId==i);
+            let y = this.scales.find(s => s.scaleId== x.scaleId);
+            console.log(grade);
+            console.log(`${y.name}:${x?.stars.toString()}`);
+            grade?.setAttribute("data-star",
+              this.rosterRating?.grades.find(g => g.scaleId==i)?.stars.toFixed(1)
+            );
+          }
+        }, 1_000 * 0.5);
+      }
+    })
   }
 
   openRateTeacherDialog(enterAnimationDuration: string = '500ms', exitAnimationDuration: string= '500ms'): void {

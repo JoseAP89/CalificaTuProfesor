@@ -7,8 +7,8 @@
     <div class='box-info' *ngIf="roster!=null">
       <div class='title-box'>DATOS GLOBALES</div>
       <div class='label-brief'>Calificación General</div>
-      <i class="global-grade" data-star="2.7"></i>
-      <div class='label-brief'>{{ (uniStructure | async )?.value | titlecase }}</div>
+      <i class="average-grade" data-star="0"></i>
+      <div class='label-brief'>{{ rosterUniStructure?.value | titlecase }}</div>
       <div class='content-brief'>{{roster.structureName}}</div>
       <div class='label-brief'>campus</div>
       <div class='content-brief'>{{roster.campusName}}</div>
@@ -16,22 +16,10 @@
     <div class='box-info'>
       <div class='title-box'>Habilidades</div>
       <div class='skills-box'>
-        <div class='label-brief'>Claridad</div>
-        <i data-star="0.3"></i>
-        <div class='label-brief'>Competencia</div>
-        <i data-star="0.8"></i>
-        <div class='label-brief'>Expresión</div>
-        <i data-star="1.0"></i>
-        <div class='label-brief'>Métodos</div>
-        <i data-star="1.5"></i>
-        <div class='label-brief'>Modelo</div>
-        <i data-star="2.0"></i>
-        <div class='label-brief'>Organización</div>
-        <i data-star="3.2"></i>
-        <div class='label-brief'>Preparación</div>
-        <i data-star="2.5"></i>
-        <div class='label-brief'>Realidad</div>
-        <i data-star="2.3"></i>
+        <ng-container *ngFor="let scale of scales">
+          <div class='label-brief'>{{scale.name}}</div>
+          <i class="skill-{{scale.scaleId}}" data-star="0"></i>
+        </ng-container>
       </div>
     </div>
   </section>

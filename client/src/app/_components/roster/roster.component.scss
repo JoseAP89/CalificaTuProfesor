@@ -35,19 +35,20 @@
     background-color: #faf0e6;
     border-radius: 10px;
 
-    .global-grade {
+    .average-grade {
       $starSize : 150px;
       font-size: $starSize;
       line-height: $starSize;
     }
     .skills-box {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: 1fr 2fr 1fr 2fr;
       gap: 10px;
       i {
-        font-size: 60px;
-        line-height: 60px;
-      }
+          line-height: 80px;
+          font-size: 80px;
+          width: 339px;
+        }
     }
   }
 
@@ -63,7 +64,7 @@
 
 @media (max-width: 690px) {
   .box-info{
-    .global-grade.global-grade.global-grade {
+    .average-grade.average-grade.average-grade {
       $starSize : 70px;
       font-size: $starSize;
       line-height: $starSize;

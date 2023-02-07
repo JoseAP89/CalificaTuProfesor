@@ -137,3 +137,9 @@ export class CommentDB {
   grades: Array<Grade>;
   vote: Vote;
 }
+
+export class RosterRating {
+  rosterId: number;
+  averageGrade: number;
+  grades: Array<Grade>;
+}
