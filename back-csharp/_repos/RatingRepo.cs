@@ -23,7 +23,7 @@ public class RatingRepo: IRatingRepo
         _connectionString = _config.GetConnectionString("TeachersDB");
     }
 
-    public async Task<RosterRatingDTO> GetRosterRatingInfo(int rosterId)
+    public async Task<RosterRatingDTO> GetRosterRatingInfoAsync(int rosterId)
     {
         using var connection = new NpgsqlConnection(_connectionString);
         // Create a query that retrieves all authors"    
@@ -45,7 +45,7 @@ public class RatingRepo: IRatingRepo
         return rating;  
     }
 
-    public async Task<Comment> AddComment(CommentDTO commentDTO)
+    public async Task<Comment> AddCommentAsync(CommentDTO commentDTO)
     {
         var comment = _mapper.Map<Comment>(commentDTO);
         comment.TokenId = Guid.NewGuid().ToString();
@@ -53,4 +53,28 @@ public class RatingRepo: IRatingRepo
         await _context.SaveChangesAsync();
         return comment;  
     }
+
+    public async Task<IEnumerable<FullCommentDTO>> GetCommentsByRosterAsync(int rosterId)
+    {
+        using var connection = new NpgsqlConnection(_connectionString);
+        // Create a query that retrieves all authors"    
+        var sql = @$"
+            select 
+			r.rosterid AS RosterRosterid,	r.campusid AS RosterCampusid,	r.teachername AS RosterTeachername,	r.teacherlastname1 AS RosterTeacherlastname1,	r.teacherlastname2 AS RosterTeacherlastname2,	r.unistructureid AS RosterUnistructureid,	r.structurename AS RosterStructurename,	r.createdat AS RosterCreatedat,	r.modifiedat AS RosterModifiedat,	r.recordid AS RosterRecordid,
+			c.commentid AS CommentCommentid,	c.rosterid AS CommentRosterid,	c.content AS CommentContent,	c.tokenid AS CommentTokenid,	c.createdat AS CommentCreatedat,	c.modifiedat AS CommentModifiedat,	c.recordid AS CommentRecordid,	c.subjectname AS CommentSubjectname,
+			g.gradeid AS GradeGradeid,	g.scaleid AS GradeScaleid,	g.commentid AS GradeCommentid,	g.stars AS GradeStars,	g.createdat AS GradeCreatedat,	g.modifiedat AS GradeModifiedat,
+			s.scaleid AS ScaleScaleid,	s.code AS ScaleCode,	s.name AS ScaleName,	s.description AS ScaleDescription,	s.createdat AS ScaleCreatedat,	s.modifiedat AS ScaleModifiedat,
+			v.voteid AS VoteVoteid,	v.commentid AS VoteCommentid,	v.approval AS VoteApproval,	v.createdat AS VoteCreatedat,	v.modifiedat AS VoteModifiedat,	v.likes AS VoteLikes,	v.dislikes AS VoteDislikes
+			from roster r
+            inner join comment c on r.rosterid=c.rosterid
+            inner join grade g on c.commentId=g.commentId
+            inner join scale s on g.scaleid=s.scaleid
+			inner join vote v on c.commentid=v.commentid
+            where r.rosterid={rosterId}
+        ";
+        // Use the Query method to execute the query and return a list of objects
+        List<FullCommentDTO> comments = (await connection.QueryAsync<FullCommentDTO>(sql)).ToList();
+        return comments;  
+    }
+
 }

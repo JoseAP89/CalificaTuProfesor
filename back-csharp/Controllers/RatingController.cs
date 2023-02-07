@@ -23,7 +23,7 @@ public class RatingController : ControllerBase
     [HttpPost("comment")]
     public async Task<ActionResult<CommentDTO>> AddComment(CommentDTO commentDTO)
     {
-        var res = await _uow.Ratings.AddComment(commentDTO);
+        var res = await _uow.Ratings.AddCommentAsync(commentDTO);
         if (res == null)
         {
             return BadRequest("Hubo un error agregando el comentario.");
@@ -31,10 +31,21 @@ public class RatingController : ControllerBase
         return Ok(_mapper.Map<CommentDTO>(res));
     }
 
+    [HttpGet("roster/fullComments/{rosterId}")]
+    public async Task<ActionResult<IEnumerable<FullCommentDTO>>> GetFullComment(int rosterId)
+    {
+        var res = await _uow.Ratings.GetCommentsByRosterAsync(rosterId);
+        if (res == null)
+        {
+            return BadRequest("Hubo un error obteniendo la lista de los comentarios del Maestro.");
+        }
+        return Ok(res);
+    }
+
     [HttpGet($"{nameof(GetRosterRating)}/{{rosterId}}")]
     public async Task<ActionResult<RosterRatingDTO>> GetRosterRating(int rosterId)
     {
-        var res = await _uow.Ratings.GetRosterRatingInfo(rosterId);
+        var res = await _uow.Ratings.GetRosterRatingInfoAsync(rosterId);
         if (res == null)
         {
             return BadRequest("Hubo un error calculando la información general del Profesor.");

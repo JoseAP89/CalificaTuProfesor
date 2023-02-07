@@ -5,6 +5,7 @@ namespace back_csharp._contracts;
 
 public interface IRatingRepo
 {
-    Task<Comment> AddComment(CommentDTO commentDTO);
-    Task<RosterRatingDTO> GetRosterRatingInfo(int rosterId);
+    Task<Comment> AddCommentAsync(CommentDTO commentDTO);
+    Task<RosterRatingDTO> GetRosterRatingInfoAsync(int rosterId);
+    Task<IEnumerable<FullCommentDTO>> GetCommentsByRosterAsync(int rosterId);
 }
