@@ -98,8 +98,7 @@ CREATE TABLE Comment (
 CREATE TABLE Vote (
     VoteId SERIAL PRIMARY KEY,
     CommentId int NOT NULL,
-    Approval boolean NOT NULL,
-    TokenId varchar(40),
+    Approval boolean NULL,
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
     ModifiedAt TIMESTAMP,
     FOREIGN KEY (CommentId)
@@ -119,8 +118,7 @@ CREATE TABLE Grade (
     GradeId SERIAL PRIMARY KEY,
     ScaleId int NOT NULL,
     CommentId int NOT NULL,
-    TokenId varchar(40),
-    Stars int DEFAULT 0 CHECK (Stars between 0 and 5),
+    Stars float(1) DEFAULT 0 CHECK (Stars between 0.0 and 5.0),
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
     ModifiedAt TIMESTAMP,
     FOREIGN KEY (ScaleId)

@@ -2,7 +2,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CommentDB, Grade, Roster, RosterDB, Scale, Vote } from 'src/app/_models/business';
+import { RatingService } from 'src/app/_services/rating.service';
 import { ScaleService } from 'src/app/_services/scale.service';
+import { SnackbarService } from 'src/app/_services/snackbar.service';
 
 @Component({
   selector: 'app-rate',
@@ -24,6 +26,8 @@ export class RateComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: RosterDB,
     private fb: FormBuilder,
     private scaleService: ScaleService,
+    private ratingService: RatingService,
+    private snackbarService: SnackbarService,
   ) {
     this._scales = []
     this.scaleDescriptionStates = []
@@ -103,6 +107,7 @@ export class RateComponent implements OnInit {
   onSubmit(){
     if (this.isDataValid()) {
       let comment = new CommentDB();
+      comment.recordId = null;
       comment.content = this.comment;
       comment.rosterId = this.roster.rosterId!;
       comment.grades = [];
@@ -120,7 +125,14 @@ export class RateComponent implements OnInit {
         // Add them to the Comment
         comment.grades.push(grade);
       }
-      console.log("C:",comment);
+      this.ratingService.addComment(comment).subscribe({
+        next: _ => {
+          this.snackbarService.showSuccessMessage("Comentario agregado exitosamente.");
+        },
+        error: error => {
+          this.snackbarService.showErrorMessage(error.message);
+        }
+      });
     }
   }
 

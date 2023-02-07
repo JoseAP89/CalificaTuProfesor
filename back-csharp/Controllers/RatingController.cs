@@ -1,4 +1,6 @@
-﻿using back_csharp._contracts;
+﻿using AutoMapper;
+using back_csharp._contracts;
+using back_csharp._dtos;
 using back_csharp._models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,20 +12,22 @@ namespace back_csharp.Controllers;
 public class RatingController : ControllerBase
 {
     private readonly IUnitOfWork _uow;
+    private readonly IMapper _mapper;
 
-    public RatingController(IUnitOfWork uow)
+    public RatingController(IUnitOfWork uow, IMapper mapper)
     {
         _uow = uow;
+        _mapper = mapper;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<Scale>> Example()
+    [HttpPost("comment")]
+    public async Task<ActionResult<CommentDTO>> AddComment(CommentDTO commentDTO)
     {
-        var res = await _uow.Ratings.Example();
+        var res = await _uow.Ratings.AddComment(commentDTO);
         if (res == null)
         {
-            return NotFound();
+            return BadRequest("Hubo un error agregando el comentario.");
         }
-        return Ok(res);
+        return Ok(_mapper.Map<CommentDTO>(res));
     }
 }

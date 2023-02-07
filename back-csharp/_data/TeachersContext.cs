@@ -104,8 +104,13 @@ namespace back_csharp._data
                     .HasColumnName("rosterid");
                 entity.Property(e => e.TokenId )
                     .HasColumnName("tokenid");
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt)
                     .HasColumnName("modifiedat");
+
+                entity.Property(e => e.RecordId)
+                    .HasDefaultValueSql("gen_random_uuid()");
 
                 entity.Property(e => e.CreatedAt)
                     .HasColumnType("timestamp without time zone")
@@ -135,8 +140,6 @@ namespace back_csharp._data
                     .HasColumnName("scaleid");
                 entity.Property(e => e.CommentId)
                     .HasColumnName("commentid");
-                entity.Property(e => e.TokenId)
-                    .HasColumnName("tokenid");
                 entity.Property(e => e.Stars)
                     .HasColumnName("stars");
                 entity.Property(e => e.CreatedAt)
@@ -149,17 +152,14 @@ namespace back_csharp._data
                     .HasDefaultValueSql("now()");
 
                 entity.Property(e => e.ModifiedAt)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("modified_at");
+                    .HasColumnType("timestamp without time zone");
 
                 entity.Property(e => e.Stars)
                     .HasDefaultValueSql("0");
 
-                entity.Property(e => e.TokenId)
-                    .HasMaxLength(20);
-
                 entity.HasOne(d => d.Comment)
                     .WithMany(p => p.Grades)
+                    .HasForeignKey(d => d.CommentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("grade_comment_id_fkey");
 
@@ -367,22 +367,19 @@ namespace back_csharp._data
                     .HasColumnName("commentid");
                 entity.Property(e => e.Approval)
                     .HasColumnName("approval");
-                entity.Property(e => e.TokenId)
-                    .HasColumnName("tokenid");
                 entity.Property(e => e.CreatedAt)
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt)
                     .HasColumnName("modifiedat");
 
+                entity.Property(e => e.Approval)
+                    .IsRequired(false);
                 entity.Property(e => e.CreatedAt)
                     .HasColumnType("timestamp without time zone")
                     .HasDefaultValueSql("now()");
 
                 entity.Property(e => e.ModifiedAt)
                     .HasColumnType("timestamp without time zone");
-
-                entity.Property(e => e.TokenId)
-                    .HasMaxLength(40);
 
                 entity.HasOne(d => d.Comment)
                     .WithOne(p => p.Vote)

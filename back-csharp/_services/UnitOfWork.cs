@@ -1,3 +1,4 @@
+using AutoMapper;
 using back_csharp._contracts;
 using back_csharp._data;
 using back_csharp._repos;
@@ -9,6 +10,7 @@ public class UnitOfWork: IUnitOfWork
 {
     private readonly DbContext _context;
     private readonly IConfiguration _config;
+    private readonly IMapper _mapper;
     private IUniversityRepo _universities;
     private IStateRepo _states;
     private IUniStructureRepo _uniStructures;
@@ -17,10 +19,11 @@ public class UnitOfWork: IUnitOfWork
     private IScaleRepo _scale;
     private IRatingRepo _rating;
 
-    public UnitOfWork(TeachersContext context, IConfiguration config)
+    public UnitOfWork(TeachersContext context, IConfiguration config, IMapper mapper)
     {
         _context = context;
         _config = config;
+        _mapper = mapper;
     }
 
     public IUniversityRepo Universities => _universities ??= new UniversityRepo(_context, _config);
@@ -29,7 +32,7 @@ public class UnitOfWork: IUnitOfWork
     public ICampusRepo Campus => _campus ??= new CampusRepo(_context, _config);
     public IRosterRepo Roster => _roster ??= new RosterRepo(_context, _config);
     public IScaleRepo Scale => _scale ??= new ScaleRepo(_context, _config);
-    public IRatingRepo Ratings => _rating ??= new RatingRepo(_context, _config);
+    public IRatingRepo Ratings => _rating ??= new RatingRepo(_context, _config, _mapper);
 
     public async Task Save()
     {
