@@ -365,6 +365,12 @@ namespace back_csharp._data
                     .HasColumnName("voteid");
                 entity.Property(e => e.CommentId)
                     .HasColumnName("commentid");
+                entity.Property(e => e.Likes)
+                    .HasDefaultValue(0)
+                    .HasColumnName("likes");
+                entity.Property(e => e.Dislikes)
+                    .HasDefaultValue(0)
+                    .HasColumnName("dislikes");
                 entity.Property(e => e.Approval)
                     .HasColumnName("approval");
                 entity.Property(e => e.CreatedAt)

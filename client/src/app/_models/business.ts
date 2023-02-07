@@ -123,6 +123,8 @@ export class Grade {
 export class Vote {
   voteId: number;
   commentId: number;
+  likes: number;
+  dislikes: number;
   approval: boolean|null;
 }
 

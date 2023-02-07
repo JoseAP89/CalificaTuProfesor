@@ -99,6 +99,8 @@ CREATE TABLE Vote (
     VoteId SERIAL PRIMARY KEY,
     CommentId int NOT NULL,
     Approval boolean NULL,
+    Likes int NOT NULL,
+    Dislikes int NOT NULL,
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
     ModifiedAt TIMESTAMP,
     FOREIGN KEY (CommentId)

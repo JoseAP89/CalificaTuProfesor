@@ -60,6 +60,8 @@ Vote
 voteId int pk
 commentId int fk - Comment.commentId
 approval boolean
+likes int
+dislikes int
 createdAt date
 modifiedAt date
 
