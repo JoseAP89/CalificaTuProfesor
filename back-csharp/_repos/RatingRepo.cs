@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using back_csharp._contracts;
 using back_csharp._dtos;
+using back_csharp._helpers;
 using back_csharp._models;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
@@ -54,7 +55,7 @@ public class RatingRepo: IRatingRepo
         return comment;  
     }
 
-    public async Task<IEnumerable<FullCommentDTO>> GetCommentsByRosterAsync(int rosterId)
+    public async Task<IEnumerable<CommentDTO>> GetCommentsByRosterAsync(int rosterId)
     {
         using var connection = new NpgsqlConnection(_connectionString);
         // Create a query that retrieves all authors"    
@@ -73,7 +74,23 @@ public class RatingRepo: IRatingRepo
             where r.rosterid={rosterId}
         ";
         // Use the Query method to execute the query and return a list of objects
-        List<FullCommentDTO> comments = (await connection.QueryAsync<FullCommentDTO>(sql)).ToList();
+        List<FullCommentDB> commentDB = (await connection.QueryAsync<FullCommentDB>(sql)).ToList();
+        var fullCommentDto = commentDB.Select(c => c.ConvertToFullCommentDTO()).GroupBy( f => f.Comment.CommentId);
+        var comments = new List<CommentDTO>();
+        foreach (var item in fullCommentDto)
+        {
+            var comment = new CommentDTO();
+            var firstComment = item.FirstOrDefault();   
+            comment.CommentId = item.Key;
+            comment.SubjectName = firstComment.Comment.SubjectName;
+            comment.Content = firstComment.Comment.Content;
+            comment.TokenId = firstComment.Comment.TokenId;
+            comment.RecordId = firstComment.Comment.RecordId;
+            comment.RosterId = firstComment.Comment.RosterId;
+            comment.Vote = _mapper.Map<VoteDTO>(firstComment.Vote);
+            comment.Grades = _mapper.Map<List<GradeDTO>>(item.Select( c => c.Grade));
+            comments.Add(comment);
+        }
         return comments;  
     }
 

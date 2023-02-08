@@ -24,7 +24,7 @@ public class ScaleController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ScaleDto>>> GetScales()
+    public async Task<ActionResult<IEnumerable<ScaleDTO>>> GetScales()
     {
         try
         {
@@ -33,7 +33,7 @@ public class ScaleController : ControllerBase
             {
                 return NotFound();
             }
-            var scales =_mapper.Map<List<ScaleDto>>(res);
+            var scales =_mapper.Map<List<ScaleDTO>>(res);
             return Ok(scales);
         }
         catch (Exception e)

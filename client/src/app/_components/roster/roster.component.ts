@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { RosterDB, RosterRating, Scale, UniStructure, Vessel } from 'src/app/_models/business';
+import { CommentDB, RosterDB, RosterRating, Scale, UniStructure, Vessel } from 'src/app/_models/business';
 import { RosterService } from 'src/app/_services/roster.service';
 import { UnistructureService } from 'src/app/_services/unistructure.service';
 import { RateComponent } from '../dialogs/rate/rate.component';
@@ -21,6 +21,7 @@ export class RosterComponent implements OnInit{
   public rosterRating: RosterRating;
   public rosterUniStructure: Vessel;
   public scales: Scale[];
+  public comments: CommentDB[];
 
   constructor(
     private route: ActivatedRoute,
@@ -29,7 +30,10 @@ export class RosterComponent implements OnInit{
     private uniStructureService: UnistructureService,
     private scaleService: ScaleService,
     private dialog: MatDialog,
-  ) {}
+  ) {
+    this.scales = [];
+    this.comments = [];
+  }
 
   get fullName(): string {
     return `${this.roster?.teacherName} ${this.roster?.teacherLastname1} ${this.roster?.teacherLastname2}`;
@@ -42,12 +46,8 @@ export class RosterComponent implements OnInit{
         this.roster = res;
         this.getUniStructures();
         this.getScales();
-        this.ratingService.getRosterRating(this.roster.rosterId).subscribe({
-          next: res=>{
-            this.rosterRating = res;
-            this.updateRatingInfo();
-          }
-        })
+        this.getComments();
+        this.getRosterRating();
       }
     });
   }
@@ -57,10 +57,27 @@ export class RosterComponent implements OnInit{
     averageGrade?.setAttribute("data-star", this.rosterRating?.averageGrade?.toString());
   }
 
+  getRosterRating() {
+    this.ratingService.getRosterRating(this.roster.rosterId).subscribe({
+      next: res => {
+        this.rosterRating = res;
+        this.updateRatingInfo();
+      }
+    })
+  }
+
   getUniStructures(){
     this.uniStructureService.getUniStructure(this.roster?.uniStructureId).subscribe({
       next: res => {
         this.rosterUniStructure = res;
+      }
+    })
+  }
+
+  getComments(){
+    this.ratingService.GetFullComments(this.roster.rosterId).subscribe({
+      next: res => {
+        this.comments = res;
       }
     })
   }

@@ -32,7 +32,7 @@ public class RatingController : ControllerBase
     }
 
     [HttpGet("roster/fullComments/{rosterId}")]
-    public async Task<ActionResult<IEnumerable<FullCommentDTO>>> GetFullComment(int rosterId)
+    public async Task<ActionResult<IEnumerable<CommentDTO>>> GetFullComments(int rosterId)
     {
         var res = await _uow.Ratings.GetCommentsByRosterAsync(rosterId);
         if (res == null)

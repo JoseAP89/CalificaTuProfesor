@@ -28,25 +28,21 @@
     <button mat-raised-button color="accent" (click)="openRateTeacherDialog()">Calificar al Maestro</button>
   </section>
 
+  <!-- COMMENTS -->
   <section class='comments-container'>
-    <div class='comment-block' *ngFor="let item of [1,2,3,4,5]">
+    <div class='comment-block' *ngFor="let comment of comments">
       <div class='teacher-logo-block'>
         <mat-icon class="user-logo"> person_pin</mat-icon>
       </div>
       <div class='info-block'>
         <div class='info-content'>
           <div class='info-item'>
-            <span class='info-title'>Materia:</span> Analisis de algoritmos
+            <span class='info-title'>Materia:</span> {{comment.subjectName | titlecase}}
           </div>
         </div>
       </div>
       <div class='text-block'>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iure aliquam autem iusto fugit? Nesciunt vero sed
-        molestiae est ad! Sequi temporibus non impedit rem facilis iusto dicta possimus iste blanditiis hic, obcaecati
-        sunt
-        distinctio deleniti tempora dolorem dignissimos consequatur optio consequuntur corporis. Ab nobis totam porro
-        nisi!
-        Consequatur, tenetur quaerat?
+        {{comment.content}}
       </div>
       <div class='buttons-block'>
         <mat-icon class="like-it btn" >thumb_up</mat-icon>

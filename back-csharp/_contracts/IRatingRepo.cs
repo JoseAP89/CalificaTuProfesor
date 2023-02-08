@@ -7,5 +7,5 @@ public interface IRatingRepo
 {
     Task<Comment> AddCommentAsync(CommentDTO commentDTO);
     Task<RosterRatingDTO> GetRosterRatingInfoAsync(int rosterId);
-    Task<IEnumerable<FullCommentDTO>> GetCommentsByRosterAsync(int rosterId);
+    Task<IEnumerable<CommentDTO>> GetCommentsByRosterAsync(int rosterId);
 }

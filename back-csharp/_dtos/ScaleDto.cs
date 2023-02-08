@@ -1,6 +1,6 @@
 namespace back_csharp._dtos;
 
-public class ScaleDto
+public class ScaleDTO
 {
    public int ScaleId { get; set; }
    public string Name { get; set; }

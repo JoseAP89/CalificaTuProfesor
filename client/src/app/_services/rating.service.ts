@@ -24,4 +24,9 @@ export class RatingService {
     return this.http.get<RosterRating>(url);
   }
 
+  public GetFullComments(rosterId: number): Observable<CommentDB[]> {
+    const url = `${this.baseUrl}/roster/fullComments/${rosterId}`;
+    return this.http.get<CommentDB[]>(url);
+  }
+
 }
