@@ -88,6 +88,7 @@ export class RosterComponent implements OnInit{
         this.scales = res;
         setTimeout(() => {
           let scaleIds = this.scales.map( s => s.scaleId);
+          // updates global individual skills of the teacher
           for (const i of scaleIds) {
             let grade = document.querySelector(`.skill-${i}`);
             let x = this.rosterRating?.grades.find(g => g.scaleId==i);
@@ -102,7 +103,7 @@ export class RosterComponent implements OnInit{
   }
 
   openRateTeacherDialog(enterAnimationDuration: string = '500ms', exitAnimationDuration: string= '500ms'): void {
-    this.dialog.open<RateComponent, RosterDB>(RateComponent, {
+    let ref = this.dialog.open<RateComponent, RosterDB>(RateComponent, {
       data: this.roster,
       enterAnimationDuration,
       exitAnimationDuration,
@@ -111,6 +112,15 @@ export class RosterComponent implements OnInit{
       height: "650px",
       panelClass: 'dialog-box'
     });
+    ref.afterClosed().subscribe({
+      next: res => {
+        if (res!=null) {
+          this.getScales();
+          this.getComments();
+          this.getRosterRating();
+        }
+      }
+    })
   }
 
 }

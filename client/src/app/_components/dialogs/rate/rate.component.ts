@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CommentDB, Grade, Roster, RosterDB, Scale, Vote } from 'src/app/_models/business';
 import { RatingService } from 'src/app/_services/rating.service';
 import { ScaleService } from 'src/app/_services/scale.service';
@@ -24,6 +24,7 @@ export class RateComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: RosterDB,
+    public dialogRef: MatDialogRef<RateComponent>,
     private fb: FormBuilder,
     private scaleService: ScaleService,
     private ratingService: RatingService,
@@ -132,11 +133,13 @@ export class RateComponent implements OnInit {
         comment.grades.push(grade);
       }
       this.ratingService.addComment(comment).subscribe({
-        next: _ => {
+        next: res => {
           this.snackbarService.showSuccessMessage("Comentario agregado exitosamente.");
+          this.dialogRef.close(res);
         },
         error: error => {
           this.snackbarService.showErrorMessage(error?.message);
+          this.dialogRef.close(null);
         }
       });
     }
