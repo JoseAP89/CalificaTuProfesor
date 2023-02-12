@@ -2,6 +2,7 @@
 using back_csharp._contracts;
 using back_csharp._dtos;
 using back_csharp._models;
+using back_csharp._models.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,9 +33,9 @@ public class RatingController : ControllerBase
     }
 
     [HttpGet("roster/fullComments/{rosterId}")]
-    public async Task<ActionResult<IEnumerable<CommentDTO>>> GetFullComments(int rosterId)
+    public async Task<ActionResult<TableData<CommentDTO>>> GetFullComments(int rosterId, int pageSize, SortPaginator sortPage, int pageNumber = 0 )
     {
-        var res = await _uow.Ratings.GetCommentsByRosterAsync(rosterId);
+        var res = await _uow.Ratings.GetCommentsByRosterAsync(rosterId, pageSize, sortPage, pageNumber);
         if (res == null)
         {
             return BadRequest("Hubo un error obteniendo la lista de los comentarios del Maestro.");

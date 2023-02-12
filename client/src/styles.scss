@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @import "@angular/material/prebuilt-themes/deeppurple-amber.css";
 
 $error-color: #ff4040;
@@ -13,7 +13,7 @@ body {
 }
 * {
   box-sizing: border-box;
-  font-family: 'Indie Flower', cursive;
+  font-family: 'Courier Prime', monospace;
 }
 
 /*input errors*/

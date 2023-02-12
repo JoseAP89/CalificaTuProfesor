@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CommentDB, Grade, Roster, RosterDB, Scale, Vote } from 'src/app/_models/business';
+import { CommentDTO, Grade, Roster, RosterDB, Scale, Vote } from 'src/app/_models/business';
 import { RatingService } from 'src/app/_services/rating.service';
 import { ScaleService } from 'src/app/_services/scale.service';
 import { SnackbarService } from 'src/app/_services/snackbar.service';
@@ -112,7 +112,7 @@ export class RateComponent implements OnInit {
 
   onSubmit(){
     if (this.isDataValid()) {
-      let comment = new CommentDB();
+      let comment = new CommentDTO();
       comment.recordId = null;
       comment.content = this.comment;
       comment.rosterId = this.roster.rosterId!;

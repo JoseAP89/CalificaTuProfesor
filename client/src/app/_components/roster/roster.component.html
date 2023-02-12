@@ -44,6 +44,9 @@
       <div class='text-block'>
         {{comment.content}}
       </div>
+      <div class='created-at'>
+        {{comment.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}
+      </div>
       <div class='buttons-block'>
         <mat-icon class="like-it btn" >thumb_up</mat-icon>
         <mat-icon class="dislike-it btn" >thumb_down</mat-icon>
@@ -51,4 +54,22 @@
       </div>
     </div>
   </section>
+
+  <div class="paginator-box">
+    <mat-form-field appearance="fill">
+      <mat-label>Select an option</mat-label>
+      <mat-select [(value)]="sortPage" (selectionChange)="onFilterChange()">
+        <ng-container *ngFor="let sp of SortPaginatorValues">
+          <mat-option value="{{sp.id}}">{{sp.value}}</mat-option>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
+    <mat-paginator class="paginator-item" itemsPerPageLabel="Comentarios por página: " nextPageLabel="siguiente"
+      previousPageLabel="anterior" (page)="handlePageEvent($event)" [length]="totalLength" [pageSize]="pageSize"
+      [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Slecciona la página">
+    </mat-paginator>
+
+  </div>
+
+
 </section>

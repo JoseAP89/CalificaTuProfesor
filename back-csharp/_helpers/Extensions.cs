@@ -48,6 +48,8 @@ public static class Extensions
         commentDTO.Comment.Content = comment.CommentContent;
         commentDTO.Comment.TokenId = comment.CommentTokenid;
         commentDTO.Comment.RecordId = comment.CommentRecordid.ToString();
+        commentDTO.Comment.CreatedAt = comment.CommentCreatedat;
+        commentDTO.Comment.ModifiedAt = comment.CommentModifiedat;
         commentDTO.Comment.SubjectName = comment.CommentSubjectname;
         // GRADE
         commentDTO.Grade = new GradeDTO();

@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { CommentDB, RosterDB, RosterRating, Scale, UniStructure, Vessel } from 'src/app/_models/business';
+import { CommentDTO, RosterDB, RosterRating, Scale, SortPaginator, UniStructure, Vessel } from 'src/app/_models/business';
 import { RosterService } from 'src/app/_services/roster.service';
 import { UnistructureService } from 'src/app/_services/unistructure.service';
 import { RateComponent } from '../dialogs/rate/rate.component';
 import { RatingService } from 'src/app/_services/rating.service';
 import { ScaleService } from 'src/app/_services/scale.service';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-roster',
@@ -16,12 +17,20 @@ import { ScaleService } from 'src/app/_services/scale.service';
 })
 export class RosterComponent implements OnInit{
 
+  public readonly SortPaginatorValues: Vessel[];
   public rosterId: number;
   public roster: RosterDB;
   public rosterRating: RosterRating;
   public rosterUniStructure: Vessel;
   public scales: Scale[];
-  public comments: CommentDB[];
+  public comments: CommentDTO[];
+
+  private pageEvent: PageEvent;
+  public totalLength: number;
+  public pageSize: number;
+  public sortPage: SortPaginator;
+  public pageNumber: number; // page 0-index based
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,6 +42,18 @@ export class RosterComponent implements OnInit{
   ) {
     this.scales = [];
     this.comments = [];
+    this.pageNumber = 0;
+    this.pageSize = 5;
+    this.SortPaginatorValues = [];
+    for (let value in SortPaginator) {
+      let n = Number(value);
+      if (!isNaN(n)) {
+        let v = new Vessel(Number(value), SortPaginator[value]);
+        this.SortPaginatorValues.push(v);
+      }
+
+    }
+    this.sortPage = SortPaginator.DateDesc;
   }
 
   get fullName(): string {
@@ -40,6 +61,9 @@ export class RosterComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    this.paginator._intl.itemsPerPageLabel="Comentarios por página";
+    this.paginator._intl.nextPageLabel="página siguiente";
+    this.paginator._intl.previousPageLabel="página anterior";
     const recordId = this.route.snapshot.paramMap.get('recordId') ?? "";
     this.rosterService.getRosterInfoByRecordId(recordId).subscribe({
       next: (res: RosterDB) => {
@@ -75,9 +99,12 @@ export class RosterComponent implements OnInit{
   }
 
   getComments(){
-    this.ratingService.GetFullComments(this.roster.rosterId).subscribe({
+    this.ratingService.GetFullComments(this.roster.rosterId, this.pageSize, this.sortPage, this.pageNumber).subscribe({
       next: res => {
-        this.comments = res;
+        this.comments = res.data;
+        this.pageNumber = res.pageNumber;
+        this.pageSize = res.pageSize;
+        this.totalLength = res.totalElements;
       }
     })
   }
@@ -121,6 +148,18 @@ export class RosterComponent implements OnInit{
         }
       }
     })
+  }
+
+  handlePageEvent(e: PageEvent) {
+    this.pageEvent = e;
+    this.totalLength = e.length;
+    this.pageSize = e.pageSize;
+    this.pageNumber = e.pageIndex;
+    this.getComments();
+  }
+
+  onFilterChange() {
+    this.getComments();
   }
 
 }

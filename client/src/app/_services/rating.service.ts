@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { CommentDB, RosterRating } from '../_models/business';
+import { CommentDTO, RosterRating, SortPaginator, TableData } from '../_models/business';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +14,9 @@ export class RatingService {
     private http: HttpClient,
   ) { }
 
-  public addComment(comment: CommentDB): Observable<CommentDB> {
+  public addComment(comment: CommentDTO): Observable<CommentDTO> {
     const url = `${this.baseUrl}/comment`;
-    return this.http.post<CommentDB>(url, comment);
+    return this.http.post<CommentDTO>(url, comment);
   }
 
   public getRosterRating(rosterId: number): Observable<RosterRating> {
@@ -24,9 +24,13 @@ export class RatingService {
     return this.http.get<RosterRating>(url);
   }
 
-  public GetFullComments(rosterId: number): Observable<CommentDB[]> {
+  public GetFullComments(rosterId: number, pageSize: number, sortPage: SortPaginator, pageNumber: number = 0): Observable<TableData<CommentDTO>> {
     const url = `${this.baseUrl}/roster/fullComments/${rosterId}`;
-    return this.http.get<CommentDB[]>(url);
+    let params = new HttpParams()
+      .set("pageSize", pageSize)
+      .set("sortPage", sortPage)
+      .set("pageNumber", pageNumber);
+    return this.http.get<TableData<CommentDTO>>(url, {params});
   }
 
 }

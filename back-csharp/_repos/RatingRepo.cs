@@ -3,6 +3,7 @@ using back_csharp._contracts;
 using back_csharp._dtos;
 using back_csharp._helpers;
 using back_csharp._models;
+using back_csharp._models.Enums;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -33,7 +34,8 @@ public class RatingRepo: IRatingRepo
             inner join comment c on r.rosterid=c.rosterid
             inner join grade g on c.commentId=g.commentId
             inner join scale s on g.scaleid=s.scaleid
-            where r.rosterid={rosterId} group by g.scaleid 
+            where r.rosterid={rosterId} 
+            group by g.scaleid 
         ";
         // Use the Query method to execute the query and return a list of objects
         List<GradeDTO> grades = (await connection.QueryAsync<GradeDTO>(sql)).ToList();
@@ -55,7 +57,7 @@ public class RatingRepo: IRatingRepo
         return comment;  
     }
 
-    public async Task<IEnumerable<CommentDTO>> GetCommentsByRosterAsync(int rosterId)
+    public async Task<TableData<CommentDTO>> GetCommentsByRosterAsync(int rosterId, int pageSize, SortPaginator pag, int pageNumber = 0)
     {
         using var connection = new NpgsqlConnection(_connectionString);
         // Create a query that retrieves all authors"    
@@ -66,17 +68,19 @@ public class RatingRepo: IRatingRepo
 			g.gradeid AS GradeGradeid,	g.scaleid AS GradeScaleid,	g.commentid AS GradeCommentid,	g.stars AS GradeStars,	g.createdat AS GradeCreatedat,	g.modifiedat AS GradeModifiedat,
 			s.scaleid AS ScaleScaleid,	s.code AS ScaleCode,	s.name AS ScaleName,	s.description AS ScaleDescription,	s.createdat AS ScaleCreatedat,	s.modifiedat AS ScaleModifiedat,
 			v.voteid AS VoteVoteid,	v.commentid AS VoteCommentid,	v.approval AS VoteApproval,	v.createdat AS VoteCreatedat,	v.modifiedat AS VoteModifiedat,	v.likes AS VoteLikes,	v.dislikes AS VoteDislikes
-			from roster r
-            inner join comment c on r.rosterid=c.rosterid
-            inner join grade g on c.commentId=g.commentId
-            inner join scale s on g.scaleid=s.scaleid
-			inner join vote v on c.commentid=v.commentid
-            where r.rosterid={rosterId}
+			FROM roster r
+            INNER JOIN comment c ON r.rosterid=c.rosterid 
+            INNER JOIN grade g ON c.commentId=g.commentId 
+            INNER JOIN scale s ON g.scaleid=s.scaleid 
+			INNER JOIN vote v ON c.commentid=v.commentid 
+            WHERE r.rosterid={rosterId} 
         ";
         // Use the Query method to execute the query and return a list of objects
-        List<FullCommentDB> commentDB = (await connection.QueryAsync<FullCommentDB>(sql)).ToList();
+        List<FullCommentDB> commentDB = (await connection.QueryAsync<FullCommentDB>(sql))
+            .ToList();
         var fullCommentDto = commentDB.Select(c => c.ConvertToFullCommentDTO()).GroupBy( f => f.Comment.CommentId);
         var comments = new List<CommentDTO>();
+        var commentsSorted = comments.AsEnumerable();
         foreach (var item in fullCommentDto)
         {
             var comment = new CommentDTO();
@@ -87,11 +91,44 @@ public class RatingRepo: IRatingRepo
             comment.TokenId = firstComment.Comment.TokenId;
             comment.RecordId = firstComment.Comment.RecordId;
             comment.RosterId = firstComment.Comment.RosterId;
+            comment.CreatedAt = firstComment.Comment.CreatedAt;
+            comment.ModifiedAt = firstComment.Comment.ModifiedAt;
             comment.Vote = _mapper.Map<VoteDTO>(firstComment.Vote);
             comment.Grades = _mapper.Map<List<GradeDTO>>(item.Select( c => c.Grade));
             comments.Add(comment);
         }
-        return comments;  
+        switch (pag)
+        {
+            case SortPaginator.DateAsc:
+                commentsSorted = comments.OrderBy( c => c.CreatedAt);
+                break;
+            case SortPaginator.DateDesc:
+                commentsSorted = comments.OrderByDescending( c => c.CreatedAt);
+                break;
+            case SortPaginator.MostLiked:
+                commentsSorted = comments.OrderBy( c => c.Vote.Likes);
+                break;
+            case SortPaginator.MostDisliked:
+                commentsSorted = comments.OrderBy( c => c.Vote.Dislikes);
+                break;
+            case SortPaginator.SubjectAsc:
+                commentsSorted = comments.OrderBy( c => c.SubjectName);
+                break;
+            case SortPaginator.SubjectDesc:
+                commentsSorted = comments.OrderByDescending( c => c.SubjectName);
+                break;
+            default:
+                break;
+        }
+        var table = new TableData<CommentDTO>();
+        table.PageNumber = pageNumber;
+        table.PageSize = pageSize;
+        table.TotalElements = comments.Count;
+        table.Data = commentsSorted
+            .Skip(pageSize * pageNumber)
+            .Take(pageSize)
+            .ToList();
+        return table;
     }
 
 }

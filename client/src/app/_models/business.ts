@@ -82,9 +82,9 @@ export class Vessel {
    readonly signature: string;
    readonly value: string;
 
-   constructor(id: number, name:string, signature: string = ""){
+   constructor(id: number, value:string, signature: string = ""){
        this.id = id;
-       this.value = name;
+       this.value = value;
        this.signature = signature;
    }
 
@@ -125,7 +125,7 @@ export class Vote {
   approval: boolean|null;
 }
 
-export class CommentDB {
+export class CommentDTO {
   commentId: number;
   recordId: string;
   subjectName: string;
@@ -134,10 +134,27 @@ export class CommentDB {
   tokenId: string;
   grades: Array<Grade>;
   vote: Vote;
+  createdAt: string;
 }
 
 export class RosterRating {
   rosterId: number;
   averageGrade: number;
   grades: Array<Grade>;
+}
+
+export enum SortPaginator {
+  DateAsc,
+  DateDesc,
+  MostLiked,
+  MostDisliked,
+  SubjectAsc,
+  SubjectDesc
+}
+
+export class TableData<T> {
+  data: T[];
+  totalElements: number;
+  pageNumber: number;
+  pageSize: number;
 }

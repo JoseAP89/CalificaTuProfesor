@@ -10,4 +10,6 @@ public class CommentDTO
     public string TokenId { get; set; }
     public IEnumerable<GradeDTO> Grades { get; set; }
     public VoteDTO Vote { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? ModifiedAt { get; set; }
 }
