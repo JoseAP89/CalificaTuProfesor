@@ -154,8 +154,6 @@ export class RosterComponent implements OnInit{
           // updates global individual skills of the teacher
           for (const i of scaleIds) {
             let grade = document.querySelector(`.skill-${i}`);
-            let x = this.rosterRating?.grades.find(g => g.scaleId==i);
-            let y = this.scales.find(s => s.scaleId== x.scaleId);
             grade?.setAttribute("data-star",
               this.rosterRating?.grades.find(g => g.scaleId==i)?.stars.toFixed(1)
             );
@@ -179,8 +177,8 @@ export class RosterComponent implements OnInit{
       next: res => {
         if (res!=null) {
           this.getScales();
-          this.getComments();
           this.getRosterRating();
+          this.getComments();
         }
         if (res.userId) {
           this.ratingService.setCurrentUserId(res.userId);

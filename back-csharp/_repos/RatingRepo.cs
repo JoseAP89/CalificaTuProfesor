@@ -56,7 +56,7 @@ public class RatingRepo: IRatingRepo
     public async Task<Comment> AddCommentAsync(CommentDTO commentDTO)
     {
         var comment = _mapper.Map<Comment>(commentDTO);
-        comment.UserId = Guid.NewGuid();
+        if(string.IsNullOrEmpty(commentDTO.UserId) ) comment.UserId = Guid.NewGuid();
         // it only carries one vote, the one of the user who created it
         comment.Votes = comment.Votes.Select( v => { v.UserId = comment.UserId; return v;}).ToList(); 
         _context.Comments.Add(comment);
@@ -71,6 +71,7 @@ public class RatingRepo: IRatingRepo
             .ThenInclude(g => g.Scale)
             .Include(c => c.Votes)
             .AsSplitQuery()
+            .AsNoTrackingWithIdentityResolution()
             .ToListAsync()
             ;
         if (comments == null || comments.Count == 0)

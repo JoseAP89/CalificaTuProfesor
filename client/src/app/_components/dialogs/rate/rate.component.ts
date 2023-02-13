@@ -21,6 +21,7 @@ export class RateComponent implements OnInit {
   public averageRate: number = 0;
   public comment: string = ""
   public roster: RosterDB;
+  public currentUserId: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: RosterDB,
@@ -36,6 +37,7 @@ export class RateComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.ratingService.currentUserId.subscribe({next: res => this.currentUserId = res})
     this.rateForm = this.fb.group({
       subjectName: ['', Validators.required],
       comment: ['', Validators.required],
@@ -117,6 +119,7 @@ export class RateComponent implements OnInit {
       comment.content = this.comment;
       comment.rosterId = this.roster.rosterId!;
       comment.subjectName = this.subjectName.value;
+      comment.userId = this.currentUserId;
       comment.grades = [];
       for (let i = 0; i < this._scales.length; i++) {
         const esc = this._scales[i];

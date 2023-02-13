@@ -16,7 +16,7 @@ export class RatingService implements OnDestroy {
   constructor(
     private http: HttpClient,
   ) {
-    this._userId = new BehaviorSubject<string>(localStorage.getItem(this._name) ?? "");
+    this._userId = new BehaviorSubject<string>(localStorage.getItem(this._name) ?? null);
   }
 
   ngOnDestroy(): void {
