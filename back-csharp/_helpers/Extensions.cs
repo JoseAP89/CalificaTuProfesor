@@ -46,7 +46,7 @@ public static class Extensions
         commentDTO.Comment.CommentId = comment.CommentCommentid;
         commentDTO.Comment.RosterId = comment.CommentRosterid;
         commentDTO.Comment.Content = comment.CommentContent;
-        commentDTO.Comment.TokenId = comment.CommentTokenid;
+        commentDTO.Comment.UserId = comment.CommentUserid.ToString();
         commentDTO.Comment.RecordId = comment.CommentRecordid.ToString();
         commentDTO.Comment.CreatedAt = comment.CommentCreatedat;
         commentDTO.Comment.ModifiedAt = comment.CommentModifiedat;
@@ -67,9 +67,8 @@ public static class Extensions
         commentDTO.Vote = new VoteDTO();
         commentDTO.Vote.VoteId = comment.VoteVoteid; 
         commentDTO.Vote.CommentId = comment.VoteCommentid; 
+        commentDTO.Vote.UserId = comment.VoteUserid.ToString(); 
         commentDTO.Vote.Approval = comment.VoteApproval; 
-        commentDTO.Vote.Likes = comment.VoteLikes; 
-        commentDTO.Vote.Dislikes = comment.VoteDislikes; 
         return commentDTO;
     }
 

@@ -8,12 +8,15 @@ public class AutoMapperConfigs: Profile
 {
     public AutoMapperConfigs()
     {
+        // ***
+        CreateMap<Vote, VoteDTO>();
+        CreateMap<VoteDTO, Vote>();
+        // ***
         CreateMap<Campus, CampusDto>().ReverseMap();
         CreateMap<Campus, ShortCampusDTO>().ReverseMap();
         CreateMap<CampusDto, ShortCampusDTO>().ReverseMap();
         CreateMap<ScaleDTO, Scale>().ReverseMap();
         CreateMap<Grade, GradeDTO>().ReverseMap();
         CreateMap<Comment, CommentDTO>().ReverseMap();
-        CreateMap<Vote, VoteDTO>().ReverseMap();
     }
 }

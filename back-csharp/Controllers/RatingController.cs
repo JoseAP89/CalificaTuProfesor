@@ -38,7 +38,7 @@ public class RatingController : ControllerBase
         var res = await _uow.Ratings.GetCommentsByRosterAsync(rosterId, pageSize, sortPage, pageNumber);
         if (res == null)
         {
-            return BadRequest("Hubo un error obteniendo la lista de los comentarios del Maestro.");
+            return NotFound("No hay comentarios para el Profesor.");
         }
         return Ok(res);
     }
@@ -49,7 +49,7 @@ public class RatingController : ControllerBase
         var res = await _uow.Ratings.GetRosterRatingInfoAsync(rosterId);
         if (res == null)
         {
-            return BadRequest("Hubo un error calculando la información general del Profesor.");
+            return NotFound("No hay calificaciones para el Profesor.");
         }
         return Ok(res);
     }

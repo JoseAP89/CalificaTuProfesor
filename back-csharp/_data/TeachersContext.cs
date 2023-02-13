@@ -109,8 +109,8 @@ namespace back_csharp._data
                     .HasColumnName("subjectname");
                 entity.Property(e => e.RosterId )
                     .HasColumnName("rosterid");
-                entity.Property(e => e.TokenId )
-                    .HasColumnName("tokenid");
+                entity.Property(e => e.UserId )
+                    .HasColumnName("userid");
                 entity.Property(e => e.CreatedAt)
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt)
@@ -129,7 +129,7 @@ namespace back_csharp._data
                 entity.Property(e => e.ModifiedAt)
                     .HasColumnType("timestamp without time zone");
 
-                entity.Property(e => e.TokenId)
+                entity.Property(e => e.UserId)
                     .HasMaxLength(40);
 
                 entity.HasOne(d => d.Roster)
@@ -371,12 +371,8 @@ namespace back_csharp._data
                     .HasColumnName("voteid");
                 entity.Property(e => e.CommentId)
                     .HasColumnName("commentid");
-                entity.Property(e => e.Likes)
-                    .HasDefaultValue(0)
-                    .HasColumnName("likes");
-                entity.Property(e => e.Dislikes)
-                    .HasDefaultValue(0)
-                    .HasColumnName("dislikes");
+                entity.Property(e => e.UserId)
+                    .HasColumnName("userid");
                 entity.Property(e => e.Approval)
                     .HasColumnName("approval");
                 entity.Property(e => e.CreatedAt)
@@ -394,7 +390,7 @@ namespace back_csharp._data
                     .HasColumnType("timestamp without time zone");
 
                 entity.HasOne(d => d.Comment)
-                    .WithOne(p => p.Vote)
+                    .WithMany(p => p.Votes)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("vote_comment_id_fkey");
             });

@@ -120,8 +120,7 @@ export class Grade {
 export class Vote {
   voteId: number;
   commentId: number;
-  likes: number;
-  dislikes: number;
+  userId: string;
   approval: boolean|null;
 }
 
@@ -131,9 +130,11 @@ export class CommentDTO {
   subjectName: string;
   rosterId: number;
   content: string;
-  tokenId: string;
+  userId: string;
   grades: Array<Grade>;
-  vote: Vote;
+  votes: Array<Vote>;
+  likes: number;
+  dislikes: number;
   createdAt: string;
 }
 

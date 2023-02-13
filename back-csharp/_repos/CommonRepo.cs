@@ -9,12 +9,12 @@ public class CommonRepo<T>: ICommonRepo<T>
     where T: class
 {
 
-    protected readonly DbContext _context;
+    protected readonly TeachersContext _context;
     protected readonly DbSet<T> _dbset;
     protected readonly IConfiguration _config; 
     protected const int MAX_RESULTS = 20;
 
-    public CommonRepo(DbContext context, IConfiguration config)
+    public CommonRepo(TeachersContext context, IConfiguration config)
     {
         _context = context;
         _config = config;

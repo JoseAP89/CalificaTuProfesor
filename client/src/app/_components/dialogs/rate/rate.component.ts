@@ -24,7 +24,7 @@ export class RateComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: RosterDB,
-    public dialogRef: MatDialogRef<RateComponent>,
+    public dialogRef: MatDialogRef<RateComponent, CommentDTO>,
     private fb: FormBuilder,
     private scaleService: ScaleService,
     private ratingService: RatingService,
@@ -128,7 +128,7 @@ export class RateComponent implements OnInit {
         // Create Vote
         let vote = new Vote();
         vote.approval = null;
-        comment.vote = vote;
+        comment.votes = [vote];
         // Add them to the Comment
         comment.grades.push(grade);
       }

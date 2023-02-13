@@ -3,12 +3,13 @@ using back_csharp._models;
 using back_csharp._dtos;
 using back_csharp._helpers;
 using Microsoft.EntityFrameworkCore;
+using back_csharp._data;
 
 namespace back_csharp._repos;
 
 public class UniversityRepo: CommonRepo<University>, IUniversityRepo
 {
-    public UniversityRepo(DbContext context, IConfiguration config) : base(context, config)
+    public UniversityRepo(TeachersContext context, IConfiguration config) : base(context, config)
     {
         
     }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using back_csharp._contracts;
+using back_csharp._data;
 using back_csharp._dtos;
 using back_csharp._helpers;
 using back_csharp._models;
@@ -12,12 +13,12 @@ namespace back_csharp._repos;
 
 public class RatingRepo: IRatingRepo
 {
-    private readonly DbContext _context;
+    private readonly TeachersContext _context;
     private readonly IConfiguration _config;
     private readonly IMapper _mapper;
     private readonly string _connectionString;
 
-    public RatingRepo(DbContext context, IConfiguration config, IMapper mapper)
+    public RatingRepo(TeachersContext context, IConfiguration config, IMapper mapper)
     {
         _context = context;
         _config = config;
@@ -39,6 +40,10 @@ public class RatingRepo: IRatingRepo
         ";
         // Use the Query method to execute the query and return a list of objects
         List<GradeDTO> grades = (await connection.QueryAsync<GradeDTO>(sql)).ToList();
+        if (grades == null || grades.Count == 0)
+        {
+            return null;
+        }
         var rating = new RosterRatingDTO
         {
             RosterId = rosterId,
@@ -51,8 +56,10 @@ public class RatingRepo: IRatingRepo
     public async Task<Comment> AddCommentAsync(CommentDTO commentDTO)
     {
         var comment = _mapper.Map<Comment>(commentDTO);
-        comment.TokenId = Guid.NewGuid().ToString();
-        _context.Set<Comment>().Add(comment);
+        comment.UserId = Guid.NewGuid();
+        // it only carries one vote, the one of the user who created it
+        comment.Votes = comment.Votes.Select( v => { v.UserId = comment.UserId; return v;}).ToList(); 
+        _context.Comments.Add(comment);
         await _context.SaveChangesAsync();
         return comment;  
     }
@@ -64,10 +71,10 @@ public class RatingRepo: IRatingRepo
         var sql = @$"
             select 
 			r.rosterid AS RosterRosterid,	r.campusid AS RosterCampusid,	r.teachername AS RosterTeachername,	r.teacherlastname1 AS RosterTeacherlastname1,	r.teacherlastname2 AS RosterTeacherlastname2,	r.unistructureid AS RosterUnistructureid,	r.structurename AS RosterStructurename,	r.createdat AS RosterCreatedat,	r.modifiedat AS RosterModifiedat,	r.recordid AS RosterRecordid,
-			c.commentid AS CommentCommentid,	c.rosterid AS CommentRosterid,	c.content AS CommentContent,	c.tokenid AS CommentTokenid,	c.createdat AS CommentCreatedat,	c.modifiedat AS CommentModifiedat,	c.recordid AS CommentRecordid,	c.subjectname AS CommentSubjectname,
+			c.commentid AS CommentCommentid,	c.rosterid AS CommentRosterid,	c.content AS CommentContent,	c.userid AS CommentUserid,	c.createdat AS CommentCreatedat,	c.modifiedat AS CommentModifiedat,	c.recordid AS CommentRecordid,	c.subjectname AS CommentSubjectname,
 			g.gradeid AS GradeGradeid,	g.scaleid AS GradeScaleid,	g.commentid AS GradeCommentid,	g.stars AS GradeStars,	g.createdat AS GradeCreatedat,	g.modifiedat AS GradeModifiedat,
 			s.scaleid AS ScaleScaleid,	s.code AS ScaleCode,	s.name AS ScaleName,	s.description AS ScaleDescription,	s.createdat AS ScaleCreatedat,	s.modifiedat AS ScaleModifiedat,
-			v.voteid AS VoteVoteid,	v.commentid AS VoteCommentid,	v.approval AS VoteApproval,	v.createdat AS VoteCreatedat,	v.modifiedat AS VoteModifiedat,	v.likes AS VoteLikes,	v.dislikes AS VoteDislikes
+			v.voteid AS VoteVoteid,	v.commentid AS VoteCommentid, v.userid AS VoteUserid ,v.approval AS VoteApproval,	v.createdat AS VoteCreatedat,	v.modifiedat AS VoteModifiedat	
 			FROM roster r
             INNER JOIN comment c ON r.rosterid=c.rosterid 
             INNER JOIN grade g ON c.commentId=g.commentId 
@@ -78,9 +85,12 @@ public class RatingRepo: IRatingRepo
         // Use the Query method to execute the query and return a list of objects
         List<FullCommentDB> commentDB = (await connection.QueryAsync<FullCommentDB>(sql))
             .ToList();
+        if (commentDB == null || commentDB.Count == 0)
+        {
+            return null;
+        }
         var fullCommentDto = commentDB.Select(c => c.ConvertToFullCommentDTO()).GroupBy( f => f.Comment.CommentId);
         var comments = new List<CommentDTO>();
-        var commentsSorted = comments.AsEnumerable();
         foreach (var item in fullCommentDto)
         {
             var comment = new CommentDTO();
@@ -88,15 +98,28 @@ public class RatingRepo: IRatingRepo
             comment.CommentId = item.Key;
             comment.SubjectName = firstComment.Comment.SubjectName;
             comment.Content = firstComment.Comment.Content;
-            comment.TokenId = firstComment.Comment.TokenId;
+            comment.UserId = firstComment.Comment.UserId;
             comment.RecordId = firstComment.Comment.RecordId;
             comment.RosterId = firstComment.Comment.RosterId;
             comment.CreatedAt = firstComment.Comment.CreatedAt;
             comment.ModifiedAt = firstComment.Comment.ModifiedAt;
-            comment.Vote = _mapper.Map<VoteDTO>(firstComment.Vote);
             comment.Grades = _mapper.Map<List<GradeDTO>>(item.Select( c => c.Grade));
+            comment.Votes = new List<VoteDTO>();
+            foreach (var v in item.Select(c => c.Vote))
+            {
+                comment.Votes.Append(v);
+                if (v.Approval.HasValue && v.Approval.Value)
+                {
+                    comment.Likes++;
+                }
+                if (v.Approval.HasValue && !v.Approval.Value)
+                {
+                    comment.Dislikes++;
+                }
+            }
             comments.Add(comment);
         }
+        var commentsSorted = comments.AsEnumerable();
         switch (pag)
         {
             case SortPaginator.DateAsc:
@@ -106,10 +129,10 @@ public class RatingRepo: IRatingRepo
                 commentsSorted = comments.OrderByDescending( c => c.CreatedAt);
                 break;
             case SortPaginator.MostLiked:
-                commentsSorted = comments.OrderBy( c => c.Vote.Likes);
+                commentsSorted = comments.OrderBy( c => c.Likes).ThenByDescending( c => c.CreatedAt);
                 break;
             case SortPaginator.MostDisliked:
-                commentsSorted = comments.OrderBy( c => c.Vote.Dislikes);
+                commentsSorted = comments.OrderBy( c => c.Dislikes).ThenByDescending( c => c.CreatedAt);
                 break;
             case SortPaginator.SubjectAsc:
                 commentsSorted = comments.OrderBy( c => c.SubjectName);

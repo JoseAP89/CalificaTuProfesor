@@ -17,7 +17,8 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 })
 export class RosterComponent implements OnInit{
 
-  public readonly SortPaginatorValues: Vessel[];
+  public currentUserId: string;
+  public readonly sortPaginatorValues: Vessel[];
   public rosterId: number;
   public roster: RosterDB;
   public rosterRating: RosterRating;
@@ -30,6 +31,7 @@ export class RosterComponent implements OnInit{
   public pageSize: number;
   public sortPage: SortPaginator;
   public pageNumber: number; // page 0-index based
+  public pageSizeOptions = [5, 10, 25, 100];
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
@@ -43,17 +45,9 @@ export class RosterComponent implements OnInit{
     this.scales = [];
     this.comments = [];
     this.pageNumber = 0;
-    this.pageSize = 5;
-    this.SortPaginatorValues = [];
-    for (let value in SortPaginator) {
-      let n = Number(value);
-      if (!isNaN(n)) {
-        let v = new Vessel(Number(value), SortPaginator[value]);
-        this.SortPaginatorValues.push(v);
-      }
-
-    }
-    this.sortPage = SortPaginator.DateDesc;
+    this.pageSize = this.pageSizeOptions[0];
+    this.sortPaginatorValues = [];
+    this.getOrderSelect();
   }
 
   get fullName(): string {
@@ -61,6 +55,7 @@ export class RosterComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    this.getCurrentUserId();
     this.paginator._intl.itemsPerPageLabel="Comentarios por página";
     this.paginator._intl.nextPageLabel="página siguiente";
     this.paginator._intl.previousPageLabel="página anterior";
@@ -74,6 +69,47 @@ export class RosterComponent implements OnInit{
         this.getRosterRating();
       }
     });
+  }
+
+  getCurrentUserId(){
+    this.ratingService.currentUserId.subscribe({next: r => this.currentUserId = r});
+  }
+
+  getOrderSelect(){
+    for (let value in SortPaginator) {
+      let n = Number(value);
+      if (!isNaN(n)) {
+        // TODO: change value to a readable name
+        let id = Number(value);
+        let val = "";
+        switch (id) {
+          case SortPaginator.DateAsc:
+            val = "Fecha ascendente";
+            break;
+          case SortPaginator.DateDesc:
+            val = "Fecha descendente";
+            break;
+          case SortPaginator.MostLiked:
+            val = "Más Likes";
+            break;
+          case SortPaginator.MostDisliked:
+            val = "Más Dislikes";
+            break;
+          case SortPaginator.SubjectAsc:
+            val = "Nombre de materia ascendente";
+            break;
+          case SortPaginator.SubjectDesc:
+            val = "Nombre de materia descendente";
+            break;
+          default:
+            break;
+        }
+        let v = new Vessel(id, val);
+        this.sortPaginatorValues.push(v);
+      }
+    }
+    this.sortPage = this.sortPaginatorValues.find(s => s.id == SortPaginator.DateDesc).id;
+
   }
 
   updateRatingInfo(){
@@ -130,7 +166,7 @@ export class RosterComponent implements OnInit{
   }
 
   openRateTeacherDialog(enterAnimationDuration: string = '500ms', exitAnimationDuration: string= '500ms'): void {
-    let ref = this.dialog.open<RateComponent, RosterDB>(RateComponent, {
+    let ref = this.dialog.open<RateComponent, RosterDB, CommentDTO>(RateComponent, {
       data: this.roster,
       enterAnimationDuration,
       exitAnimationDuration,
@@ -146,6 +182,9 @@ export class RosterComponent implements OnInit{
           this.getComments();
           this.getRosterRating();
         }
+        if (res.userId) {
+          this.ratingService.setCurrentUserId(res.userId);
+        }
       }
     })
   }
@@ -160,6 +199,18 @@ export class RosterComponent implements OnInit{
 
   onFilterChange() {
     this.getComments();
+  }
+
+  addLike(){
+
+  }
+
+  addDislike(){
+
+  }
+
+  addWarning(){
+
   }
 
 }

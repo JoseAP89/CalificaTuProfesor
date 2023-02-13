@@ -84,11 +84,11 @@ CREATE TABLE Roster (
 
 CREATE TABLE Comment (
     CommentId SERIAL PRIMARY KEY,
-    RecordId uuid DEFAULT gen_random_uuid();
+    RecordId uuid DEFAULT gen_random_uuid(),
     RosterId int NOT NULL,
     SubjectName varchar(100),
     Content varchar(600) NOT NULL,
-    TokenId varchar(40),
+    UserId uuid not null,
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
     ModifiedAt TIMESTAMP,
     FOREIGN KEY (RosterId)
@@ -98,22 +98,12 @@ CREATE TABLE Comment (
 CREATE TABLE Vote (
     VoteId SERIAL PRIMARY KEY,
     CommentId int NOT NULL,
+    UserId uuid not null,
     Approval boolean NULL,
-    Likes int NOT NULL,
-    Dislikes int NOT NULL,
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
     ModifiedAt TIMESTAMP,
     FOREIGN KEY (CommentId)
         REFERENCES Comment (CommentId)
-);
-
-CREATE TABLE Scale (
-    ScaleId SERIAL PRIMARY KEY,
-    Code varchar(3) UNIQUE,
-    Name varchar(30) UNIQUE,
-    Description varchar(250),
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP
 );
 
 CREATE TABLE Grade (
@@ -127,6 +117,15 @@ CREATE TABLE Grade (
         REFERENCES Scale (ScaleId),
     FOREIGN KEY (CommentId)
         REFERENCES Comment (CommentId)
+);
+
+CREATE TABLE Scale (
+    ScaleId SERIAL PRIMARY KEY,
+    Code varchar(3) UNIQUE,
+    Name varchar(30) UNIQUE,
+    Description varchar(250),
+    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
+    ModifiedAt TIMESTAMP
 );
 
 CREATE TABLE RosterScale (

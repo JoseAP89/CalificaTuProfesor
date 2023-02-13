@@ -4,6 +4,7 @@ namespace back_csharp._dtos;
 
 public class FullCommentDB
 {
+    // ROSTER
     [Column("rosterrosterid")]
     public int RosterRosterid { get; set; }
     [Column("rostercampusid")]
@@ -23,6 +24,8 @@ public class FullCommentDB
     [Column("rostermodifiedat")]
     public DateTime? RosterModifiedat {get; set;}
     [Column("rosterrecordid")]
+
+    // COMMENT
     public Guid RosterRecordid {get; set;}
     [Column("commentcommentid")]
     public int CommentCommentid {get; set;}
@@ -30,8 +33,8 @@ public class FullCommentDB
     public int CommentRosterid {get; set;}
     [Column("commentcontent")]
     public string CommentContent {get; set;}
-    [Column("commenttokenid")]
-    public string CommentTokenid {get; set;}
+    [Column("commentuserid")]
+    public Guid CommentUserid {get; set;}
     [Column("commentcreatedat")]
     public DateTime CommentCreatedat {get; set;}
     [Column("commentmodifiedat")]
@@ -40,6 +43,8 @@ public class FullCommentDB
     public Guid CommentRecordid {get; set;}
     [Column("commentsubjectname")]
     public string CommentSubjectname {get; set;}
+
+    // GRADE
     [Column("gradegradeid")]
     public int GradeGradeid {get; set;}
     [Column("gradescaleid")]
@@ -51,6 +56,8 @@ public class FullCommentDB
     [Column("gradecreatedat")]
     public DateTime GradeCreatedat {get; set;}
     [Column("grademodifiedat")]
+
+    // SCALE
     public DateTime? GradeModifiedat {get; set;}
     [Column("scalescaleid")]
     public int ScaleScaleid {get; set;}
@@ -64,18 +71,18 @@ public class FullCommentDB
     public DateTime ScaleCreatedat {get; set;}
     [Column("scalemodifiedat")]
     public DateTime? ScaleModifiedat {get; set;}
+
+    // VOTE
     [Column("votevoteid")]
     public int VoteVoteid {get; set;}
     [Column("votecommentid")]
     public int VoteCommentid {get; set;}
     [Column("voteapproval")]
+    public Guid VoteUserid {get; set;}
+    [Column("voteuserid")]
     public bool? VoteApproval {get; set;}
     [Column("votecreatedat")]
     public DateTime VoteCreatedat {get; set;}
     [Column("votemodifiedat")]
     public DateTime? VoteModifiedat {get; set;}
-    [Column("votelikes")]
-    public int VoteLikes {get; set;}
-    [Column("votedislikes")]
-    public int VoteDislikes {get; set;}
 }

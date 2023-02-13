@@ -62,9 +62,14 @@
   }
 }
 
-.paginator-item {
-  margin-top: 20px;
-  font-size: 1.1rem;
+.paginator-box{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 40px;
+  .paginator-item {
+    margin-top: 20px;
+    font-size: 1.1rem;
+  }
 }
 
 @media (max-width: 690px) {

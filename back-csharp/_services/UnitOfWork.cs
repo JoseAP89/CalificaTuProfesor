@@ -8,7 +8,7 @@ namespace back_csharp._services;
 
 public class UnitOfWork: IUnitOfWork
 {
-    private readonly DbContext _context;
+    private readonly TeachersContext _context;
     private readonly IConfiguration _config;
     private readonly IMapper _mapper;
     private IUniversityRepo _universities;

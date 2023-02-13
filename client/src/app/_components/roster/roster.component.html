@@ -57,16 +57,16 @@
 
   <div class="paginator-box">
     <mat-form-field appearance="fill">
-      <mat-label>Select an option</mat-label>
+      <mat-label>Selecciona el tipo de ordenamiento</mat-label>
       <mat-select [(value)]="sortPage" (selectionChange)="onFilterChange()">
-        <ng-container *ngFor="let sp of SortPaginatorValues">
+        <ng-container *ngFor="let sp of sortPaginatorValues">
           <mat-option value="{{sp.id}}">{{sp.value}}</mat-option>
         </ng-container>
       </mat-select>
     </mat-form-field>
     <mat-paginator class="paginator-item" itemsPerPageLabel="Comentarios por página: " nextPageLabel="siguiente"
       previousPageLabel="anterior" (page)="handlePageEvent($event)" [length]="totalLength" [pageSize]="pageSize"
-      [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Slecciona la página">
+      [pageSizeOptions]="" aria-label="Slecciona la página">
     </mat-paginator>
 
   </div>

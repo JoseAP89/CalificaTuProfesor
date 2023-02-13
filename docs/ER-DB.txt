@@ -51,17 +51,16 @@ recordId uuid
 rosterId int fk >- Roster.rosterId
 subjectName varchar
 content varchar
-tokenId varchar
+userId varchar
 createdAt date
 modifiedAt date
 
 Vote
 --
 voteId int pk
-commentId int fk - Comment.commentId
+commentId int fk >- Comment.commentId
+userId varchar
 approval boolean
-likes int
-dislikes int
 createdAt date
 modifiedAt date
 
