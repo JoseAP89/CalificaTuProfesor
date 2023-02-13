@@ -66,79 +66,37 @@ public class RatingRepo: IRatingRepo
 
     public async Task<TableData<CommentDTO>> GetCommentsByRosterAsync(int rosterId, int pageSize, SortPaginator pag, int pageNumber = 0)
     {
-        using var connection = new NpgsqlConnection(_connectionString);
-        // Create a query that retrieves all authors"    
-        var sql = @$"
-            select 
-			r.rosterid AS RosterRosterid,	r.campusid AS RosterCampusid,	r.teachername AS RosterTeachername,	r.teacherlastname1 AS RosterTeacherlastname1,	r.teacherlastname2 AS RosterTeacherlastname2,	r.unistructureid AS RosterUnistructureid,	r.structurename AS RosterStructurename,	r.createdat AS RosterCreatedat,	r.modifiedat AS RosterModifiedat,	r.recordid AS RosterRecordid,
-			c.commentid AS CommentCommentid,	c.rosterid AS CommentRosterid,	c.content AS CommentContent,	c.userid AS CommentUserid,	c.createdat AS CommentCreatedat,	c.modifiedat AS CommentModifiedat,	c.recordid AS CommentRecordid,	c.subjectname AS CommentSubjectname,
-			g.gradeid AS GradeGradeid,	g.scaleid AS GradeScaleid,	g.commentid AS GradeCommentid,	g.stars AS GradeStars,	g.createdat AS GradeCreatedat,	g.modifiedat AS GradeModifiedat,
-			s.scaleid AS ScaleScaleid,	s.code AS ScaleCode,	s.name AS ScaleName,	s.description AS ScaleDescription,	s.createdat AS ScaleCreatedat,	s.modifiedat AS ScaleModifiedat,
-			v.voteid AS VoteVoteid,	v.commentid AS VoteCommentid, v.userid AS VoteUserid ,v.approval AS VoteApproval,	v.createdat AS VoteCreatedat,	v.modifiedat AS VoteModifiedat	
-			FROM roster r
-            INNER JOIN comment c ON r.rosterid=c.rosterid 
-            INNER JOIN grade g ON c.commentId=g.commentId 
-            INNER JOIN scale s ON g.scaleid=s.scaleid 
-			INNER JOIN vote v ON c.commentid=v.commentid 
-            WHERE r.rosterid={rosterId} 
-        ";
-        // Use the Query method to execute the query and return a list of objects
-        List<FullCommentDB> commentDB = (await connection.QueryAsync<FullCommentDB>(sql))
-            .ToList();
-        if (commentDB == null || commentDB.Count == 0)
+        var comments = await _context.Comments
+            .Include(c => c.Grades)
+            .ThenInclude(g => g.Scale)
+            .Include(c => c.Votes)
+            .AsSplitQuery()
+            .ToListAsync()
+            ;
+        if (comments == null || comments.Count == 0)
         {
             return null;
         }
-        var fullCommentDto = commentDB.Select(c => c.ConvertToFullCommentDTO()).GroupBy( f => f.Comment.CommentId);
-        var comments = new List<CommentDTO>();
-        foreach (var item in fullCommentDto)
-        {
-            var comment = new CommentDTO();
-            var firstComment = item.FirstOrDefault();   
-            comment.CommentId = item.Key;
-            comment.SubjectName = firstComment.Comment.SubjectName;
-            comment.Content = firstComment.Comment.Content;
-            comment.UserId = firstComment.Comment.UserId;
-            comment.RecordId = firstComment.Comment.RecordId;
-            comment.RosterId = firstComment.Comment.RosterId;
-            comment.CreatedAt = firstComment.Comment.CreatedAt;
-            comment.ModifiedAt = firstComment.Comment.ModifiedAt;
-            comment.Grades = _mapper.Map<List<GradeDTO>>(item.Select( c => c.Grade));
-            comment.Votes = new List<VoteDTO>();
-            foreach (var v in item.Select(c => c.Vote))
-            {
-                comment.Votes.Append(v);
-                if (v.Approval.HasValue && v.Approval.Value)
-                {
-                    comment.Likes++;
-                }
-                if (v.Approval.HasValue && !v.Approval.Value)
-                {
-                    comment.Dislikes++;
-                }
-            }
-            comments.Add(comment);
-        }
-        var commentsSorted = comments.AsEnumerable();
+        var commentsSorted = _mapper.Map<List<CommentDTO>>(comments).AsEnumerable();
         switch (pag)
         {
             case SortPaginator.DateAsc:
-                commentsSorted = comments.OrderBy( c => c.CreatedAt);
+                commentsSorted = commentsSorted.OrderBy( c => c.CreatedAt);
                 break;
             case SortPaginator.DateDesc:
-                commentsSorted = comments.OrderByDescending( c => c.CreatedAt);
+                commentsSorted = commentsSorted.OrderByDescending( c => c.CreatedAt);
                 break;
             case SortPaginator.MostLiked:
-                commentsSorted = comments.OrderBy( c => c.Likes).ThenByDescending( c => c.CreatedAt);
+                commentsSorted = commentsSorted.OrderBy( c => c.Likes).ThenByDescending( c => c.CreatedAt);
                 break;
             case SortPaginator.MostDisliked:
-                commentsSorted = comments.OrderBy( c => c.Dislikes).ThenByDescending( c => c.CreatedAt);
+                commentsSorted = commentsSorted.OrderBy( c => c.Dislikes).ThenByDescending( c => c.CreatedAt);
                 break;
             case SortPaginator.SubjectAsc:
-                commentsSorted = comments.OrderBy( c => c.SubjectName);
+                commentsSorted = commentsSorted.OrderBy( c => c.SubjectName);
                 break;
             case SortPaginator.SubjectDesc:
-                commentsSorted = comments.OrderByDescending( c => c.SubjectName);
+                commentsSorted = commentsSorted.OrderByDescending( c => c.SubjectName);
                 break;
             default:
                 break;
