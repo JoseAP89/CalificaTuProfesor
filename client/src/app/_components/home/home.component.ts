@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
     let searchValueInput = document.querySelector("#search-value");
     const keyup$ = fromEvent(searchValueInput, 'keyup');
     keyup$.pipe(
-      debounceTime(300)
+      debounceTime(400)
     ).subscribe( (event: any) => {
       this.onSearch(event);
     });
