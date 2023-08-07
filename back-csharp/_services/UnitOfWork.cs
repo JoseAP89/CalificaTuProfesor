@@ -18,6 +18,7 @@ public class UnitOfWork: IUnitOfWork
     private IRosterRepo _roster;
     private IScaleRepo _scale;
     private IRatingRepo _rating;
+    private IVoteRepo _vote;
 
     public UnitOfWork(TeachersContext context, IConfiguration config, IMapper mapper)
     {
@@ -33,6 +34,7 @@ public class UnitOfWork: IUnitOfWork
     public IRosterRepo Roster => _roster ??= new RosterRepo(_context, _config);
     public IScaleRepo Scale => _scale ??= new ScaleRepo(_context, _config);
     public IRatingRepo Ratings => _rating ??= new RatingRepo(_context, _config, _mapper);
+    public IVoteRepo Votes => _vote ??= new VoteRepo(_context, _config, _mapper);
 
     public async Task Save()
     {

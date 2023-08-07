@@ -11,5 +11,6 @@ public interface IUnitOfWork
     IRosterRepo Roster { get; }
     IScaleRepo Scale { get; }
     IRatingRepo Ratings { get; }
+    IVoteRepo Votes { get; }
     Task Save();
 }

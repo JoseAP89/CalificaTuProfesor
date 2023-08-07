@@ -71,7 +71,7 @@ public class RatingRepo: IRatingRepo
             .ThenInclude(g => g.Scale)
             .Include(c => c.Votes)
             .AsSplitQuery()
-            .AsNoTrackingWithIdentityResolution()
+            .AsNoTracking()
             .ToListAsync()
             ;
         if (comments == null || comments.Count == 0)
