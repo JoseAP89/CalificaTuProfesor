@@ -75,6 +75,11 @@ export class RosterComponent implements OnInit{
     this.ratingService.currentUserId.subscribe({next: r => this.currentUserId = r});
   }
 
+  /** Determines if the current user has voted or not in an specified comment, either a like or a dislike.*/
+  hasVoted(comment: CommentDTO): boolean{
+    return comment.votes.find(v => v.userId == this.currentUserId)?.approval;
+  }
+
   getOrderSelect(){
     for (let value in SortPaginator) {
       let n = Number(value);

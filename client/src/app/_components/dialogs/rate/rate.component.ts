@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { firstValueFrom } from 'rxjs';
 import { CommentDTO, Grade, Roster, RosterDB, Scale, Vote } from 'src/app/_models/business';
 import { RatingService } from 'src/app/_services/rating.service';
 import { ScaleService } from 'src/app/_services/scale.service';
@@ -112,14 +113,14 @@ export class RateComponent implements OnInit {
     return this.rateForm.valid && this.isCommentValid() && this.averageRate>0;
   }
 
-  onSubmit(){
+  async onSubmit(){
     if (this.isDataValid()) {
       let comment = new CommentDTO();
       comment.recordId = null;
       comment.content = this.comment;
       comment.rosterId = this.roster.rosterId!;
       comment.subjectName = this.subjectName.value;
-      comment.userId = this.currentUserId;
+      comment.userId = await firstValueFrom(this.ratingService.checkSetAndGetCurrentUserID());
       comment.grades = [];
       for (let i = 0; i < this._scales.length; i++) {
         const esc = this._scales[i];

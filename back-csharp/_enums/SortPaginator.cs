@@ -1,4 +1,4 @@
-﻿namespace back_csharp._models.Enums;
+﻿namespace back_csharp._enums;
 
 public enum SortPaginator
 {

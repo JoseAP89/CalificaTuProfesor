@@ -34,6 +34,12 @@ export class RatingService implements OnDestroy {
     this._userId.next(value);
   }
 
+  public checkSetAndGetCurrentUserID(){
+    let id = localStorage.getItem(this._name);
+    this._userId.next(id);
+    return this.currentUserId;
+  }
+
   // HTTP SERVICES
 
   public addComment(comment: CommentDTO): Observable<CommentDTO> {

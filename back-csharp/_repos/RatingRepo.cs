@@ -2,9 +2,9 @@
 using back_csharp._contracts;
 using back_csharp._data;
 using back_csharp._dtos;
+using back_csharp._enums;
 using back_csharp._helpers;
 using back_csharp._models;
-using back_csharp._models.Enums;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;

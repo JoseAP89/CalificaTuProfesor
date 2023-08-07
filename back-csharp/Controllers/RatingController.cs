@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using back_csharp._contracts;
 using back_csharp._dtos;
+using back_csharp._enums;
 using back_csharp._models;
-using back_csharp._models.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +10,9 @@ namespace back_csharp.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+/*  This controller handles Comments and Grade tabe functionalities, as well as the creation of the Vote list,
+ *  but the voting process itself is managed by the VoteController
+ *  */
 public class RatingController : ControllerBase
 {
     private readonly IUnitOfWork _uow;

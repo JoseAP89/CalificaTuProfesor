@@ -48,8 +48,8 @@
         {{comment.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}
       </div>
       <div class='buttons-block'>
-        <mat-icon class="like-it btn" >thumb_up</mat-icon>
-        <mat-icon class="dislike-it btn" >thumb_down</mat-icon>
+        <mat-icon class="btn" [ngClass]="{ 'chosen-btn' : hasVoted(comment) === true}">thumb_up</mat-icon>
+        <mat-icon class="btn" [ngClass]="{ 'chosen-btn' : hasVoted(comment) === false}" >thumb_down</mat-icon>
         <mat-icon class="report-it btn" >add_alert</mat-icon>
       </div>
     </div>
