@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, delay, map, of } from 'rxjs';
+import { Observable, debounceTime, delay, fromEvent, map, of } from 'rxjs';
 import { Vessel } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 import { RosterService } from 'src/app/_services/roster.service';
@@ -11,7 +11,7 @@ import { SnackbarService } from 'src/app/_services/snackbar.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
   public searchValue: string;
   public selectedOption: Vessel;
@@ -32,11 +32,23 @@ export class HomeComponent {
     this.searchValue = '';
   }
 
-  onSearch(input: string) {
-    this.searchValue = input;
+  ngOnInit(): void {
+    let searchValueInput = document.querySelector("#search-value");
+    const keyup$ = fromEvent(searchValueInput, 'keyup');
+    keyup$.pipe(
+      debounceTime(300)
+    ).subscribe( (event: any) => {
+      this.onSearch(event);
+    });
+  }
+
+
+  onSearch(input: any) {
+    this.searchValue = input.target.value;
+    //this.searchValue = input;
     this.showOptions = true;
     if (this.typeOfSearch == "P") { // Profesor
-      this.options = this.rosterService.getTeacherCampus(input).pipe(
+      this.options = this.rosterService.getTeacherCampus(this.searchValue).pipe(
         map( res => {
           return res.map( r => {
             // [roster , universidad]
@@ -47,7 +59,7 @@ export class HomeComponent {
       );
 
     } else { // Campus
-      this.options = this.compusService.getCampusWithUniversity(input).pipe(
+      this.options = this.compusService.getCampusWithUniversity(this.searchValue).pipe(
         map( res => {
           return res.map( r => {
             // [campus , universidad]

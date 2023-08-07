@@ -18,11 +18,11 @@
     <mat-form-field class="search-form-field">
       <mat-label>{{typeOfSearch == "P" ? "Buscar Profesor" : "Buscar Campus"}}</mat-label>
       <input matInput
+        id="search-value"
         #SearchVal
         type="search"
         [(ngModel)]="searchValue"
         autocomplete="off"
-        (keyup)="onSearch(SearchVal.value)"
         (focus)="changeShowOptions(true)"
       >
       <button  class="close-options-btn" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearchValue()" [hidden]="searchValue==null || searchValue.length==0">
