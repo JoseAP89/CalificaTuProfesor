@@ -98,6 +98,16 @@ export class RosterComponent implements OnInit{
     });
   }
 
+  countVotes(comment: CommentDTO, approval: boolean): number {
+    let res = 0;
+    for (const c of comment.votes) {
+      if (c.approval === approval) {
+        res++;
+      }
+    }
+    return res;
+  }
+
   /** Determines if the current user has voted or not in an specified comment, either a like or a dislike.*/
   hasVoted(comment: CommentDTO): boolean{
     return comment.votes.find(v => v.userId == this.currentUserId)?.approval;

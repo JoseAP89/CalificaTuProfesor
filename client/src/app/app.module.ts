@@ -26,6 +26,7 @@ import { RateComponent } from './_components/dialogs/rate/rate.component';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatBadgeModule} from '@angular/material/badge';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MatSliderModule,
     MatExpansionModule,
     MatPaginatorModule,
+    MatBadgeModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
