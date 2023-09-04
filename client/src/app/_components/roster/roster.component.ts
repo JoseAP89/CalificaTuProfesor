@@ -84,18 +84,12 @@ export class RosterComponent implements OnInit{
       this.snackbarService.showErrorMessage("You cannot vote your own comment.");
       return;
     }
-    if (!!this.currentUserId && comment.votes.some( v => v.userId == this.currentUserId && approval == v.approval)) {
-      this.snackbarService.showErrorMessage("You cannot vote twice for the same approval value.");
-      return;
-    }
-    console.log("comment:", comment);
     let vote = new VoteDTO();
     vote.approval = approval;
     vote.commentId = comment.commentId;
     vote.userId = this.currentUserId;
     this.voteService.addVote(vote).subscribe({
       next: res => {
-        console.log("res:", res);
         this.getComments();
       },
       error: e => {

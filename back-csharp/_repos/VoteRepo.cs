@@ -34,11 +34,14 @@ public class VoteRepo: IVoteRepo
         var userVote = await GetByUserAndCommentId(vote.UserId, vote.CommentId);
         if (userVote!=null)
         {
-            if (userVote.Approval == voteDto.Approval)
+            if (userVote.Approval == voteDto.Approval) // if it is the same boolean value then remove the vote form the comment
             {
-                throw new BadHttpRequestException("You cannot vote the same approval twice");
+                userVote.Approval = null;
             }
-            userVote.Approval = vote.Approval;
+            else
+            {
+                userVote.Approval = vote.Approval;
+            }
             userVote.ModifiedAt = DateTime.Now;
             _context.Update(userVote);
         } 
