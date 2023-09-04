@@ -138,6 +138,13 @@ export class CommentDTO {
   createdAt: string;
 }
 
+export class VoteDTO {
+  voteId: number;
+  commentId: number;
+  userId: string;
+  approval: boolean|null;
+}
+
 export class RosterRating {
   rosterId: number;
   averageGrade: number;

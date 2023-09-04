@@ -1,1 +1,4 @@
-**** Notes about the taks to be done ****
+**** Notes about the tasks to be done ****
++	It was added the upvote and downvote functionality, currently every comment brings the list of votes it has on the
+	system, is there a better way withoug bringing all that info for every comment??  [03/09/2023]
++	There is a need for an error middleware on the backend to better improve the messages sent to the client

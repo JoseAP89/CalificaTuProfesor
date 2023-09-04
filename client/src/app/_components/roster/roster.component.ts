@@ -2,13 +2,15 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { CommentDTO, RosterDB, RosterRating, Scale, SortPaginator, UniStructure, Vessel } from 'src/app/_models/business';
+import { CommentDTO, RosterDB, RosterRating, Scale, SortPaginator, UniStructure, Vessel, VoteDTO } from 'src/app/_models/business';
 import { RosterService } from 'src/app/_services/roster.service';
 import { UnistructureService } from 'src/app/_services/unistructure.service';
 import { RateComponent } from '../dialogs/rate/rate.component';
 import { RatingService } from 'src/app/_services/rating.service';
 import { ScaleService } from 'src/app/_services/scale.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { VoteService } from 'src/app/_services/vote.service';
+import { SnackbarService } from 'src/app/_services/snackbar.service';
 
 @Component({
   selector: 'app-roster',
@@ -40,7 +42,9 @@ export class RosterComponent implements OnInit{
     private ratingService: RatingService,
     private uniStructureService: UnistructureService,
     private scaleService: ScaleService,
+    private voteService: VoteService,
     private dialog: MatDialog,
+    private snackbarService: SnackbarService,
   ) {
     this.scales = [];
     this.comments = [];
@@ -73,6 +77,31 @@ export class RosterComponent implements OnInit{
 
   getCurrentUserId(){
     this.ratingService.currentUserId.subscribe({next: r => this.currentUserId = r});
+  }
+
+  voteComment(comment: CommentDTO, approval: boolean){
+    if (!!this.currentUserId && comment.userId == this.currentUserId) {
+      this.snackbarService.showErrorMessage("You cannot vote your own comment.");
+      return;
+    }
+    if (!!this.currentUserId && comment.votes.some( v => v.userId == this.currentUserId && approval == v.approval)) {
+      this.snackbarService.showErrorMessage("You cannot vote twice for the same approval value.");
+      return;
+    }
+    console.log("comment:", comment);
+    let vote = new VoteDTO();
+    vote.approval = approval;
+    vote.commentId = comment.commentId;
+    vote.userId = this.currentUserId;
+    this.voteService.addVote(vote).subscribe({
+      next: res => {
+        console.log("res:", res);
+        this.getComments();
+      },
+      error: e => {
+        this.snackbarService.showErrorMessage(e?.message || "There was an error voting the comment.");
+      }
+    });
   }
 
   /** Determines if the current user has voted or not in an specified comment, either a like or a dislike.*/

@@ -34,6 +34,10 @@ public class VoteRepo: IVoteRepo
         var userVote = await GetByUserAndCommentId(vote.UserId, vote.CommentId);
         if (userVote!=null)
         {
+            if (userVote.Approval == voteDto.Approval)
+            {
+                throw new BadHttpRequestException("You cannot vote the same approval twice");
+            }
             userVote.Approval = vote.Approval;
             userVote.ModifiedAt = DateTime.Now;
             _context.Update(userVote);
