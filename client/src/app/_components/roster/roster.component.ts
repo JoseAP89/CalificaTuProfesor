@@ -81,7 +81,7 @@ export class RosterComponent implements OnInit{
 
   async voteComment(comment: CommentDTO, approval: boolean){
     if (!!this.currentUserId && comment.userId == this.currentUserId) {
-      this.snackbarService.showErrorMessage("You cannot vote your own comment.");
+      this.snackbarService.showErrorMessage("No puedes votar tu propio comentario.");
       return;
     }
     let vote = new VoteDTO();
@@ -98,7 +98,7 @@ export class RosterComponent implements OnInit{
         this.getComments();
       },
       error: e => {
-        this.snackbarService.showErrorMessage(e?.message || "There was an error voting the comment.");
+        this.snackbarService.showErrorMessage(e?.message || "Hubó un error creando el voto.");
       }
     });
   }
