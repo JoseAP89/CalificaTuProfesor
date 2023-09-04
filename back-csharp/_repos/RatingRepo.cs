@@ -67,6 +67,7 @@ public class RatingRepo: IRatingRepo
     public async Task<TableData<CommentDTO>> GetCommentsByRosterAsync(int rosterId, int pageSize, SortPaginator pag, int pageNumber = 0)
     {
         var comments = await _context.Comments
+            .Where(c => c.RosterId == rosterId)
             .Include(c => c.Grades)
             .ThenInclude(g => g.Scale)
             .Include(c => c.Votes)

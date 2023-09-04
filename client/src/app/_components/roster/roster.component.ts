@@ -26,7 +26,7 @@ export class RosterComponent implements OnInit{
   public rosterRating: RosterRating;
   public rosterUniStructure: Vessel;
   public scales: Scale[];
-  public comments: CommentDTO[];
+  public comments: CommentDTO[] = [];
 
   private pageEvent: PageEvent;
   public totalLength: number;
@@ -60,7 +60,7 @@ export class RosterComponent implements OnInit{
 
   ngOnInit(): void {
     this.getCurrentUserId();
-    this.paginator._intl.itemsPerPageLabel="Comentarios por página";
+    this.paginator._intl.itemsPerPageLabel="Comentarios por página - ";
     this.paginator._intl.nextPageLabel="página siguiente";
     this.paginator._intl.previousPageLabel="página anterior";
     const recordId = this.route.snapshot.paramMap.get('recordId') ?? "";
