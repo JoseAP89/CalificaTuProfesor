@@ -1,4 +1,5 @@
 // https://dbdiagram.io/d/64d0317302bd1c4a5e53e35c
+
 Table "UniStructure" {
   "UniStructureId" SERIAL [pk, increment]
   "Name" VARCHAR(300) [not null]
