@@ -35,8 +35,8 @@ export class RatingService implements OnDestroy {
   }
 
   public checkSetAndGetCurrentUserID(){
-    let id = localStorage.getItem(this._name);
-    this._userId.next(id);
+    let userId = localStorage.getItem(this._name);
+    this._userId.next(userId);
     return this.currentUserId;
   }
 

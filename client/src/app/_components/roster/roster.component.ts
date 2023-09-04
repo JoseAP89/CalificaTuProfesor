@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import { CommentDTO, RosterDB, RosterRating, Scale, SortPaginator, UniStructure, Vessel, VoteDTO } from 'src/app/_models/business';
 import { RosterService } from 'src/app/_services/roster.service';
 import { UnistructureService } from 'src/app/_services/unistructure.service';
@@ -79,7 +79,7 @@ export class RosterComponent implements OnInit{
     this.ratingService.currentUserId.subscribe({next: r => this.currentUserId = r});
   }
 
-  voteComment(comment: CommentDTO, approval: boolean){
+  async voteComment(comment: CommentDTO, approval: boolean){
     if (!!this.currentUserId && comment.userId == this.currentUserId) {
       this.snackbarService.showErrorMessage("You cannot vote your own comment.");
       return;
@@ -89,7 +89,12 @@ export class RosterComponent implements OnInit{
     vote.commentId = comment.commentId;
     vote.userId = this.currentUserId;
     this.voteService.addVote(vote).subscribe({
-      next: res => {
+      next: async res => {
+        let userId = await firstValueFrom(this.ratingService.checkSetAndGetCurrentUserID());
+        if (!!!userId || !(typeof userId === 'string')) {
+          this.ratingService.setCurrentUserId(res.userId);
+          this.currentUserId = res.userId;
+        }
         this.getComments();
       },
       error: e => {
