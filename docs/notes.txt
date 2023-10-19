@@ -2,4 +2,5 @@
 +	It was added the upvote and downvote functionality, currently every comment brings the list of votes it has on the
 	system, is there a better way without bringing all that info for every comment??  [03/09/2023]
 +	There is a need for an error middleware on the backend to better improve the messages sent to the client
-+ 	Sorting select field it is not implemented yet, or it is not working. On the roster page.
++	About page needs TODO
++	Look for Campus TODO
