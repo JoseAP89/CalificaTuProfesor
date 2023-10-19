@@ -242,16 +242,4 @@ export class RosterComponent implements OnInit{
     this.getComments();
   }
 
-  addLike(){
-
-  }
-
-  addDislike(){
-
-  }
-
-  addWarning(){
-
-  }
-
 }
