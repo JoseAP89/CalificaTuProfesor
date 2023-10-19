@@ -71,11 +71,13 @@
         }
         .option-item:hover {
           background-color: aqua;
+          .parent-option {
+            color: #232b2b;
+          }
         }
         .hide-options-btn {
           cursor: pointer;
         }
-
       }
 
     }
