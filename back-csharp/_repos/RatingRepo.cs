@@ -80,6 +80,21 @@ public class RatingRepo: IRatingRepo
             return null;
         }
         var commentsSorted = _mapper.Map<List<CommentDTO>>(comments).AsEnumerable();
+        commentsSorted = commentsSorted.Select( c =>
+        {
+            foreach (var v in c.Votes)
+            {
+                if (v.Approval == true)
+                {
+                    c.Likes++;
+                }
+                else if (v.Approval == false)
+                {
+                    c.Dislikes++;
+                }
+            }
+            return c;
+        });
         switch (pag)
         {
             case SortPaginator.DateAsc:
@@ -103,21 +118,7 @@ public class RatingRepo: IRatingRepo
             default:
                 break;
         }
-        commentsSorted = commentsSorted.Select( c =>
-        {
-            foreach (var v in c.Votes)
-            {
-                if (v.Approval == true)
-                {
-                    c.Likes++;
-                }
-                else if (v.Approval == false)
-                {
-                    c.Dislikes++;
-                }
-            }
-            return c;
-        }).ToList();
+        commentsSorted = commentsSorted.ToList();
         var table = new TableData<CommentDTO>();
         table.PageNumber = pageNumber;
         table.PageSize = pageSize;
