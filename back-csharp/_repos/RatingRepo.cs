@@ -104,10 +104,10 @@ public class RatingRepo: IRatingRepo
                 commentsSorted = commentsSorted.OrderByDescending( c => c.CreatedAt);
                 break;
             case SortPaginator.MostLiked:
-                commentsSorted = commentsSorted.OrderBy( c => c.Likes).ThenByDescending( c => c.CreatedAt);
+                commentsSorted = commentsSorted.OrderByDescending( c => c.Likes).ThenByDescending( c => c.CreatedAt);
                 break;
             case SortPaginator.MostDisliked:
-                commentsSorted = commentsSorted.OrderBy( c => c.Dislikes).ThenByDescending( c => c.CreatedAt);
+                commentsSorted = commentsSorted.OrderByDescending( c => c.Dislikes).ThenByDescending( c => c.CreatedAt);
                 break;
             case SortPaginator.SubjectAsc:
                 commentsSorted = commentsSorted.OrderBy( c => c.SubjectName);
