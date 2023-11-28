@@ -2,6 +2,7 @@
 drop DATABASE if EXISTS teachers;
 create DATABASE teachers;
 
+\c teachers; -- psql command to connect to the new database teachers
 
 -- privileges: create them if you have not already
 
@@ -75,7 +76,7 @@ CREATE TABLE Roster (
     StructureName varchar(100),
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
     ModifiedAt TIMESTAMP,
-    UNIQUE(CampusId, TeacherName, TeacherLastname1, TeacherLastname2, SubjectName),
+    UNIQUE(CampusId, TeacherName, TeacherLastname1, TeacherLastname2),
     FOREIGN KEY (CampusId)
         REFERENCES Campus (CampusId),
     FOREIGN KEY (UniStructureId)
@@ -106,6 +107,15 @@ CREATE TABLE Vote (
         REFERENCES Comment (CommentId)
 );
 
+CREATE TABLE Scale (
+    ScaleId SERIAL PRIMARY KEY,
+    Code varchar(3) UNIQUE,
+    Name varchar(30) UNIQUE,
+    Description varchar(250),
+    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
+    ModifiedAt TIMESTAMP
+);
+
 CREATE TABLE Grade (
     GradeId SERIAL PRIMARY KEY,
     ScaleId int NOT NULL,
@@ -117,15 +127,6 @@ CREATE TABLE Grade (
         REFERENCES Scale (ScaleId),
     FOREIGN KEY (CommentId)
         REFERENCES Comment (CommentId)
-);
-
-CREATE TABLE Scale (
-    ScaleId SERIAL PRIMARY KEY,
-    Code varchar(3) UNIQUE,
-    Name varchar(30) UNIQUE,
-    Description varchar(250),
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP
 );
 
 CREATE TABLE RosterScale (
