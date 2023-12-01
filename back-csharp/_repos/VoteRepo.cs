@@ -31,6 +31,11 @@ public class VoteRepo: IVoteRepo
         if (voteDto.UserId == "") voteDto.UserId = null;
         var vote = _mapper.Map<Vote>(voteDto);
         vote.UserId = String.IsNullOrEmpty(voteDto.UserId) ? Guid.NewGuid() : new Guid(voteDto.UserId);
+        var comment = await _context.Comments.FirstOrDefaultAsync( c => c.CommentId == voteDto.CommentId);
+        if (comment.UserId == vote.UserId)
+        {
+            throw new Exception("No puedes votar tu propio comentario.");
+        }
         var userVote = await GetByUserAndCommentId(vote.UserId, vote.CommentId);
         if (userVote!=null)
         {
