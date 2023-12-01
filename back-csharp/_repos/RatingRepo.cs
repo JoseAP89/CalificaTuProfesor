@@ -6,6 +6,8 @@ using back_csharp._enums;
 using back_csharp._helpers;
 using back_csharp._models;
 using Dapper;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Server.IIS;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -58,8 +60,23 @@ public class RatingRepo: IRatingRepo
         var comment = _mapper.Map<Comment>(commentDTO);
         if(string.IsNullOrEmpty(commentDTO.UserId) ) comment.UserId = Guid.NewGuid();
         // it only carries one vote, the one of the user who created it
-        comment.Votes = comment.Votes.Select( v => { v.UserId = comment.UserId; return v;}).ToList(); 
+        comment.Votes = comment.Votes.Select( v => 
+        { 
+            v.UserId = comment.UserId; 
+            return v;
+        }).ToList(); 
         _context.Comments.Add(comment);
+        await _context.SaveChangesAsync();
+        return comment;  
+    }
+
+    public async Task<Comment> EditCommentContentAsync(CommentContentDTO commentDTO)
+    {
+        var comment = await _context.Comments.FirstOrDefaultAsync( c => c.CommentId == commentDTO.CommentId) 
+            ?? throw new Exception("Comment does not exist.");
+        if (comment.Content == commentDTO.Content) throw new Exception("Comment has the same content.");
+        comment.Content = commentDTO.Content;
+        _context.Comments.Update(comment);
         await _context.SaveChangesAsync();
         return comment;  
     }

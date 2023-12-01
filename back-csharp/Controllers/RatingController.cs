@@ -35,6 +35,17 @@ public class RatingController : ControllerBase
         return Ok(_mapper.Map<CommentDTO>(res));
     }
 
+    [HttpPatch("comment")]
+    public async Task<ActionResult<CommentDTO>> EditCommentContent(CommentContentDTO commentDTO)
+    {
+        var res = await _uow.Ratings.EditCommentContentAsync(commentDTO);
+        if (res == null)
+        {
+            return BadRequest("Hubo un error editando el comentario.");
+        }
+        return Ok(_mapper.Map<CommentDTO>(res));
+    }
+
     [HttpGet("roster/fullComments/{rosterId}")]
     public async Task<ActionResult<TableData<CommentDTO>>> GetFullComments(int rosterId, int pageSize, SortPaginator sortPage, int pageNumber = 0 )
     {
