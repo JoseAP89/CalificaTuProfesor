@@ -166,3 +166,8 @@ export class TableData<T> {
   pageNumber: number;
   pageSize: number;
 }
+
+export class CommentContentDTO {
+  commentId: number;
+  content: string;
+}

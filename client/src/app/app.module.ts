@@ -27,6 +27,7 @@ import {MatSliderModule} from '@angular/material/slider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatBadgeModule} from '@angular/material/badge';
+import { EditCommentComponent } from './_components/dialogs/edit-comment/edit-comment.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import {MatBadgeModule} from '@angular/material/badge';
     AddCampusComponent,
     RosterComponent,
     RateComponent,
+    EditCommentComponent,
   ],
   imports: [
     BrowserModule,

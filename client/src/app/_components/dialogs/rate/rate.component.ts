@@ -6,6 +6,7 @@ import { CommentDTO, Grade, Roster, RosterDB, Scale, Vote } from 'src/app/_model
 import { RatingService } from 'src/app/_services/rating.service';
 import { ScaleService } from 'src/app/_services/scale.service';
 import { SnackbarService } from 'src/app/_services/snackbar.service';
+import { MAX_LEN_COMMENT, MIN_LEN_COMMENT } from '../../constants';
 
 @Component({
   selector: 'app-rate',
@@ -14,8 +15,8 @@ import { SnackbarService } from 'src/app/_services/snackbar.service';
 })
 export class RateComponent implements OnInit {
 
-  public readonly MAX_LEN_COMMENT = 600;
-  public readonly MIN_LEN_COMMENT = 2;
+  public readonly MAX_LEN_COMMENT = MAX_LEN_COMMENT;
+  public readonly MIN_LEN_COMMENT = MIN_LEN_COMMENT;
   public rateForm: FormGroup;
   public _scales: Scale[];
   public scaleDescriptionStates: boolean[];

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, firstValueFrom } from 'rxjs';
-import { CommentDTO, RosterDB, RosterRating, Scale, SortPaginator, UniStructure, Vessel, VoteDTO } from 'src/app/_models/business';
+import { CommentContentDTO, CommentDTO, RosterDB, RosterRating, Scale, SortPaginator, UniStructure, Vessel, VoteDTO } from 'src/app/_models/business';
 import { RosterService } from 'src/app/_services/roster.service';
 import { UnistructureService } from 'src/app/_services/unistructure.service';
 import { RateComponent } from '../dialogs/rate/rate.component';
@@ -11,6 +11,7 @@ import { ScaleService } from 'src/app/_services/scale.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { VoteService } from 'src/app/_services/vote.service';
 import { SnackbarService } from 'src/app/_services/snackbar.service';
+import { EditCommentComponent } from '../dialogs/edit-comment/edit-comment.component';
 
 @Component({
   selector: 'app-roster',
@@ -77,6 +78,11 @@ export class RosterComponent implements OnInit{
 
   getCurrentUserId(){
     this.ratingService.currentUserId.subscribe({next: r => this.currentUserId = r});
+  }
+
+  canEdit(comment: CommentDTO): boolean {
+    // You can edit only your own comments
+    return !!this.currentUserId && comment.userId == this.currentUserId;
   }
 
   async voteComment(comment: CommentDTO, approval: boolean){
@@ -226,6 +232,26 @@ export class RosterComponent implements OnInit{
         if (res.userId) {
           this.ratingService.setCurrentUserId(res.userId);
         }
+      }
+    })
+  }
+
+  openEditCommentDialog(comment: CommentDTO, enterAnimationDuration: string = '500ms', exitAnimationDuration: string= '500ms'): void {
+    let ref = this.dialog.open<EditCommentComponent, CommentDTO, CommentContentDTO>(EditCommentComponent, {
+      data: comment,
+      enterAnimationDuration,
+      exitAnimationDuration,
+      disableClose: true,
+      width:'600px',
+      panelClass: 'dialog-box'
+    });
+    ref.afterClosed().subscribe({
+      next: res => {
+        if (res!=null && res.content != comment.content) {
+          this.ratingService.editComment(res).subscribe( r => {
+            this.getComments();
+          })
+        } 
       }
     })
   }

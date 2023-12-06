@@ -50,6 +50,7 @@
       <div class='buttons-block'>
         <mat-icon class="btn" [matBadge]="countVotes(comment, true)" matBadgeColor="primary" matBadgePosition="above before" [ngClass]="{ 'chosen-btn' : hasVoted(comment) === true}" (click)="voteComment(comment, true)">thumb_up</mat-icon>
         <mat-icon class="btn" [matBadge]="countVotes(comment, false)" matBadgeColor="warn" [ngClass]="{ 'chosen-btn' : hasVoted(comment) === false}" (click)="voteComment(comment, false)" >thumb_down</mat-icon>
+        <mat-icon *ngIf="canEdit(comment)" (click)="openEditCommentDialog(comment)">edit</mat-icon>
         <mat-icon class="report-it btn" >add_alert</mat-icon>
       </div>
     </div>

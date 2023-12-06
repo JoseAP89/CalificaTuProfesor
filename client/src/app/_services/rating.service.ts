@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { CommentDTO, RosterRating, SortPaginator, TableData } from '../_models/business';
+import { CommentContentDTO, CommentDTO, RosterRating, SortPaginator, TableData } from '../_models/business';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +45,11 @@ export class RatingService implements OnDestroy {
   public addComment(comment: CommentDTO): Observable<CommentDTO> {
     const url = `${this.baseUrl}/comment`;
     return this.http.post<CommentDTO>(url, comment);
+  }
+
+  public editComment(comment: CommentContentDTO): Observable<CommentDTO> {
+    const url = `${this.baseUrl}/comment`;
+    return this.http.patch<CommentDTO>(url, comment);
   }
 
   public getRosterRating(rosterId: number): Observable<RosterRating> {

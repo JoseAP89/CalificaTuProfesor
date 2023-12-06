@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>Edit Comment</h1>
+<div mat-dialog-content>
+    <mat-form-field class="form-box">
+        <textarea matInput
+            class="txt-area"
+            minRows="5"
+            maxRows="40"
+            [minlength]="MIN_LEN_COMMENT"
+            [maxlength]="MAX_LEN_COMMENT"
+            [(ngModel)] = "content"
+        >{{content}}</textarea>
+    </mat-form-field>
+    <div class="comment-data" [ngClass]="{
+            'bad-comment': content.length<MIN_LEN_COMMENT,
+            'good-comment': content.length>=MIN_LEN_COMMENT && content.length<MAX_LEN_COMMENT,
+            'warning-comment': content.length==MAX_LEN_COMMENT
+          }">
+        {{content.length}}/{{MAX_LEN_COMMENT}}
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button class="cancel-btn" mat-button mat-raised-button mat-dialog-close [mat-dialog-close]="null">Cancel</button>
+    <button class="ok-btn" mat-button mat-raised-button mat-dialog-close cdkFocusInitial (click)="onOk()">
+        Ok
+    </button>
+</div>

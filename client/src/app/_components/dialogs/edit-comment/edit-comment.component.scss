@@ -1,0 +1,19 @@
+.form-box {
+    width: 100%;
+
+    .txt-area {
+        text-align: justify;
+        width: 100%;
+    }
+}
+.bad-comment {
+    color: red;
+}
+
+.good-comment {
+    color: green;
+}
+
+.warning-comment {
+    color: #da9100;
+}
