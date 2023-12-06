@@ -5,5 +5,5 @@
 +	About page
 +	Look for Campus functionality
 +   Notifications functionality (front, backend, and table)
-+	Capability to edit your own comments 
 + 	How many times can can the same user create a comment?
++	When user updates his own comment it must update the date also, that very same updated date must be displayed on the interface
