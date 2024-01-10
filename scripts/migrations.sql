@@ -1,8 +1,8 @@
 -- initial setup 
-drop DATABASE if EXISTS teachers;
-create DATABASE teachers;
+--drop DATABASE if EXISTS teachers;
+--create DATABASE teachers;
 
-\c teachers; -- psql command to connect to the new database teachers
+--\c teachers; -- psql command to connect to the new database teachers
 
 -- privileges: create them if you have not already
 
@@ -12,6 +12,7 @@ create DATABASE teachers;
 --GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO joseap;
 --GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO joseap;
 
+-- You need to have the database first for the following commands
 -- dropping tables
 DROP TABLE IF EXISTS RosterScale;
 DROP TABLE IF EXISTS Grade;
