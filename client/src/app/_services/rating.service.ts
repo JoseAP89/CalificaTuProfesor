@@ -1,22 +1,34 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, firstValueFrom, iif, map, mergeMap, of, scheduled, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { CommentContentDTO, CommentDTO, RosterRating, SortPaginator, TableData } from '../_models/business';
+import { CommonService } from './common.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RatingService implements OnDestroy {
 
-  private _userId : BehaviorSubject<string>;
+  private _userId : BehaviorSubject<string> ;
   private _name = "userId";
 
   private baseUrl = environment.api_url + "/api/rating";
   constructor(
     private http: HttpClient,
+    private commonService: CommonService,
   ) {
-    this._userId = new BehaviorSubject<string>(localStorage.getItem(this._name) ?? null);
+    this._userId = new BehaviorSubject<string>(null);
+    let userId = localStorage.getItem(this._name);
+    if (!!userId) {
+      this.setCurrentUserId(userId);
+    } else { // it generates a new userId if there is none
+      this.commonService.generateUserId().subscribe({
+        next : r => {
+          this.setCurrentUserId(r);
+        }
+      })
+    }
   }
 
   ngOnDestroy(): void {
@@ -34,7 +46,7 @@ export class RatingService implements OnDestroy {
     this._userId.next(value);
   }
 
-  public checkSetAndGetCurrentUserID(){
+  public checkSetAndGetCurrentUserID(): Observable<string>{
     let userId = localStorage.getItem(this._name);
     this._userId.next(userId);
     return this.currentUserId;

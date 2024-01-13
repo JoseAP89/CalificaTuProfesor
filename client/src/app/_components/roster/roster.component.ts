@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, firstValueFrom } from 'rxjs';
+import { Observable, firstValueFrom, iif } from 'rxjs';
 import { CommentContentDTO, CommentDTO, RosterDB, RosterRating, Scale, SortPaginator, UniStructure, Vessel, VoteDTO } from 'src/app/_models/business';
 import { RosterService } from 'src/app/_services/roster.service';
 import { UnistructureService } from 'src/app/_services/unistructure.service';
@@ -77,7 +77,12 @@ export class RosterComponent implements OnInit{
   }
 
   getCurrentUserId(){
-    this.ratingService.currentUserId.subscribe({next: r => this.currentUserId = r});
+    this.ratingService.currentUserId.subscribe({
+      next: r => {
+        this.currentUserId = r;
+        return r;
+      }
+    });
   }
 
   canEdit(comment: CommentDTO): boolean {
