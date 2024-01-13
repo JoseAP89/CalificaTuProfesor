@@ -63,4 +63,5 @@ public class CommonRepo<T>: ICommonRepo<T>
     {
         return await _dbset.Where(exp).ToListAsync();
     }
+
 }

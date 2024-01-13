@@ -28,7 +28,6 @@ public class VoteRepo: IVoteRepo
 
     public async Task<Vote> AddVote(VoteDTO voteDto)
     {
-        if (voteDto.UserId == "") voteDto.UserId = null;
         var vote = _mapper.Map<Vote>(voteDto);
         vote.UserId = String.IsNullOrEmpty(voteDto.UserId) ? Guid.NewGuid() : new Guid(voteDto.UserId);
         var comment = await _context.Comments.FirstOrDefaultAsync( c => c.CommentId == voteDto.CommentId);
