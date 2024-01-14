@@ -174,7 +174,7 @@
       grid-column: list.slash( $numCols , $lastNode);
       display: flex;
       align-items: center;
-      justify-content: space-around;
+      justify-content: space-evenly;
       font-size: 1.9rem;
 
       .btn {
