@@ -45,7 +45,7 @@
         {{comment.content}}
       </div>
       <div class='created-at'>
-        {{ comment?.modifiedAt ?? comment.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}
+        {{ comment.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}
       </div>
       <div class='buttons-block'>
         <mat-icon class="btn" [matBadge]="countVotes(comment, true)" matBadgeColor="primary" matBadgePosition="above before" [ngClass]="{ 'chosen-btn' : hasVoted(comment) === true}" (click)="voteComment(comment, true)">thumb_up</mat-icon>

@@ -2,10 +2,10 @@
 +       Add a Common Repository.
 +	It was added the upvote and downvote functionality, currently every comment brings the list of votes it has on the
 	system, is there a better way without bringing all that info for every comment??  [03/09/2023]
-+	There is a need for an error middleware on the backend to better improve the messages sent to the client
++	There is a need for an error middleware on the backend to better improve the messages sent to the client, also I need to add an ApiException class to handle business logic errors in the app.
 +	About page
 +	Look for Campus functionality
 +   Notifications functionality (front, backend, and table)
-+ 	How many times can can the same user create a comment?(every 2 months)
-+	When user updates his own comment it must update the date also, that very same updated date must be displayed on the interface
++       If I delete the userId from localstorage and decide to add/vote then        a userId is generated automatically on the backend, make sure that
+        that new id is being assinged correctly on the frontend to the user.
 

@@ -19,6 +19,7 @@ public class RatingRepo: IRatingRepo
     private readonly IConfiguration _config;
     private readonly IMapper _mapper;
     private readonly string _connectionString;
+    private const double MIN_MONTHS_TO_COMMENT = 3.0;
 
     public RatingRepo(TeachersContext context, IConfiguration config, IMapper mapper)
     {
@@ -59,10 +60,26 @@ public class RatingRepo: IRatingRepo
     {
         var comment = _mapper.Map<Comment>(commentDTO);
         if(string.IsNullOrEmpty(commentDTO.UserId) ) comment.UserId = Guid.NewGuid();
-        // it only carries one vote, the one of the user who created it
+        var userComments = await _context.Comments.Where( c => c.UserId == comment.UserId &&
+            c.RosterId == commentDTO.RosterId
+        ).OrderByDescending( c => c.CreatedAt).FirstOrDefaultAsync();
+        if (userComments != null) 
+        {
+            // there is one comment already, business rule is to allow more comments for one user
+            // for the same teacher/roster if and only if it has passed MIN_MONTHS_TO_COMMENT or more months since his
+            // last comment.
+            double monthsPassed = DateTime.Now.Subtract(userComments.CreatedAt).Days / (365.2425 / 12.0);
+            if (monthsPassed < MIN_MONTHS_TO_COMMENT)
+            {
+                throw new Exception($"Ya has comentado con anterioridad al profesor. Deben pasar almenos {MIN_MONTHS_TO_COMMENT} meses para publicar otro comentario.");
+            }
+            
+        }
+        // it only carries one vote, the one of the user who created it, initially his vote is null
         comment.Votes = comment.Votes.Select( v => 
         { 
             v.UserId = comment.UserId; 
+            v.Approval = null;
             return v;
         }).ToList(); 
         _context.Comments.Add(comment);
