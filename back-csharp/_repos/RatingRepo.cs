@@ -75,6 +75,7 @@ public class RatingRepo: IRatingRepo
         var comment = await _context.Comments.FirstOrDefaultAsync( c => c.CommentId == commentDTO.CommentId) 
             ?? throw new Exception("Comment does not exist.");
         if (comment.Content == commentDTO.Content) throw new Exception("Comment has the same content.");
+        comment.ModifiedAt = DateTime.Now;
         comment.Content = commentDTO.Content;
         _context.Comments.Update(comment);
         await _context.SaveChangesAsync();
@@ -136,14 +137,16 @@ public class RatingRepo: IRatingRepo
                 break;
         }
         commentsSorted = commentsSorted.ToList();
-        var table = new TableData<CommentDTO>();
-        table.PageNumber = pageNumber;
-        table.PageSize = pageSize;
-        table.TotalElements = comments.Count;
-        table.Data = commentsSorted
-            .Skip(pageSize * pageNumber)
-            .Take(pageSize)
-            .ToList();
+        var table = new TableData<CommentDTO>
+        {
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalElements = comments.Count,
+            Data = commentsSorted
+                .Skip(pageSize * pageNumber)
+                .Take(pageSize)
+                .ToList()
+        };
         return table;
     }
 

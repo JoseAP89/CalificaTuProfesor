@@ -136,6 +136,7 @@ export class CommentDTO {
   likes: number;
   dislikes: number;
   createdAt: string;
+  modifiedAt: string;
 }
 
 export class VoteDTO {
