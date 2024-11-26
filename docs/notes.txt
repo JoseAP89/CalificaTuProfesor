@@ -6,7 +6,8 @@
 +	About page
 +	Look for Campus functionality
 +   Notifications functionality (front, backend, and table)
-+       If I delete the userId from localstorage and decide to add/vote then        a userId is generated automatically on the backend, make sure that
++       If I delete the userId from localstorage and decide to add/vote then a userId is generated automatically on the backend, make sure that
         that new id is being assinged correctly on the frontend to the user.
 +       Show a better validation for the comment-grade form.
 +       Show the default value for the sorting type on the comment's page.
++	Location of path in a file system should not be hardcoded but put into the appsettings.json	

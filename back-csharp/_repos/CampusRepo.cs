@@ -4,6 +4,7 @@ using back_csharp._dtos;
 using back_csharp._helpers;
 using Microsoft.EntityFrameworkCore;
 using back_csharp._data;
+using Npgsql;
 
 namespace back_csharp._repos;
 
@@ -75,8 +76,9 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
             .Trim()
             .ToLower()
             .RemoveDiacritics();
-        var campus= await _context.Set<Campus>().FromSqlRaw<Campus>(
-            $"SELECT * FROM Campus c WHERE LOWER(UNACCENT(c.Name)) LIKE '%{search}%'  LIMIT {MAX_RESULTS} ")
+        var campus = await _context.Set<Campus>().FromSqlInterpolated(
+                $"SELECT * FROM Campus c WHERE LOWER(UNACCENT(c.Name)) LIKE '%' || {search} || '%' LIMIT {MAX_RESULTS}"
+            )
             .AsNoTracking()
             .ToListAsync();
         var res = campus?.Select( x => 
@@ -91,8 +93,8 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
                 .Trim()
                 .ToLower()
                 .RemoveDiacritics();
-            var campusIds = await _context.Set<Campus>().FromSqlRaw<Campus>(
-                $"SELECT * FROM Campus c WHERE LOWER(UNACCENT(c.Name)) LIKE '%{search}%' LIMIT {MAX_RESULTS} ")
+            var campusIds = await _context.Set<Campus>().FromSqlInterpolated<Campus>(
+                $"SELECT * FROM Campus c WHERE LOWER(UNACCENT(c.Name)) LIKE '%' || {search} || '%' LIMIT {MAX_RESULTS} ")
                 .AsNoTracking()
                 .Select(x => x.CampusId)
                 .ToListAsync();
@@ -112,8 +114,8 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
         public async Task<Campus> AddCampus(CampusDto campusDto)
         {
             var name = campusDto.Name.ToLower().Trim().RemoveDiacritics();
-            var campuses = await _context.Set<University>().FromSqlRaw<University>(
-                $"SELECT * FROM campus u WHERE LOWER(UNACCENT(u.name)) LIKE '%{name}%' ")
+            var campuses = await _context.Set<University>().FromSqlInterpolated<University>(
+                $"SELECT * FROM campus u WHERE LOWER(UNACCENT(u.name)) LIKE '%' || {name} || '%' ")
                 .AsNoTracking()
                 .ToListAsync();
             if (campuses.Count>0 )
