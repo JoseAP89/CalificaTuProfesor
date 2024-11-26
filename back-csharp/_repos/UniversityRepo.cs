@@ -59,7 +59,7 @@ public class UniversityRepo: CommonRepo<University>, IUniversityRepo
         if (universitydto.ImgFile != null)
         {
             string img_name = universitydto.Name.Replace(" ", "_").ToLower().Trim();
-            string path = "/home/joseap/Documents/projects/CalificaTuProfesor/front/public/universities/";
+            string path = _config.GetValue<string>("Images:university");
             path += img_name + "." + universitydto.ImgType;
             var data = universitydto.ImgFile.Base64Decode();
             

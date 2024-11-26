@@ -30,7 +30,7 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
 
     public async Task<CampusDto> GetCampus(int id)
     {
-        string path = _config["Images:campus"];
+        string path = _config.GetValue<string>("Images:campus");
         var campus = from c in _context.Set<Campus>()
             join u in _context.Set<University>() on c.UniversityId equals u.UniversityId 
             join s in _context.Set<State>() on c.StateId equals s.StateId 
@@ -132,7 +132,7 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
             if (campusDto.ImgFile != null)
             {
                 string img_name = campusDto.Name.Replace(" ", "_").ToLower().Trim();
-                string path = "/home/joseap/Documents/projects/CalificaTuProfesor/front/public/campuses/";
+                string path = _config.GetValue<string>("Images:campus");
                 path += img_name + "." + campusDto.ImgType;
                 var data = campusDto.ImgFile.Base64Decode();
                 await File.WriteAllBytesAsync(path,data);
