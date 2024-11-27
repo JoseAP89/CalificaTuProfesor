@@ -8,3 +8,4 @@
         that new id is being assinged correctly on the frontend to the user.
 +       Show a better validation for the comment-grade form.
 +       Show the default value for the sorting type on the comment's page.
++	Add a button on the roster page to change number of pages required
