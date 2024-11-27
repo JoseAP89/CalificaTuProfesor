@@ -99,8 +99,9 @@ public class RatingRepo: IRatingRepo
         return comment;  
     }
 
-    public async Task<TableData<CommentDTO>> GetCommentsByRosterAsync(int rosterId, int pageSize, SortPaginator pag, int pageNumber = 0)
+    public async Task<TableData<CommentDTO>> GetCommentsByRosterAsync(int rosterId, int pageSize, SortPaginator pag, int pageNumber = 0, Guid? currentUserId = null)
     {
+        if(currentUserId == null) currentUserId = Guid.NewGuid();
         var comments = await _context.Comments
             .Where(c => c.RosterId == rosterId)
             .Include(c => c.Grades)
@@ -127,7 +128,12 @@ public class RatingRepo: IRatingRepo
                 {
                     c.Dislikes++;
                 }
+                if (currentUserId.ToString() == v.UserId)
+                {
+                    c.currentUserVote = v.Approval; 
+                }
             }
+            c.Votes = null; // to avoid send a large amount of votes per comment unnecessarily
             return c;
         });
         switch (pag)

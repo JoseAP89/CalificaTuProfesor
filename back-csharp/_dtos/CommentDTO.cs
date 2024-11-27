@@ -10,6 +10,7 @@ public class CommentDTO
     public string UserId { get; set; }
     public int Likes { get; set; }
     public int Dislikes { get; set; }
+    public bool? currentUserVote { get; set; }
     public IEnumerable<GradeDTO> Grades { get; set; }
     public IEnumerable<VoteDTO> Votes { get; set; }
     public DateTime CreatedAt { get; set; }

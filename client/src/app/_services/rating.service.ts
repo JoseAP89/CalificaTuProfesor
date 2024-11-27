@@ -69,12 +69,13 @@ export class RatingService implements OnDestroy {
     return this.http.get<RosterRating>(url);
   }
 
-  public GetFullComments(rosterId: number, pageSize: number, sortPage: SortPaginator, pageNumber: number = 0): Observable<TableData<CommentDTO>> {
+  public GetFullComments(rosterId: number, pageSize: number, sortPage: SortPaginator, pageNumber: number = 0, currentUserId: string = null): Observable<TableData<CommentDTO>> {
     const url = `${this.baseUrl}/roster/fullComments/${rosterId}`;
     let params = new HttpParams()
       .set("pageSize", pageSize)
       .set("sortPage", sortPage)
-      .set("pageNumber", pageNumber);
+      .set("pageNumber", pageNumber)
+      .set("currentUserId", currentUserId);
     return this.http.get<TableData<CommentDTO>>(url, {params});
   }
 

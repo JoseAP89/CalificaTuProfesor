@@ -114,19 +114,9 @@ export class RosterComponent implements OnInit{
     });
   }
 
-  countVotes(comment: CommentDTO, approval: boolean): number {
-    let res = 0;
-    for (const c of comment.votes) {
-      if (c.approval === approval) {
-        res++;
-      }
-    }
-    return res;
-  }
-
   /** Determines if the current user has voted or not in an specified comment, either a like or a dislike.*/
   hasVoted(comment: CommentDTO): boolean{
-    return comment.votes.find(v => v.userId == this.currentUserId)?.approval;
+    return comment.currentUserVote;
   }
 
   getOrderSelect(){
@@ -189,7 +179,7 @@ export class RosterComponent implements OnInit{
   }
 
   getComments(){
-    this.ratingService.GetFullComments(this.roster.rosterId, this.pageSize, this.sortPage, this.pageNumber).subscribe({
+    this.ratingService.GetFullComments(this.roster.rosterId, this.pageSize, this.sortPage, this.pageNumber, this.currentUserId).subscribe({
       next: res => {
         this.comments = res.data;
         this.pageNumber = res.pageNumber;

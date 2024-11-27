@@ -135,6 +135,7 @@ export class CommentDTO {
   votes: Array<Vote>;
   likes: number;
   dislikes: number;
+  currentUserVote?:	boolean;
   createdAt: string;
   modifiedAt: string;
 }

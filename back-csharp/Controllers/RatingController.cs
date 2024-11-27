@@ -47,9 +47,9 @@ public class RatingController : ControllerBase
     }
 
     [HttpGet("roster/fullComments/{rosterId}")]
-    public async Task<ActionResult<TableData<CommentDTO>>> GetFullComments(int rosterId, int pageSize, SortPaginator sortPage, int pageNumber = 0 )
+    public async Task<ActionResult<TableData<CommentDTO>>> GetFullComments(int rosterId, int pageSize, SortPaginator sortPage, int pageNumber = 0, Guid? currentUserId = null)
     {
-        var res = await _uow.Ratings.GetCommentsByRosterAsync(rosterId, pageSize, sortPage, pageNumber);
+        var res = await _uow.Ratings.GetCommentsByRosterAsync(rosterId, pageSize, sortPage, pageNumber, currentUserId);
         if (res == null)
         {
             return NotFound("No hay comentarios para el Profesor.");
