@@ -65,7 +65,7 @@
         </ng-container>
       </mat-select>
     </mat-form-field>
-    <mat-paginator class="paginator-item" itemsPerPageLabel="Comentarios por página: " nextPageLabel="siguiente"
+    <mat-paginator class="paginator-item" [pageSizeOptions]="pageSizeOptions" itemsPerPageLabel="Comentarios por página: " nextPageLabel="siguiente"
       previousPageLabel="anterior" (page)="handlePageEvent($event)" [length]="totalLength" [pageSize]="pageSize"
       [pageSizeOptions]="" aria-label="Slecciona la página">
     </mat-paginator>

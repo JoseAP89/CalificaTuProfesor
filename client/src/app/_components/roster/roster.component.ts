@@ -34,7 +34,7 @@ export class RosterComponent implements OnInit{
   public pageSize: number;
   public sortPage: SortPaginator;
   public pageNumber: number; // page 0-index based
-  public pageSizeOptions = [5, 10, 25, 100];
+  public pageSizeOptions = [5, 10, 25, 50];
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
