@@ -48,8 +48,8 @@
         {{ comment.createdAt | date: 'dd/MM/yyyy HH:mm:ss a'}}
       </div>
       <div class='buttons-block'>
-        <mat-icon class="btn" [matBadge]="comment.likes" matBadgeColor="primary" matBadgePosition="above before" [ngClass]="{ 'chosen-btn' : hasVoted(comment) === true}" (click)="voteComment(comment, true)">thumb_up</mat-icon>
-        <mat-icon class="btn" [matBadge]="comment.dislikes" matBadgeColor="warn" [ngClass]="{ 'chosen-btn' : hasVoted(comment) === false}" (click)="voteComment(comment, false)" >thumb_down</mat-icon>
+        <mat-icon class="btn" [matBadge]="comment.likes" matBadgeColor="primary" matBadgePosition="above before" [ngClass]="{ 'chosen-btn' : hasVoted(comment) === true, 'disable-btn' : hasVoted(comment) === null}" (click)="voteComment(comment, true)">thumb_up</mat-icon>
+        <mat-icon class="btn" [matBadge]="comment.dislikes" matBadgeColor="warn" [ngClass]="{ 'chosen-btn' : hasVoted(comment) === false, 'disable-btn' : hasVoted(comment) === null}" (click)="voteComment(comment, false)" >thumb_down</mat-icon>
         <mat-icon class="btn" *ngIf="canEdit(comment)" (click)="openEditCommentDialog(comment)">edit</mat-icon>
         <mat-icon class="report-it btn" >add_alert</mat-icon>
       </div>
