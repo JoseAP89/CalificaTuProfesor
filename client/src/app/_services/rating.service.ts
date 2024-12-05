@@ -64,6 +64,11 @@ export class RatingService implements OnDestroy {
     return this.http.patch<CommentDTO>(url, comment);
   }
 
+  public deleteComment(commentId: number): Observable<number> {
+    const url = `${this.baseUrl}/comment/${commentId}`;
+    return this.http.delete<number>(url);
+  }
+
   public getRosterRating(rosterId: number): Observable<RosterRating> {
     const url = `${this.baseUrl}/getRosterRating/${rosterId}`;
     return this.http.get<RosterRating>(url);

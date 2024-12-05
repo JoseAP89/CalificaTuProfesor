@@ -1,7 +1,7 @@
 import { BusinessException } from "../_models/business";
 
 /** Regresa el mensaje apropiado de error. */
-export function getHttpErrorMessage(error: any): string {
+export function getHttpErrorMessage(error: any, defaultMsg: string = "Hubo un error ejecutando la acción."): string {
   let errorStr = "";
   let businessEx: BusinessException = Object.assign(new BusinessException(), error.error);
   if((businessEx?.statusCode ?? 0) > 299 ){
@@ -12,7 +12,7 @@ export function getHttpErrorMessage(error: any): string {
   } else {
     errorStr = error.message;
   }
-  return errorStr;
+  return errorStr || defaultMsg;
 }
 
 /** Regresa si un objeto es de tipo string o no.*/

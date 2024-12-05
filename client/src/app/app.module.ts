@@ -28,6 +28,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatBadgeModule} from '@angular/material/badge';
 import { EditCommentComponent } from './_components/dialogs/edit-comment/edit-comment.component';
+import { CancelAcceptComponent } from './_components/dialogs/cancel-accept/cancel-accept.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { EditCommentComponent } from './_components/dialogs/edit-comment/edit-co
     RosterComponent,
     RateComponent,
     EditCommentComponent,
+    CancelAcceptComponent,
   ],
   imports: [
     BrowserModule,

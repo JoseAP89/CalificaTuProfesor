@@ -87,11 +87,24 @@ public class RatingRepo: IRatingRepo
         return comment;  
     }
 
+    public async Task<int> DeleteCommentByIdAsync(int commentId)
+    {
+        var comment = await _context.Comments.FirstOrDefaultAsync(c => c.CommentId == commentId)
+            ?? throw new Exception("El comentario no existe.");
+        var votes = await _context.Votes.Where(v => v.CommentId == commentId).ToListAsync();
+        var grades = await _context.Grades.Where(v => v.CommentId == commentId).ToListAsync();
+        _context.Grades.RemoveRange(grades);
+        _context.Votes.RemoveRange(votes);
+        _context.Comments.Remove(comment);
+        await _context.SaveChangesAsync();
+        return commentId;  
+    }
+
     public async Task<Comment> EditCommentContentAsync(CommentContentDTO commentDTO)
     {
         var comment = await _context.Comments.FirstOrDefaultAsync( c => c.CommentId == commentDTO.CommentId) 
-            ?? throw new Exception("Comment does not exist.");
-        if (comment.Content == commentDTO.Content) throw new Exception("Comment has the same content.");
+            ?? throw new Exception("El comentatio no existe.");
+        if (comment.Content == commentDTO.Content) throw new Exception("El comentario no contiene cambios.");
         comment.ModifiedAt = DateTime.Now;
         comment.Content = commentDTO.Content;
         _context.Comments.Update(comment);

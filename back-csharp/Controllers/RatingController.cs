@@ -35,6 +35,25 @@ public class RatingController : ControllerBase
         return Ok(_mapper.Map<CommentDTO>(res));
     }
 
+    [HttpDelete("comment/{commentId}")]
+    public async Task<ActionResult<int>> DeleteComment(int commentId)
+    {
+        int res = -1;
+        try
+        {
+            res = await _uow.Ratings.DeleteCommentByIdAsync(commentId);
+            if (res == -1)
+            {
+                return BadRequest("Hubo un error borrando el comentario.");
+            }
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+        return Ok(res);
+    }
+
     [HttpPatch("comment")]
     public async Task<ActionResult<CommentDTO>> EditCommentContent(CommentContentDTO commentDTO)
     {

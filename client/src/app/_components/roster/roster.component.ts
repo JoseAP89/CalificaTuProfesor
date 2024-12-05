@@ -12,6 +12,8 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { VoteService } from 'src/app/_services/vote.service';
 import { SnackbarService } from 'src/app/_services/snackbar.service';
 import { EditCommentComponent } from '../dialogs/edit-comment/edit-comment.component';
+import { AcceptCancelData } from '../dialogs/cancel-accept/cancel-accept.component';
+import { getHttpErrorMessage } from 'src/app/_helpers/miscelaneous';
 
 @Component({
   selector: 'app-roster',
@@ -30,6 +32,7 @@ export class RosterComponent implements OnInit{
   public comments: CommentDTO[] = [];
 
   private pageEvent: PageEvent;
+  private _recordId: string;
   public totalLength: number;
   public pageSize: number;
   public sortPage: SortPaginator;
@@ -64,8 +67,12 @@ export class RosterComponent implements OnInit{
     this.paginator._intl.itemsPerPageLabel="Comentarios por página - ";
     this.paginator._intl.nextPageLabel="página siguiente";
     this.paginator._intl.previousPageLabel="página anterior";
-    const recordId = this.route.snapshot.paramMap.get('recordId') ?? "";
-    this.rosterService.getRosterInfoByRecordId(recordId).subscribe({
+    this._recordId = this.route.snapshot.paramMap.get('recordId') ?? "";
+    this.buildRoster();
+  }
+
+  buildRoster(){
+    this.rosterService.getRosterInfoByRecordId(this._recordId).subscribe({
       next: (res: RosterDB) => {
         this.roster = res;
         this.getUniStructures();
@@ -85,7 +92,7 @@ export class RosterComponent implements OnInit{
     });
   }
 
-  canEdit(comment: CommentDTO): boolean {
+  isOwner(comment: CommentDTO): boolean {
     // You can edit only your own comments
     return !!this.currentUserId && comment.userId == this.currentUserId;
   }
@@ -207,7 +214,33 @@ export class RosterComponent implements OnInit{
     })
   }
 
-  openRateTeacherDialog(enterAnimationDuration: string = '500ms', exitAnimationDuration: string= '500ms'): void {
+  openAcceptCancelDialogWindow(commentId: number){
+    let data: AcceptCancelData = {
+      title: "Borrar comentario",
+      message: "¿Desea borrar el comentario? Este no podrá ser recuperado.",
+      okBtnName: "Borrar",
+      cancelBtnName: "Cancelar"
+    }
+    this.snackbarService.openCancelAcceptDialog(data).subscribe({
+      next: res => {
+        if (res) {
+          this.ratingService.deleteComment(commentId).subscribe({ 
+            next: res => {
+              if (res>0) {
+                this.buildRoster();
+                this.snackbarService.showSuccessMessage(`El comentario fue borrado exitosamente.`);
+              }
+            },
+            error: e => {
+                this.snackbarService.showErrorMessage(getHttpErrorMessage(e));
+            }
+          });
+        }
+      }
+    });
+  }
+
+  openRateTeacherDialog(enterAnimationDuration: string = '100ms', exitAnimationDuration: string= '100ms'): void {
     let ref = this.dialog.open<RateComponent, RosterDB, CommentDTO>(RateComponent, {
       data: this.roster,
       enterAnimationDuration,
@@ -231,7 +264,7 @@ export class RosterComponent implements OnInit{
     })
   }
 
-  openEditCommentDialog(comment: CommentDTO, enterAnimationDuration: string = '500ms', exitAnimationDuration: string= '500ms'): void {
+  openEditCommentDialog(comment: CommentDTO, enterAnimationDuration: string = '100ms', exitAnimationDuration: string= '100ms'): void {
     let ref = this.dialog.open<EditCommentComponent, CommentDTO, CommentContentDTO>(EditCommentComponent, {
       data: comment,
       enterAnimationDuration,

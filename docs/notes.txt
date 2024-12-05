@@ -1,11 +1,9 @@
 **** Notes about the tasks to be done ****
-+       Add a Common Repository.
-+	There is a need for an error middleware on the backend to better improve the messages sent to the client, also I need to add an ApiException class to handle business logic errors in the app.
+++	There is a need for an error middleware on the backend to better improve the messages sent to the client, also I need to add an ApiException class to handle business logic errors in the app.
 +	About page
-+	Look for Campus functionality
+++	Look for Campus functionality
 +   Notifications functionality (front, backend, and table)
 +       If I delete the userId from localstorage and decide to add/vote then a userId is generated automatically on the backend, make sure that
         that new id is being assinged correctly on the frontend to the user.
 +       Show a better validation for the comment-grade form.
 +       Show the default value for the sorting type on the comment's page.
-+	Add a button on the roster page to change number of pages required
