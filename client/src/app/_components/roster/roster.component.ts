@@ -252,11 +252,9 @@ export class RosterComponent implements OnInit{
     });
     ref.afterClosed().subscribe({
       next: res => {
-        if (res!=null) {
-          this.getScales();
-          this.getRosterRating();
-          this.getComments();
-        } // if a comment was created, then the backend creates an uuid for the user (userId), which will be used for future references
+        if(res == null) return;
+        this.buildRoster();
+        // if a comment was created, then the backend creates an uuid for the user (userId), which will be used for future references
         if (res.userId) {
           this.ratingService.setCurrentUserId(res.userId);
         }
