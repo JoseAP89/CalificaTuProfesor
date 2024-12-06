@@ -7,3 +7,4 @@
         that new id is being assinged correctly on the frontend to the user.
 +       Show a better validation for the comment-grade form.
 +       Show the default value for the sorting type on the comment's page.
++	There is a bug on the teacher's name when the screen is decreased, name and lastname overlaps.
