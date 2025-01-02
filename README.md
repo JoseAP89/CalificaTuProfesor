@@ -15,7 +15,8 @@ confiable.
 1. Run the script migrations.sql on psql to create the database and its tables: `# \i migrations.sql`. You need to be on the root folder where 
 the migrations file is located. If on windows use `# \encoding UTF8` to change to UTF encoding and use '/' on the path route. 
 You also need that last code when you connect to teachers database before executing the sql code and before 
-granting all privilages to the joseap user.
+granting all privilages to the joseap user. Another consideration to take is to check the port used to connect to the postgres sql  database which 
+should match with the one used on the appsetings file(s).
 2. Create the user joseap: `$ create user joseap;`
 3. Add a password to the user joseap: `$ alter user joseap with encrypted password 'J1o2s3e4';`
 4. Execute the command: `$ GRANT ALL PRIVILEGES ON DATABASE teachers TO joseap;`

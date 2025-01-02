@@ -32,14 +32,14 @@
     border-radius: 4px;
   }
   .button-classroom {
-    background-image: url('../../../assets/images/classroom.jpg');
+    background-image: url('/assets/images/classroom.jpg');
   }
   .button-campus {
-    background-image: url('../../../assets/images/campus.jpg');
+    background-image: url('/assets/images/campus.jpg');
     filter: brightness(90%);
   }
   .button-university {
-    background-image: url('../../../assets/images/university.jpg');
+    background-image: url('/assets/images/university.jpg');
   }
   .item-image-bg:hover {
     filter: brightness(84%);

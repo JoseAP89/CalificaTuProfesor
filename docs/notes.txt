@@ -1,6 +1,10 @@
 **** Notes about the tasks to be done ****
 ++	There is a need for an error middleware on the backend to better improve the messages sent to the client, also I need to add an ApiException class to handle business logic errors in the app.
 +	About page
++	RosterScale table was made to create a cache-like table for roster-scale grades, but it is a work
+	in progress still, although an effective way to stop storing Scales X Comments on the Grade table would
+	be a better solution, taking into consideration the possibility to remove comments and updating the
+	grades per roster.
 ++	Look for Campus functionality
 +   Notifications functionality (front, backend, and table)
 +       If I delete the userId from localstorage and decide to add/vote then a userId is generated automatically on the backend, make sure that

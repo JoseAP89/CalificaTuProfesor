@@ -132,7 +132,7 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
             RosterId = rosterDto.RosterId,
             TeacherName = rosterDto.TeacherName.Trim().ToUpper(),
             TeacherLastname1 = rosterDto.TeacherLastname1.Trim().ToUpper(),
-            TeacherLastname2 = rosterDto.TeacherLastname2?.Trim().ToUpper(),
+            TeacherLastname2 = rosterDto.TeacherLastname2?.Trim().ToUpper() ?? "",
             UniStructureId = rosterDto.UniStructureId,
             StructureName = rosterDto.StructureName,
             CampusId = rosterDto.CampusId
