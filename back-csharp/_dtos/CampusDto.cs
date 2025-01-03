@@ -5,6 +5,7 @@ namespace back_csharp._dtos;
 public class CampusDto
 {
     public int CampusId { get; set; }
+    public Guid RecordId { get; set; }
     
     public string Name { get; set; } 
     

@@ -12,6 +12,7 @@ namespace back_csharp._models
         }
 
         public int CampusId { get; set; }
+        public Guid RecordId { get; set; }
         public string Name { get; set; } = null!;
         public int UniversityId { get; set; }
         public int StateId { get; set; }

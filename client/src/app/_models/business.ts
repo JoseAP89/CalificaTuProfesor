@@ -63,7 +63,7 @@ export class Scale {
 
 export class TeacherCampus {
   rosterId: number;
-  signature: string;
+  rosterRecordId: string; // recordId from the Roster object
   campus: Campus;
   teacherName: string;
   teacherLastname1: string;

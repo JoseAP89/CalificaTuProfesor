@@ -53,7 +53,7 @@ export class HomeComponent implements OnInit {
           return res.map( r => {
             // [roster , universidad]
             let fullName = `${r.teacherName} ${r.teacherLastname1} ${r.teacherLastname2}`;
-            return [new Vessel(r.rosterId,fullName, r.signature), new Vessel(r.campus.campusId, `${(r.uniStructureName + " DE " + r.structureName).toUpperCase()} * ${r.campus.name}`)];
+            return [new Vessel(r.rosterId,fullName, r.rosterRecordId), new Vessel(r.campus.campusId, `${(r.uniStructureName + " DE " + r.structureName).toUpperCase()} * ${r.campus.name}`)];
           });
         })
       );

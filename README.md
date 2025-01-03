@@ -22,4 +22,7 @@ should match with the one used on the appsetings file(s).
 4. Execute the command: `$ GRANT ALL PRIVILEGES ON DATABASE teachers TO joseap;`
 5. Execute the command: `$ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO joseap;`
 6. Execute the command: `$ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO joseap;`
-7. To connect in psql on the database teachers as the user joseap you first off need to connect as postgres: `$ sudo -u postgres psql`, then `# \c "host=localhost port=5432 dbname=teachers user=joseap password=J1o2s3e4"`
+7. To connect in psql on linux to the database teachers as the user joseap you first off need to connect as postgres: 
+ `$ sudo -u postgres psql`, on windows: 
+ `psql -h localhost -p <PORT> -U joseap teachers` then: 
+ `# \c "host=localhost port=<PORT> dbname=teachers user=joseap password=J1o2s3e4"`

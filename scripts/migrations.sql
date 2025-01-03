@@ -1,4 +1,7 @@
 -- initial setup 
+-- example to execute the file on terminal on windows:
+--   teachers=> \encoding UTF8
+--   teachers=> \i C:/Users/diana/Documents/CalificaTuProfesorApp/CalificaTuProfesor/scripts/migrations.sql
 --drop DATABASE if EXISTS teachers;
 --create DATABASE teachers;
 
@@ -47,6 +50,7 @@ CREATE TABLE State (
 
 CREATE TABLE University (
     UniversityId SERIAL PRIMARY KEY,
+	RecordId uuid DEFAULT gen_random_uuid(),
     Name varchar(250) NOT NULL UNIQUE,
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
     ModifiedAt TIMESTAMP
@@ -54,6 +58,7 @@ CREATE TABLE University (
 
 CREATE TABLE Campus (
     CampusId SERIAL PRIMARY KEY,
+	RecordId uuid DEFAULT gen_random_uuid(),
     Name varchar(250) NOT NULL,
     UniversityId int NOT NULL,
     StateId int NOT NULL,

@@ -50,6 +50,9 @@ namespace back_csharp._data
 
                 entity.Property(e => e.CampusId)
                     .HasColumnName("campusid");
+                entity.Property(e => e.RecordId)
+                    .HasDefaultValueSql("gen_random_uuid()")
+                    .HasColumnName("recordid");
                 entity.Property(e => e.Name)
                     .HasColumnName("name");
                 entity.Property(e => e.UniversityId )
@@ -341,6 +344,9 @@ namespace back_csharp._data
 
                 entity.Property(e => e.UniversityId)
                     .HasColumnName("universityid");
+                entity.Property(e => e.RecordId)
+                    .HasDefaultValueSql("gen_random_uuid()")
+                    .HasColumnName("recordid");
                 entity.Property(e => e.Name)
                     .HasColumnName("name");
                 entity.Property(e => e.CreatedAt)
