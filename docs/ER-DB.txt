@@ -17,6 +17,7 @@ Table "State" {
 
 Table "University" {
   "UniversityId" SERIAL [pk, increment]
+  "RecordId" uuid [default: `gen_random_uuid()`]
   "Name" varchar(250) [unique, not null]
   "CreatedAt" timestamp [not null, default: `NOW()`]
   "ModifiedAt" timestamp
@@ -24,6 +25,7 @@ Table "University" {
 
 Table "Campus" {
   "CampusId" SERIAL [pk, increment]
+  "RecordId" uuid [default: `gen_random_uuid()`]
   "Name" varchar(250) [unique, not null]
   "UniversityId" int [unique, not null]
   "StateId" int [unique, not null]
