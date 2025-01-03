@@ -3,11 +3,10 @@
 Califica a tus profesores de tu universidad, colegio o escuela acorde a su desempeño en el aula de clases, de forma anónima y
 confiable.
 
+## SETTING UP THE DATABASE
 ## Modelo Entidad-Relacion de la BD
 
 ![picture alt](https://github.com/JoseAP89/CalificaTuProfesor/blob/main/docs/ER-DB.png "entidad-relacion")
-
-## SETTING UP THE DATABASE
 
 0. Create the database teacers and then connect to the database with the following commands:
     `# CREATE DATABASE teachers;`
