@@ -40,7 +40,18 @@ namespace back_csharp.Controllers
         [HttpGet("info/{id:int}")]
         public async Task<ActionResult<CampusDto>> GetCampus(int id)
         {
-            var res = await _uow.Campus.GetCampus(id);
+            var res = await _uow.Campus.GetCampusAsync(id);
+            if (res==null)
+            {
+                return NotFound();
+            } 
+            return Ok(res);
+        }
+        
+        [HttpGet("info/record/{recordId}")]
+        public async Task<ActionResult<CampusDto>> GetCampusByRecordId(Guid recordId)
+        {
+            var res = await _uow.Campus.GetCampusByRecordIdAsync(recordId);
             if (res==null)
             {
                 return NotFound();

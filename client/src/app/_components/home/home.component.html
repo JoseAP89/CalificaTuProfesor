@@ -5,10 +5,10 @@
   <div class="type-of-search">
     <mat-radio-group #SearchType aria-labelledby="example-radio-group-label" class="radio-group" [(ngModel)]="typeOfSearch"
     color="primary">
-      <mat-radio-button class="radio-btn" [value]="'P'">
+      <mat-radio-button class="radio-btn" [value]="1">
         <p class="radio-txt">Por Profesor</p>
       </mat-radio-button>
-      <mat-radio-button class="radio-btn" [value]="'C'">
+      <mat-radio-button class="radio-btn" [value]="2">
         <p class="radio-txt">Por Campus</p>
       </mat-radio-button>
     </mat-radio-group>
@@ -16,7 +16,7 @@
   <div class="search-container">
     <!-- CAMPO DE BUSQUEDA -->
     <mat-form-field class="search-form-field">
-      <mat-label>{{typeOfSearch == "P" ? "Buscar Profesor" : "Buscar Campus"}}</mat-label>
+      <mat-label>{{typeOfSearch == 1 ? "Buscar Profesor" : "Buscar Campus"}}</mat-label>
       <input matInput
         id="search-value"
         #SearchVal

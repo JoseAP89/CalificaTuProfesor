@@ -38,6 +38,11 @@ export class CampusService {
     return this.http.get<Campus>(url);
   }
 
+  public getCampusByRecordId(recordId: string): Observable<Campus>{
+    const url = `${this.baseUrl}/info/record/${recordId}`;
+    return this.http.get<Campus>(url);
+  }
+
   public getCampusSearch(value: string): Observable<Vessel[]>{
     const url = `${this.baseUrl}/search/${value}`;
     return this.http.get<Vessel[]>(url);

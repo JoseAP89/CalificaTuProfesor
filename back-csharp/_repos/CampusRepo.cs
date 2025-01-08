@@ -28,7 +28,13 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
         return campus;
     }
 
-    public async Task<CampusDto> GetCampus(int id)
+    public async Task<CampusDto> GetCampusByRecordIdAsync(Guid recordId)
+    {
+        int id = (await _context.Set<Campus>().FirstOrDefaultAsync(c => c.RecordId == recordId))?.CampusId ?? 0;
+        return await GetCampusAsync(id); 
+    }
+
+    public async Task<CampusDto> GetCampusAsync(int id)
     {
         string path = _config.GetValue<string>("Images:campus");
         var campus = from c in _context.Set<Campus>()
@@ -37,6 +43,7 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
             where c.CampusId == id select new
             {
                 Name = c.Name,
+                RecordId = c.RecordId,
                 CampusId = c.CampusId,
                 UniversityId = c.UniversityId,
                 UniversityName = u.Name,
@@ -47,6 +54,7 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
             .Select(x => new CampusDto
             {
                 Name = x.Name,
+                RecordId = x.RecordId,  
                 CampusId = x.CampusId,
                 UniversityId = x.UniversityId,
                 UniversityName = x.UniversityName,
@@ -59,10 +67,13 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
             var fileName =  res.Name.Replace(" ", "_").ToLower().Trim() ;
             var files = Directory.GetFiles(path, $"{fileName}.*");
             string fullFileName = files.FirstOrDefault();
-            if (fullFileName != null)
+            if (!string.IsNullOrEmpty(fullFileName))
             {
                 var pos = fullFileName.LastIndexOf("/");
                 fullFileName = fullFileName[(pos+1)..];
+            } else
+            {
+                fullFileName = "generic-campus-1.png";  
             }
             res.FullFileName = fullFileName;
         }
@@ -106,6 +117,7 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
                 {
                     CampusId = c.CampusId,
                     Name = c.Name,
+                    RecordId = c.RecordId,
                     University = new UniversityDto {UniversityId = u.UniversityId, Name = u.Name}
                 }).AsNoTracking().ToListAsync();
             return res;

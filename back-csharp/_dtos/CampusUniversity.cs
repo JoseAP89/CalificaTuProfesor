@@ -4,5 +4,6 @@ public class CampusUniversity
 {
     public int CampusId { get; set; }
     public string Name { get; set; }
+    public Guid RecordId { get; set; }
     public UniversityDto University { get; set; }
 }

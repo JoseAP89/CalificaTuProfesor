@@ -7,6 +7,7 @@ export class BusinessException {
 export class CampusUniversity {
     campusId: number;
     name: string;
+    recordId: string;
     university: University
 }
 
@@ -63,7 +64,7 @@ export class Scale {
 
 export class TeacherCampus {
   rosterId: number;
-  rosterRecordId: string; // recordId from the Roster object
+  signature: string; // recordId from the Roster object
   campus: Campus;
   teacherName: string;
   teacherLastname1: string;

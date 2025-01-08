@@ -29,6 +29,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatBadgeModule} from '@angular/material/badge';
 import { EditCommentComponent } from './_components/dialogs/edit-comment/edit-comment.component';
 import { CancelAcceptComponent } from './_components/dialogs/cancel-accept/cancel-accept.component';
+import { CampusComponent } from './_components/campus/campus.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { CancelAcceptComponent } from './_components/dialogs/cancel-accept/cance
     RateComponent,
     EditCommentComponent,
     CancelAcceptComponent,
+    CampusComponent,
   ],
   imports: [
     BrowserModule,

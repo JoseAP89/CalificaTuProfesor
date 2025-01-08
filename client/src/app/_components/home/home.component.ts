@@ -6,6 +6,11 @@ import { CampusService } from 'src/app/_services/campus.service';
 import { RosterService } from 'src/app/_services/roster.service';
 import { SnackbarService } from 'src/app/_services/snackbar.service';
 
+export enum TypeOfSearch {
+  Profesor = 1,
+  Campus = 2,
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -17,7 +22,7 @@ export class HomeComponent implements OnInit {
   public selectedOption: Vessel;
   public options: Observable<Vessel[][]>;
   public showOptions: boolean = false;
-  public typeOfSearch: string = "P";
+  public typeOfSearch: TypeOfSearch = TypeOfSearch.Profesor;
 
   /**
    *
@@ -47,13 +52,13 @@ export class HomeComponent implements OnInit {
     this.searchValue = input.target.value;
     //this.searchValue = input;
     this.showOptions = true;
-    if (this.typeOfSearch == "P") { // Profesor
+    if (this.typeOfSearch == TypeOfSearch.Profesor) {
       this.options = this.rosterService.getTeacherCampus(this.searchValue).pipe(
         map( res => {
           return res.map( r => {
             // [roster , universidad]
             let fullName = `${r.teacherName} ${r.teacherLastname1} ${r.teacherLastname2}`;
-            return [new Vessel(r.rosterId,fullName, r.rosterRecordId), new Vessel(r.campus.campusId, `${(r.uniStructureName + " DE " + r.structureName).toUpperCase()} * ${r.campus.name}`)];
+            return [new Vessel(r.rosterId,fullName, r.signature), new Vessel(r.campus.campusId, `${(r.uniStructureName + " DE " + r.structureName).toUpperCase()} * ${r.campus.name}`)];
           });
         })
       );
@@ -63,7 +68,7 @@ export class HomeComponent implements OnInit {
         map( res => {
           return res.map( r => {
             // [campus , universidad]
-            return [new Vessel(r.campusId,r.name), new Vessel(r.university.universityId, r.university.name)];
+            return [new Vessel(r.campusId,r.name, r.recordId), new Vessel(r.university.universityId, r.university.name)];
           });
         })
       );
@@ -85,8 +90,11 @@ export class HomeComponent implements OnInit {
   }
 
   onSubmit(){
-    if (this.selectedOption?.id!=null && this.selectedOption.id != 0) {
+
+    if (this.selectedOption?.id!=null && this.selectedOption.id != 0 && this.typeOfSearch == TypeOfSearch.Profesor) {
       this.router.navigate([`/maestro/${this.selectedOption.signature}`]);
+    } else if (this.selectedOption?.id!=null && this.selectedOption.id != 0 && this.typeOfSearch == TypeOfSearch.Campus) {
+      this.router.navigate([`/campus/${this.selectedOption.signature}`]);
     }
   }
 }
