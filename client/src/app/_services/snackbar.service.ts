@@ -9,22 +9,21 @@ import { Observable } from 'rxjs';
 })
 export class SnackbarService {
 
-  private durationInSeconds: number = 5;
   constructor(
     private _snackBar: MatSnackBar,
     private _dialog: MatDialog,
   ) { }
 
-  public showSuccessMessage(message: string) {
+  public showSuccessMessage(message: string, waitingTimeMs = 5_000.0) {
     this._snackBar.open(message, "Cerrar", {
-      duration: this.durationInSeconds * 1_000,
+      duration:  waitingTimeMs,
       panelClass: "success-snackbar"
     });
   }
 
-  public showErrorMessage(message: string) {
+  public showErrorMessage(message: string, waitingTimeMs = 5_000.0) {
     this._snackBar.open(message, "Cerrar", {
-      duration: this.durationInSeconds * 1_000,
+      duration:  waitingTimeMs,
       panelClass: "error-snackbar"
     });
   }

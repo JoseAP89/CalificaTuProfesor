@@ -27,12 +27,19 @@ public class RatingController : ControllerBase
     [HttpPost("comment")]
     public async Task<ActionResult<CommentDTO>> AddComment(CommentDTO commentDTO)
     {
-        var res = await _uow.Ratings.AddCommentAsync(commentDTO);
-        if (res == null)
+        try
         {
-            return BadRequest("Hubo un error agregando el comentario.");
+            var res = await _uow.Ratings.AddCommentAsync(commentDTO);
+            if (res == null)
+            {
+                return BadRequest("Hubo un error agregando el comentario.");
+            }
+            return Ok(_mapper.Map<CommentDTO>(res));
         }
-        return Ok(_mapper.Map<CommentDTO>(res));
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpDelete("comment/{commentId}")]
@@ -71,7 +78,7 @@ public class RatingController : ControllerBase
         var res = await _uow.Ratings.GetCommentsByRosterAsync(rosterId, pageSize, sortPage, pageNumber, currentUserId);
         if (res == null)
         {
-            return NotFound("No hay comentarios para el Profesor.");
+            return NotFound("Hubo un error obteniendo la lista de comentarios del profesor.");
         }
         return Ok(res);
     }
@@ -82,7 +89,7 @@ public class RatingController : ControllerBase
         var res = await _uow.Ratings.GetRosterRatingInfoAsync(rosterId);
         if (res == null)
         {
-            return NotFound("No hay calificaciones para el Profesor.");
+            return NotFound("Hubo un error obteniendo las calificaciones del profesor.");
         }
         return Ok(res);
     }

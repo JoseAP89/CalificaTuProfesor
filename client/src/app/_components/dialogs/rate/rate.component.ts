@@ -7,6 +7,7 @@ import { RatingService } from 'src/app/_services/rating.service';
 import { ScaleService } from 'src/app/_services/scale.service';
 import { SnackbarService } from 'src/app/_services/snackbar.service';
 import { MAX_LEN_COMMENT, MIN_LEN_COMMENT } from '../../constants';
+import { getHttpErrorMessage } from 'src/app/_helpers/miscelaneous';
 
 @Component({
   selector: 'app-rate',
@@ -143,7 +144,7 @@ export class RateComponent implements OnInit {
           this.dialogRef.close(res);
         },
         error: error => {
-          this.snackbarService.showErrorMessage(error?.message);
+          this.snackbarService.showErrorMessage(getHttpErrorMessage(error), 8_000);
           this.dialogRef.close(null);
         }
       });

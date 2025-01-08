@@ -31,29 +31,33 @@ public class RatingRepo: IRatingRepo
 
     public async Task<RosterRatingDTO> GetRosterRatingInfoAsync(int rosterId)
     {
-        using var connection = new NpgsqlConnection(_connectionString);
-        // Create a query that retrieves all authors"    
-        var sql = @$"
-            select g.scaleid, round(CAST(avg(g.stars) as numeric),1) as stars from roster r
-            inner join comment c on r.rosterid=c.rosterid
-            inner join grade g on c.commentId=g.commentId
-            inner join scale s on g.scaleid=s.scaleid
-            where r.rosterid={rosterId} 
-            group by g.scaleid 
-        ";
-        // Use the Query method to execute the query and return a list of objects
-        List<GradeDTO> grades = (await connection.QueryAsync<GradeDTO>(sql)).ToList();
-        if (grades == null || grades.Count == 0)
+        try
+        {
+            using var connection = new NpgsqlConnection(_connectionString);
+            // Create a query that retrieves all authors"    
+            var sql = @$"
+                select g.scaleid, round(CAST(avg(g.stars) as numeric),1) as stars from roster r
+                inner join comment c on r.rosterid=c.rosterid
+                inner join grade g on c.commentId=g.commentId
+                inner join scale s on g.scaleid=s.scaleid
+                where r.rosterid={rosterId} 
+                group by g.scaleid 
+            ";
+            // Use the Query method to execute the query and return a list of objects
+            List<GradeDTO> grades = (await connection.QueryAsync<GradeDTO>(sql)).ToList();
+            var rating = new RosterRatingDTO
+            {
+                RosterId = rosterId,
+                Grades = grades,
+                AverageGrade = grades.Count > 0 ? Math.Round(grades.Average(g => g.Stars), 1) : 0.0
+            };
+            return rating;
+
+        }
+        catch (Exception)
         {
             return null;
         }
-        var rating = new RosterRatingDTO
-        {
-            RosterId = rosterId,
-            Grades = grades,
-            AverageGrade = Math.Round(grades.Average(g => g.Stars), 1),
-        };
-        return rating;  
     }
 
     public async Task<Comment> AddCommentAsync(CommentDTO commentDTO)
@@ -114,76 +118,80 @@ public class RatingRepo: IRatingRepo
 
     public async Task<TableData<CommentDTO>> GetCommentsByRosterAsync(int rosterId, int pageSize, SortPaginator pag, int pageNumber = 0, Guid? currentUserId = null)
     {
-        if(currentUserId == null) currentUserId = Guid.NewGuid();
-        var comments = await _context.Comments
-            .Where(c => c.RosterId == rosterId)
-            .Include(c => c.Grades)
-            .ThenInclude(g => g.Scale)
-            .Include(c => c.Votes)
-            .AsSplitQuery()
-            .AsNoTracking()
-            .ToListAsync()
-            ;
-        if (comments == null || comments.Count == 0)
+        try
+        {
+            if (currentUserId == null) currentUserId = Guid.NewGuid();
+            var comments = await _context.Comments
+                .Where(c => c.RosterId == rosterId)
+                .Include(c => c.Grades)
+                .ThenInclude(g => g.Scale)
+                .Include(c => c.Votes)
+                .AsSplitQuery()
+                .AsNoTracking()
+                .ToListAsync()
+                ;
+            var commentsSorted = _mapper.Map<List<CommentDTO>>(comments).AsEnumerable();
+            commentsSorted = commentsSorted.Select(c =>
+            {
+                foreach (var v in c.Votes)
+                {
+                    if (v.Approval == true)
+                    {
+                        c.Likes++;
+                    }
+                    else if (v.Approval == false)
+                    {
+                        c.Dislikes++;
+                    }
+                    if (currentUserId.ToString() == v.UserId)
+                    {
+                        c.currentUserVote = v.Approval;
+                    }
+                }
+                c.Votes = null; // to avoid send a large amount of votes per comment unnecessarily
+                return c;
+            });
+            switch (pag)
+            {
+                case SortPaginator.DateAsc:
+                    commentsSorted = commentsSorted.OrderBy(c => c.CreatedAt);
+                    break;
+                case SortPaginator.DateDesc:
+                    commentsSorted = commentsSorted.OrderByDescending(c => c.CreatedAt);
+                    break;
+                case SortPaginator.MostLiked:
+                    commentsSorted = commentsSorted.OrderByDescending(c => c.Likes).ThenByDescending(c => c.CreatedAt);
+                    break;
+                case SortPaginator.MostDisliked:
+                    commentsSorted = commentsSorted.OrderByDescending(c => c.Dislikes).ThenByDescending(c => c.CreatedAt);
+                    break;
+                case SortPaginator.SubjectAsc:
+                    commentsSorted = commentsSorted.OrderBy(c => c.SubjectName);
+                    break;
+                case SortPaginator.SubjectDesc:
+                    commentsSorted = commentsSorted.OrderByDescending(c => c.SubjectName);
+                    break;
+                default:
+                    break;
+            }
+            commentsSorted = commentsSorted.ToList();
+            var table = new TableData<CommentDTO>
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalElements = comments.Count,
+                Data = commentsSorted
+                    .Skip(pageSize * pageNumber)
+                    .Take(pageSize)
+                    .ToList()
+            };
+            return table;
+
+        }
+        catch (Exception)
         {
             return null;
         }
-        var commentsSorted = _mapper.Map<List<CommentDTO>>(comments).AsEnumerable();
-        commentsSorted = commentsSorted.Select( c =>
-        {
-            foreach (var v in c.Votes)
-            {
-                if (v.Approval == true)
-                {
-                    c.Likes++;
-                }
-                else if (v.Approval == false)
-                {
-                    c.Dislikes++;
-                }
-                if (currentUserId.ToString() == v.UserId)
-                {
-                    c.currentUserVote = v.Approval; 
-                }
-            }
-            c.Votes = null; // to avoid send a large amount of votes per comment unnecessarily
-            return c;
-        });
-        switch (pag)
-        {
-            case SortPaginator.DateAsc:
-                commentsSorted = commentsSorted.OrderBy( c => c.CreatedAt);
-                break;
-            case SortPaginator.DateDesc:
-                commentsSorted = commentsSorted.OrderByDescending( c => c.CreatedAt);
-                break;
-            case SortPaginator.MostLiked:
-                commentsSorted = commentsSorted.OrderByDescending( c => c.Likes).ThenByDescending( c => c.CreatedAt);
-                break;
-            case SortPaginator.MostDisliked:
-                commentsSorted = commentsSorted.OrderByDescending( c => c.Dislikes).ThenByDescending( c => c.CreatedAt);
-                break;
-            case SortPaginator.SubjectAsc:
-                commentsSorted = commentsSorted.OrderBy( c => c.SubjectName);
-                break;
-            case SortPaginator.SubjectDesc:
-                commentsSorted = commentsSorted.OrderByDescending( c => c.SubjectName);
-                break;
-            default:
-                break;
-        }
-        commentsSorted = commentsSorted.ToList();
-        var table = new TableData<CommentDTO>
-        {
-            PageNumber = pageNumber,
-            PageSize = pageSize,
-            TotalElements = comments.Count,
-            Data = commentsSorted
-                .Skip(pageSize * pageNumber)
-                .Take(pageSize)
-                .ToList()
-        };
-        return table;
     }
 
 }
