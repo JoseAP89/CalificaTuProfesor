@@ -83,6 +83,18 @@ public class RatingController : ControllerBase
         return Ok(res);
     }
 
+    [HttpGet("teacher/ranking")]
+    public async Task<ActionResult<TableData<CommentDTO>>> GetTeacherRanking(string campusRecordIdStr = "", int pageSize = 20, int pageNumber = 0)
+    {
+        Guid campusRecordId = string.IsNullOrEmpty(campusRecordIdStr )? Guid.Empty : new Guid(campusRecordIdStr);
+        var res = await _uow.Ratings.GetTeachersRankingAsync(campusRecordId, pageSize, pageNumber);
+        if (res == null)
+        {
+            return NotFound("Hubo un error obteniendo la lista de rankings.");
+        }
+        return Ok(res);
+    }
+
     [HttpGet($"{nameof(GetRosterRating)}/{{rosterId}}")]
     public async Task<ActionResult<RosterRatingDTO>> GetRosterRating(int rosterId)
     {

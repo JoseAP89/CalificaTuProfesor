@@ -194,4 +194,53 @@ public class RatingRepo: IRatingRepo
         }
     }
 
+    public async Task<List<RankingDTO>> GetTeachersRankingAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0)
+    {
+        try
+        {
+            var ranks = await ( 
+                from c in _context.Comments
+                join g in _context.Grades on c.CommentId equals g.CommentId
+                join s in _context.Scales on g.ScaleId equals s.ScaleId
+                join r in _context.Rosters on c.RosterId equals r.RosterId
+                join k in _context.Campuses on r.CampusId equals k.CampusId
+                group new 
+                {
+                    r.TeacherName,
+                    r.TeacherLastname1,
+                    r.TeacherLastname2,
+                    RosterRecordId = r.RecordId,
+                    g.Stars,
+                    CampusRecordId = k.RecordId,
+                    CampusName = k.Name,
+                    r.StructureName
+                }
+                by r.RecordId into ranking
+                select new RankingDTO
+                {
+                   RosterRecordId = ranking.First().RosterRecordId,
+                   CampusRecordId=ranking.First().CampusRecordId,   
+                   TeacherFullName = (ranking.First().TeacherName + ' ' + ranking.First().TeacherLastname1 + ' ' +ranking.First().TeacherLastname2).Trim(),
+                   Score =ranking.Average( row => row.Stars),
+                   CampusName = ranking.First().CampusName,
+                   StructureName = ranking.First().StructureName
+                }
+            ).AsNoTracking()
+                .OrderByDescending( r => r.Score )
+                .ThenBy( r => r.TeacherFullName )
+                .Skip( pageNumber * pageSize )
+                .Take( pageSize )   
+                .ToListAsync();
+            return ranks.Select( r =>
+            {
+                r.Score = Math.Round(r.Score, 4);
+                return r;
+            }).ToList();
+
+        }
+        catch (Exception )
+        {
+            return null;
+        }
+    }
 }
