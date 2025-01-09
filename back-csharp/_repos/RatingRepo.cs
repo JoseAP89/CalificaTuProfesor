@@ -15,6 +15,7 @@ namespace back_csharp._repos;
 
 public class RatingRepo: IRatingRepo
 {
+    private const int DECIMAL_DIGITS = 5;
     private readonly TeachersContext _context;
     private readonly IConfiguration _config;
     private readonly IMapper _mapper;
@@ -198,13 +199,13 @@ public class RatingRepo: IRatingRepo
     {
         try
         {
-            var ranks = await ( 
+            var ranksQuery = (
                 from c in _context.Comments
                 join g in _context.Grades on c.CommentId equals g.CommentId
                 join s in _context.Scales on g.ScaleId equals s.ScaleId
                 join r in _context.Rosters on c.RosterId equals r.RosterId
                 join k in _context.Campuses on r.CampusId equals k.CampusId
-                group new 
+                group new
                 {
                     r.TeacherName,
                     r.TeacherLastname1,
@@ -218,14 +219,22 @@ public class RatingRepo: IRatingRepo
                 by r.RecordId into ranking
                 select new RankingDTO
                 {
-                   RosterRecordId = ranking.First().RosterRecordId,
-                   CampusRecordId=ranking.First().CampusRecordId,   
-                   TeacherFullName = (ranking.First().TeacherName + ' ' + ranking.First().TeacherLastname1 + ' ' +ranking.First().TeacherLastname2).Trim(),
-                   Score =ranking.Average( row => row.Stars),
-                   CampusName = ranking.First().CampusName,
-                   StructureName = ranking.First().StructureName
+                    RosterRecordId = ranking.First().RosterRecordId,
+                    CampusRecordId = ranking.First().CampusRecordId,
+                    TeacherFullName = (ranking.First().TeacherName + ' ' + ranking.First().TeacherLastname1 + ' ' + ranking.First().TeacherLastname2).Trim(),
+                    Score = ranking.Average(row => row.Stars),
+                    CampusName = ranking.First().CampusName,
+                    StructureName = ranking.First().StructureName
                 }
-            ).AsNoTracking()
+            );
+
+            if (campusRecordId != Guid.Empty)
+            {
+                ranksQuery = ranksQuery.Where(r => r.CampusRecordId == campusRecordId);    
+            }
+
+            var ranks = await ranksQuery
+                .AsNoTracking()
                 .OrderByDescending( r => r.Score )
                 .ThenBy( r => r.TeacherFullName )
                 .Skip( pageNumber * pageSize )
@@ -233,7 +242,7 @@ public class RatingRepo: IRatingRepo
                 .ToListAsync();
             return ranks.Select( r =>
             {
-                r.Score = Math.Round(r.Score, 4);
+                r.Score = Math.Round(r.Score, DECIMAL_DIGITS);
                 return r;
             }).ToList();
 
