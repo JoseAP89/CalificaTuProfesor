@@ -1,12 +1,23 @@
 // https://dbdiagram.io/d/64d0317302bd1c4a5e53e35c
 
-Table "UniStructure" {
-  "UniStructureId" SERIAL [pk, increment]
+Table "UniversityArea" {
+  "UniversityAreaId" SERIAL [pk, increment]
   "Name" VARCHAR(300) [not null]
   "Code" VARCHAR(2) [not null]
   "CreatedAt" timestamp [not null, default: `NOW()`]
   "ModifiedAt" timestamp
 }
+Ref: "UniversityArea"."UniversityAreaId" < "StudyField"."UniversityAreaId"
+
+Table "StudyField" {
+  "StudyFieldId" SERIAL [pk, increment]
+  "Name" VARCHAR(300) [not null]
+  "Code" VARCHAR(2) [not null]
+  "UniversityAreaId" int [not null]
+  "CreatedAt" timestamp [not null, default: `NOW()`]
+  "ModifiedAt" timestamp
+}
+Ref: "StudyField"."StudyFieldId" < "Comment"."StudyFieldId"
 
 Table "State" {
   "StateId" SERIAL [pk, increment]
@@ -14,18 +25,19 @@ Table "State" {
   "CreatedAt" timestamp [not null, default: `NOW()`]
   "ModifiedAt" timestamp
 }
+Ref:"State"."StateId" < "Campus"."StateId"
+
 
 Table "University" {
   "UniversityId" SERIAL [pk, increment]
-  "RecordId" uuid [default: `gen_random_uuid()`]
   "Name" varchar(250) [unique, not null]
   "CreatedAt" timestamp [not null, default: `NOW()`]
   "ModifiedAt" timestamp
 }
+Ref:"University"."UniversityId" < "Campus"."UniversityId"
 
 Table "Campus" {
   "CampusId" SERIAL [pk, increment]
-  "RecordId" uuid [default: `gen_random_uuid()`]
   "Name" varchar(250) [unique, not null]
   "UniversityId" int [unique, not null]
   "StateId" int [unique, not null]
@@ -40,11 +52,12 @@ Table "Roster" {
   "TeacherName" varchar(100) [unique]
   "TeacherLastname1" varchar(100) [unique]
   "TeacherLastname2" varchar(100) [unique]
-  "UniStructureId" int [not null]
-  "StructureName" varchar(100)
   "CreatedAt" timestamp [not null, default: `NOW()`]
   "ModifiedAt" timestamp
 }
+Ref:"Roster"."RosterId" < "Comment"."RosterId"
+Ref:"Roster"."RosterId" < "RosterScale"."RosterId"
+
 
 Table "Comment" {
   "CommentId" SERIAL [pk, increment]
@@ -53,9 +66,14 @@ Table "Comment" {
   "SubjectName" varchar(100)
   "Content" varchar(600) [not null]
   "UserId" uuid [not null]
+  "StudyFieldId" int [not null]
   "CreatedAt" timestamp [not null, default: `NOW()`]
   "ModifiedAt" timestamp
 }
+Ref:"Campus"."CampusId" < "Roster"."CampusId"
+Ref:"Comment"."CommentId" < "Vote"."CommentId"
+Ref:"Comment"."CommentId" < "Grade"."CommentId"
+
 
 Table "Vote" {
   "VoteId" SERIAL [pk, increment]
@@ -83,6 +101,9 @@ Table "Scale" {
   "CreatedAt" timestamp [not null, default: `NOW()`]
   "ModifiedAt" timestamp
 }
+Ref:"Scale"."ScaleId" < "Grade"."ScaleId"
+Ref:"Scale"."ScaleId" < "RosterScale"."ScaleId"
+
 
 Table "RosterScale" {
   "RosterScaleId" SERIAL [pk, increment]
@@ -92,23 +113,3 @@ Table "RosterScale" {
   "CreatedAt" timestamp [not null, default: `NOW()`]
   "ModifiedAt" timestamp
 }
-
-Ref:"University"."UniversityId" < "Campus"."UniversityId"
-
-Ref:"State"."StateId" < "Campus"."StateId"
-
-Ref:"Campus"."CampusId" < "Roster"."CampusId"
-
-Ref:"UniStructure"."UniStructureId" < "Roster"."UniStructureId"
-
-Ref:"Roster"."RosterId" < "Comment"."RosterId"
-
-Ref:"Comment"."CommentId" < "Vote"."CommentId"
-
-Ref:"Scale"."ScaleId" < "Grade"."ScaleId"
-
-Ref:"Comment"."CommentId" < "Grade"."CommentId"
-
-Ref:"Roster"."RosterId" < "RosterScale"."RosterId"
-
-Ref:"Scale"."ScaleId" < "RosterScale"."ScaleId"
