@@ -7,8 +7,8 @@ namespace back_csharp._models
     {
         public Roster()
         {
-            Comments = new HashSet<Comment>();
-            RosterScales = new HashSet<RosterScale>();
+            Comments = new List<Comment>();
+            RosterScales = new List<RosterScale>();
         }
 
         public int RosterId { get; set; }
@@ -17,13 +17,10 @@ namespace back_csharp._models
         public string TeacherName { get; set; }
         public string TeacherLastname1 { get; set; }
         public string TeacherLastname2 { get; set; }
-        public int UniStructureId { get; set; }
-        public string StructureName { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
 
         public virtual Campus Campus { get; set; } = null!;
-        public virtual UniStructure UniStructure { get; set; } = null!;
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<RosterScale> RosterScales { get; set; }
     }

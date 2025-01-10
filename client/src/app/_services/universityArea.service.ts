@@ -2,25 +2,25 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { UniStructure, Vessel } from '../_models/business';
+import { UniversityArea, Vessel } from '../_models/business';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UnistructureService {
+export class UniversityAreaService {
 
-  private baseUrl = environment.api_url + "/api/unistructure";
+  private baseUrl = environment.api_url + "/api/universityarea";
 
   constructor(
     private http: HttpClient,
   ) { }
 
-  public getUniStructure(uniStructureId: number): Observable<Vessel>{
-    const url = `${this.baseUrl}/${uniStructureId}`;
+  public getUniversityArea(universityAreaId: number): Observable<Vessel>{
+    const url = `${this.baseUrl}/${universityAreaId}`;
     return this.http.get<Vessel>(url);
   }
 
-  public getUniStructures(): Observable<Vessel[]>{
+  public getAllUniversityAreas(): Observable<Vessel[]>{
     const url = `${this.baseUrl}`;
     return this.http.get<Vessel[]>(url);
   }

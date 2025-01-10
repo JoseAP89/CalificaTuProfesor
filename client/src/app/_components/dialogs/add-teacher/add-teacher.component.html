@@ -21,25 +21,6 @@
         <input matInput formControlName="teacherLastname2">
       </mat-form-field>
 
-      <!-- UNI STRUCTURE ID -->
-      <mat-form-field appearance="fill">
-        <mat-label>Estructura Universitaria</mat-label>
-        <mat-select formControlName="uniStructureId" required>
-          <mat-option>--</mat-option>
-          <ng-container *ngIf="(uniStructures | async) as structures">
-            <mat-option *ngFor="let s of structures" [value]="s.id">
-              {{s.value}}
-            </mat-option>
-          </ng-container>
-        </mat-select>
-      </mat-form-field>
-
-      <!-- UNI STRUCTURE NAME -->
-      <mat-form-field appearance="outline">
-        <mat-label>Nombre de la Estructura Universitaria</mat-label>
-        <input matInput formControlName="structureName" autocomplete="off" required>
-      </mat-form-field>
-
       <!-- CAMPUS -->
       <mat-form-field class="example-full-width" appearance="fill">
         <mat-label>Campus</mat-label>

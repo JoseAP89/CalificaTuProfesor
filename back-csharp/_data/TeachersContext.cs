@@ -26,7 +26,8 @@ namespace back_csharp._data
         public virtual DbSet<Roster> Rosters { get; set; } = null!;
         public virtual DbSet<Scale> Scales { get; set; } = null!;
         public virtual DbSet<State> States { get; set; } = null!;
-        public virtual DbSet<UniStructure> UniStructures { get; set; } = null!;
+        public virtual DbSet<UniversityArea> UniversityAreas { get; set; } = null!;
+        public virtual DbSet<StudyField> StudyFields { get; set; } = null!;
         public virtual DbSet<University> Universities { get; set; } = null!;
         public virtual DbSet<Vote> Votes { get; set; } = null!;
         public virtual DbSet<RosterScale> RosterScales { get; set; } = null!;
@@ -101,6 +102,8 @@ namespace back_csharp._data
 
                 entity.Property(e => e.CommentId)
                     .HasColumnName("commentid");
+                entity.Property(e => e.StudyFieldId)
+                    .HasColumnName("studyfieldid");
                 entity.Property(e => e.RecordId)
                     .HasColumnName("recordid");
                 entity.Property(e => e.Content)
@@ -140,6 +143,12 @@ namespace back_csharp._data
                     .HasForeignKey(d => d.RosterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("comment_roster_id_fkey");
+
+                entity.HasOne(d => d.StudyField)
+                    .WithMany(p => p.Comments)
+                    .HasForeignKey(d => d.StudyFieldId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("comment_studyfield_id_fkey");
             });
 
             // GRADE
@@ -188,7 +197,6 @@ namespace back_csharp._data
             {
                 entity.ToTable("roster");
 
-
                 entity.Property(e => e.RosterId)
                     .HasColumnName("rosterid");
                 entity.Property(e => e.RecordId)
@@ -202,10 +210,6 @@ namespace back_csharp._data
                     .HasColumnName("teacherlastname1");
                 entity.Property(e => e.TeacherLastname2)
                     .HasColumnName("teacherlastname2");
-                entity.Property(e => e.UniStructureId)
-                    .HasColumnName("unistructureid");
-                entity.Property(e => e.StructureName)
-                    .HasColumnName("structurename");
                 entity.Property(e => e.CreatedAt)
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt)
@@ -221,9 +225,6 @@ namespace back_csharp._data
                 entity.Property(e => e.ModifiedAt)
                     .HasColumnType("timestamp without time zone");
 
-                entity.Property(e => e.StructureName)
-                    .HasMaxLength(100);
-
                 entity.Property(e => e.TeacherLastname1)
                     .HasMaxLength(100);
 
@@ -238,12 +239,6 @@ namespace back_csharp._data
                     .HasForeignKey(d => d.CampusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("roster_campus_id_fkey");
-
-                entity.HasOne(d => d.UniStructure)
-                    .WithMany(p => p.Rosters)
-                    .HasForeignKey(d => d.UniStructureId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("roster_uni_structure_id_fkey");
             });
 
             // SCALE
@@ -307,13 +302,13 @@ namespace back_csharp._data
                     .HasMaxLength(80);
             });
 
-            // UNISTRUCTURE
-            modelBuilder.Entity<UniStructure>(entity =>
+            // UNIVERSITY AREA
+            modelBuilder.Entity<UniversityArea>(entity =>
             {
-                entity.ToTable("unistructure");
+                entity.ToTable("universityarea");
 
-                entity.Property(e => e.UniStructureId)
-                    .HasColumnName("unistructureid");
+                entity.Property(e => e.UniversityAreaId)
+                    .HasColumnName("universityareaid");
                 entity.Property(e => e.Name)
                     .HasColumnName("name");
                 entity.Property(e => e.Code)
@@ -324,7 +319,7 @@ namespace back_csharp._data
                     .HasColumnName("modifiedat");
 
                 entity.Property(e => e.Code)
-                    .HasMaxLength(2);
+                    .HasMaxLength(4);
 
                 entity.Property(e => e.CreatedAt)
                     .HasColumnType("timestamp without time zone")
@@ -336,6 +331,42 @@ namespace back_csharp._data
                 entity.Property(e => e.Name)
                     .HasMaxLength(300);
             });
+
+            // STUDY FIELD
+            modelBuilder.Entity<StudyField>(entity =>
+            {
+                entity.ToTable("Studyfield");
+
+                entity.Property(e => e.StudyFieldId)
+                    .HasColumnName("studyfieldid");
+                entity.Property(e => e.Name)
+                    .HasColumnName("name");
+                entity.Property(e => e.Code)
+                    .HasColumnName("code");
+                entity.Property(e => e.UniversityAreaId)
+                    .HasColumnName("universityareaid");
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnName("createdat");
+                entity.Property(e => e.ModifiedAt)
+                    .HasColumnName("modifiedat");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(4);
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("timestamp without time zone")
+                    .HasDefaultValueSql("now()");
+                entity.Property(e => e.ModifiedAt)
+                    .HasColumnType("timestamp without time zone");
+                entity.Property(e => e.Name)
+                    .HasMaxLength(300);
+
+                entity.HasOne(d => d.UniversityArea)
+                    .WithMany(p => p.StudyFields)
+                    .HasForeignKey(d => d.UniversityAreaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fieldstudy_uniarea_id_fkey");
+            });
+
 
             // UNIVERSITY
             modelBuilder.Entity<University>(entity =>

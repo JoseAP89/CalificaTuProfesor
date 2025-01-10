@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 namespace back_csharp._models
 {
-    public partial class UniStructure
+    public partial class UniversityArea
     {
-        public UniStructure()
+        public UniversityArea()
         {
-            Rosters = new HashSet<Roster>();
+            StudyFields = new List<StudyField>();
         }
 
-        public int UniStructureId { get; set; }
+        public int UniversityAreaId { get; set; }
         public string Name { get; set; } = null!;
         public string Code { get; set; } = null!;
         public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
 
-        public virtual ICollection<Roster> Rosters { get; set; }
+        public virtual ICollection<StudyField> StudyFields { get; set; }
     }
 }

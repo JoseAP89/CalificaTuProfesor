@@ -34,8 +34,6 @@ export class RosterDB {
   teacherName: string;
   teacherLastname1: string;
   teacherLastname2: string;
-  uniStructureId: number;
-  structureName: string;
   campusId: number;
   campusName?: string;
   recordId: string;
@@ -105,8 +103,8 @@ export class NewUniversity {
     imgType?: string;
 }
 
-export class UniStructure {
-  uniStructureId: number;
+export class UniversityArea {
+  universityAreaId: number;
   name: string;
   code: string;
 }

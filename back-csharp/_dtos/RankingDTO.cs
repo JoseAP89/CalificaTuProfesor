@@ -6,6 +6,6 @@ public class RankingDTO
     public Guid CampusRecordId { get; set; }
     public string TeacherFullName { get; set; }
     public string CampusName { get; set; }
-    public string StructureName { get; set; }
+    public string UniversityArea { get; set; }
     public double Score { get; set; }
 }

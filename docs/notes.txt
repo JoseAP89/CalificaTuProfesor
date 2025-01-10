@@ -1,9 +1,16 @@
 **** Notes about the tasks to be done ****
 
-++	Campus Page (in progress)
 ++	Change UniStructure table for Area (Engineering, Social Science, and so on) and
 	it might require to add a new table for the subjects that each Area could have, since
 	the concept UniStructure and StructureName are quite confusing.
+	- Removal of StructureName from Roster table, since comments is the one to have it
+	- there is a need to update the DB diagram
+
+++  Add fields University Area and Study Fiel as requitements when adding a comment. The Roster page
+	will have many changes so as to show the new Study Field and University Area.
++	There is a bug when searching for a professor on the home search bar component, you get null null
+	due to not showing the deprecated unistructure (replaced by university area) anymore
+++	Campus Page (in progress)
 +++ Build a top 10 board for the home page, similar to the one on 9anime (https://9animetv.to/home)
 ++  Add a grade float property for Roster, so that it can be displayed more clearly who teacher has better
 	grading scores, and also show that decimal value into the Roster page.
@@ -14,7 +21,8 @@
 	in progress still, although an effective way to stop storing Scales X Comments on the Grade table would
 	be a better solution, taking into consideration the possibility to remove comments and updating the
 	grades per roster.
-
++	There is a bug when you first select the campus, when creating a teacher, and then you select it, you
+	always get a not recognized campus first, which it is resolved by re selecting it.
 ++	Build a logger
 
 +   Notifications functionality (front, backend, and table)

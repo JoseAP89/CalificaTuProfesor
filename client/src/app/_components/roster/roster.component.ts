@@ -2,9 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, firstValueFrom, iif } from 'rxjs';
-import { CommentContentDTO, CommentDTO, RosterDB, RosterRating, Scale, SortPaginator, UniStructure, Vessel, VoteDTO } from 'src/app/_models/business';
+import { CommentContentDTO, CommentDTO, RosterDB, RosterRating, Scale, SortPaginator, UniversityArea, Vessel, VoteDTO } from 'src/app/_models/business';
 import { RosterService } from 'src/app/_services/roster.service';
-import { UnistructureService } from 'src/app/_services/unistructure.service';
 import { RateComponent } from '../dialogs/rate/rate.component';
 import { RatingService } from 'src/app/_services/rating.service';
 import { ScaleService } from 'src/app/_services/scale.service';
@@ -44,7 +43,6 @@ export class RosterComponent implements OnInit{
     private route: ActivatedRoute,
     private rosterService: RosterService,
     private ratingService: RatingService,
-    private uniStructureService: UnistructureService,
     private scaleService: ScaleService,
     private voteService: VoteService,
     private dialog: MatDialog,
@@ -75,7 +73,6 @@ export class RosterComponent implements OnInit{
     this.rosterService.getRosterInfoByRecordId(this._recordId).subscribe({
       next: (res: RosterDB) => {
         this.roster = res;
-        this.getUniStructures();
         this.getScales();
         this.getComments();
         this.getRosterRating();
@@ -173,14 +170,6 @@ export class RosterComponent implements OnInit{
       next: res => {
         this.rosterRating = res;
         this.updateRatingInfo();
-      }
-    })
-  }
-
-  getUniStructures(){
-    this.uniStructureService.getUniStructure(this.roster?.uniStructureId).subscribe({
-      next: res => {
-        this.rosterUniStructure = res;
       }
     })
   }

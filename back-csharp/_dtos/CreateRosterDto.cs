@@ -12,9 +12,7 @@ public class CreateRosterDto
 
         public string SubjectName { get; set; }
 
-        public int UniStructureId { get; set; }
         
         public int CampusId { get; set; }
         
-        public string StructureName { get; set; }
 }

@@ -13,7 +13,7 @@ public class UnitOfWork: IUnitOfWork
     private readonly IMapper _mapper;
     private IUniversityRepo _universities;
     private IStateRepo _states;
-    private IUniStructureRepo _uniStructures;
+    private IUniversityAreaRepo _uniStructures;
     private ICampusRepo _campus;
     private IRosterRepo _roster;
     private IScaleRepo _scale;
@@ -29,7 +29,7 @@ public class UnitOfWork: IUnitOfWork
 
     public IUniversityRepo Universities => _universities ??= new UniversityRepo(_context, _config);
     public IStateRepo States => _states ??= new StateRepo(_context, _config);
-    public IUniStructureRepo UniStructures => _uniStructures ??= new UniStructureRepo(_context, _config);
+    public IUniversityAreaRepo UniversityAreas => _uniStructures ??= new UniversityAreaRepo(_context, _config);
     public ICampusRepo Campus => _campus ??= new CampusRepo(_context, _config);
     public IRosterRepo Roster => _roster ??= new RosterRepo(_context, _config);
     public IScaleRepo Scale => _scale ??= new ScaleRepo(_context, _config);

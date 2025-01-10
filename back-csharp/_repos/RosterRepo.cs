@@ -16,7 +16,6 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
     public async Task<RosterDto> GetRosterDTO(Guid signature)
     {
         var roster = from c in _context.Set<Roster>()
-            join s in _context.Set<UniStructure>() on c.UniStructureId equals s.UniStructureId 
             join m in _context.Set<Campus>() on c.CampusId equals m.CampusId 
             where c.RecordId == signature select new
             {
@@ -25,9 +24,6 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
                 TeacherName = c.TeacherName,
                 TeacherLastname1 = c.TeacherLastname1,
                 TeacherLastname2 = c.TeacherLastname2,
-                UniStructureId = c.UniStructureId,
-                StructureType = s.Name,
-                StructureName = c.StructureName,
                 CampusId = c.CampusId,
                 CampusName = m.Name
             };
@@ -38,9 +34,6 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
                 TeacherName = x.TeacherName,
                 TeacherLastname1 = x.TeacherLastname1,
                 TeacherLastname2 = x.TeacherLastname2,
-                UniStructureId = x.UniStructureId,
-                StructureType = x.StructureType,
-                StructureName = x.StructureName,
                 CampusId = x.CampusId,
                 CampusName = x.CampusName,
                 RecordId = x.RecordId
@@ -52,7 +45,6 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
     public async Task<RosterDto> GetRosterDTO(int id)
     {
         var roster = from c in _context.Set<Roster>()
-            join s in _context.Set<UniStructure>() on c.UniStructureId equals s.UniStructureId 
             join m in _context.Set<Campus>() on c.CampusId equals m.CampusId 
             where c.RosterId == id select new
             {
@@ -60,9 +52,6 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
                 TeacherName = c.TeacherName,
                 TeacherLastname1 = c.TeacherLastname1,
                 TeacherLastname2 = c.TeacherLastname2,
-                UniStructureId = c.UniStructureId,
-                StructureType = s.Name,
-                StructureName = c.StructureName,
                 CampusId = c.CampusId,
                 CampusName = m.Name
             };
@@ -73,9 +62,6 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
                 TeacherName = x.TeacherName,
                 TeacherLastname1 = x.TeacherLastname1,
                 TeacherLastname2 = x.TeacherLastname2,
-                UniStructureId = x.UniStructureId,
-                StructureType = x.StructureType,
-                StructureName = x.StructureName,
                 CampusId = x.CampusId,
                 CampusName = x.CampusName,
             }).SingleOrDefault();
@@ -108,7 +94,6 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
             .ToListAsync();
         var res = await (from c in _context.Set<Campus>()
             join r in _context.Set<Roster>() on c.CampusId equals r.CampusId
-            join u in _context.Set<UniStructure>() on r.UniStructureId equals u.UniStructureId
             where teacher_ids.Contains(r.RosterId)
             orderby r.TeacherName, r.TeacherLastname1, r.TeacherLastname2, c.Name
             select new TeacherCampus()
@@ -118,8 +103,6 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
                 TeacherName = r.TeacherName,
                 TeacherLastname1 = r.TeacherLastname1,
                 TeacherLastname2 = r.TeacherLastname2,
-                UniStructureName = u.Name,
-                StructureName = r.StructureName,
                 Campus = new CampusDto {Name = c.Name, CampusId = c.CampusId, UniversityId = c.UniversityId},
             }).AsNoTracking().ToListAsync();
         return res;
@@ -133,8 +116,6 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
             TeacherName = rosterDto.TeacherName.Trim().ToUpper(),
             TeacherLastname1 = rosterDto.TeacherLastname1.Trim().ToUpper(),
             TeacherLastname2 = rosterDto.TeacherLastname2?.Trim().ToUpper() ?? "",
-            UniStructureId = rosterDto.UniStructureId,
-            StructureName = rosterDto.StructureName,
             CampusId = rosterDto.CampusId
         };
         await base.Add(roster);

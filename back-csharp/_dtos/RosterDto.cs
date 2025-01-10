@@ -11,15 +11,9 @@ public class RosterDto
 
         public string TeacherLastname2 { get; set; }
 
-        public string SubjectName { get; set; }
-
-        public int UniStructureId { get; set; }
-        
-        public string StructureType { get; set; }
 
         public int CampusId { get; set; }
         
         public string CampusName { get; set; }
 
-        public string StructureName { get; set; }
 }

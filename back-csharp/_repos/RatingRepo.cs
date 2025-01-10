@@ -214,7 +214,6 @@ public class RatingRepo: IRatingRepo
                     g.Stars,
                     CampusRecordId = k.RecordId,
                     CampusName = k.Name,
-                    r.StructureName
                 }
                 by r.RecordId into ranking
                 select new RankingDTO
@@ -224,7 +223,6 @@ public class RatingRepo: IRatingRepo
                     TeacherFullName = (ranking.First().TeacherName + ' ' + ranking.First().TeacherLastname1 + ' ' + ranking.First().TeacherLastname2).Trim(),
                     Score = ranking.Average(row => row.Stars),
                     CampusName = ranking.First().CampusName,
-                    StructureName = ranking.First().StructureName
                 }
             );
 
