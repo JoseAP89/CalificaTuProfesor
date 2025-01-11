@@ -11,5 +11,5 @@ public interface IRatingRepo
     Task<int> DeleteCommentByIdAsync(int commentId);
     Task<RosterRatingDTO> GetRosterRatingInfoAsync(int rosterId);
     Task<TableData<CommentDTO>> GetCommentsByRosterAsync(int rosterId, int pageSize, SortPaginator pag, int pageNumber = 0, Guid? currentUserId = null);
-    Task<List<RankingDTO>> GetTeachersRankingAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0);
+    Task<List<RankingDTO>> GetTeachersRankingAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0, Guid? rosterRecordId = null);
 }

@@ -11,6 +11,10 @@ public class AutoMapperConfigs: Profile
         // ***
         CreateMap<Vote, VoteDTO>();
         CreateMap<VoteDTO, Vote>();
+        CreateMap<StudyFieldDTO, StudyField>();
+        CreateMap<StudyField, StudyFieldDTO>();
+        CreateMap<UniversityAreaDTO, UniversityArea>();
+        CreateMap<UniversityArea, UniversityAreaDTO>();
         // ***
         CreateMap<Campus, CampusDto>().ReverseMap();
         CreateMap<Campus, ShortCampusDTO>().ReverseMap();

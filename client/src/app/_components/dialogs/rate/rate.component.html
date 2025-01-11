@@ -41,6 +41,24 @@
         </div>
       </div>
 
+      <div class="study-field-box">
+        <mat-form-field>
+          <mat-label>Area</mat-label>
+          <mat-select formControlName="universityAreaId" (valueChange)="onChangeUniversityArea()" name="universityArea">
+            <mat-option *ngFor="let area of universityAreas"
+              [value]="area.universityAreaId">{{area.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Campo de estudio</mat-label>
+          <mat-select formControlName="studyFieldId" name="studyField">
+            <mat-option *ngFor="let field of getStudyFieldByUniAreaId(universityAreaId.value)"
+              [value]="field.studyFieldId">{{field.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
       <div class="comment-box">
         <label for="comment">Escribe una reseña de tu experiencia con el Maestro (se respetuoso):</label>
         <textarea #Comment id="comment" formControlName="comment" matInput

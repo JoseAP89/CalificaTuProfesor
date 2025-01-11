@@ -6,8 +6,6 @@ using back_csharp._enums;
 using back_csharp._helpers;
 using back_csharp._models;
 using Dapper;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Server.IIS;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -195,7 +193,7 @@ public class RatingRepo: IRatingRepo
         }
     }
 
-    public async Task<List<RankingDTO>> GetTeachersRankingAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0)
+    public async Task<List<RankingDTO>> GetTeachersRankingAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0, Guid? rosterRecordId = null)
     {
         try
         {
@@ -229,6 +227,10 @@ public class RatingRepo: IRatingRepo
             if (campusRecordId != Guid.Empty)
             {
                 ranksQuery = ranksQuery.Where(r => r.CampusRecordId == campusRecordId);    
+            }
+            if (rosterRecordId != null && rosterRecordId != Guid.Empty)
+            {
+                ranksQuery = ranksQuery.Where(r => r.RosterRecordId == rosterRecordId);    
             }
 
             var ranks = await ranksQuery

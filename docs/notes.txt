@@ -1,13 +1,5 @@
 **** Notes about the tasks to be done ****
 
-++	Change UniStructure table for Area (Engineering, Social Science, and so on) and
-	it might require to add a new table for the subjects that each Area could have, since
-	the concept UniStructure and StructureName are quite confusing.
-	- Removal of StructureName from Roster table, since comments is the one to have it
-	- there is a need to update the DB diagram
-
-++  Add fields University Area and Study Fiel as requitements when adding a comment. The Roster page
-	will have many changes so as to show the new Study Field and University Area.
 +	There is a bug when searching for a professor on the home search bar component, you get null null
 	due to not showing the deprecated unistructure (replaced by university area) anymore
 ++	Campus Page (in progress)
@@ -17,6 +9,8 @@
 ++	There is a need for an error middleware on the backend to better improve the messages sent to the client,
 	also I need to add an ApiException class to handle business logic errors in the app.
 +	About page
++	Add a badge comments filter by UniversityArea-StudyField on the Roster Page, that would be a great
+	and useful addition.
 +	RosterScale table was made to create a cache-like table for roster-scale grades, but it is a work
 	in progress still, although an effective way to stop storing Scales X Comments on the Grade table would
 	be a better solution, taking into consideration the possibility to remove comments and updating the

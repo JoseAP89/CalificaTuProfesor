@@ -8,6 +8,7 @@ public class CommentDTO
     public string SubjectName { get; set; }
     public string Content { get; set; }
     public string UserId { get; set; }
+    public int StudyFieldId { get; set; }
     public int Likes { get; set; }
     public int Dislikes { get; set; }
     public bool? currentUserVote { get; set; }

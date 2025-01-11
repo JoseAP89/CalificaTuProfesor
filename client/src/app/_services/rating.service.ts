@@ -84,4 +84,14 @@ export class RatingService implements OnDestroy {
     return this.http.get<TableData<CommentDTO>>(url, {params});
   }
 
+  public GetTeacherRanking(rosterId: number, pageSize: number, sortPage: SortPaginator, pageNumber: number = 0, currentUserId: string = null): Observable<TableData<CommentDTO>> {
+    const url = `${this.baseUrl}/roster/fullComments/${rosterId}`;
+    let params = new HttpParams()
+      .set("pageSize", pageSize)
+      .set("sortPage", sortPage)
+      .set("pageNumber", pageNumber)
+      .set("currentUserId", currentUserId);
+    return this.http.get<TableData<CommentDTO>>(url, {params});
+  }
+
 }

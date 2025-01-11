@@ -330,12 +330,14 @@ namespace back_csharp._data
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(300);
+                entity.HasMany(d => d.StudyFields)
+                    .WithOne(d => d.UniversityArea);
             });
 
             // STUDY FIELD
             modelBuilder.Entity<StudyField>(entity =>
             {
-                entity.ToTable("Studyfield");
+                entity.ToTable("studyfield");
 
                 entity.Property(e => e.StudyFieldId)
                     .HasColumnName("studyfieldid");
@@ -364,7 +366,7 @@ namespace back_csharp._data
                     .WithMany(p => p.StudyFields)
                     .HasForeignKey(d => d.UniversityAreaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fieldstudy_uniarea_id_fkey");
+                    .HasConstraintName("studyfield_uniarea_id_fkey");
             });
 
 

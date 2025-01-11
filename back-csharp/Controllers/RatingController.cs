@@ -84,10 +84,11 @@ public class RatingController : ControllerBase
     }
 
     [HttpGet("teacher/ranking")]
-    public async Task<ActionResult<TableData<CommentDTO>>> GetTeacherRanking(string campusRecordIdStr = "", int pageSize = 20, int pageNumber = 0)
+    public async Task<ActionResult<TableData<CommentDTO>>> GetTeacherRanking(string campusRecordIdStr = "", int pageSize = 20, int pageNumber = 0, string rosterRecordIdStr = "")
     {
-        Guid campusRecordId = string.IsNullOrEmpty(campusRecordIdStr )? Guid.Empty : new Guid(campusRecordIdStr);
-        var res = await _uow.Ratings.GetTeachersRankingAsync(campusRecordId, pageSize, pageNumber);
+        Guid campusRecordId = string.IsNullOrEmpty(campusRecordIdStr)? Guid.Empty : new Guid(campusRecordIdStr);
+        Guid rosterRecordId = string.IsNullOrEmpty(rosterRecordIdStr)? Guid.Empty : new Guid(rosterRecordIdStr);
+        var res = await _uow.Ratings.GetTeachersRankingAsync(campusRecordId, pageSize, pageNumber, rosterRecordId);
         if (res == null)
         {
             return NotFound("Hubo un error obteniendo la lista de rankings.");

@@ -9,6 +9,7 @@ using back_csharp._data;
 using back_csharp._dtos;
 using back_csharp._helpers;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace back_csharp.Controllers
 {
@@ -18,11 +19,13 @@ namespace back_csharp.Controllers
     {
         private readonly TeachersContext _context;
         private readonly IUnitOfWork _uow;
+        private readonly IMapper _mapper;
 
-        public UniversityAreaController(TeachersContext context, IUnitOfWork uow)
+        public UniversityAreaController(TeachersContext context, IUnitOfWork uow, IMapper mapper)
         {
             _context = context;
             _uow = uow;
+            this._mapper = mapper;
         }
 
         [HttpGet("{uniAreaId}")]
@@ -46,7 +49,7 @@ namespace back_csharp.Controllers
         }
         
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Vessel>>> GetUniversityAreas()
+        public async Task<ActionResult<IEnumerable<UniversityAreaDTO>>> GetUniversityAreas()
         {
             try
             {
@@ -55,7 +58,8 @@ namespace back_csharp.Controllers
                 {
                     return NotFound();
                 }
-                return Ok(res);
+                var unis = _mapper.Map<List<UniversityAreaDTO>>(res);
+                return Ok(unis);
 
             }
             catch (Exception e)

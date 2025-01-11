@@ -107,6 +107,14 @@ export class UniversityArea {
   universityAreaId: number;
   name: string;
   code: string;
+  studyFields?: StudyField[];
+}
+
+export class StudyField {
+  studyFieldId: number;
+  universityAreaId: number;
+  name: string;
+  code: string;
 }
 
 export class Grade {
@@ -128,6 +136,7 @@ export class CommentDTO {
   recordId: string;
   subjectName: string;
   rosterId: number;
+  studyFieldId: number;
   content: string;
   userId: string;
   grades: Array<Grade>;
@@ -171,4 +180,13 @@ export class TableData<T> {
 export class CommentContentDTO {
   commentId: number;
   content: string;
+}
+
+export interface RankingDTO {
+  rosterRecordId: string;
+  campusRecordId: string;
+  teacherFullName: string;
+  campusName: string;
+  universityArea: string;
+  score: number;
 }

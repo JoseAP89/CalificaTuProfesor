@@ -2,12 +2,13 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { firstValueFrom } from 'rxjs';
-import { CommentDTO, Grade, Roster, RosterDB, Scale, Vote } from 'src/app/_models/business';
+import { CommentDTO, Grade, Roster, RosterDB, Scale, StudyField, UniversityArea, Vote } from 'src/app/_models/business';
 import { RatingService } from 'src/app/_services/rating.service';
 import { ScaleService } from 'src/app/_services/scale.service';
 import { SnackbarService } from 'src/app/_services/snackbar.service';
 import { MAX_LEN_COMMENT, MIN_LEN_COMMENT } from '../../constants';
 import { getHttpErrorMessage } from 'src/app/_helpers/miscelaneous';
+import { UniversityAreaService } from 'src/app/_services/universityArea.service';
 
 @Component({
   selector: 'app-rate',
@@ -25,6 +26,7 @@ export class RateComponent implements OnInit {
   public comment: string = ""
   public roster: RosterDB;
   public currentUserId: string;
+  public universityAreas: UniversityArea[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: RosterDB,
@@ -32,6 +34,7 @@ export class RateComponent implements OnInit {
     private fb: FormBuilder,
     private scaleService: ScaleService,
     private ratingService: RatingService,
+    private universityAreaService: UniversityAreaService,
     private snackbarService: SnackbarService,
   ) {
     this._scales = []
@@ -44,6 +47,8 @@ export class RateComponent implements OnInit {
     this.rateForm = this.fb.group({
       subjectName: ['', Validators.required],
       comment: ['', Validators.required],
+      universityAreaId: [0, Validators.required],
+      studyFieldId: [0, Validators.required],
       scales: this.fb.array([])
     });
     this.scaleService.getScales().subscribe({
@@ -52,15 +57,40 @@ export class RateComponent implements OnInit {
         this.addScalesToForm();
         this.addScalesDescriptionStatus();
       }
+    });
+    this.universityAreaService.getAllUniversityAreas().subscribe({
+      next: res => {
+        this.universityAreas = res;  
+      }
     })
   }
 
   get scales() : FormArray {
     return this.rateForm.get('scales') as FormArray;
   }
-
+  get universityAreaId() : FormControl {
+    return this.rateForm.get('universityAreaId') as FormControl;
+  }
+  get studyFieldId() : FormControl {
+    return this.rateForm.get('studyFieldId') as FormControl;
+  }
   get subjectName(): FormControl {
     return this.rateForm.get('subjectName') as FormControl;
+  }
+
+  onChangeUniversityArea(){
+    this.rateForm.patchValue({
+      studyFieldId: 0
+    });
+  }
+
+  getStudyFieldByUniAreaId(uniAreaId: number) : StudyField[]{
+    if (uniAreaId>0) {
+      for (const area of this.universityAreas) {
+        if(area.universityAreaId == uniAreaId) return area.studyFields;
+      }
+    }
+    return [];
   }
 
   updateAverageRate(): void {
@@ -112,7 +142,7 @@ export class RateComponent implements OnInit {
   }
 
   isDataValid(): boolean{
-    return this.rateForm.valid && this.isCommentValid() && this.averageRate>0;
+    return this.rateForm.valid && this.isCommentValid() && this.averageRate > 0 && this.studyFieldId.value > 0;
   }
 
   async onSubmit(){
@@ -122,6 +152,7 @@ export class RateComponent implements OnInit {
       comment.content = this.comment;
       comment.rosterId = this.roster.rosterId!;
       comment.subjectName = this.subjectName.value;
+      comment.studyFieldId = this.studyFieldId.value;
       comment.userId = await firstValueFrom(this.ratingService.checkSetAndGetCurrentUserID());
       comment.grades = [];
       for (let i = 0; i < this._scales.length; i++) {

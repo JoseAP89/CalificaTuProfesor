@@ -20,9 +20,9 @@ export class UniversityAreaService {
     return this.http.get<Vessel>(url);
   }
 
-  public getAllUniversityAreas(): Observable<Vessel[]>{
+  public getAllUniversityAreas(): Observable<UniversityArea[]>{
     const url = `${this.baseUrl}`;
-    return this.http.get<Vessel[]>(url);
+    return this.http.get<UniversityArea[]>(url);
   }
 
 }

@@ -6,6 +6,6 @@ namespace back_csharp._contracts;
 public interface IUniversityAreaRepo: ICommonRepo<UniversityArea>
 {
     Task<Vessel> GetUniversityAreaVesselAsync(int universityAreaId);
-    Task<IEnumerable<Vessel>> GetAllUniversityAreaVesselsAsync();
+    Task<IEnumerable<UniversityArea>> GetAllUniversityAreaVesselsAsync();
 
 }
