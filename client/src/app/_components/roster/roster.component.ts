@@ -26,7 +26,6 @@ export class RosterComponent implements OnInit{
   public rosterId: number;
   public roster: RosterDB;
   public rosterRating: RosterRating;
-  public rosterUniStructure: Vessel;
   public scales: Scale[];
   public comments: CommentDTO[] = [];
 

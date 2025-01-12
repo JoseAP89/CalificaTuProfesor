@@ -35,7 +35,7 @@ public class RatingRepo: IRatingRepo
             using var connection = new NpgsqlConnection(_connectionString);
             // Create a query that retrieves all authors"    
             var sql = @$"
-                select g.scaleid, round(CAST(avg(g.stars) as numeric),1) as stars from roster r
+                select g.scaleid, round(CAST(avg(g.stars) as numeric),{DECIMAL_DIGITS}) as stars from roster r
                 inner join comment c on r.rosterid=c.rosterid
                 inner join grade g on c.commentId=g.commentId
                 inner join scale s on g.scaleid=s.scaleid
@@ -48,7 +48,7 @@ public class RatingRepo: IRatingRepo
             {
                 RosterId = rosterId,
                 Grades = grades,
-                AverageGrade = grades.Count > 0 ? Math.Round(grades.Average(g => g.Stars), 1) : 0.0
+                AverageGrade = grades.Count > 0 ? Math.Round(grades.Average(g => g.Stars), DECIMAL_DIGITS) : 0.0
             };
             return rating;
 
