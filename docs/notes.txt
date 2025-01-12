@@ -1,5 +1,6 @@
 **** Notes about the tasks to be done ****
 
+
 +	There is a bug when searching for a professor on the home search bar component, you get null null
 	due to not showing the deprecated unistructure (replaced by university area) anymore
 ++	Campus Page (in progress)
