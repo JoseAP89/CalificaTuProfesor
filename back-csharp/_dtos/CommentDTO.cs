@@ -1,4 +1,6 @@
-﻿namespace back_csharp._dtos;
+﻿using back_csharp._models;
+
+namespace back_csharp._dtos;
 
 public class CommentDTO
 {
@@ -12,6 +14,7 @@ public class CommentDTO
     public int Likes { get; set; }
     public int Dislikes { get; set; }
     public bool? currentUserVote { get; set; }
+    public StudyFieldDTO StudyField { get; set; }
     public IEnumerable<GradeDTO> Grades { get; set; }
     public IEnumerable<VoteDTO> Votes { get; set; }
     public DateTime CreatedAt { get; set; }

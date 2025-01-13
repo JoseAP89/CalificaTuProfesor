@@ -115,20 +115,56 @@ public class RatingRepo: IRatingRepo
         return comment;  
     }
 
-    public async Task<TableData<CommentDTO>> GetCommentsByRosterAsync(int rosterId, int pageSize, SortPaginator pag, int pageNumber = 0, Guid? currentUserId = null)
+    public async Task<TableData<CommentDTO>> GetCommentsByRosterAsync(int rosterId, int pageSize = 10, SortPaginator pag = SortPaginator.DateDesc, int pageNumber = 0, Guid? currentUserId = null)
     {
         try
         {
             if (currentUserId == null) currentUserId = Guid.NewGuid();
             var comments = await _context.Comments
                 .Where(c => c.RosterId == rosterId)
-                .Include(c => c.Grades)
-                .ThenInclude(g => g.Scale)
-                .Include(c => c.Votes)
+                .Select(c => new Comment
+                {
+                    CommentId = c.CommentId,
+                    RecordId = c.RecordId,
+                    SubjectName = c.SubjectName,
+                    Content = c.Content,
+                    CreatedAt = c.CreatedAt,
+                    ModifiedAt = c.ModifiedAt,
+                    UserId = c.UserId,
+                    Grades = c.Grades.Select(g => new Grade
+                    {
+                        GradeId = g.GradeId,
+                        Stars = g.Stars,
+                        Scale = new Scale
+                        {
+                            ScaleId = g.Scale.ScaleId,
+                            Name = g.Scale.Name,
+                            Description = g.Scale.Description
+                        }
+                    }).ToList(),
+                    Votes = c.Votes.Select(v => new Vote
+                    {
+                        VoteId = v.VoteId,
+                        UserId = v.UserId,
+                        Approval = v.Approval
+                    }).ToList(),
+                    StudyField = new StudyField
+                    {
+                        StudyFieldId = c.StudyField.StudyFieldId,
+                        Name = c.StudyField.Name,
+                        Code = c.StudyField.Code,
+                        UniversityArea = new UniversityArea
+                        {
+                             UniversityAreaId =c.StudyField.UniversityArea.UniversityAreaId,
+                             Name =c.StudyField.UniversityArea.Name,
+                             Code =c.StudyField.UniversityArea.Code
+                        }
+                    }
+                })
                 .AsSplitQuery()
                 .AsNoTracking()
-                .ToListAsync()
-                ;
+                .ToListAsync();
+
             var commentsSorted = _mapper.Map<List<CommentDTO>>(comments).AsEnumerable();
             commentsSorted = commentsSorted.Select(c =>
             {
@@ -187,7 +223,7 @@ public class RatingRepo: IRatingRepo
             return table;
 
         }
-        catch (Exception)
+        catch (Exception _e)
         {
             return null;
         }

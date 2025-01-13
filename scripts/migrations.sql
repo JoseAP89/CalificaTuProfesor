@@ -210,7 +210,7 @@ INSERT INTO StudyField (Name, Code, UniversityAreaId) VALUES
   ('Diseño Gráfico', 'DGRA', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'HA')),
   ('Teatro', 'TEAT', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'HA')),
   ('Música', 'MUSI', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'HA')),
-  ('FÍsica', 'FISN', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CNE')),
+  ('Física', 'FISN', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CNE')),
   ('Química', 'QUIN', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CNE')),
   ('Geología', 'GEON', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CNE')),
   ('Matemáticas', 'MATN', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CNE')),
