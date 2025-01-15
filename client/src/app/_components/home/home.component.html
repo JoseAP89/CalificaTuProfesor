@@ -38,8 +38,8 @@
       <div class="search-options-box" *ngFor="let item of opts; index as i">
         <mat-icon class="hide-options-btn" *ngIf="i == 0" (click)="showOptions = false">expand_less</mat-icon>
         <div class="option-item" (click)="onSelectedOption(item[0])">
-          <div class="children-option">{{item[0].value}}</div>
-          <div class="parent-option">{{item[1].value}}</div>
+          <div class="children-option">{{item[0]?.value ?? ''}}</div>
+          <div class="parent-option">{{item[1]?.value ?? ''}}</div>
         </div>
       </div>
     </div>
