@@ -126,7 +126,8 @@ public class RatingRepo: IRatingRepo
                 {
                     CommentId = c.CommentId,
                     RecordId = c.RecordId,
-                    RosterId = rosterId,
+                    RosterId = c.RosterId,
+                    StudyFieldId = c.StudyFieldId,
                     SubjectName = c.SubjectName,
                     Content = c.Content,
                     CreatedAt = c.CreatedAt,

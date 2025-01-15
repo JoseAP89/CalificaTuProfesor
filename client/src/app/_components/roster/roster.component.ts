@@ -288,4 +288,17 @@ export class RosterComponent implements OnInit{
     this.getComments();
   }
 
+  getAverageCommentGrade(comment: CommentDTO): number{
+    let numerator = 0;
+    if(!comment?.grades) return 0;
+    for (const grade of comment.grades) {
+      numerator+= grade.stars;
+    }
+    return numerator / comment.grades.length;
+  }
+
+  getStarkRank(num: number): number {
+    return Math.ceil(num);
+  }
+
 }

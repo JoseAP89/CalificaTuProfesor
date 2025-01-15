@@ -115,6 +115,7 @@ export class StudyField {
   universityAreaId: number;
   name: string;
   code: string;
+  universityArea?: UniversityArea;
 }
 
 export class Grade {
@@ -141,6 +142,7 @@ export class CommentDTO {
   userId: string;
   grades: Array<Grade>;
   votes: Array<Vote>;
+  studyField: StudyField;
   likes: number;
   dislikes: number;
   currentUserVote?:	boolean;
