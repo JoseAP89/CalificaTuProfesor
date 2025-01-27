@@ -1,8 +1,5 @@
 **** Notes about the tasks to be done ****
 
-
-+	There is a bug when searching for a professor on the home search bar component, you get null null
-	due to not showing the deprecated unistructure (replaced by university area) anymore
 ++	Campus Page (in progress)
 +++ Build a top 10 board for the home page, similar to the one on 9anime (https://9animetv.to/home)
 ++  Add a grade float property for Roster, so that it can be displayed more clearly who teacher has better

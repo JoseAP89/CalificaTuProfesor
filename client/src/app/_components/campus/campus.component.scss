@@ -1,0 +1,13 @@
+.campus-main-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4px;
+    .teachers-tile{
+        padding: 10px;
+
+    }
+    .top-board-tile{
+        padding: 10px;
+
+    }
+}

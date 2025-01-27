@@ -59,7 +59,7 @@ namespace back_csharp.Controllers
         [HttpGet("campus/{search}")]
         public async Task<ActionResult<IEnumerable<TeacherCampus>>> GetTeacherCampus(string search)
         {
-            var res = await _uow.Roster.GetTeacherCampus(search);
+            var res = await _uow.Roster.GetTeacherCampusByTeacherName(search);
             if (res==null)
             {
                 return NotFound();
