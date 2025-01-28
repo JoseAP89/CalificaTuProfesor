@@ -2,4 +2,11 @@ version: '3'
 
 
 services:
-
+    proxy:
+        build: "client/."
+    client-app:
+        build: "client/."
+        environment:
+            - APP_NAME=client-app
+        ports: 
+            - 4200:4200
