@@ -2,11 +2,69 @@ version: '3'
 
 
 services:
-    proxy:
-        build: "client/."
-    client-app:
-        build: "client/."
+    client-service:
+        container_name: client-app
+        build: 
+            context: ./client
+            dockerfile: Dockerfile
         environment:
             - APP_NAME=client-app
         ports: 
             - 4200:4200
+        depends_on:
+            - proxyserver-service
+        networks:
+            - app_network
+
+    backend-service:
+        container_name: backend-app
+        build: 
+            context: ./back-csharp
+            dockerfile: Dockerfile
+        environment:
+            - APP_NAME=backend-app
+            - ASPNETCORE_ENVIRONMENT=Development
+        ports: 
+            - 5268:5268
+            - 7167:7167
+        depends_on:
+            - postgres-db
+        networks:
+            - app_network
+
+    postgres-db:
+        container_name: postgres-app
+        build: 
+            context: ./postgresql
+            dockerfile: Dockerfile
+        environment:
+            - APP_NAME=postgres-app
+        ports: 
+            - 5432:5432
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        networks:
+            - app_network
+        
+    proxyserver-service:
+        container_name: proxyserver-app
+        build: 
+            context: ./proxyserver
+            dockerfile: Dockerfile
+        environment:
+            - APP_NAME=proxyserver-app
+        ports: 
+            - 8080:80
+        depends_on:
+            - backend-service
+        networks:
+            - app_network
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
+    driver: bridge
+            
+            
