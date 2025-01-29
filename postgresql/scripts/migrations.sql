@@ -1,18 +1,3 @@
--- initial setup 
--- example to execute the file on terminal on windows:
---   teachers=> \encoding UTF8
---   teachers=> \i C:/Users/diana/Documents/CalificaTuProfesorApp/CalificaTuProfesor/scripts/migrations.sql
---drop DATABASE if EXISTS teachers;
---create DATABASE teachers;
-
---\c teachers; -- psql command to connect to the new database teachers
-
--- privileges: create them if you have not already
-
---create user joseap ;
---alter user joseap with encrypted password 'J1o2s3e4';
-
--- You need to have the database created first for the following commands
 -- dropping tables
 DROP TABLE IF EXISTS RosterScale;
 DROP TABLE IF EXISTS Grade;
@@ -155,12 +140,6 @@ CREATE TABLE RosterScale (
     FOREIGN KEY (ScaleId)
         REFERENCES Scale (ScaleId)
 );
-
--- Granting access to user joseap
-
-GRANT ALL PRIVILEGES ON DATABASE teachers TO joseap;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO joseap;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO joseap;
 
 -- filling university area table
 
