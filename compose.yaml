@@ -3,56 +3,64 @@ version: '3'
 
 services:
     client-service:
-        container_name: client-app
+        container_name: client-service
         build: 
             context: ./client
             dockerfile: Dockerfile
-        environment:
-            - APP_NAME=client-app
         ports: 
             - 4200:4200
+        environment:
+            - APP_NAME=client-service
+            - PRODUCTION=false
+            - API_URL=http://localhost:8080
+        post_start:
+          - command: node /usr/src/app/client/replace-env.js
         depends_on:
             - proxyserver-service
         networks:
             - app_network
 
     backend-service:
-        container_name: backend-app
+        container_name: backend-service
         build: 
             context: ./back-csharp
             dockerfile: Dockerfile
-        environment:
-            - APP_NAME=backend-app
-            - ASPNETCORE_ENVIRONMENT=Development
         ports: 
             - 5268:5268
             - 7167:7167
+        environment:
+            - APP_NAME=backend-app
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ConnectionStrings__TeachersDB=Host=postgres-db;Database=teachers;Username=joseap;Password=J1o2s3e4
         depends_on:
             - postgres-db
         networks:
             - app_network
 
     postgres-db:
-        container_name: postgres-app
+        container_name: postgres-db
         build: 
             context: ./postgresql
             dockerfile: Dockerfile
-        environment:
-            - APP_NAME=postgres-app
         ports: 
             - 5432:5432
+        environment:
+            - APP_NAME=postgres-app
+            - POSTGRES_DB=postgres
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=J1o2s3e4
         volumes:
             - postgres_data:/var/lib/postgresql/data
         networks:
             - app_network
         
     proxyserver-service:
+        environment:
+            - APP_NAME=proxyserver-app
         container_name: proxyserver-app
         build: 
             context: ./proxyserver
             dockerfile: Dockerfile
-        environment:
-            - APP_NAME=proxyserver-app
         ports: 
             - 8080:80
         depends_on:

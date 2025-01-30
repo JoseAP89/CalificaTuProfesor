@@ -9,7 +9,7 @@ import { Scale } from '../_models/business';
 })
 export class ScaleService {
 
-  private baseUrl = environment.api_url + "/api/scale";
+  private baseUrl = environment.API_URL + "/api/scale";
   constructor(
     private http: HttpClient,
   ) { }

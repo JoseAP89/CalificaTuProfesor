@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class VoteService {
 
-  private baseUrl = environment.api_url + "/api/vote";
+  private baseUrl = environment.API_URL + "/api/vote";
 
   constructor(
     private http: HttpClient,

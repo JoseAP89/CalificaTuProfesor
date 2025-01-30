@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 })
 export class CommonService {
 
-  private baseUrl = environment.api_url + "/api/Common";
+  private baseUrl = environment.API_URL + "/api/Common";
 
   constructor(
     private http: HttpClient,
