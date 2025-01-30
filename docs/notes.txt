@@ -1,11 +1,14 @@
 **** Notes about the tasks to be done ****
 
+++	When creating a teacher the field campus makes a request for every key stroke, change that to a more efficient way
+	using the already done on the home search bar.
 ++	Campus Page (in progress)
 +++ Build a top 10 board for the home page, similar to the one on 9anime (https://9animetv.to/home)
 ++  Add a grade float property for Roster, so that it can be displayed more clearly who teacher has better
 	grading scores, and also show that decimal value into the Roster page.
 ++	There is a need for an error middleware on the backend to better improve the messages sent to the client,
 	also I need to add an ApiException class to handle business logic errors in the app.
++	Add a diagram to show how the services interact with each other on the docker network.
 +	About page
 +	Add a badge comments filter by UniversityArea-StudyField on the Roster Page, that would be a great
 	and useful addition.

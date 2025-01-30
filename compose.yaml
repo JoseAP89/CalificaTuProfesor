@@ -14,7 +14,7 @@ services:
             - PRODUCTION=false
             - API_URL=http://localhost:8080
         post_start:
-          - command: node /usr/src/app/client/replace-env.js
+          - command: node /usr/src/app/client/replace-env.js # set up the environment variables
         depends_on:
             - proxyserver-service
         networks:
