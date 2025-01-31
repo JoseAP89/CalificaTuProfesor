@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, catchError, firstValueFrom, of, tap } from 'rxjs';
+import { Observable, catchError, debounceTime, firstValueFrom, fromEvent, of, tap } from 'rxjs';
 import { Campus, RosterDB, UniversityArea, Vessel } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 import { RosterService } from 'src/app/_services/roster.service';
@@ -32,6 +32,15 @@ export class AddTeacherComponent implements OnInit {
       teacherLastname1: ['', Validators.required],
       teacherLastname2: [''],
       campusName: ['', Validators.required],
+    });
+    let searchValueInput = document.querySelector("#search-campus-field");
+    const keyup$ = fromEvent(searchValueInput, 'keyup');
+    keyup$.pipe(
+      debounceTime(400)
+    ).subscribe( (event: any) => {
+      let typedValue = event.target.value;
+      console.log("event::", typedValue);
+      this.onSearchCampus(typedValue);
     });
   }
 

@@ -1,7 +1,5 @@
 **** Notes about the tasks to be done ****
 
-++	When creating a teacher the field campus makes a request for every key stroke, change that to a more efficient way
-	using the already done on the home search bar.
 ++ When creating a teacher comment those are not being reflected on the comments section, you need to refresh the page to show it.
 ++	Campus Page (in progress)
 +++ Build a top 10 board for the home page, similar to the one on 9anime (https://9animetv.to/home)

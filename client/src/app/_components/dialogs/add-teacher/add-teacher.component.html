@@ -25,11 +25,12 @@
       <mat-form-field class="example-full-width" appearance="fill">
         <mat-label>Campus</mat-label>
         <input type="text" required
+          id="search-campus-field"
           placeholder="Busca el campus"
           aria-label="Number"
           matInput
           formControlName="campusName"
-          #CampusElement (keyup)="onSearchCampus(CampusElement.value)"
+          #CampusElement
           (blur)="onSelectCampus()"
           (select)="onSelectCampus()"
           [matAutocomplete]="campus"
