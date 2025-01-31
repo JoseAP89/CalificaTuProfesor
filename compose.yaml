@@ -1,8 +1,6 @@
-version: '3'
-
-
 services:
     client-service:
+        restart: always
         container_name: client-service
         build: 
             context: ./client
@@ -13,6 +11,12 @@ services:
             - APP_NAME=client-service
             - PRODUCTION=false
             - API_URL=http://localhost:8080
+        post_start:
+          - command: node /app/replace-env.js # set up the environment variables
+        depends_on:
+            proxyserver-service:
+                condition: service_started
+                restart: true
         develop:
             watch: 
                 - action: sync
@@ -22,14 +26,14 @@ services:
                     - ./client/node_modules
                 - action: rebuild
                   path: ./client/package.json
-        post_start:
-          - command: node /app/replace-env.js # set up the environment variables
-        depends_on:
-            - proxyserver-service
+                - action: sync+restart
+                  path: ./back-csharp
+                  target: /app
         networks:
             - app_network
 
     backend-service:
+        restart: always
         container_name: backend-service
         build: 
             context: ./back-csharp
@@ -41,15 +45,15 @@ services:
             - APP_NAME=backend-app
             - ASPNETCORE_ENVIRONMENT=Development
             - ConnectionStrings__TeachersDB=Host=postgres-db;Database=teachers;Username=joseap;Password=J1o2s3e4
+        depends_on:
+            - postgres-db
         develop:
             watch: 
-                - action: sync
+                - action: rebuild
                   path: ./back-csharp
                   target: /app
                 - action: rebuild
                   path: ./back-csharp/back-csharp.csproj
-        depends_on:
-            - postgres-db
         networks:
             - app_network
 
@@ -71,6 +75,7 @@ services:
             - app_network
         
     proxyserver-service:
+        restart: always
         environment:
             - APP_NAME=proxyserver-app
         container_name: proxyserver-app
@@ -80,7 +85,14 @@ services:
         ports: 
             - 8080:80
         depends_on:
-            - backend-service
+            backend-service:
+                condition: service_started
+                restart: true
+        develop:
+            watch: 
+                - action: sync+restart
+                  path: ./back-csharp
+                  target: /app
         networks:
             - app_network
 
