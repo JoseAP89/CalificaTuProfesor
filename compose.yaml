@@ -13,8 +13,17 @@ services:
             - APP_NAME=client-service
             - PRODUCTION=false
             - API_URL=http://localhost:8080
+        develop:
+            watch: 
+                - action: sync
+                  path: ./client  
+                  target: /app
+                  ignore: 
+                    - ./client/node_modules
+                - action: rebuild
+                  path: ./client/package.json
         post_start:
-          - command: node /usr/src/app/client/replace-env.js # set up the environment variables
+          - command: node /app/replace-env.js # set up the environment variables
         depends_on:
             - proxyserver-service
         networks:
@@ -32,6 +41,13 @@ services:
             - APP_NAME=backend-app
             - ASPNETCORE_ENVIRONMENT=Development
             - ConnectionStrings__TeachersDB=Host=postgres-db;Database=teachers;Username=joseap;Password=J1o2s3e4
+        develop:
+            watch: 
+                - action: sync
+                  path: ./back-csharp
+                  target: /app
+                - action: rebuild
+                  path: ./back-csharp/back-csharp.csproj
         depends_on:
             - postgres-db
         networks:
