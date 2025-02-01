@@ -65,8 +65,7 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
         if (res != null)
         {
             var fileName =  res.Name.Replace(" ", "_").ToLower().Trim() ;
-            var files = Directory.GetFiles(path, $"{fileName}.*");
-            string fullFileName = files.FirstOrDefault();
+            string fullFileName = fileName is not null? $"{path}\\{fileName}": null;
             if (!string.IsNullOrEmpty(fullFileName))
             {
                 var pos = fullFileName.LastIndexOf("/");

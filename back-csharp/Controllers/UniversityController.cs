@@ -44,7 +44,7 @@ namespace back_csharp.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return BadRequest($"Hubo un error al buscar la universidad con id {id}");
+                return BadRequest($"Hubo un error al solicitar la búsqueda de la universidad con id {id}.");
             }
 
         }

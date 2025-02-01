@@ -1,0 +1,44 @@
+# Ignore build and distribution files
+**/dist/
+**/node_modules/
+
+# Ignore local development files
+**/.angular/
+**/.vscode/
+**/.idea/
+**/.git/
+**/.github/
+
+# Ignore npm/yarn cache and logs
+**/.npm/
+**/.yarn/
+**/yarn.lock
+**/package-lock.json
+**/npm-debug.log
+**/yarn-error.log
+
+# Ignore test results and coverage reports
+**/coverage/
+**/test-results/
+
+# Ignore Docker-related files (except Dockerfile)
+**/docker-compose*
+**/.dockerignore
+**/Dockerfile*
+
+# Ignore environment-specific files
+**/.env
+**/.env.local
+**/.env.development
+**/.env.production
+
+# Ignore IDE-specific files
+**/.project
+**/.settings/
+**/*.iml
+
+# Ignore temporary files
+**/.tmp/
+**/.cache/
+**/*.tmp
+**/*.log

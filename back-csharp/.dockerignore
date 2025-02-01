@@ -1,0 +1,44 @@
+# Ignore build and runtime files
+**/bin/
+**/obj/
+
+# Ignore local development files
+**/.vs/
+**/.vscode/
+**/.idea/
+**/.git/
+**/.github/
+
+# Ignore NuGet packages and cache
+**/.nuget/
+**/packages/
+**/nuget.config
+
+# Ignore user-specific files
+**/*.user
+**/*.suo
+
+# Ignore test results and coverage reports
+**/TestResults/
+**/coverage/
+
+# Ignore Docker-related files (except Dockerfile)
+**/docker-compose*
+**/.dockerignore
+**/Dockerfile*
+
+# Ignore logs and temporary files
+**/logs/
+**/*.log
+**/temp/
+
+# Ignore environment-specific files
+**/.env
+**/.env.local
+**/.env.development
+**/.env.production
+
+# Ignore IDE-specific files
+**/.project
+**/.settings/
+**/*.iml
