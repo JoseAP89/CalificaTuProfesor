@@ -1,4 +1,5 @@
 export const environment = {
-  PRODUCTION: "${PRODUCTION}",
-  API_URL: "${API_URL}"
+  PRODUCTION: false,
+  ENV: "DEV",
+  API_URL: "https://localhost:7167"
 };
