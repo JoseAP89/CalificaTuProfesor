@@ -1,11 +1,22 @@
 <div class="section-title">
   <p>{{campusInfo.name}}</p>
+  <p class="subtitle">Información de profesores</p>
 </div>
 
 <!-- http://localhost:4200/campus/f591544f-e366-4c3e-bc34-6060a63d65c6 -->
+<section>
+  <div class="search-input-box">
+    <mat-form-field>
+      <mat-label>Buscar profesor</mat-label>
+      <input matInput type="search" />
+      <button mat-icon-button matSuffix aria-label="Buscar">
+        <mat-icon>{{'search'}}</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+</section>
 <section class="campus-main-grid">
   <div class="teachers-tile">
-    <div class="title-section">Lista de Maestros</div>
     <div class="table-container">
       <table>
         <thead>
@@ -31,6 +42,19 @@
 
   </div>
   <div class="top-board-tile">
-    <div class="title-section">Tabla de mejores posiciones</div>
+    <div class="ranking-container">
+      <div class="ranking-header">Top 10 ranking del campus</div>
+      <div class="ranking-body">
+        <div class="ranking-item" *ngFor="let item of rankTeacherList">
+          <div class="item-rank">{{item.rank}}</div>
+          <div class="item-user-icon">👤</div>
+          <div class="item-info">
+            <div class="item-title">{{getFullName(item.name, item.firstLastName, item.firstLastName)}}</div>
+            <div class="item-comment">{{item.totalComments}}</div>
+            <div class="item-grade">{{item.averageGrade}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>

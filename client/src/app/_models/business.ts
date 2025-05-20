@@ -200,3 +200,9 @@ export interface CampusTeacherList {
   totalComments: number;
   averageGrade: number;
 }
+
+export interface RankingTopTeacherList extends CampusTeacherList {
+  campusId: number;
+  campusName: string;
+  rank: number;
+}

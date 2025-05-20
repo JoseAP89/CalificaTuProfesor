@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Campus, CampusTeacherList } from 'src/app/_models/business';
+import { Campus, CampusTeacherList, RankingTopTeacherList } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 
 @Component({
@@ -13,6 +13,7 @@ export class CampusComponent implements OnInit {
   private recordId: string;
   public campusInfo: Campus;
   public teacherList: Array<CampusTeacherList> = [];
+  public rankTeacherList: Array<RankingTopTeacherList> = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -160,6 +161,108 @@ export class CampusComponent implements OnInit {
         averageGrade: 2.76
       }
     ];
+    this.rankTeacherList = [
+      {
+        rank: 1,
+        name: "Maria",
+        firstLastName: "Garcia",
+        secondLastName: "Lopez",
+        totalComments: 128,
+        averageGrade: 4.95,
+        campusId: 101,
+        campusName: "Central Campus"
+      },
+      {
+        rank: 2,
+        name: "John",
+        firstLastName: "Smith",
+        secondLastName: "Williams",
+        totalComments: 95,
+        averageGrade: 4.89,
+        campusId: 102,
+        campusName: "North Campus"
+      },
+      {
+        rank: 3,
+        name: "Wei",
+        firstLastName: "Zhang",
+        secondLastName: "",
+        totalComments: 112,
+        averageGrade: 4.85,
+        campusId: 103,
+        campusName: "East Campus"
+      },
+      {
+        rank: 4,
+        name: "Aisha",
+        firstLastName: "Johnson",
+        secondLastName: "Brown",
+        totalComments: 87,
+        averageGrade: 4.82,
+        campusId: 104,
+        campusName: "West Campus"
+      },
+      {
+        rank: 5,
+        name: "Carlos",
+        firstLastName: "Rodriguez",
+        secondLastName: "Martinez",
+        totalComments: 76,
+        averageGrade: 4.78,
+        campusId: 101,
+        campusName: "Central Campus"
+      },
+      {
+        rank: 6,
+        name: "Sophie",
+        firstLastName: "Dubois",
+        secondLastName: "",
+        totalComments: 68,
+        averageGrade: 4.75,
+        campusId: 105,
+        campusName: "International Campus"
+      },
+      {
+        rank: 7,
+        name: "James",
+        firstLastName: "Wilson",
+        secondLastName: "Taylor",
+        totalComments: 82,
+        averageGrade: 4.72,
+        campusId: 102,
+        campusName: "North Campus"
+      },
+      {
+        rank: 8,
+        name: "Yuki",
+        firstLastName: "Tanaka",
+        secondLastName: "",
+        totalComments: 59,
+        averageGrade: 4.68,
+        campusId: 103,
+        campusName: "East Campus"
+      },
+      {
+        rank: 9,
+        name: "Olivia",
+        firstLastName: "Brown",
+        secondLastName: "Davis",
+        totalComments: 64,
+        averageGrade: 4.65,
+        campusId: 104,
+        campusName: "West Campus"
+      },
+      {
+        rank: 10,
+        name: "Mohammed",
+        firstLastName: "Ali",
+        secondLastName: "Khan",
+        totalComments: 71,
+        averageGrade: 4.62,
+        campusId: 105,
+        campusName: "International Campus"
+      }
+    ];
   }
 
   ngOnInit(): void {
@@ -171,4 +274,10 @@ export class CampusComponent implements OnInit {
     });
 
   }
+
+  getFullName(name: string, lastname1: string, lastname2: string): string {
+    if(!name || !lastname1) return "";
+    return (`${name} ${lastname1} ${lastname2}`).trim();
+  }
+
 }
