@@ -144,7 +144,7 @@ CREATE TABLE RosterScale (
 -- filling university area table
 
 INSERT INTO UniversityArea (Name, Code) VALUES
-  ('Ciencias Físico-MatemÁticas e Ingenierías','CFMI'),
+  ('Ciencias Físico-Matemáticas e Ingenierías','CFMI'),
   ('Ciencias Biológicas, Químicas y de la Salud','CBQS'),
   ('Ciencias Sociales y Administrativas','CSA'),
   ('Humanidades y Artes','HA'),
@@ -155,7 +155,7 @@ INSERT INTO UniversityArea (Name, Code) VALUES
 -- filling StudyFields
 
 INSERT INTO StudyField (Name, Code, UniversityAreaId) VALUES
-  ('MatemÁticas', 'MATS', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CFMI')),
+  ('Matemáticas', 'MATS', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CFMI')),
   ('Física', 'FIS', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CFMI')),
   ('Química', 'QUIM', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CFMI')),
   ('Ingeniería', 'ING', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CFMI')),
