@@ -275,9 +275,4 @@ export class CampusComponent implements OnInit {
 
   }
 
-  getFullName(name: string, lastname1: string, lastname2: string): string {
-    if(!name || !lastname1) return "";
-    return (`${name} ${lastname1} ${lastname2}`).trim();
-  }
-
 }

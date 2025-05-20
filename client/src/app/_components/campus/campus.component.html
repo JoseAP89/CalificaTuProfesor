@@ -42,19 +42,10 @@
 
   </div>
   <div class="top-board-tile">
-    <div class="ranking-container">
-      <div class="ranking-header">Top 10 ranking del campus</div>
-      <div class="ranking-body">
-        <div class="ranking-item" *ngFor="let item of rankTeacherList">
-          <div class="item-rank">{{item.rank}}</div>
-          <div class="item-user-icon">👤</div>
-          <div class="item-info">
-            <div class="item-title">{{getFullName(item.name, item.firstLastName, item.firstLastName)}}</div>
-            <div class="item-comment">{{item.totalComments}}</div>
-            <div class="item-grade">{{item.averageGrade}}</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <app-top-ranking-list 
+      [title]="'Top 10 Ranking'"
+      [rankTeacherList]="rankTeacherList"
+      [showCampusName]="false"
+    ></app-top-ranking-list>
   </div>
 </section>

@@ -30,6 +30,7 @@ import {MatBadgeModule} from '@angular/material/badge';
 import { EditCommentComponent } from './_components/dialogs/edit-comment/edit-comment.component';
 import { CancelAcceptComponent } from './_components/dialogs/cancel-accept/cancel-accept.component';
 import { CampusComponent } from './_components/campus/campus.component';
+import { TopRankingListComponent } from './_components/top-ranking-list/top-ranking-list.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { CampusComponent } from './_components/campus/campus.component';
     EditCommentComponent,
     CancelAcceptComponent,
     CampusComponent,
+    TopRankingListComponent,
   ],
   imports: [
     BrowserModule,
