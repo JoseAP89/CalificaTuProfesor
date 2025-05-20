@@ -1,7 +1,10 @@
 **** Notes about the tasks to be done ****
 
-++ When creating a teacher comment those are not being reflected on the comments section, you need to refresh the page to show it.
 ++	Campus Page (in progress)
+	-- pagination
+	-- backend part
+	-- select table functionality
+	-- top ranking table per campus
 +++ Build a top 10 board for the home page, similar to the one on 9anime (https://9animetv.to/home)
 ++  Add a grade float property for Roster, so that it can be displayed more clearly who teacher has better
 	grading scores, and also show that decimal value into the Roster page.

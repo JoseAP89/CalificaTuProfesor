@@ -192,3 +192,11 @@ export interface RankingDTO {
   universityArea: string;
   score: number;
 }
+
+export interface CampusTeacherList {
+  name: string;
+  firstLastName: string;
+  secondLastName: string;
+  totalComments: number;
+  averageGrade: number;
+}

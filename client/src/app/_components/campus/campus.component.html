@@ -4,6 +4,33 @@
 
 <!-- http://localhost:4200/campus/f591544f-e366-4c3e-bc34-6060a63d65c6 -->
 <section class="campus-main-grid">
-  <div class="teachers-tile">Teachers list</div>
-  <div class="top-board-tile">Board Rank</div>
+  <div class="teachers-tile">
+    <div class="title-section">Lista de Maestros</div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th><span class="header-icon">👤</span>Name</th>
+            <th>First LastName</th>
+            <th>Second LastName</th>
+            <th><span class="header-icon">💬</span># Comments</th>
+            <th><span class="header-icon">⭐</span>Total Grade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of teacherList">
+            <td>{{ item.name }}</td>
+            <td>{{ item.firstLastName}}</td>
+            <td>{{ item.secondLastName}}</td>
+            <td class="comments-cell">{{ item.totalComments}}</td>
+            <td class="grade-cell grade-A">{{ item.averageGrade}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  <div class="top-board-tile">
+    <div class="title-section">Tabla de mejores posiciones</div>
+  </div>
 </section>
