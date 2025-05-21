@@ -174,7 +174,7 @@ export class RosterComponent implements OnInit{
   }
 
   getComments(){
-    this.ratingService.GetFullComments(this.roster.rosterId, this.pageSize, this.sortPage, this.pageNumber, this.currentUserId).subscribe({
+    this.ratingService.getFullComments(this.roster.rosterId, this.pageSize, this.sortPage, this.pageNumber, this.currentUserId).subscribe({
       next: res => {
         this.comments = res.data;
         this.pageNumber = res.pageNumber;

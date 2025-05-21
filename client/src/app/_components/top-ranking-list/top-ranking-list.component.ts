@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { RankingTopTeacherList } from 'src/app/_models/business';
+import { RankingTopTeacher } from 'src/app/_models/business';
 
 @Component({
   selector: 'app-top-ranking-list',
@@ -9,7 +9,7 @@ import { RankingTopTeacherList } from 'src/app/_models/business';
 export class TopRankingListComponent {
   @Input() title: string= "Top Ranking";
   @Input() showCampusName = true;
-  @Input() rankTeacherList: Array<RankingTopTeacherList> = [];
+  @Input() rankTeacherList: Array<RankingTopTeacher> = [];
 
 
   getFullName(name: string, lastname1: string, lastname2: string): string {

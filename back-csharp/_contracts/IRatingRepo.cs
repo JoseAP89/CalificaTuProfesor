@@ -11,5 +11,13 @@ public interface IRatingRepo
     Task<int> DeleteCommentByIdAsync(int commentId);
     Task<RosterRatingDTO> GetRosterRatingInfoAsync(int rosterId);
     Task<TableData<CommentDTO>> GetCommentsByRosterAsync(int rosterId, int pageSize, SortPaginator pag, int pageNumber = 0, Guid? currentUserId = null);
-    Task<List<RankingDTO>> GetTeachersRankingAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0, Guid? rosterRecordId = null);
+    /// <summary>
+    /// Gets the list of teachers with option to convert the list in a ranking list
+    /// </summary>
+    /// <param name="campusRecordId"></param>
+    /// <param name="pageSize"></param>
+    /// <param name="pageNumber"></param>
+    /// <param name="sortByRank"></param>
+    /// <returns></returns>
+    Task<TableData<RankingTopTeacherDTO>> GetRankingTopTeacherAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0, bool sortByRank = false);
 }

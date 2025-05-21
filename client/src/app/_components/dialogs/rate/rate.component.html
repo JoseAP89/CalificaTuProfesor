@@ -10,11 +10,32 @@
   <div mat-dialog-content class="dialog-content-box">
     <form [formGroup]="rateForm">
 
-      <!-- RATING SCALES -->
+      <!-- SUBJECT NAME -->
       <mat-form-field class="subjectName-box">
         <mat-label>Nombre de la Materia Cursada</mat-label>
         <input matInput type="text" formControlName="subjectName" class="subjectName-input">
       </mat-form-field>
+
+      <!-- AREA  -->
+      <div class="study-field-box">
+        <mat-form-field>
+          <mat-label>Area</mat-label>
+          <mat-select formControlName="universityAreaId" (valueChange)="onChangeUniversityArea()" name="universityArea">
+            <mat-option *ngFor="let area of universityAreas"
+              [value]="area.universityAreaId">{{area.name}}</mat-option>
+          </mat-select>
+      <!-- FIELD OF STUDY  -->
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Campo de estudio</mat-label>
+          <mat-select formControlName="studyFieldId" name="studyField">
+            <mat-option *ngFor="let field of getStudyFieldByUniAreaId(universityAreaId.value)"
+              [value]="field.studyFieldId">{{field.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
       <!-- RATING SCALES -->
       <div formArrayName="scales" class="scales-container" *ngIf="_scales!= null && _scales.length>0">
         <h2>Califica las habilidades de enseñanza</h2>
@@ -35,30 +56,14 @@
             </mat-expansion-panel>
           </mat-accordion>
 
+          <!-- RATING SCALES -->
           <mat-slider class="slider-box" [max]="100" [min]="0" [step]="1" [discrete]="false">
             <input matSliderThumb  [formControlName]="i" [value]="getScale(i)" (change)="updateRates(i)">
           </mat-slider>
         </div>
       </div>
 
-      <div class="study-field-box">
-        <mat-form-field>
-          <mat-label>Area</mat-label>
-          <mat-select formControlName="universityAreaId" (valueChange)="onChangeUniversityArea()" name="universityArea">
-            <mat-option *ngFor="let area of universityAreas"
-              [value]="area.universityAreaId">{{area.name}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Campo de estudio</mat-label>
-          <mat-select formControlName="studyFieldId" name="studyField">
-            <mat-option *ngFor="let field of getStudyFieldByUniAreaId(universityAreaId.value)"
-              [value]="field.studyFieldId">{{field.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
+      <!-- COMMENT -->
       <div class="comment-box">
         <label for="comment">Escribe una reseña de tu experiencia con el Maestro (se respetuoso):</label>
         <textarea #Comment id="comment" formControlName="comment" matInput

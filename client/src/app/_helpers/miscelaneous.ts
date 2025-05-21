@@ -57,3 +57,8 @@ export function getCurrentDate(format: string): string {
   res = res.replace("ss",ss);
   return res;
 }
+
+export function roundNumber(number: number, decimals: number) : number{
+  const factor = Math.pow(10, decimals);
+  return Math.round(number * factor) / factor;
+}

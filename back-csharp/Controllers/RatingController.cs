@@ -5,6 +5,7 @@ using back_csharp._enums;
 using back_csharp._models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.Intrinsics.X86;
 
 namespace back_csharp.Controllers;
 
@@ -83,19 +84,6 @@ public class RatingController : ControllerBase
         return Ok(res);
     }
 
-    [HttpGet("teacher/ranking")]
-    public async Task<ActionResult<TableData<CommentDTO>>> GetTeacherRanking(string campusRecordIdStr = "", int pageSize = 20, int pageNumber = 0, string rosterRecordIdStr = "")
-    {
-        Guid campusRecordId = string.IsNullOrEmpty(campusRecordIdStr)? Guid.Empty : new Guid(campusRecordIdStr);
-        Guid rosterRecordId = string.IsNullOrEmpty(rosterRecordIdStr)? Guid.Empty : new Guid(rosterRecordIdStr);
-        var res = await _uow.Ratings.GetTeachersRankingAsync(campusRecordId, pageSize, pageNumber, rosterRecordId);
-        if (res == null)
-        {
-            return NotFound("Hubo un error obteniendo la lista de rankings.");
-        }
-        return Ok(res);
-    }
-
     [HttpGet($"{nameof(GetRosterRating)}/{{rosterId}}")]
     public async Task<ActionResult<RosterRatingDTO>> GetRosterRating(int rosterId)
     {
@@ -106,4 +94,17 @@ public class RatingController : ControllerBase
         }
         return Ok(res);
     }
+
+    [HttpGet("teacher/ranking")]
+    public async Task<ActionResult<TableData<RankingTopTeacherDTO>>> GetRankingTopTeacherList(string campusRecordIdStr = "", int pageSize = 20, int pageNumber = 0, bool sortByRank = false)
+    {
+        Guid campusRecordId = string.IsNullOrEmpty(campusRecordIdStr)? Guid.Empty : new Guid(campusRecordIdStr);
+        var res = await _uow.Ratings.GetRankingTopTeacherAsync(campusRecordId, pageSize, pageNumber, sortByRank);
+        if (res == null)
+        {
+            return NotFound("Hubo un error obteniendo la lista de rankings.");
+        }
+        return Ok(res);
+    }
+
 }

@@ -1,13 +1,8 @@
 **** Notes about the tasks to be done ****
 
 ++	Campus Page (in progress)
-	-- pagination
-	-- backend part
-	-- select table functionality
-	-- top ranking table per campus
+	-- backend part: pagination & search & link references to the teacher page (hover effects)
 +++ Build a top 10 board for the home page, similar to the one on 9anime (https://9animetv.to/home)
-++  Add a grade float property for Roster, so that it can be displayed more clearly who teacher has better
-	grading scores, and also show that decimal value into the Roster page.
 ++	There is a need for an error middleware on the backend to better improve the messages sent to the client,
 	also I need to add an ApiException class to handle business logic errors in the app.
 +	Add a diagram to show how the services interact with each other on the docker network.
@@ -21,10 +16,10 @@
 +	There is a bug when you first select the campus, when creating a teacher, and then you select it, you
 	always get a not recognized campus first, which it is resolved by re selecting it.
 ++	Build a logger
-
 +   Notifications functionality (front, backend, and table)
 +   If I delete the userId from localstorage and decide to add/vote then a userId is generated automatically on the backend, make sure that
     that new id is being assinged correctly on the frontend to the user.
 +   Show a better validation for the comment-grade form.
 +   Show the default value for the sorting type on the comment's page.
 +	There is a bug on the teacher's name when the screen is decreased, name and lastname overlaps.
+++ Change compose.yaml to remove the jaavscript file executed post-start

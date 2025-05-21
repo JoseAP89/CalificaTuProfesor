@@ -2,8 +2,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, ReplaySubject, firstValueFrom, iif, map, mergeMap, of, scheduled, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { CommentContentDTO, CommentDTO, RosterRating, SortPaginator, TableData } from '../_models/business';
+import { CommentContentDTO, CommentDTO, RankingTopTeacher, RosterRating, SortPaginator, TableData } from '../_models/business';
 import { CommonService } from './common.service';
+import { roundNumber } from '../_helpers/miscelaneous';
 
 @Injectable({
   providedIn: 'root'
@@ -74,7 +75,7 @@ export class RatingService implements OnDestroy {
     return this.http.get<RosterRating>(url);
   }
 
-  public GetFullComments(rosterId: number, pageSize: number, sortPage: SortPaginator, pageNumber: number = 0, currentUserId: string = null): Observable<TableData<CommentDTO>> {
+  public getFullComments(rosterId: number, pageSize: number, sortPage: SortPaginator, pageNumber: number = 0, currentUserId: string = null): Observable<TableData<CommentDTO>> {
     const url = `${this.baseUrl}/roster/fullComments/${rosterId}`;
     let params = new HttpParams()
       .set("pageSize", pageSize)
@@ -84,14 +85,22 @@ export class RatingService implements OnDestroy {
     return this.http.get<TableData<CommentDTO>>(url, {params});
   }
 
-  public GetTeacherRanking(rosterId: number, pageSize: number, sortPage: SortPaginator, pageNumber: number = 0, currentUserId: string = null): Observable<TableData<CommentDTO>> {
-    const url = `${this.baseUrl}/roster/fullComments/${rosterId}`;
+  public getRankingTopTeacherList(pageSize: number, pageNumber: number = 0, campusRecordIdStr: string = "" ,sortByRank: boolean = false): Observable<TableData<RankingTopTeacher>> {
+    const url = `${this.baseUrl}/teacher/ranking`;
     let params = new HttpParams()
       .set("pageSize", pageSize)
-      .set("sortPage", sortPage)
       .set("pageNumber", pageNumber)
-      .set("currentUserId", currentUserId);
-    return this.http.get<TableData<CommentDTO>>(url, {params});
+      .set("campusRecordIdStr", campusRecordIdStr)
+      .set("sortByRank", sortByRank);
+    return this.http.get<TableData<RankingTopTeacher>>(url, {params}).pipe(
+      map( r => {
+        let data = r.data;
+        for (const element of data) {
+          element.averageGrade = roundNumber(element.averageGrade, 5);
+        }
+        return r;
+      })
+    );
   }
 
 }

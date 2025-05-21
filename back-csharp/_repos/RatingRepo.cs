@@ -231,61 +231,84 @@ public class RatingRepo: IRatingRepo
         }
     }
 
-    public async Task<List<RankingDTO>> GetTeachersRankingAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0, Guid? rosterRecordId = null)
+    public async Task<TableData<RankingTopTeacherDTO>> GetRankingTopTeacherAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0, bool sortByRank = false)
     {
         try
         {
             var ranksQuery = (
                 from c in _context.Comments
                 join g in _context.Grades on c.CommentId equals g.CommentId
-                join s in _context.Scales on g.ScaleId equals s.ScaleId
                 join r in _context.Rosters on c.RosterId equals r.RosterId
                 join k in _context.Campuses on r.CampusId equals k.CampusId
                 group new
                 {
+                    c.CommentId,
                     r.TeacherName,
                     r.TeacherLastname1,
                     r.TeacherLastname2,
-                    RosterRecordId = r.RecordId,
                     g.Stars,
-                    CampusRecordId = k.RecordId,
+                    k.CampusId,
                     CampusName = k.Name,
+                    CampusRecordId = k.RecordId,
+                    RosterRecordId = r.RecordId
                 }
-                by r.RecordId into ranking
-                select new RankingDTO
+                by new { r.RecordId, k.CampusId } into ranking
+                select new RankingTopTeacherDTO
                 {
-                    RosterRecordId = ranking.First().RosterRecordId,
-                    CampusRecordId = ranking.First().CampusRecordId,
-                    TeacherFullName = (ranking.First().TeacherName + ' ' + ranking.First().TeacherLastname1 + ' ' + ranking.First().TeacherLastname2).Trim(),
-                    Score = ranking.Average(row => row.Stars),
+                    Name = ranking.First().TeacherName,
+                    FirstLastName = ranking.First().TeacherLastname1,
+                    SecondLastName = ranking.First().TeacherLastname2,
+                    AverageGrade = ranking.Average(row => row.Stars),
                     CampusName = ranking.First().CampusName,
+                    CampusId = ranking.First().CampusId,
+                    Rank = 0,
+                    TotalComments = ranking.Select(x => x.CommentId).Distinct().Count(),
+                    CampusRecordId = ranking.First().CampusRecordId.ToString(),
+                    RosterRecordId = ranking.First().RosterRecordId.ToString(),
                 }
             );
 
             if (campusRecordId != Guid.Empty)
             {
-                ranksQuery = ranksQuery.Where(r => r.CampusRecordId == campusRecordId);    
+                ranksQuery = ranksQuery.Where(r => r.CampusRecordId == campusRecordId.ToString());    
             }
-            if (rosterRecordId != null && rosterRecordId != Guid.Empty)
+
+            if (sortByRank)
             {
-                ranksQuery = ranksQuery.Where(r => r.RosterRecordId == rosterRecordId);    
+                ranksQuery = ranksQuery.OrderByDescending(r => r.AverageGrade )
+                    .ThenBy(r => r.Name);
+            } 
+            else
+            {
+                ranksQuery = ranksQuery.OrderBy(r => r.FirstLastName)
+                    .ThenBy(r => r.SecondLastName)
+                    .ThenBy(r => r.Name);
             }
 
             var ranks = await ranksQuery
                 .AsNoTracking()
-                .OrderByDescending( r => r.Score )
-                .ThenBy( r => r.TeacherFullName )
                 .Skip( pageNumber * pageSize )
                 .Take( pageSize )   
                 .ToListAsync();
-            return ranks.Select( r =>
+            if (sortByRank && ranks.Count>0)
             {
-                r.Score = Math.Round(r.Score, DECIMAL_DIGITS);
-                return r;
-            }).ToList();
+                int rankNumber = 1;
+                foreach (var item in ranks)
+                {
+                    item.Rank = rankNumber;
+                    rankNumber++;
+                }
+            }
+            return new TableData<RankingTopTeacherDTO>
+            {
+                Data = ranks,
+                PageNumber = pageNumber,
+                PageSize = pageSize,    
+                TotalElements = ranks.Count()
+            };
 
         }
-        catch (Exception )
+        catch (Exception e)
         {
             return null;
         }
