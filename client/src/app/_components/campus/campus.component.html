@@ -1,5 +1,5 @@
 <div class="section-title">
-  <p>{{campusInfo.name}}</p>
+  <p>{{campusInfo?.name}}</p>
   <p class="subtitle">Información de profesores</p>
 </div>
 
@@ -8,9 +8,9 @@
   <div class="search-input-box">
     <mat-form-field>
       <mat-label>Buscar profesor</mat-label>
-      <input matInput type="search" />
-      <button mat-icon-button matSuffix aria-label="Buscar">
-        <mat-icon>{{'search'}}</mat-icon>
+      <input matInput type="search" [(ngModel)]="search" name="search" (ngModelChange)="onSearchChange($event)"/>
+      <button mat-icon-button matSuffix aria-label="Buscar" (click)="onDeleteSearch()">
+        <mat-icon>{{'close'}}</mat-icon>
       </button>
     </mat-form-field>
   </div>

@@ -231,7 +231,7 @@ public class RatingRepo: IRatingRepo
         }
     }
 
-    public async Task<TableData<RankingTopTeacherDTO>> GetRankingTopTeacherAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0, bool sortByRank = false)
+    public async Task<TableData<RankingTopTeacherDTO>> GetRankingTopTeacherAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0, bool sortByRank = false, string search = null)
     {
         try
         {
@@ -273,7 +273,17 @@ public class RatingRepo: IRatingRepo
                 ranksQuery = ranksQuery.Where(r => r.CampusRecordId == campusRecordId.ToString());    
             }
 
-            if (sortByRank)
+            if(!string.IsNullOrEmpty(search))
+            {
+                ranksQuery = ranksQuery
+                    .Where(r => EF.Functions.ILike(
+                        TeachersContext.Unaccent(r.Name + " " + r.FirstLastName + " " + r.SecondLastName).Trim(),
+                        "%" + TeachersContext.Unaccent(search.Trim()) + "%"))
+                    .OrderBy(r => r.FirstLastName)
+                    .ThenBy(r => r.SecondLastName)
+                    .ThenBy(r => r.Name);
+            }
+            else if (sortByRank)
             {
                 ranksQuery = ranksQuery.OrderByDescending(r => r.AverageGrade )
                     .ThenBy(r => r.Name);
@@ -287,9 +297,12 @@ public class RatingRepo: IRatingRepo
 
             var ranks = await ranksQuery
                 .AsNoTracking()
-                .Skip( pageNumber * pageSize )
-                .Take( pageSize )   
                 .ToListAsync();
+            var totalElements = ranks.Count;
+            ranks = ranks
+                .Skip(pageNumber * pageSize)
+                .Take(pageSize)
+                .ToList();
             if (sortByRank && ranks.Count>0)
             {
                 int rankNumber = 1;
@@ -304,7 +317,7 @@ public class RatingRepo: IRatingRepo
                 Data = ranks,
                 PageNumber = pageNumber,
                 PageSize = pageSize,    
-                TotalElements = ranks.Count()
+                TotalElements = totalElements
             };
 
         }

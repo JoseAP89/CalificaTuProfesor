@@ -2,7 +2,7 @@
 
  /* Add a black background color to the top navigation */
 .topnav {
-  background-color: #f1d592;
+  background: radial-gradient(ellipse at bottom right, #1a3028 0%, #0d1914 60%, #020403 100%);
   overflow: hidden;
   width: 100%;
   margin: 0;
@@ -10,29 +10,25 @@
 
 /* Style the links inside the navigation bar */
 .topnav a {
-  font-family: 'Qwigley', cursive;
   float: left;
   display: block;
-  color: #483c32;
+  color: whitesmoke;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 28px;
-  font-weight: bold;
-  border-right: 2px solid #d2b48c;
+  font-size: 22px;
   letter-spacing: 1.9px;
   cursor: pointer;
 }
 
 /* Change the color of links on hover */
 .topnav a:hover {
-  background-color: #ddd;
-  color: black;
+  color: #4d94ff;
 }
 
 /* Add an active class to highlight the current page */
 .topnav a.active {
-  background-color: #04AA6D;
+  background-color: #80b3ff;
   color: white;
 }
 

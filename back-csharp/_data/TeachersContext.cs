@@ -44,6 +44,10 @@ namespace back_csharp._data
         {
             modelBuilder.HasPostgresExtension("unaccent");
 
+            modelBuilder.HasDbFunction(typeof(TeachersContext)
+               .GetMethod(nameof(Unaccent), new[] { typeof(string) })!)
+               .HasName("unaccent");
+
             // CAMPUS
             modelBuilder.Entity<Campus>(entity =>
             {
@@ -479,5 +483,6 @@ namespace back_csharp._data
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        public static string Unaccent(string input) => throw new NotSupportedException();
     }
 }

@@ -85,13 +85,14 @@ export class RatingService implements OnDestroy {
     return this.http.get<TableData<CommentDTO>>(url, {params});
   }
 
-  public getRankingTopTeacherList(pageSize: number, pageNumber: number = 0, campusRecordIdStr: string = "" ,sortByRank: boolean = false): Observable<TableData<RankingTopTeacher>> {
+  public getRankingTopTeacherList(pageSize: number, pageNumber: number = 0, campusRecordIdStr: string = "" ,sortByRank: boolean = false, search: string = null): Observable<TableData<RankingTopTeacher>> {
     const url = `${this.baseUrl}/teacher/ranking`;
     let params = new HttpParams()
       .set("pageSize", pageSize)
       .set("pageNumber", pageNumber)
       .set("campusRecordIdStr", campusRecordIdStr)
-      .set("sortByRank", sortByRank);
+      .set("sortByRank", sortByRank)
+      .set("search", search ?? '');
     return this.http.get<TableData<RankingTopTeacher>>(url, {params}).pipe(
       map( r => {
         let data = r.data;
