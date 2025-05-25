@@ -194,6 +194,7 @@ export interface RankingDTO {
 }
 
 export interface CampusTeacherList {
+  teacherRecordId: string;
   name: string;
   firstLastName: string;
   secondLastName: string;

@@ -2,6 +2,7 @@
 
 public class CampusTeacherListDTO
 {
+    public string TeacherRecordId { get; set; }
     public string Name { get; set; }
     public string FirstLastName { get; set; }
     public string SecondLastName { get; set; }

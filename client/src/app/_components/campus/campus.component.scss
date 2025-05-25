@@ -39,6 +39,11 @@
             border-radius: 8px;
             overflow: hidden;
             background-color: white;
+
+            tr.teacher-row:hover {
+                background-color: #E3F2FD;
+                cursor: pointer;
+            }
         }
 
         h1 {
@@ -120,4 +125,5 @@
     .top-board-tile {
         padding: 14px;
     }
+
 }

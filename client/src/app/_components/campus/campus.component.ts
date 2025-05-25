@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, map, Observable } from 'rxjs';
 import { Campus, CampusTeacherList, RankingTopTeacher } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
@@ -21,7 +21,8 @@ export class CampusComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private campusService: CampusService,
-    private ratingService: RatingService
+    private ratingService: RatingService,
+    private router: Router
   ) {
     this.search = "";
   }
@@ -62,6 +63,11 @@ export class CampusComponent implements OnInit {
       }
     });
 
+  }
+
+  onRowDoubleClick(row: CampusTeacherList){
+    if(row?.teacherRecordId)
+      this.router.navigate([`/maestro/${row.teacherRecordId}`]); 
   }
 
 }

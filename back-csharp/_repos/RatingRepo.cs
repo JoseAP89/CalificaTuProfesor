@@ -255,6 +255,7 @@ public class RatingRepo: IRatingRepo
                 by new { r.RecordId, k.CampusId } into ranking
                 select new RankingTopTeacherDTO
                 {
+                    TeacherRecordId = ranking.First().RosterRecordId.ToString(),
                     Name = ranking.First().TeacherName,
                     FirstLastName = ranking.First().TeacherLastname1,
                     SecondLastName = ranking.First().TeacherLastname2,
