@@ -245,17 +245,19 @@ public class RatingRepo: IRatingRepo
         try
         {
             var ranksQuery = (
-                from c in _context.Comments
-                join g in _context.Grades on c.CommentId equals g.CommentId
-                join r in _context.Rosters on c.RosterId equals r.RosterId
+                from r in _context.Rosters
                 join k in _context.Campuses on r.CampusId equals k.CampusId
+                join c in _context.Comments on r.RosterId equals c.RosterId into commentsJoin
+                from c in commentsJoin.DefaultIfEmpty()
+                join g in _context.Grades on c.CommentId equals g.CommentId into gradesJoin
+                from g in gradesJoin.DefaultIfEmpty()
                 group new
                 {
-                    c.CommentId,
+                    CommentId = c != null ? c.CommentId : 0,
                     r.TeacherName,
                     r.TeacherLastname1,
                     r.TeacherLastname2,
-                    g.Stars,
+                    Stars = g != null ? g.Stars : 0,
                     k.CampusId,
                     CampusName = k.Name,
                     CampusRecordId = k.RecordId,
@@ -272,7 +274,9 @@ public class RatingRepo: IRatingRepo
                     CampusName = ranking.First().CampusName,
                     CampusId = ranking.First().CampusId,
                     Rank = 0,
-                    TotalComments = ranking.Select(x => x.CommentId).Distinct().Count(),
+                    TotalComments = ranking
+                        .Where(x => x.CommentId > 0)
+                        .Select(x => x.CommentId).Distinct().Count(),
                     CampusRecordId = ranking.First().CampusRecordId.ToString(),
                     RosterRecordId = ranking.First().RosterRecordId.ToString(),
                 }
