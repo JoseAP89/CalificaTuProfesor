@@ -15,7 +15,7 @@ public class ScaleRepo: CommonRepo<Scale>, IScaleRepo
     public async Task<IEnumerable<Scale>> GetAll()
     {
         var scales = (await base.GetAll<Scale>(null, null))
-            ?.OrderBy( s => s.Name);
+            ?.OrderBy( s => s.ScaleId);
         return scales.ToList();
     }
 }

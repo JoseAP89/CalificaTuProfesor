@@ -1,9 +1,7 @@
 **** Notes about the tasks to be done ****
 
 ++   Modify the campus info page to be suitable for mobile
-+++ Add the option to grade how difficult the lecture was, but it would not impact the average
-	performance of the professor but it would only show how difficult on average are his 
-	lectures.
+++	New star display component
 +++ Build a top 10 board for the home page, similar to the one on 9anime (https://9animetv.to/home)
 + 	Build the About page
 +   Build the rust code for detecting vulgar words and gibberish and execute it with WASM
@@ -25,7 +23,6 @@
     that new id is being assinged correctly on the frontend to the user.
 +   Show a better validation for the comment-grade form.
 +   Show the default value for the sorting type on the comment's page.
-+	There is a bug on the teacher's name when the screen is decreased, name and lastname overlaps.
 +   Change Roster table name to Teacher, it is no longer a roster but a simple teacher table,
 	an all the modifications that that name change will entail
 ++ Change compose.yaml to remove the jaavscript file executed post-start

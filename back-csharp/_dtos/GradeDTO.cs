@@ -6,4 +6,5 @@ public class GradeDTO
     public int ScaleId { get; set; }
     public int CommentId { get; set; }
     public double Stars { get; set; }
+    public string Code { get; set; }
 }

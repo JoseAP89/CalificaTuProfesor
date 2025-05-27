@@ -35,23 +35,26 @@ public class RatingRepo: IRatingRepo
             using var connection = new NpgsqlConnection(_connectionString);
             // Create a query that retrieves all authors"    
             var sql = @$"
-                select g.scaleid, round(CAST(avg(g.stars) as numeric),{DECIMAL_DIGITS}) as stars from roster r
-                inner join comment c on r.rosterid=c.rosterid
-                inner join grade g on c.commentId=g.commentId
-                inner join scale s on g.scaleid=s.scaleid
-                where r.rosterid={rosterId} 
-                group by g.scaleid 
+                select g.scaleid, MAX(s.code) as code, round(CAST(avg(g.stars) as numeric),{DECIMAL_DIGITS}) as stars 
+                from roster r 
+                inner join comment c on r.rosterid=c.rosterid 
+                inner join grade g on c.commentId=g.commentId 
+                inner join scale s on g.scaleid=s.scaleid 
+                where r.rosterid={rosterId}  
+                group by g.scaleid
+                order by g.scaleid asc
             ";
             // Use the Query method to execute the query and return a list of objects
             List<GradeDTO> grades = (await connection.QueryAsync<GradeDTO>(sql)).ToList();
             var rating = new RosterRatingDTO
             {
                 RosterId = rosterId,
-                Grades = grades,
-                AverageGrade = grades.Count > 0 ? Math.Round(grades.Average(g => g.Stars), DECIMAL_DIGITS) : 0.0
+                Grades = grades.OrderBy(g => g.ScaleId).ToList(),
+                AverageGrade = grades.Count > 0 ? 
+                    Math.Round(grades.Where(g => g.Code != "DI").Average(g => g.Stars), DECIMAL_DIGITS) :
+                    0.0,
             };
             return rating;
-
         }
         catch (Exception)
         {
@@ -146,12 +149,7 @@ public class RatingRepo: IRatingRepo
                     {
                         GradeId = g.GradeId,
                         Stars = g.Stars,
-                        Scale = new Scale
-                        {
-                            ScaleId = g.Scale.ScaleId,
-                            Name = g.Scale.Name,
-                            Description = g.Scale.Description
-                        }
+                        ScaleId = g.ScaleId
                     }).ToList(),
                     Votes = c.Votes.Select(v => new Vote
                     {
@@ -251,6 +249,8 @@ public class RatingRepo: IRatingRepo
                 from c in commentsJoin.DefaultIfEmpty()
                 join g in _context.Grades on c.CommentId equals g.CommentId into gradesJoin
                 from g in gradesJoin.DefaultIfEmpty()
+                join s in _context.Scales on g.ScaleId equals s.ScaleId  into scalesJoin
+                from s in scalesJoin.DefaultIfEmpty()
                 group new
                 {
                     CommentId = c != null ? c.CommentId : 0,
@@ -260,6 +260,7 @@ public class RatingRepo: IRatingRepo
                     Stars = g != null ? g.Stars : 0,
                     k.CampusId,
                     CampusName = k.Name,
+                    ScaleCode = s.Code,
                     CampusRecordId = k.RecordId,
                     RosterRecordId = r.RecordId
                 }
@@ -270,7 +271,7 @@ public class RatingRepo: IRatingRepo
                     Name = ranking.First().TeacherName,
                     FirstLastName = ranking.First().TeacherLastname1,
                     SecondLastName = ranking.First().TeacherLastname2,
-                    AverageGrade = ranking.Average(row => row.Stars),
+                    AverageGrade = ranking.Where(row => row.ScaleCode != "DI").Average(row => row.Stars),
                     CampusName = ranking.First().CampusName,
                     CampusId = ranking.First().CampusId,
                     Rank = 0,
@@ -312,12 +313,12 @@ public class RatingRepo: IRatingRepo
             var ranks = await ranksQuery
                 .AsNoTracking()
                 .ToListAsync();
-            var totalElements = ranks.Count;
+            var totalElements = ranks?.Count ?? 0;
             ranks = ranks
                 .Skip(pageNumber * pageSize)
                 .Take(pageSize)
                 .ToList();
-            if (sortByRank && ranks.Count>0)
+            if (sortByRank && (ranks?.Count ?? 0) >0)
             {
                 int rankNumber = 1;
                 foreach (var item in ranks)

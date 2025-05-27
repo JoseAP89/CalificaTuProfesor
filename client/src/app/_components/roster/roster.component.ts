@@ -174,7 +174,7 @@ export class RosterComponent implements OnInit, AfterViewInit{
 
   }
 
-  updateRatingInfo(){
+  updateGlobalAverageGrade(){
     let averageGrade = document.querySelector(".average-grade");
     averageGrade?.setAttribute("data-star", this.rosterRating?.averageGrade?.toString());
   }
@@ -183,7 +183,7 @@ export class RosterComponent implements OnInit, AfterViewInit{
     this.ratingService.getRosterRating(this.roster.rosterId).subscribe({
       next: res => {
         this.rosterRating = res;
-        this.updateRatingInfo();
+        this.updateGlobalAverageGrade();
       }
     })
   }
@@ -212,7 +212,7 @@ export class RosterComponent implements OnInit, AfterViewInit{
               this.rosterRating?.grades.find(g => g.scaleId==i)?.stars.toFixed(1)
             );
           }
-        }, 1_000 * 0.5);
+        }, 1_00);
       }
     })
   }
@@ -256,11 +256,13 @@ export class RosterComponent implements OnInit, AfterViewInit{
     ref.afterClosed().subscribe({
       next: res => {
         if(res == null) return;
-        this.buildRoster();
-        // if a comment was created, then the backend creates an uuid for the user (userId), which will be used for future references
-        if (res.userId) {
-          this.ratingService.setCurrentUserId(res.userId);
-        }
+        setTimeout(() => {
+          this.buildRoster();
+          // if a comment was created, then the backend creates an uuid for the user (userId), which will be used for future references
+          if (res.userId) {
+            this.ratingService.setCurrentUserId(res.userId);
+          }
+        }, 500);
       }
     })
   }
@@ -306,10 +308,12 @@ export class RosterComponent implements OnInit, AfterViewInit{
   getAverageCommentGrade(comment: CommentDTO): number{
     let numerator = 0;
     if(!comment?.grades) return 0;
-    for (const grade of comment.grades) {
+    const difficultyScale = this.scales?.filter(s => s.code == "DI")[0];
+    const grades = comment.grades.filter(g => g.scaleId !== difficultyScale.scaleId);
+    for (const grade of grades) {
       numerator+= grade.stars;
     }
-    return numerator / comment.grades.length;
+    return numerator / grades.length;
   }
 
   getStarkRank(num: number): number {
