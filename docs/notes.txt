@@ -1,6 +1,5 @@
 **** Notes about the tasks to be done ****
 
-++   Modify the campus info page to be suitable for mobile
 ++	New star display component
 +++ Build a top 10 board for the home page, similar to the one on 9anime (https://9animetv.to/home)
 + 	Build the About page
