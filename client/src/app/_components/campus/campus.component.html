@@ -21,15 +21,16 @@
       <table>
         <thead>
           <tr>
-            <th>Apellido Paterno</th>
+            <th><span class="header-icon">👤</span>Apellido Paterno</th>
             <th>Apellido Materno</th>
-            <th><span class="header-icon">👤</span>Name</th>
-            <th><span class="header-icon">💬</span># Comments</th>
-            <th><span class="header-icon">⭐</span>Total Grade</th>
+            <th>Nombre</th>
+            <th><span class="header-icon">💬</span># Comentarios</th>
+            <th><span class="header-icon">⭐</span>Puntaje promedio</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of teacherList" [id]="item.teacherRecordId" class="teacher-row" (dblclick)="onRowDoubleClick(item)">
+          <tr *ngFor="let item of teacherList" [id]="item.teacherRecordId" class="teacher-row"
+            (dblclick)="onRowDoubleClick(item)">
             <td>{{ item.firstLastName}}</td>
             <td>{{ item.secondLastName}}</td>
             <td>{{ item.name }}</td>
@@ -38,6 +39,15 @@
           </tr>
         </tbody>
       </table>
+  
+      <div class="paginator-box">
+        <mat-paginator class="paginator-item" [pageSizeOptions]="pageSizeOptions"
+          itemsPerPageLabel="tamaño de página: " nextPageLabel="siguiente" previousPageLabel="anterior"
+          (page)="handlePageEvent($event)" [length]="totalLength" [pageSize]="pageSize" [pageSizeOptions]=""
+          [showFirstLastButtons]='true' aria-label="Slecciona la página">
+        </mat-paginator>
+  
+      </div>
     </div>
 
   </div>

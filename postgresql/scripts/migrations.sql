@@ -192,7 +192,7 @@ INSERT INTO StudyField (Name, Code, UniversityAreaId) VALUES
   ('Física', 'FISN', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CNE')),
   ('Química', 'QUIN', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CNE')),
   ('Geología', 'GEON', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CNE')),
-  ('MatemÁticas', 'MATN', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CNE')),
+  ('Matemáticas', 'MATN', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CNE')),
   ('Estadística', 'ESTN', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CNE')),
   ('Ingeniería en Sistemas Computacionales', 'INSC', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CFMI')),
   ('Desarrollo de Software', 'DSOF', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CFMI')),

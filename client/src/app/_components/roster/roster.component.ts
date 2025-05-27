@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, firstValueFrom, iif } from 'rxjs';
@@ -19,7 +19,7 @@ import { getHttpErrorMessage } from 'src/app/_helpers/miscelaneous';
   templateUrl: './roster.component.html',
   styleUrls: ['./roster.component.scss']
 })
-export class RosterComponent implements OnInit{
+export class RosterComponent implements OnInit, AfterViewInit{
 
   public currentUserId: string;
   public readonly sortPaginatorValues: Vessel[];
@@ -66,6 +66,15 @@ export class RosterComponent implements OnInit{
     this.paginator._intl.previousPageLabel="página anterior";
     this._recordId = this.route.snapshot.paramMap.get('recordId') ?? "";
     this.buildRoster();
+  }
+
+  ngAfterViewInit() {
+    this.paginator._intl.itemsPerPageLabel = 'Tamaño de página:';
+    this.paginator._intl.nextPageLabel = 'Página siguiente';
+    this.paginator._intl.previousPageLabel = 'Página anterior';
+    this.paginator._intl.lastPageLabel = 'Ultima página';
+    this.paginator._intl.firstPageLabel = 'Primera página';
+    this.paginator._intl.changes.next(); // Trigger update
   }
 
   buildRoster(){
