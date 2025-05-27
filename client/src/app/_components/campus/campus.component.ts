@@ -52,12 +52,14 @@ export class CampusComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.paginator._intl.itemsPerPageLabel = 'Tamaño de página:';
-    this.paginator._intl.nextPageLabel = 'Página siguiente';
-    this.paginator._intl.previousPageLabel = 'Página anterior';
-    this.paginator._intl.lastPageLabel = 'Ultima página';
-    this.paginator._intl.firstPageLabel = 'Primera página';
-    this.paginator._intl.changes.next(); // Trigger update
+    setTimeout(() => {
+      this.paginator._intl.itemsPerPageLabel = 'Tamaño de página:';
+      this.paginator._intl.nextPageLabel = 'Página siguiente';
+      this.paginator._intl.previousPageLabel = 'Página anterior';
+      this.paginator._intl.lastPageLabel = 'Ultima página';
+      this.paginator._intl.firstPageLabel = 'Primera página';
+      this.paginator._intl.changes.next(); // Trigger update
+    }, 100);
   }
 
   onSearchChange(search: string){

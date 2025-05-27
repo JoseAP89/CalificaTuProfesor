@@ -27,7 +27,14 @@
   </section>
 
   <section class="score-box">
-    <button mat-raised-button color="accent" (click)="openRateTeacherDialog()">Calificar al Maestro</button>
+    <button mat-raised-button color="accent" [disabled]="!canComment" (click)="openRateTeacherDialog()">Calificar al Maestro</button>
+    <ng-container *ngIf="!canComment">
+      <app-alert-message [type]="1" [title]="'Notificación'">
+        Ya has comentado al maestro en un periodo menor a 3 meses. Gracias por tu participación. 
+        Para volver a comentar espera que el periodo termine o edita tu comentario pasado.
+      </app-alert-message>
+    </ng-container>
+    
   </section>
 
   <!-- COMMENTS -->

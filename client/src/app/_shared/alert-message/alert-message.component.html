@@ -1,0 +1,10 @@
+<div #alertElement class="alert" [ngClass]="getClassType()">
+    <span class="close-btn" (click)="closeAlert()">&times;</span>
+    <div class="alert-content">
+        <!-- Your alert content goes here -->
+        <strong>{{title}}</strong>
+        <p>
+            <ng-content></ng-content>
+        </p>
+    </div>
+</div>

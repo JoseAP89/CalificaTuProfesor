@@ -55,6 +55,14 @@ export class RatingService implements OnDestroy {
 
   // HTTP SERVICES
 
+  public canComment(userId: string, teacherId: number): Observable<boolean> {
+    const url = `${this.baseUrl}/can-comment`;
+    let params = new HttpParams()
+      .set("userId", userId)
+      .set("teacherId", teacherId);
+    return this.http.get<boolean>(url, {params});
+  }
+
   public addComment(comment: CommentDTO): Observable<CommentDTO> {
     const url = `${this.baseUrl}/comment`;
     return this.http.post<CommentDTO>(url, comment);

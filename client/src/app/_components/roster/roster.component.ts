@@ -28,6 +28,7 @@ export class RosterComponent implements OnInit, AfterViewInit{
   public rosterRating: RosterRating;
   public scales: Scale[];
   public comments: CommentDTO[] = [];
+  public canComment: boolean = false;
 
   private pageEvent: PageEvent;
   private _recordId: string;
@@ -69,12 +70,14 @@ export class RosterComponent implements OnInit, AfterViewInit{
   }
 
   ngAfterViewInit() {
-    this.paginator._intl.itemsPerPageLabel = 'Tamaño de página:';
-    this.paginator._intl.nextPageLabel = 'Página siguiente';
-    this.paginator._intl.previousPageLabel = 'Página anterior';
-    this.paginator._intl.lastPageLabel = 'Ultima página';
-    this.paginator._intl.firstPageLabel = 'Primera página';
-    this.paginator._intl.changes.next(); // Trigger update
+    setTimeout(() => {
+      this.paginator._intl.itemsPerPageLabel = 'Tamaño de página:';
+      this.paginator._intl.nextPageLabel = 'Página siguiente';
+      this.paginator._intl.previousPageLabel = 'Página anterior';
+      this.paginator._intl.lastPageLabel = 'Ultima página';
+      this.paginator._intl.firstPageLabel = 'Primera página';
+      this.paginator._intl.changes.next(); // Trigger update
+    }, 100);
   }
 
   buildRoster(){
@@ -84,6 +87,9 @@ export class RosterComponent implements OnInit, AfterViewInit{
         this.getScales();
         this.getComments();
         this.getRosterRating();
+        this.ratingService.canComment(this.currentUserId, this.roster.rosterId).subscribe({
+          next: value => { this.canComment = value;}
+        });
       }
     });
   }

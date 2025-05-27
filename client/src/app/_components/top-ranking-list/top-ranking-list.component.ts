@@ -14,6 +14,6 @@ export class TopRankingListComponent {
 
   getFullName(name: string, lastname1: string, lastname2: string): string {
     if(!name || !lastname1) return "";
-    return (`${name} ${lastname1} ${lastname2}`).trim();
+    return (`${lastname1} ${lastname2} ${name}`).trim();
   }
 }

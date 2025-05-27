@@ -1,7 +1,9 @@
 **** Notes about the tasks to be done ****
 
-+++   Add front end pagination for the campus info page
 ++   Modify the campus info page to be suitable for mobile
++++ Add the option to grade how difficult the lecture was, but it would not impact the average
+	performance of the professor but it would only show how difficult on average are his 
+	lectures.
 +++ Build a top 10 board for the home page, similar to the one on 9anime (https://9animetv.to/home)
 + 	Build the About page
 +   Build the rust code for detecting vulgar words and gibberish and execute it with WASM

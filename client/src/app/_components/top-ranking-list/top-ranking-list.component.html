@@ -5,7 +5,7 @@
             <div class="item-rank">{{item.rank}}</div>
             <div class="item-user-icon">👤</div>
             <div class="item-info">
-                <div class="item-title">{{getFullName(item.name, item.firstLastName, item.firstLastName)}}</div>
+                <div class="item-title">{{getFullName(item.name, item.firstLastName, item.secondLastName)}}</div>
                 <div class="item-campus" *ngIf="showCampusName">{{item.campusName}}</div>
                 <div class="item-comment">{{item.totalComments}}</div>
                 <div class="item-grade">{{item.averageGrade}}</div>

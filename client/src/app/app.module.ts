@@ -31,6 +31,7 @@ import { EditCommentComponent } from './_components/dialogs/edit-comment/edit-co
 import { CancelAcceptComponent } from './_components/dialogs/cancel-accept/cancel-accept.component';
 import { CampusComponent } from './_components/campus/campus.component';
 import { TopRankingListComponent } from './_components/top-ranking-list/top-ranking-list.component';
+import { AlertMessageComponent } from './_shared/alert-message/alert-message.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { TopRankingListComponent } from './_components/top-ranking-list/top-rank
     CancelAcceptComponent,
     CampusComponent,
     TopRankingListComponent,
+    AlertMessageComponent,
   ],
   imports: [
     BrowserModule,

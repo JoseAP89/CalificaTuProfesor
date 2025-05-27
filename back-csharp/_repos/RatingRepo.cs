@@ -59,13 +59,12 @@ public class RatingRepo: IRatingRepo
         }
     }
 
-    public async Task<Comment> AddCommentAsync(CommentDTO commentDTO)
+    public async Task<bool> CanComment(string userId, int teacherId)
     {
-        var comment = _mapper.Map<Comment>(commentDTO);
-        if(string.IsNullOrEmpty(commentDTO.UserId) ) comment.UserId = Guid.NewGuid();
-        var userComments = await _context.Comments.Where( c => c.UserId == comment.UserId &&
-            c.RosterId == commentDTO.RosterId
+        var userComments = await _context.Comments.Where( c => c.UserId.ToString() == userId &&
+            c.RosterId == teacherId
         ).OrderByDescending( c => c.CreatedAt).FirstOrDefaultAsync();
+        if(string.IsNullOrEmpty(userId) ) userId = Guid.NewGuid().ToString();
         if (userComments != null) 
         {
             // there is one comment already, business rule is to allow more comments for one user
@@ -74,9 +73,19 @@ public class RatingRepo: IRatingRepo
             double monthsPassed = DateTime.Now.Subtract(userComments.CreatedAt).Days / (365.2425 / 12.0);
             if (monthsPassed < MIN_MONTHS_TO_COMMENT)
             {
-                throw new Exception($"Ya has comentado con anterioridad al profesor. Deben pasar almenos {MIN_MONTHS_TO_COMMENT} meses para publicar otro comentario.");
+                return false;
             }
             
+        }
+        return true;
+    }
+
+    public async Task<Comment> AddCommentAsync(CommentDTO commentDTO)
+    {
+        var comment = _mapper.Map<Comment>(commentDTO);
+        if (!( await CanComment(comment.UserId.ToString(), comment.RosterId))) 
+        {
+            throw new Exception($"Ya has comentado con anterioridad al profesor. Deben pasar almenos {MIN_MONTHS_TO_COMMENT} meses para publicar otro comentario.");
         }
         // it only carries one vote, the one of the user who created it, initially his vote is null
         comment.Votes = comment.Votes.Select( v => 

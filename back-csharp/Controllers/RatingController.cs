@@ -25,6 +25,20 @@ public class RatingController : ControllerBase
         _mapper = mapper;
     }
 
+    [HttpGet("can-comment")]
+    public async Task<ActionResult<CommentDTO>> CanComment(string userId, int teacherId)
+    {
+        try
+        {
+            var res = await _uow.Ratings.CanComment(userId, teacherId);
+            return Ok(res);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
     [HttpPost("comment")]
     public async Task<ActionResult<CommentDTO>> AddComment(CommentDTO commentDTO)
     {

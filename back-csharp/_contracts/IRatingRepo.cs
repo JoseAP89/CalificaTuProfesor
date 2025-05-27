@@ -6,6 +6,7 @@ namespace back_csharp._contracts;
 
 public interface IRatingRepo
 {
+    Task<bool> CanComment(string userId, int teacherId);
     Task<Comment> AddCommentAsync(CommentDTO commentDTO);
     Task<Comment> EditCommentContentAsync(CommentContentDTO commentDTO);
     Task<int> DeleteCommentByIdAsync(int commentId);
