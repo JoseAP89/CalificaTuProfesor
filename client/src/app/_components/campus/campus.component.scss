@@ -33,12 +33,16 @@
         }
 
         .table-container {
-            max-width: 1200px;
+            width: 100%;
             margin: 0 auto;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             overflow: hidden;
             background-color: white;
+            overflow-x: auto;
+            display: grid;
+            grid-template-columns: 100%;
+
 
             tr.teacher-row:hover {
                 background-color: #E3F2FD;
@@ -55,6 +59,7 @@
 
         table {
             width: 100%;
+            min-width: 570px;
             border-collapse: collapse;
             font-size: 14px;
         }
@@ -126,4 +131,27 @@
         padding: 14px;
     }
 
+}
+@media (max-width: 900px ) {
+    .campus-main-grid {
+        grid-template-columns: 1fr;
+    }    
+}
+@media (max-width: 570px) {
+    .table-container {
+        overflow-x: scroll !important;
+        /* Force scrollbar */
+        -webkit-overflow-scrolling: touch;
+        /* Smooth scrolling on iOS */
+    }
+
+    /* Optional: Add a visual cue that table is scrollable */
+    .table-container::after {
+        content: "→ Scroll →";
+        display: block;
+        text-align: center;
+        padding: 5px;
+        color: #666;
+        font-size: 12px;
+    }
 }
