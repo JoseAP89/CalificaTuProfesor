@@ -1,7 +1,6 @@
 **** Notes about the tasks to be done ****
 
 ++	New star display component
-+++ Build a top 10 board for the home page, similar to the one on 9anime (https://9animetv.to/home)
 + 	Build the About page
 +   Build the rust code for detecting vulgar words and gibberish and execute it with WASM
 ++	There is a need for an error middleware on the backend to better improve the messages sent to the client,

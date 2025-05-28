@@ -1,9 +1,11 @@
 .home-container {
+  background-color: black;
   background-image: url("/assets/images/chalkboard.jpg");
   color: white;
   height: 100vh;
   width: 100%;
   .home-title {
+    line-height: 32px;
     font-size: 2.6rem;
     margin: 30px auto 80px auto;
     text-align: center;
@@ -83,6 +85,23 @@
     }
     ::ng-deep .mat-mdc-form-field-subscript-wrapper {
       display: none !important;
+    }
+  }
+  .home-main-tile{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .home-main-tile{
+    display: grid;
+    grid-template-columns: 1fr;
+    .home-left-tile{
+      width: 90vw;
+    }
+    .home-right-tile {
+      display: none;
     }
   }
 }

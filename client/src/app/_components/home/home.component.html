@@ -1,47 +1,51 @@
 <section class="box home-container">
-  <div class="home-title">
-    Comienza buscando tu profesor
-  </div>
-  <div class="type-of-search">
-    <mat-radio-group #SearchType aria-labelledby="example-radio-group-label" class="radio-group" [(ngModel)]="typeOfSearch"
-    color="primary">
-      <mat-radio-button class="radio-btn" [value]="1">
-        <p class="radio-txt">Por Profesor</p>
-      </mat-radio-button>
-      <mat-radio-button class="radio-btn" [value]="2">
-        <p class="radio-txt">Por Campus</p>
-      </mat-radio-button>
-    </mat-radio-group>
-  </div>
-  <div class="search-container">
-    <!-- CAMPO DE BUSQUEDA -->
-    <mat-form-field class="search-form-field">
-      <mat-label>{{typeOfSearch == 1 ? "Buscar Profesor" : "Buscar Campus"}}</mat-label>
-      <input matInput
-        id="search-value"
-        #SearchVal
-        type="search"
-        [(ngModel)]="searchValue"
-        autocomplete="off"
-        (focus)="changeShowOptions(true)"
-      >
-      <button  class="close-options-btn" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearchValue()" [hidden]="searchValue==null || searchValue.length==0">
-        <mat-icon class="close-search-btn">close</mat-icon>
-      </button>
-      <!--SEARCH BTN -->
-      <div class="search-btn">
-        <button mat-raised-button color="primary" (click)="onSubmit()">Buscar</button>
+  <div class="home-main-tile">
+    <div class="home-left-tile">
+      <div class="home-title">
+        Comienza buscando tu profesor
       </div>
-    </mat-form-field>
-    <!-- CONTENEDOR DE OPCIONES -->
-    <div class="search-options-container" *ngIf="searchValue!='' && showOptions && (options | async ) as opts">
-      <div class="search-options-box" *ngFor="let item of opts; index as i">
-        <mat-icon class="hide-options-btn" *ngIf="i == 0" (click)="showOptions = false">expand_less</mat-icon>
-        <div class="option-item" (click)="onSelectedOption(item[0])">
-          <div class="children-option">{{item[0]?.value ?? ''}}</div>
-          <div class="parent-option">{{item[1]?.value ?? ''}}</div>
+      <div class="type-of-search">
+        <mat-radio-group #SearchType aria-labelledby="example-radio-group-label" class="radio-group"
+          [(ngModel)]="typeOfSearch" color="primary">
+          <mat-radio-button class="radio-btn" [value]="1">
+            <p class="radio-txt">Por Profesor</p>
+          </mat-radio-button>
+          <mat-radio-button class="radio-btn" [value]="2">
+            <p class="radio-txt">Por Campus</p>
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div class="search-container">
+        <!-- CAMPO DE BUSQUEDA -->
+        <mat-form-field class="search-form-field">
+          <mat-label>{{typeOfSearch == 1 ? "Buscar Profesor" : "Buscar Campus"}}</mat-label>
+          <input matInput id="search-value" #SearchVal type="search" [(ngModel)]="searchValue" autocomplete="off"
+            (focus)="changeShowOptions(true)">
+          <button class="close-options-btn" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearchValue()"
+            [hidden]="searchValue==null || searchValue.length==0">
+            <mat-icon class="close-search-btn">close</mat-icon>
+          </button>
+          <!--SEARCH BTN -->
+          <div class="search-btn">
+            <button mat-raised-button color="primary" (click)="onSubmit()">Buscar</button>
+          </div>
+        </mat-form-field>
+        <!-- CONTENEDOR DE OPCIONES -->
+        <div class="search-options-container" *ngIf="searchValue!='' && showOptions && (options | async ) as opts">
+          <div class="search-options-box" *ngFor="let item of opts; index as i">
+            <mat-icon class="hide-options-btn" *ngIf="i == 0" (click)="showOptions = false">expand_less</mat-icon>
+            <div class="option-item" (click)="onSelectedOption(item[0])">
+              <div class="children-option">{{item[0]?.value ?? ''}}</div>
+              <div class="parent-option">{{item[1]?.value ?? ''}}</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <div class="home-right-tile">
+      <app-top-ranking-list [title]="'Top 10 Ranking'" [rankTeacherList]="rankTeacherList"
+        [showCampusName]="true"></app-top-ranking-list>
+    </div>
+  
   </div>
 </section>

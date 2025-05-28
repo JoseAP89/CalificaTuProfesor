@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, debounceTime, delay, fromEvent, map, of } from 'rxjs';
-import { Vessel } from 'src/app/_models/business';
+import { RankingTopTeacher, Vessel } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
+import { RatingService } from 'src/app/_services/rating.service';
 import { RosterService } from 'src/app/_services/roster.service';
 import { SnackbarService } from 'src/app/_services/snackbar.service';
 
@@ -23,6 +24,7 @@ export class HomeComponent implements OnInit {
   public options: Observable<Vessel[][]>;
   public showOptions: boolean = false;
   public typeOfSearch: TypeOfSearch = TypeOfSearch.Profesor;
+  public rankTeacherList: Array<RankingTopTeacher> = [];
 
   /**
    *
@@ -32,6 +34,7 @@ export class HomeComponent implements OnInit {
     private rosterService: RosterService,
     private snackbarService: SnackbarService,
     private router: Router,
+    private ratingService: RatingService,
   ) {
     this.options = of([]);
     this.searchValue = '';
@@ -45,6 +48,11 @@ export class HomeComponent implements OnInit {
     ).subscribe( (event: any) => {
       this.onSearch(event);
     });
+    this.ratingService.getRankingTopTeacherList(10, 0, null, true).subscribe({
+      next: res => {
+        this.rankTeacherList = res.data;
+      }
+    }) ;
   }
 
 

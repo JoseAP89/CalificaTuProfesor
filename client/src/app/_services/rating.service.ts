@@ -98,7 +98,7 @@ export class RatingService implements OnDestroy {
     let params = new HttpParams()
       .set("pageSize", pageSize)
       .set("pageNumber", pageNumber)
-      .set("campusRecordIdStr", campusRecordIdStr)
+      .set("campusRecordIdStr", campusRecordIdStr ?? '')
       .set("sortByRank", sortByRank)
       .set("search", search ?? '');
     return this.http.get<TableData<RankingTopTeacher>>(url, {params}).pipe(
