@@ -38,18 +38,25 @@
         }
 
         .item-campus {
-            font-style: oblique;
-        }
-        .item-campus::before {
-            content: "🏢";
-            margin-right: 5px;
-            font-size: 12px;
+            margin-top: 4px;
+            margin-bottom: 0px;
+            font-style: normal;
+            display: inline-flex;
+            .university-icon {
+                fill: currentColor;
+            }
+            p {
+                margin-left: 6px;
+            }
         }
 
-        .item-comment::before {
-            content: "💬";
-            margin-right: 5px;
-            font-size: 12px;
+        .item-comment {
+            span {
+                padding-top: 2px;
+            }
+            p {
+                margin-left: 6px;
+            }
         }
 
         .item-rank {
