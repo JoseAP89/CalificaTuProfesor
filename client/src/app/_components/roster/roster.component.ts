@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, firstValueFrom, iif } from 'rxjs';
@@ -47,6 +47,7 @@ export class RosterComponent implements OnInit, AfterViewInit{
     private voteService: VoteService,
     private dialog: MatDialog,
     private snackbarService: SnackbarService,
+    private renderer: Renderer2
   ) {
     this.scales = [];
     this.comments = [];
@@ -106,6 +107,24 @@ export class RosterComponent implements OnInit, AfterViewInit{
   isOwner(comment: CommentDTO): boolean {
     // You can edit only your own comments
     return !!this.currentUserId && comment.userId == this.currentUserId;
+  }
+
+  paintThumbBtns(comment: CommentDTO, approval?: boolean){
+    if(approval == null) return;
+    // chose right color
+    if (approval) {
+      const thumbsUpElement = document.querySelector(`#thumbs-up-icon-${comment.commentId}`);
+      if (thumbsUpElement) {
+        this.renderer.removeClass(thumbsUpElement, 'disable-btn');
+        this.renderer.addClass(thumbsUpElement, 'thumbs-up-icon');
+      }
+    } else {
+      const thumbsDownElement = document.querySelector(`#thumbs-down-icon-${comment.commentId}`);
+      if (thumbsDownElement) {
+        this.renderer.removeClass(thumbsDownElement, 'disable-btn');
+        this.renderer.addClass(thumbsDownElement, 'thumbs-down-icon');
+      }
+    }
   }
 
   async voteComment(comment: CommentDTO, approval: boolean){
@@ -195,6 +214,11 @@ export class RosterComponent implements OnInit, AfterViewInit{
         this.pageNumber = res.pageNumber;
         this.pageSize = res.pageSize;
         this.totalLength = res.totalElements;
+        setTimeout(() => {
+          this.comments.forEach(comment => {
+            this.paintThumbBtns(comment, comment.currentUserVote);
+          });
+        });
       }
     })
   }

@@ -192,13 +192,44 @@
 
       .btn {
         cursor: pointer;
+        font-size: 22px;
       }
 
-      .chosen-btn {
-        color: blue;
+      .thumbs-up-icon {
+        color: #388e3c;
+        /* Green */
       }
-      .disable-btn {
-        color: grey;
+      .thumbs-up-icon:hover {
+        color: #1b5e20;
+      }
+      .thumbs-down-icon {
+        color: #d32f2f;
+        /* Red */
+      }
+      .thumbs-down-icon:hover {
+        color: #b71c1c;
+      }
+      .delete-icon {
+        color: #d32f2f;
+        /* Red */
+      }
+      .delete-icon:hover {
+        color: #b71c1c;
+      }
+      .alert-icon {
+        color: #ffa000;
+        /* Amber */
+      }
+      .alert-icon:hover {
+        color: #ff6f00;
+      }
+      .edit-icon {
+        margin-left: 8px;
+        color: #388e3c;
+        font-size: 24px;
+      }
+      .edit-icon:hover {
+        color: #116b15;
       }
     }
   }
