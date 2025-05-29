@@ -1,6 +1,5 @@
 **** Notes about the tasks to be done ****
 
-+	Solve the error with this request: https://localhost:7167/api/university/search/
 + 	Build the About page
 +   Build the rust code for detecting vulgar words and gibberish and execute it with WASM
 ++	There is a need for an error middleware on the backend to better improve the messages sent to the client,

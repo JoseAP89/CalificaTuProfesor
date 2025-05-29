@@ -4,12 +4,14 @@ import { HomeComponent } from './_components/home/home.component';
 import { AddItemsComponent } from './_components/add-items/add-items.component';
 import { RosterComponent } from './_components/roster/roster.component';
 import { CampusComponent } from './_components/campus/campus.component';
+import { AboutUsComponent } from './_components/about-us/about-us.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'agregar', component: AddItemsComponent},
   {path: 'maestro/:recordId', component: RosterComponent},
   {path: 'campus/:recordId', component: CampusComponent},
+  {path: 'acerca-de-nosotros', component: AboutUsComponent},
 /*
   {
     path: '',

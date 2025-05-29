@@ -33,6 +33,7 @@ import { CampusComponent } from './_components/campus/campus.component';
 import { TopRankingListComponent } from './_shared/top-ranking-list/top-ranking-list.component';
 import { AlertMessageComponent } from './_shared/alert-message/alert-message.component';
 import { StarComponent } from './_shared/star/star.component';
+import { AboutUsComponent } from './_components/about-us/about-us.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { StarComponent } from './_shared/star/star.component';
     TopRankingListComponent,
     AlertMessageComponent,
     StarComponent,
+    AboutUsComponent,
   ],
   imports: [
     BrowserModule,

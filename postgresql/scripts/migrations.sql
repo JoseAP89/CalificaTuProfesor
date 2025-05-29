@@ -10051,5 +10051,5 @@ INSERT INTO Scale(Code, Name, Description) VALUES
 ('EX', 'Expresión','Capacidad de comunicación clara y concisa con su clase.'),
 ('ME', 'Métodos','Uso de metodos de presentación que generan atención e interes en la clase.'),
 ('OR', 'Organización','Buena organicación de la enseñanza de los temas en la clase.'),
-('DI', 'Dificultad','La dificultad para obtener una calificación aprobatoria.'),
+('DI', 'Dificultad','La dificultad para obtener una calificación aprobatoria. No influye en el puntaje global.'),
 ('RE', 'Realidad','Capacidad de explicar aplicaciones de la materia a la práctica o a su uso en el mundo laboral.');

@@ -1,0 +1,80 @@
+<div class="body-container">
+    <section class="hero">
+        <div class="container">
+            <h1>Nuestra historia</h1>
+            <p>
+                Impulsados por la inovación y la excelencia academica
+            </p>
+        </div>
+    </section>
+
+    <section class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Quienes somos</h3>
+                    <p>
+                        Somos una plataforma web diseñada para evaluar el desempeño de profesores universitarios de manera clara, objetiva y
+                        eficiente, basándonos exclusivamente en su rendimiento académico.
+                    </p>
+                    <p>
+                        Nuestro objetivo es brindar a los estudiantes información transparente sobre la calidad docente, facilitando así
+                        decisiones informadas al momento de elegir sus cursos.
+                    </p>
+                    <p>
+                        Con sede en Benito, Juáres, Ciudad de México, México.
+                    </p>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+                        alt="Our team working together">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mission">
+        <div class="section-title">
+            <h2>Nuestra Misión & Visión</h2>
+            <p>Principios guía que influencian en todo lo que hacemos</p>
+        </div>
+        <div class="container">
+            <div class="about-content">
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+                        alt="Mission and vision">
+                </div>
+                <div class="about-text">
+                    <h3>Misión</h3>
+                    <p>
+                        Evaluar el desempeño docente universitario con transparencia y objetividad, mediante una plataforma digital innovadora
+                        que empodere a los estudiantes. Brindamos herramientas basadas en datos reales para que la comunidad académica tome
+                        decisiones informadas, promoviendo así la excelencia educativa.
+                    </p>
+                    <h3>Vision</h3>
+                    <p>
+                        Ser el referente en la evaluación docente, reconocido por su rigor metodológico y su impacto en la mejora
+                        continua de la educación superior. Aspiramos a construir un ecosistema donde la retroalimentación entre profesores y
+                        estudiantes impulse la calidad académica y la equidad en el acceso a la información.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="values">
+        <div class="section-title">
+            <h2>¿Como los calificamos?</h2>
+            <p>Los atributos con los que medimos el rendimiento</p>
+        </div>
+        <div class="container">
+            <div class="values-grid">
+                <div class="value-card" *ngFor="let item of scales | async">
+                    <h3>{{item.name}}</h3>
+                    <p>{{item.description}}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
