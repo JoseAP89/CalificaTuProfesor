@@ -90,6 +90,14 @@
 .item-title {
     font-weight: 800;
     flex-grow: 1;
+    a {
+        text-decoration: none;
+    }
+}
+.item-title:hover {
+    a {
+        color: rgb(18, 125, 212);
+    }
 }
 
 .item-time {
