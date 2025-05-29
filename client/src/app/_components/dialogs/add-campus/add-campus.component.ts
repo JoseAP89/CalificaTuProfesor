@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, catchError, firstValueFrom, map, of, tap } from 'rxjs';
+import { Observable, catchError, debounceTime, firstValueFrom, fromEvent, map, of, tap } from 'rxjs';
 import { Campus, NewCampus, NewUniversity, Vessel } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 import { SnackbarService } from 'src/app/_services/snackbar.service';
@@ -14,10 +14,11 @@ import { UniversityService } from 'src/app/_services/university.service';
 })
 export class AddCampusComponent implements OnInit {
 
+  @ViewChild('universityInput') universityInput!: ElementRef<HTMLInputElement>;
   public campusForm: FormGroup;
   public states: Observable<Vessel[]>;
   public uniSearchOptions: Observable<Vessel[]>
-  public uniError: boolean = false;
+  public uniError?: boolean = false;
   public uniSelected: Vessel;
 
 
@@ -30,6 +31,13 @@ export class AddCampusComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    let searchValueInput = document.querySelector("#university-search-input");
+    const keyup$ = fromEvent(searchValueInput, 'keyup');
+    keyup$.pipe(
+      debounceTime(400)
+    ).subscribe( (event: any) => {
+      this.onSearchUni(event?.target?.value);
+    });
     this.states = this.stateService.getStates();
     this.campusForm = this.fb.group({
       name: ['', Validators.required],
@@ -39,36 +47,24 @@ export class AddCampusComponent implements OnInit {
   }
 
   onSearchUni(search: string){
+    search = search?.trim();
+    if(!search) return;
     this.uniError = false;
-    this.uniSearchOptions = this.universityService.searchUniversity(search);;
+    this.uniSearchOptions = this.universityService.searchUniversity(search).pipe(
+      tap( res => {
+        if(res && res.length === 0){
+          this.uniError = true;
+        }
+      }),
+      catchError(() => {
+        this.uniError = true;
+        return of(null);
+      })
+    );
   }
 
-  async onSelectUni() {
-    setTimeout( async () => {
-      this.uniError = false;
-      let uniName = (this.campusForm.get("universityName")?.value as string)?.trim();
-      let uniNameUrl = uniName.replaceAll(" ", "+");
-      let uni = await firstValueFrom(
-        this.universityService.searchUniversity(uniNameUrl).pipe(
-          tap(() => this.uniError = false),
-          map( data => {
-            let res = data.filter( u => u.value.toLowerCase() == uniName.toLowerCase().trim());
-            return res !=null ? res[0] : null;
-          }),
-          catchError(() => {
-            this.uniError = true;
-            return of(null)
-          })
-        )
-      );
-      if (uni == null) {
-        this.uniError = true;
-      } else {
-        this.uniSelected = uni;
-        this.uniError = false;
-      }
-
-    }, 1_000 * 0.2);
+  async onSelectionChange(value: Vessel) {
+    this.uniSelected = value;
   }
 
   async onSubmit(){
@@ -77,7 +73,7 @@ export class AddCampusComponent implements OnInit {
       campus.universityId = this.uniSelected.id;
       this.campusService.addCampus(campus).subscribe({
         next: res => {
-          this.snackbarService.showSuccessMessage(`Campus con nombre '${res.name}' fue agregado correctamente.`);
+          this.snackbarService.showSuccessMessage(`Campus '${res.name}' fue agregado correctamente.`);
         },
         error: error => {
           this.snackbarService.showErrorMessage(`Hubo un error agregando al campus. ${error}`);

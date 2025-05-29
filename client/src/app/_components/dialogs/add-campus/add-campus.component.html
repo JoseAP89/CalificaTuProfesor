@@ -25,18 +25,18 @@
       <!-- UNIVERSITY -->
       <mat-form-field class="example-full-width" appearance="fill">
         <mat-label>Universidad</mat-label>
-        <input type="text" required
+        <input 
+          #universityInput
+          id="university-search-input"
+          type="text" required
           placeholder="Busca la universidad"
           aria-label="Number"
           matInput
           formControlName="universityName"
-          #CampusElement (keyup)="onSearchUni(CampusElement.value)"
-          (blur)="onSelectUni()"
-          (select)="onSelectUni()"
           [matAutocomplete]="uni"
         />
         <mat-autocomplete autoActiveFirstOption #uni="matAutocomplete">
-          <mat-option *ngFor="let option of uniSearchOptions | async" [value]="option.value">
+          <mat-option *ngFor="let option of uniSearchOptions | async" [value]="option.value" (onSelectionChange)="onSelectionChange(option)">
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
@@ -46,6 +46,9 @@
       <div class="input-error" *ngIf="this.uniError">
         <p>La universidad seleccionada no existe.</p>
       </div>
+      <div class="input-error" *ngIf="this.uniError === null">
+        <p>Error en la búsqueda.</p>
+      </div>
 
     </form>
   </div>
@@ -53,7 +56,7 @@
     <button mat-button mat-raised-button class="cancel-btn" mat-dialog-close>Cerrar</button>
     <button mat-button mat-raised-button class="ok-btn"
       [ngClass]="{'disabled-btn': !campusForm.valid}"
-      mat-dialog-close (click)="onSubmit()" [disabled]="!campusForm.valid">
+      mat-dialog-close (click)="onSubmit()" [disabled]="!campusForm.valid || uniError">
       Guardar
     </button>
   </div>

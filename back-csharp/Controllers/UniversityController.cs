@@ -71,21 +71,12 @@ namespace back_csharp.Controllers
         [HttpGet("search/{search}")]
         public async Task<ActionResult<IEnumerable<Vessel>>> GetUniversitySearch(string search)
         {
-            try
+            var res = await _uow.Universities.Search(search);
+            if (res==null)
             {
-                var res = await _uow.Universities.Search(search);
-                if (res==null)
-                {
-                    return NoContent();
-                }
-                return Ok(res);
-
+                return BadRequest("There was an error while searching the university.");
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return BadRequest($"Hubo un error al buscar las universidades.");
-            }
+            return Ok(res);
         }
         
         [HttpPost]
