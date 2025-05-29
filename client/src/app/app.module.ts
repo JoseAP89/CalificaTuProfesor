@@ -30,8 +30,9 @@ import {MatBadgeModule} from '@angular/material/badge';
 import { EditCommentComponent } from './_components/dialogs/edit-comment/edit-comment.component';
 import { CancelAcceptComponent } from './_components/dialogs/cancel-accept/cancel-accept.component';
 import { CampusComponent } from './_components/campus/campus.component';
-import { TopRankingListComponent } from './_components/top-ranking-list/top-ranking-list.component';
+import { TopRankingListComponent } from './_shared/top-ranking-list/top-ranking-list.component';
 import { AlertMessageComponent } from './_shared/alert-message/alert-message.component';
+import { StarComponent } from './_shared/star/star.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { AlertMessageComponent } from './_shared/alert-message/alert-message.com
     CampusComponent,
     TopRankingListComponent,
     AlertMessageComponent,
+    StarComponent,
   ],
   imports: [
     BrowserModule,

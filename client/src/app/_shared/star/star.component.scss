@@ -1,0 +1,53 @@
+/* star-rating.component.css */
+.star-rating-container {
+  --star-size: 24px; /* Default size, can be overridden */
+}
+
+.stars {
+  display: flex;
+  align-items: center;
+  font-size: var(--star-size);
+  margin-bottom: 20px;
+}
+
+.star {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  line-height: 1em;
+  text-align: center;
+  color: #ccc; /* Default empty star color */
+  position: relative;
+}
+
+.star.full {
+  color: orange;
+}
+
+.star.empty {
+  color: #ccc;
+}
+
+.partial-mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+.partial-container {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  position: relative;
+}
+.partial-container .empty {
+  position: relative;
+  z-index: 0;
+}
+
+.numeric-star-value {
+    margin-left: 14px;
+    color: grey;
+}

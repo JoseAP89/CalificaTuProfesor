@@ -3,7 +3,7 @@
     <div class="title-container" >
       <div class="left-box">Califica a {{roster.fullName}}</div>
       <div class="right-box">
-        <i class="average-rate" data-star="0"></i>
+        <app-star [averageGrade]="averageRate" [fontSize]="30" [showAverageValue]="true" [averageValueColor]="'white'"></app-star>
       </div>
     </div>
   </div>
@@ -46,9 +46,9 @@
                 <mat-panel-title>
                   <label id="scale-{{ i }}" class="example-name-label">{{ _scales[i].name}}</label>
                 </mat-panel-title>
-                <mat-panel-description>
+                <mat-panel-description class="panel-description">
                   <label class="scale-value">
-                    <i class="scale-rate-{{i}} individual-scale-rate" data-star="0"></i>
+                    <app-star [averageGrade]="updateScaleRate(i)" [fontSize]="25" [showAverageValue]="true" [averageValueColor]="'black'"></app-star>
                   </label>
                 </mat-panel-description>
               </mat-expansion-panel-header>

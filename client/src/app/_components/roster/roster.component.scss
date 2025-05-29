@@ -35,10 +35,8 @@
     background-color: #faf0e6;
     border-radius: 10px;
 
-    .average-grade {
-      $starSize : 150px;
-      font-size: $starSize;
-      line-height: $starSize;
+    .global-avg-grade{
+      padding-top: 4px;
     }
     .skills-box {
       display: grid;
@@ -142,9 +140,9 @@
           .extra-info {
             font-size: 0.95rem;
           }
-          .individual-score i{
-            font-size: 30px;
-            line-height: 20px;
+          .individual-score {
+            margin-top: 2px;
+            height: 22px;
           }
           .indv-numeric-score {
             font-size: 0.8rem;

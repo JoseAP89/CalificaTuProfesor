@@ -94,18 +94,16 @@ export class RateComponent implements OnInit {
   }
 
   updateAverageRate(): void {
-    let value = (this.scales.value as Array<number>).reduce( (a,b) => a+b, 0) / (this._scales.length * 10.0 * 2.0);
-    let res = value.toFixed(1);
+    const difficultIndex = this._scales?.map(s => s.code)?.indexOf('DI');
+    const scaleValues = this.scales.value?.filter((_: number, i:number) => i !== difficultIndex);
+    let value = (scaleValues as Array<number>).reduce( (a,b) => a+b, 0) / (scaleValues.length * 10.0 * 2.0);
+    let res = value.toFixed(2);
     this.averageRate = Number(res);
-    let star = document.querySelector(".average-rate");
-    star?.setAttribute("data-star",res);
   }
 
-  updateScaleRate(index: number): void {
-    let value = this.getScale(index) / (2.0 * 10.0);
-    let res = value.toFixed(1);
-    let star = document.querySelector(`.scale-rate-${index}`);
-    star?.setAttribute("data-star",res);
+  updateScaleRate(index: number): number {
+    const value = this.getScale(index) / (2.0 * 10.0);
+    return Number(value.toFixed(2));
   }
 
   updateRates(index: number){
@@ -118,7 +116,7 @@ export class RateComponent implements OnInit {
     return Number(val.value);
   }
 
-  /** It adds the scales in alphabetic order sent by the server. Both _scales and scales controller have the same argument positions.*/
+  /** It adds the scales in the order sent by the server. Both _scales and scales controller have the same argument positions.*/
   addScalesToForm(){
     for (let index = 0; index < this._scales.length; index++) {
       this.scales.push(this.fb.control(0));

@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, map, Observable } from 'rxjs';
 import { Campus, CampusTeacherList, RankingTopTeacher } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 import { RatingService } from 'src/app/_services/rating.service';

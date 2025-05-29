@@ -1,0 +1,25 @@
+<div class="star-rating-container">
+    <div class="stars" >
+        <!-- Full stars -->
+        <span *ngFor="let _ of [].constructor(fullStars)" class="star full">★</span>
+
+        <!-- Partial star -->
+        <span *ngIf="hasPartialStar" class="star partial-container">
+            <span class="partial-mask" [style.width.%]="partialStarWidth">
+                <span class="star full">★</span>
+            </span>
+            <span class="star empty">★</span>
+        </span>
+
+        <!-- Empty stars -->
+        <span *ngFor="let _ of [].constructor(emptyStars)" class="star empty">★</span>
+
+        <!-- Numerical Value (optional) -->
+         <ng-container *ngIf="showAverageValue">
+            <span class="numeric-star-value">({{averageGrade}})</span>
+         </ng-container>
+         
+
+    </div>
+
+</div>

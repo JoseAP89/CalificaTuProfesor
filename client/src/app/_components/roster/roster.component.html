@@ -7,7 +7,9 @@
     <div class='box-info' *ngIf="roster!=null">
       <div class='title-box'>DATOS GLOBALES</div>
       <div class='label-brief'>Calificación General</div>
-      <i class="average-grade" data-star="0"></i>
+      <div class="global-avg-grade">
+        <app-star [averageGrade]="globalAverageGrade" [fontSize]="70"></app-star>
+      </div>
       <div class='label-brief'>Puntuación total</div>
       <div class='content-brief'>{{rosterRating?.averageGrade ?? 0}}</div>
       <div class='label-brief'>Rango</div>
@@ -20,7 +22,7 @@
       <div class='skills-box'>
         <ng-container *ngFor="let scale of scales">
           <div class='label-brief'>{{scale.name}}</div>
-          <i class="skill-{{scale.scaleId}}" data-star="0"></i>
+          <app-star [averageGrade]="getTeacherScaleGrade(scale.scaleId)" [fontSize]="40"></app-star>
         </ng-container>
       </div>
     </div>
@@ -48,7 +50,9 @@
           <div class='info-item'>
             <div><span class='info-title'>Materia:</span> {{comment.subjectName | uppercase}}</div>
             <div class="extra-info"><span>{{comment.studyField.universityArea.name| titlecase}}</span><span class=''> &#10095; {{comment.studyField.name | titlecase}}</span></div>
-            <div class="individual-score"><i class="average-grade" [attr.data-star]="getAverageCommentGrade(comment)"></i></div>
+            <div class="individual-score">
+              <app-star [averageGrade]="getAverageCommentGrade(comment)"></app-star>
+            </div>
             <div class="indv-numeric-score">{{getAverageCommentGrade(comment ) | number: '1.0-4'}}</div>
           </div>
         </div>

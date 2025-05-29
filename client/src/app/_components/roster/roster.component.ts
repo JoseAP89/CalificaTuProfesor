@@ -37,6 +37,7 @@ export class RosterComponent implements OnInit, AfterViewInit{
   public sortPage: SortPaginator;
   public pageNumber: number; // page 0-index based
   public pageSizeOptions = [5, 10, 25, 50];
+  public globalAverageGrade = 0;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
@@ -194,8 +195,7 @@ export class RosterComponent implements OnInit, AfterViewInit{
   }
 
   updateGlobalAverageGrade(){
-    let averageGrade = document.querySelector(".average-grade");
-    averageGrade?.setAttribute("data-star", this.rosterRating?.averageGrade?.toString());
+    this.globalAverageGrade = this?.rosterRating?.averageGrade;
   }
 
   getRosterRating() {
@@ -223,20 +223,14 @@ export class RosterComponent implements OnInit, AfterViewInit{
     })
   }
 
+  getTeacherScaleGrade(scaleId: number): number{
+    return this.rosterRating?.grades?.find(g => g.scaleId === scaleId)?.stars ?? 0;
+  }
+
   getScales(){
     this.scaleService.getScales().subscribe({
       next: res => {
         this.scales = res;
-        setTimeout(() => {
-          let scaleIds = this.scales.map( s => s.scaleId);
-          // updates global individual skills of the teacher
-          for (const i of scaleIds) {
-            let grade = document.querySelector(`.skill-${i}`);
-            grade?.setAttribute("data-star",
-              this.rosterRating?.grades.find(g => g.scaleId==i)?.stars.toFixed(1)
-            );
-          }
-        }, 1_00);
       }
     })
   }
