@@ -1,6 +1,5 @@
 **** Notes about the tasks to be done ****
 
-+ 	Build the About page
 +   Build the rust code for detecting vulgar words and gibberish and execute it with WASM
 ++	There is a need for an error middleware on the backend to better improve the messages sent to the client,
 	also I need to add an ApiException class to handle business logic errors in the app.

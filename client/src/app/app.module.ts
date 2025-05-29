@@ -34,6 +34,7 @@ import { TopRankingListComponent } from './_shared/top-ranking-list/top-ranking-
 import { AlertMessageComponent } from './_shared/alert-message/alert-message.component';
 import { StarComponent } from './_shared/star/star.component';
 import { AboutUsComponent } from './_components/about-us/about-us.component';
+import { FooterComponent } from './_components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { AboutUsComponent } from './_components/about-us/about-us.component';
     AlertMessageComponent,
     StarComponent,
     AboutUsComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
