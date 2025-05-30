@@ -19,7 +19,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
 
     // Initialize content filter
-    let filter = ContentFilter::new(args.wordlist.to_str().unwrap())?;
+    let filter = ContentFilter::new()?;
 
     // Process input
     match args.text {

@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use std::sync::Arc;
 use crate::content_filter::{
     word_loader::WordLoader,
     normalizer::WordNormalizer,  // Fixed import path
@@ -13,14 +14,29 @@ pub struct ContentFilter {
 }
 
 impl ContentFilter {
-    pub fn new(json_path: &str) -> Result<Self, Box<dyn std::error::Error>> {
-        let vulgar_words = WordLoader::load_from_file(json_path)?;
+    pub fn new() -> Result<Self, Box<dyn std::error::Error>> {
+        //let vulgar_words = WordLoader::load_from_file(json_path)?;
+        let vulgar_words = WordLoader::get_words();
         let gibberish_detector = GibberishDetector::new(0.4, 4);
         
-        Ok(Self {
-            vulgar_words,
-            gibberish_detector,
-        })
+        match Arc::try_unwrap(vulgar_words) {
+            Ok(set) => {
+                // Now you have HashSet<String> with no allocation
+                // This is a zero-cost conversion if the Arc had only one reference
+                return Ok(Self {
+                    vulgar_words : set,
+                    gibberish_detector,
+                });
+            }
+            Err(arc) => {
+                // Clone the HashSet if there are multiple references
+                let set = (*arc).clone();
+                return Ok(Self {
+                    vulgar_words : set,
+                    gibberish_detector,
+                });
+            }
+        }
     }
 
     pub fn analyze(&self, text: &str) -> AnalysisResult {

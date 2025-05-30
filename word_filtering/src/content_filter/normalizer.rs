@@ -8,6 +8,7 @@ static LEET_SUBSTITUTIONS: Lazy<Vec<(Regex, &str)>> = Lazy::new(|| {
         (Regex::new(r"4").unwrap(), "a"),
         (Regex::new(r"5").unwrap(), "s"),
         (Regex::new(r"7").unwrap(), "t"),
+        (Regex::new(r"9").unwrap(), "p"),
         (Regex::new(r"0").unwrap(), "o"),
         (Regex::new(r"@").unwrap(), "a"),
         (Regex::new(r"!").unwrap(), "i"),
