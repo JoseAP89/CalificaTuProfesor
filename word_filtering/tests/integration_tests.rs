@@ -1,42 +1,43 @@
 use word_filtering::ContentFilter;
-use std::io::Write;
+use std::io::{Write, Seek, SeekFrom};
 use tempfile::NamedTempFile;
 
 #[test]
 fn test_full_filter() -> Result<(), Box<dyn std::error::Error>> {
-    // Create JSON content
-    let json_content = r#"
-    {
+    // 1. Create JSON content with proper formatting
+    let json_content = r#"{
         "shit": 1,
         "fuck": 2
-    }
-    "#;
-    
-    // Create and write to temp file
+    }"#;
+
+    // 2. Create and properly write to temp file
     let mut temp_file = NamedTempFile::new()?;
     write!(temp_file, "{}", json_content)?;
-    
-    // Flush to ensure content is written
     temp_file.flush()?;
     
-    // Get the path (important to do this after writing)
+    // 3. Reset file pointer to beginning
+    temp_file.seek(SeekFrom::Start(0))?;
+    
+    // 4. Get path after writing
     let path = temp_file.path().to_str()
-        .ok_or("Invalid path")?;
+        .ok_or("Invalid path")?.to_string();
     
-    // Create filter
-    let filter = ContentFilter::new(path)?;
+    // 5. Create filter
+    let filter = ContentFilter::new(&path)?;
     
-    // Run tests
+    // 6. Test vulgar words
     let result = filter.analyze("this is shit");
-    assert!(result.is_inappropriate);
-    assert!(result.vulgar_words_found);
+    assert!(result.is_inappropriate, "Should detect vulgar words like puto");
+    assert!(result.vulgar_words_found, "Should flag vulgar words");
     
-    let result = filter.analyze("asdf zxcv");
-    assert!(result.is_inappropriate);
-    assert!(result.gibberish_detected);
+    // 7. Test gibberish
+    let result = filter.analyze("kjhbjjbxqzy anjiijikjaanaxbb");
+    assert!(result.is_inappropriate, "Should detect gibberish");
+    assert!(result.gibberish_detected, "Should flag gibberish");
     
+    // 8. Test clean text
     let result = filter.analyze("hello world");
-    assert!(!result.is_inappropriate);
+    assert!(!result.is_inappropriate, "Should pass clean text");
     
     Ok(())
 }
