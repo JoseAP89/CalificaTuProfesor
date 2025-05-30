@@ -30,12 +30,22 @@ fn test_full_filter() -> Result<(), Box<dyn std::error::Error>> {
     assert!(result.is_inappropriate, "Should detect vulgar words like puto");
     assert!(result.vulgar_words_found, "Should flag vulgar words");
     
-    // 7. Test gibberish
-    let result = filter.analyze("kjhbjjbxqzy anjiijikjaanaxbb");
+    // 7. Test vulgar words
+    let result = filter.analyze("this is sh1t");
+    assert!(result.is_inappropriate, "Should detect vulgar words like puto");
+    assert!(result.vulgar_words_found, "Should flag vulgar words");
+
+    // 8. Test vulgar words
+    let result = filter.analyze("this is sh.1t");
+    assert!(result.is_inappropriate, "Should detect vulgar words like puto");
+    assert!(result.vulgar_words_found, "Should flag vulgar words");
+
+    // 9 Test gibberish
+    let result = filter.analyze("kjhba test");
     assert!(result.is_inappropriate, "Should detect gibberish");
     assert!(result.gibberish_detected, "Should flag gibberish");
     
-    // 8. Test clean text
+    // 10. Test clean text
     let result = filter.analyze("hello world");
     assert!(!result.is_inappropriate, "Should pass clean text");
     
