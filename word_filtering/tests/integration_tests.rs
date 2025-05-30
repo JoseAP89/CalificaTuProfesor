@@ -1,6 +1,4 @@
 use word_filtering::ContentFilter;
-use std::io::{Write, Seek, SeekFrom};
-use tempfile::NamedTempFile;
 
 #[test]
 fn test_full_filter() -> Result<(), Box<dyn std::error::Error>> {
@@ -19,6 +17,11 @@ fn test_full_filter() -> Result<(), Box<dyn std::error::Error>> {
 
     // 8. Test vulgar words
     let result = filter.analyze("this is 9ut0");
+    assert!(result.is_inappropriate, "Should detect vulgar words like puto");
+    assert!(result.vulgar_words_found, "Should flag vulgar words");
+
+    // 8. Test vulgar words
+    let result = filter.analyze("this is prostituto");
     assert!(result.is_inappropriate, "Should detect vulgar words like puto");
     assert!(result.vulgar_words_found, "Should flag vulgar words");
 
