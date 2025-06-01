@@ -2,7 +2,8 @@
 
 +   when using wasm.analyze in the fonrt end, it should disable the button since the process can
 	take a bit time to complete
-+	improve vulgar word finding in rust, since the word 'apasionado' do not pass the test
++	only thing remaining is over time add words to the black_word_list and the white_word_list,
+	thus, it would be an always active task (ALWAYS ACTIVE)
 ++	There is a need for an error middleware on the backend to better improve the messages sent to the client,
 	also I need to add an ApiException class to handle business logic errors in the app.
 +	Add a diagram to show how the services interact with each other on the docker network.
