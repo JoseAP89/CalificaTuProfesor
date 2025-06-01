@@ -10,7 +10,6 @@ impl WordMatcher {
         }
 
         // 2. Only do flexible matching for short patterns (e.g. "puta")
-        println!("es maricas -> {}", pattern == "maricas");
         if pattern.len() <= 10 {
             // Match like p.*u.*t.*a
             let spaced_pattern = pattern.chars().map(|c| c.to_string()).collect::<Vec<_>>().join(".*");
