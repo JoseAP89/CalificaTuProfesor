@@ -6,6 +6,7 @@ import { CampusService } from 'src/app/_services/campus.service';
 import { RatingService } from 'src/app/_services/rating.service';
 import { RosterService } from 'src/app/_services/roster.service';
 import { SnackbarService } from 'src/app/_services/snackbar.service';
+import { WasmFilterService } from 'src/app/_services/wasmFilter.service';
 
 export enum TypeOfSearch {
   Profesor = 1,
@@ -35,6 +36,7 @@ export class HomeComponent implements OnInit {
     private snackbarService: SnackbarService,
     private router: Router,
     private ratingService: RatingService,
+    private wasmFilteringService: WasmFilterService,
   ) {
     this.options = of([]);
     this.searchValue = '';
@@ -53,6 +55,9 @@ export class HomeComponent implements OnInit {
         this.rankTeacherList = res.data;
       }
     }) ;
+    const text = "asekjhwei puto";
+    console.log(`text: '${text}' is: ${this.wasmFilteringService.analyzeText(text)}`);
+    
   }
 
 

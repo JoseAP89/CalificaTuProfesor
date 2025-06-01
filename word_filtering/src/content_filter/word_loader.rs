@@ -8,7 +8,7 @@ use lazy_static::lazy_static;
 
 lazy_static! {
     pub static ref BAD_SPANISH_WORDS_SET: Arc<HashSet<String>> = {
-        let json_data = include_str!(r"..\..\config\spanish_bad_words.json");
+        let json_data = include_str!(r"..\..\..\client\config\spanish_bad_words.json");
         let bad_words: BadWords = serde_json::from_str(json_data)
             .expect("Failed to parse bad words JSON");
         

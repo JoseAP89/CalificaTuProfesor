@@ -1,5 +1,5 @@
 use std::io;
-use word_filtering_lib::ContentFilter; // Replace with your crate name
+use word_filtering_lib::ContentFilter;
 use std::path::PathBuf;
 use clap::Parser;
 

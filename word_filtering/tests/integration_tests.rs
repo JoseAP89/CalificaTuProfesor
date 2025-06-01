@@ -1,4 +1,4 @@
-use word_filtering::ContentFilter;
+use word_filtering_lib::ContentFilter; 
 
 #[test]
 fn test_full_filter() -> Result<(), Box<dyn std::error::Error>> {
