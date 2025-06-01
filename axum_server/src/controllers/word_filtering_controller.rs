@@ -1,10 +1,10 @@
 use axum::{
-    routing::{get, post},
+    routing::{post},
     Router,
     response::Json,
     extract::Json as ExtractJson,
 };
-use axum_server::{content_filter::word_loader, ContentFilter};
+use axum_server::{ContentFilter};
 use serde::{Serialize, Deserialize};
 use crate::AppState;
 
@@ -35,12 +35,15 @@ async fn analyze_words(ExtractJson(payload): ExtractJson<FilterRequest>) -> Json
         let is_bad = filter.analyze(&word);
         is_inappropiate = is_bad.is_inappropriate;
         if is_inappropiate {
-           break; 
+            break; 
         }
     }
 
     Json(ApiResponse {
-        message: "Words filtered successfully".to_string(),
+        message: match is_inappropiate {
+           true => "No podemos procesar la información porque uno o más campos contienen contenido inapropiado. Por favor, modifícalos para continuar.".to_string(),
+           _ => "Todos los mensajes son apropiados.".to_string() 
+        },
         is_inappropiate: Some(is_inappropiate),
     })
 }

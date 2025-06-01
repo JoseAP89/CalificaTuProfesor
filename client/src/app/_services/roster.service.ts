@@ -9,7 +9,7 @@ import { Roster, RosterDB, TeacherCampus, Vessel } from '../_models/business';
 })
 export class RosterService {
 
-  private baseUrl = environment.API_URL + "/api/roster";
+  private baseUrl = environment.API_URL_DOT_NET + "/api/roster";
 
   constructor(
     private http: HttpClient,

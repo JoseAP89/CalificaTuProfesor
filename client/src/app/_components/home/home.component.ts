@@ -33,10 +33,8 @@ export class HomeComponent implements OnInit {
   constructor(
     private compusService: CampusService,
     private rosterService: RosterService,
-    private snackbarService: SnackbarService,
     private router: Router,
     private ratingService: RatingService,
-    private wasmFilteringService: WasmFilterService,
   ) {
     this.options = of([]);
     this.searchValue = '';
@@ -55,9 +53,6 @@ export class HomeComponent implements OnInit {
         this.rankTeacherList = res.data;
       }
     }) ;
-    const text = "asekjhwei puto";
-    console.log(`text: '${text}' is: ${this.wasmFilteringService.analyzeText(text)}`);
-    
   }
 
 

@@ -1,4 +1,5 @@
 use axum::{Router};
+use tower_http::cors::{CorsLayer, Any};
 use std::net::SocketAddr;
 
 mod controllers;
@@ -9,12 +10,18 @@ pub struct AppState {}
 
 #[tokio::main]
 async fn main() {
+    // Create CORS layer
+    let cors = CorsLayer::new()
+        .allow_origin(Any) // Allows all origins
+        .allow_methods(Any) // Allows all HTTP methods
+        .allow_headers(Any); // Allows all headers
     // Initialize shared state
     let shared_state = AppState {};
 
     // Build our application with routes from controllers
     let app = Router::new()
         .merge(controllers::word_filtering_controller::router())
+        .layer(cors)
         .with_state(shared_state);
 
     // Run the server

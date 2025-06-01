@@ -14,7 +14,7 @@ export class RatingService implements OnDestroy {
   private _userId : BehaviorSubject<string> ;
   private _name = "userId";
 
-  private baseUrl = environment.API_URL + "/api/rating";
+  private baseUrl = environment.API_URL_DOT_NET + "/api/rating";
   constructor(
     private http: HttpClient,
     private commonService: CommonService,

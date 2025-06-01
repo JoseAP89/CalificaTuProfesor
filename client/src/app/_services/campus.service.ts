@@ -9,7 +9,7 @@ import { Campus, CampusUniversity, NewCampus, Vessel } from '../_models/business
 })
 export class CampusService {
 
-  private baseUrl = environment.API_URL + "/api/campus";
+  private baseUrl = environment.API_URL_DOT_NET + "/api/campus";
 
   constructor(
     private http: HttpClient,

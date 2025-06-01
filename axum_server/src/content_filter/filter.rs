@@ -17,7 +17,9 @@ impl ContentFilter {
     pub fn new() -> Result<Self, Box<dyn std::error::Error>> {
         //let vulgar_words = WordLoader::load_from_file(json_path)?;
         let vulgar_words = WordLoader::get_words();
-        let gibberish_detector = GibberishDetector::new(0.4, 4);
+        let thresold = 0.6;
+        let min_word_length = 4;
+        let gibberish_detector = GibberishDetector::new(thresold, min_word_length);
         
         match Arc::try_unwrap(vulgar_words) {
             Ok(set) => {

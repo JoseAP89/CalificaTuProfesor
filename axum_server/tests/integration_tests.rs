@@ -5,34 +5,65 @@ fn test_full_filter() -> Result<(), Box<dyn std::error::Error>> {
     // 5. Create filter
     let filter = ContentFilter::new()?;
     
-    // 6. Test vulgar words
-    let result = filter.analyze("this is pu.t0");
-    assert!(result.is_inappropriate, "Should detect vulgar words");
+    //  vulgar words test section
+    
+    let text_word = "p3ndej0" ;
+    let result = filter.analyze(text_word);
+    assert!(result.is_inappropriate, "Should detect vulgar words: {}", text_word);
     assert!(result.vulgar_words_found, "Should flag vulgar words");
     
-    // 7. Test vulgar words
-    let result = filter.analyze("this is puto");
-    assert!(result.is_inappropriate, "Should detect vulgar words");
-    assert!(result.vulgar_words_found, "Should flag vulgar words");
+    let text_word = "this is puto" ;
+    let result = filter.analyze(text_word);
+    assert!(result.is_inappropriate, "Should detect vulgar words: {}", text_word);
+    assert!(result.vulgar_words_found, "Should flag vulgar words: {}", text_word);
 
-    // 8. Test vulgar words
-    let result = filter.analyze("this is 9ut0");
-    assert!(result.is_inappropriate, "Should detect vulgar words like puto");
-    assert!(result.vulgar_words_found, "Should flag vulgar words");
 
-    // 8. Test vulgar words
-    let result = filter.analyze("this is prostituto");
-    assert!(result.is_inappropriate, "Should detect vulgar words like puto");
-    assert!(result.vulgar_words_found, "Should flag vulgar words");
+    let text_word = "this is 9ut0";
+    let result = filter.analyze(text_word);
+    assert!(result.is_inappropriate, "Should detect vulgar words like puto: {}", text_word);
+    assert!(result.vulgar_words_found, "Should flag vulgar words: {}", text_word);
 
-    // 9 Test gibberish
-    let result = filter.analyze("kjhba test");
-    assert!(result.is_inappropriate, "Should detect gibberish");
-    assert!(result.gibberish_detected, "Should flag gibberish");
+    let text_word = "this is prostituto";
+    let result = filter.analyze(text_word);
+    assert!(result.is_inappropriate, "Should detect vulgar words: {}", text_word);
+    assert!(result.vulgar_words_found, "Should flag vulgar words: {}", text_word);
+
+    //  gibberish words test section
+
+    let text_word = "kjhba test";
+    let result = filter.analyze(text_word);
+    assert!(result.is_inappropriate, "Should detect gibberish word: {}", text_word);
     
-    // 10. Test clean text
-    let result = filter.analyze("hello world");
-    assert!(!result.is_inappropriate, "Should pass clean text");
+    let text_word = "weikjfi";
+    let result = filter.analyze(text_word);
+    assert!(result.is_inappropriate, "Should detect gibberish: {}", text_word);
+
+    let text_word = "awlkhidwhi";
+    let result = filter.analyze(text_word);
+    assert!(result.is_inappropriate, "Should detect gibberish: {}", text_word);
+
+
+    // clean words test section
+
+    let text_word = "hello world";
+    let result = filter.analyze(text_word);
+    assert!(!result.is_inappropriate, "Should pass clean text: {}", text_word);
     
+    let text_word = "quick test";
+    let result = filter.analyze(text_word);
+    assert!(!result.is_inappropriate, "Should pass clean text: {}", text_word);
+
+    let text_word = "hello world";
+    let result = filter.analyze(text_word);
+    assert!(!result.is_inappropriate, "Should pass clean text: {}", text_word);
+
+    let text_word = "El profesor nos mintio con muchas cosas";
+    let result = filter.analyze(text_word);
+    assert!(!result.is_inappropriate, "Should pass clean text: {}", text_word);
+
+    let text_word = "Maestro Ivan Shevchenko";
+    let result = filter.analyze(text_word);
+    assert!(!result.is_inappropriate, "Should pass clean text: {}", text_word);
+
     Ok(())
 }

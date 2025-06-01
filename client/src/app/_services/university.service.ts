@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 })
 export class UniversityService {
 
-  private baseUrl = environment.API_URL + "/api/university";
+  private baseUrl = environment.API_URL_DOT_NET + "/api/university";
 
   constructor(
     private http: HttpClient,

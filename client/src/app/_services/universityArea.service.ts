@@ -9,7 +9,7 @@ import { UniversityArea, Vessel } from '../_models/business';
 })
 export class UniversityAreaService {
 
-  private baseUrl = environment.API_URL + "/api/universityarea";
+  private baseUrl = environment.API_URL_DOT_NET + "/api/universityarea";
 
   constructor(
     private http: HttpClient,
