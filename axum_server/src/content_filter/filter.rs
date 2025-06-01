@@ -1,44 +1,29 @@
-use std::collections::HashSet;
-use std::sync::Arc;
+use phf::Set;
+
 use crate::content_filter::{
-    word_loader::WordLoader,
     normalizer::WordNormalizer,  // Fixed import path
     matcher::WordMatcher,        // Fixed import path
     gibberish::GibberishDetector, // Fixed import path
     models::AnalysisResult,
 };
+use crate::constants::{WHITE_LIST_WORDS, BLACK_LIST_WORDS};
 
 pub struct ContentFilter {
-    vulgar_words: HashSet<String>,
+    vulgar_words: Set<&'static str>,
     gibberish_detector: GibberishDetector,
 }
 
 impl ContentFilter {
     pub fn new() -> Result<Self, Box<dyn std::error::Error>> {
         //let vulgar_words = WordLoader::load_from_file(json_path)?;
-        let vulgar_words = WordLoader::get_words();
+        let vulgar_words  = BLACK_LIST_WORDS;
         let thresold = 0.6;
         let min_word_length = 4;
         let gibberish_detector = GibberishDetector::new(thresold, min_word_length);
-        
-        match Arc::try_unwrap(vulgar_words) {
-            Ok(bad_words_set) => {
-                // Now you have HashSet<String> with no allocation
-                // This is a zero-cost conversion if the Arc had only one reference
-                return Ok(Self {
-                    vulgar_words : bad_words_set,
-                    gibberish_detector,
-                });
-            }
-            Err(arc) => {
-                // Clone the HashSet if there are multiple references
-                let bad_words_set = (*arc).clone();
-                return Ok(Self {
-                    vulgar_words : bad_words_set,
-                    gibberish_detector,
-                });
-            }
-        }
+        Ok(Self {
+            vulgar_words,
+            gibberish_detector,
+        })
     }
 
     pub fn analyze(&self, text: &str) -> AnalysisResult {
@@ -50,8 +35,19 @@ impl ContentFilter {
 
     pub fn contains_vulgar_words(&self, text: &str) -> bool {
         let words = text.split_whitespace();
+        let white_list = WHITE_LIST_WORDS;
+        let black_list = &self.vulgar_words;
         for word in words {
             let normalized = WordNormalizer::normalize(word);
+            // Check blacklist first
+            if black_list.contains(&normalized) {
+                return true;
+            }
+            // Check whitelist 
+            if white_list.contains(&normalized) {
+                continue;
+            }
+            // if passed the previous tests, then check for more advanced patterns
             for pattern in &self.vulgar_words {
                 if WordMatcher::is_match(&normalized, pattern) {
                     return true;

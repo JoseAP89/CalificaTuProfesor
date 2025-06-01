@@ -161,7 +161,7 @@ impl GibberishDetector {
         let unusual_clusters = UNUSUAL_CLUSTERS;
         
         let mut score: f64= 0.0;
-        for cluster in unusual_clusters {
+        for cluster in unusual_clusters.iter() {
             if word.contains(cluster) {
                 score += 0.4;  // Increased score for found clusters
                 if cluster.len() >= 3 {

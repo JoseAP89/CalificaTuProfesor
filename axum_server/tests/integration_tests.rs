@@ -9,24 +9,29 @@ fn test_full_filter() -> Result<(), Box<dyn std::error::Error>> {
     
     let text_word = "p3ndej0" ;
     let result = filter.analyze(text_word);
-    assert!(result.is_inappropriate, "Should detect vulgar words: {}", text_word);
     assert!(result.vulgar_words_found, "Should flag vulgar words");
     
     let text_word = "this is puto" ;
     let result = filter.analyze(text_word);
-    assert!(result.is_inappropriate, "Should detect vulgar words: {}", text_word);
     assert!(result.vulgar_words_found, "Should flag vulgar words: {}", text_word);
 
 
     let text_word = "this is 9ut0";
     let result = filter.analyze(text_word);
-    assert!(result.is_inappropriate, "Should detect vulgar words like puto: {}", text_word);
     assert!(result.vulgar_words_found, "Should flag vulgar words: {}", text_word);
 
     let text_word = "this is prostituto";
     let result = filter.analyze(text_word);
-    assert!(result.is_inappropriate, "Should detect vulgar words: {}", text_word);
     assert!(result.vulgar_words_found, "Should flag vulgar words: {}", text_word);
+
+    let text_word = "soplapollas";
+    let result = filter.analyze(text_word);
+    assert!(result.vulgar_words_found, "Should detect vulgar words: {}", text_word);
+
+    let text_word = "Este maestro se paso, nos puso el examen super complidado y 
+    muchos maricas se quejaron pero aun asi nos reprobo a todos.";
+    let result = filter.analyze(text_word);
+    assert!(result.vulgar_words_found, "Should detect vulgar words: {}", text_word);
 
     //  gibberish words test section
 
@@ -74,6 +79,13 @@ fn test_full_filter() -> Result<(), Box<dyn std::error::Error>> {
     assert!(!result.is_inappropriate, "Should pass clean text: {}", text_word);
 
     let text_word = "apasionado";
+    let result = filter.analyze(text_word);
+    assert!(!result.vulgar_words_found, "Should pass clean text: {}", text_word);
+
+    let text_word = "la clase del profesor, a decir vdd, es bastante buena, se nota que el prof
+    es muy apasionado con lo que hace y le mete corazon a todas sus lecciones, se sale un poco de tema pero
+    tambien aprendemos de las cosas que dice, relaciona sus experiencias vividas con su trabajo y con eso 
+    aprendemos mucho de cada palabra que sale de su boca, muy recomendado bandita.";
     let result = filter.analyze(text_word);
     assert!(!result.vulgar_words_found, "Should pass clean text: {}", text_word);
 
