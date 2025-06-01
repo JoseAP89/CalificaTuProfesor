@@ -20,7 +20,7 @@
 </div>
 <div mat-dialog-actions>
     <button class="cancel-btn" mat-button mat-raised-button mat-dialog-close [mat-dialog-close]="null">Cancel</button>
-    <button class="ok-btn" mat-button mat-raised-button mat-dialog-close cdkFocusInitial (click)="onOk()">
+    <button class="ok-btn" mat-button mat-raised-button cdkFocusInitial [disabled]="isProcessing" (click)="onOk()">
         Ok
     </button>
 </div>

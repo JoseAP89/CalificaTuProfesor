@@ -14,13 +14,5 @@
 </head>
 <body class="mat-typography">
   <app-root></app-root>
-  <script>
-    // Preconfigure WASM loading path
-    window.Module = window.Module || {
-      locateFile: function (path) {
-        return 'assets/wasm/' + path;
-      }
-    };
-  </script>
 </body>
 </html>

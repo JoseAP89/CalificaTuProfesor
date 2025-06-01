@@ -1,11 +1,13 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Observable, catchError, debounceTime, firstValueFrom, fromEvent, map, of, tap } from 'rxjs';
 import { Campus, NewCampus, NewUniversity, Vessel } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 import { SnackbarService } from 'src/app/_services/snackbar.service';
 import { StateService } from 'src/app/_services/state.service';
 import { UniversityService } from 'src/app/_services/university.service';
+import { ApiResponseAxum, FilterRequest, WasmFilterService } from 'src/app/_services/wasmFilter.service';
 
 @Component({
   selector: 'app-add-campus',
@@ -28,6 +30,8 @@ export class AddCampusComponent implements OnInit {
     private universityService: UniversityService,
     private campusService: CampusService,
     private snackbarService: SnackbarService,
+    private wasmFilterService: WasmFilterService,
+    private dialogRef: MatDialogRef<AddCampusComponent>
   ) {}
 
   ngOnInit(): void {
@@ -71,14 +75,32 @@ export class AddCampusComponent implements OnInit {
     if (this.campusForm.valid && !this.uniError) {
       let campus: NewCampus = Object.assign(new NewCampus(), this.campusForm.value);
       campus.universityId = this.uniSelected.id;
-      this.campusService.addCampus(campus).subscribe({
-        next: res => {
-          this.snackbarService.showSuccessMessage(`Campus '${res.name}' fue agregado correctamente.`);
-        },
-        error: error => {
-          this.snackbarService.showErrorMessage(`Hubo un error agregando al campus. ${error}`);
+      // analyze if the name and lastname are not inappropiate first before saving to DB
+      let filter: FilterRequest = {
+        words: [campus.name].filter(d => d && d.length>0)
+      }
+      let nexus_response: ApiResponseAxum = {
+        message: "",
+        is_inappropiate: true
+      };
+      await firstValueFrom(this.wasmFilterService.analyze_words(filter)).then( res => {
+        if (res.is_inappropiate != null) {
+          nexus_response = res;
         }
       });
+      if (nexus_response.is_inappropiate) {
+        this.snackbarService.showErrorMessage(nexus_response.message, 20_000);
+      } else {
+        this.campusService.addCampus(campus).subscribe({
+          next: res => {
+            this.snackbarService.showSuccessMessage(`Campus '${res.name}' fue agregado correctamente.`);
+            this.dialogRef.close();
+          },
+          error: error => {
+            this.snackbarService.showErrorMessage(`Hubo un error agregando al campus. ${error}`);
+          }
+        });
+      }
     }
   }
 

@@ -22,19 +22,19 @@ impl ContentFilter {
         let gibberish_detector = GibberishDetector::new(thresold, min_word_length);
         
         match Arc::try_unwrap(vulgar_words) {
-            Ok(set) => {
+            Ok(bad_words_set) => {
                 // Now you have HashSet<String> with no allocation
                 // This is a zero-cost conversion if the Arc had only one reference
                 return Ok(Self {
-                    vulgar_words : set,
+                    vulgar_words : bad_words_set,
                     gibberish_detector,
                 });
             }
             Err(arc) => {
                 // Clone the HashSet if there are multiple references
-                let set = (*arc).clone();
+                let bad_words_set = (*arc).clone();
                 return Ok(Self {
-                    vulgar_words : set,
+                    vulgar_words : bad_words_set,
                     gibberish_detector,
                 });
             }

@@ -31,17 +31,23 @@ async fn analyze_words(ExtractJson(payload): ExtractJson<FilterRequest>) -> Json
         .collect::<Vec<String>>();
     let mut is_inappropiate  = false;
     let filter = ContentFilter::new().unwrap();
+    let mut motive = "";
     for word in filtered_words  {
         let is_bad = filter.analyze(&word);
         is_inappropiate = is_bad.is_inappropriate;
         if is_inappropiate {
+            if is_bad.vulgar_words_found {
+                motive = "Motivo: Contenido vulgar.";
+            }
+            if is_bad.gibberish_detected {
+                motive = "Motivo: Contenido sin sentido.";
+            }
             break; 
         }
     }
-
     Json(ApiResponse {
         message: match is_inappropiate {
-           true => "No podemos procesar la información porque uno o más campos contienen contenido inapropiado. Por favor, modifícalos para continuar.".to_string(),
+           true => format!("No podemos procesar la información porque uno o más campos contienen contenido inapropiado. Por favor, modifícalos para continuar. {}", motive).to_string(),
            _ => "Todos los mensajes son apropiados.".to_string() 
         },
         is_inappropiate: Some(is_inappropiate),

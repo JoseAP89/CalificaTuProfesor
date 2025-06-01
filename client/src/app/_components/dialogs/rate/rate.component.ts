@@ -9,6 +9,8 @@ import { SnackbarService } from 'src/app/_services/snackbar.service';
 import { MAX_LEN_COMMENT, MIN_LEN_COMMENT } from '../../constants';
 import { getHttpErrorMessage } from 'src/app/_helpers/miscelaneous';
 import { UniversityAreaService } from 'src/app/_services/universityArea.service';
+import { ApiResponseAxum, FilterRequest, WasmFilterService } from 'src/app/_services/wasmFilter.service';
+import { AddTeacherComponent } from '../add-teacher/add-teacher.component';
 
 @Component({
   selector: 'app-rate',
@@ -36,6 +38,7 @@ export class RateComponent implements OnInit {
     private ratingService: RatingService,
     private universityAreaService: UniversityAreaService,
     private snackbarService: SnackbarService,
+    private wasmFilterService: WasmFilterService
   ) {
     this._scales = []
     this.scaleDescriptionStates = []
@@ -167,16 +170,33 @@ export class RateComponent implements OnInit {
         // Add them to the Comment
         comment.grades.push(grade);
       }
-      this.ratingService.addComment(comment).subscribe({
-        next: res => {
-          this.snackbarService.showSuccessMessage("Comentario agregado exitosamente.");
-          this.dialogRef.close(res);
-        },
-        error: error => {
-          this.snackbarService.showErrorMessage(getHttpErrorMessage(error), 8_000);
-          this.dialogRef.close(null);
+      // analyze if the name and lastname are not inappropiate first before saving to DB
+      let filter: FilterRequest = {
+        words: [comment.content].filter(d => d && d.length>0)
+      }
+      let nexus_response: ApiResponseAxum = {
+        message: "",
+        is_inappropiate: true
+      };
+      await firstValueFrom(this.wasmFilterService.analyze_words(filter)).then( res => {
+        if (res.is_inappropiate != null) {
+          nexus_response = res;
         }
       });
+      if (nexus_response.is_inappropiate) {
+        this.snackbarService.showErrorMessage(nexus_response.message, 20_000);
+      } else {
+        this.ratingService.addComment(comment).subscribe({
+          next: res => {
+            this.snackbarService.showSuccessMessage("Comentario agregado exitosamente.");
+            this.dialogRef.close(res);
+          },
+          error: error => {
+            this.snackbarService.showErrorMessage(getHttpErrorMessage(error), 8_000);
+            this.dialogRef.close(null);
+          }
+        });
+      }
     }
   }
 

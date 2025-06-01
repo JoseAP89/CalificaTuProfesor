@@ -35,10 +35,46 @@ impl GibberishDetector {
         }
     }
 
+    pub fn remove_diacritics(c: char) -> char {
+        // Convert to lowercase first for consistency
+        let c_lower = c.to_ascii_lowercase();
+        // Handle common accented characters
+        match c_lower {
+            'á' | 'à' | 'â' | 'ä' | 'ã' | 'å' | 'ā' => 'a',
+            'é' | 'è' | 'ê' | 'ë' | 'ē' | 'ė' | 'ę' => 'e',
+            'í' | 'ì' | 'î' | 'ï' | 'ī' | 'į' => 'i',
+            'ó' | 'ò' | 'ô' | 'ö' | 'õ' | 'ō' | 'ø' => 'o',
+            'ú' | 'ù' | 'û' | 'ü' | 'ū' => 'u',
+            'ý' | 'ÿ' => 'y',
+            'ç' | 'č' | 'ć' => 'c',
+            'ñ' | 'ń' => 'n',
+            'š' | 'ś' => 's',
+            'ž' | 'ż' => 'z',
+            'ß' => 's',
+            'ð' => 'd',
+            'þ' => 't',
+            'æ' => 'a',
+            'œ' => 'o',
+            'ł' => 'l',
+            'ř' => 'r',
+            'ť' => 't',
+            'ď' => 'd',
+            'ḧ' => 'h',
+            'ẍ' => 'x',
+            _ => c_lower
+        }
+    }
+
     pub fn contains_gibberish(&self, text: &str) -> bool {
         let words = text.split_whitespace();
         for word in words {
-            let clean_word = word.trim_matches(|c: char| !c.is_alphabetic());
+            let clean_word = &word.chars()
+                .filter(|c| c.is_alphabetic() || c == &' ' )
+                .map(|c| GibberishDetector::remove_diacritics(c))
+                .collect::<String>()
+                .split_whitespace()
+                .collect::<Vec<_>>()
+                .join(" ");
             if clean_word.len() >= self.min_word_length {
                 let score = self.calculate_score(clean_word);
                 if score > self.threshold {

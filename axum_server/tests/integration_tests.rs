@@ -65,5 +65,17 @@ fn test_full_filter() -> Result<(), Box<dyn std::error::Error>> {
     let result = filter.analyze(text_word);
     assert!(!result.is_inappropriate, "Should pass clean text: {}", text_word);
 
+    let text_word = "El Colegio de México, A.C.";
+    let result = filter.analyze(text_word);
+    assert!(!result.is_inappropriate, "Should pass clean text: {}", text_word);
+
+    let text_word = "Hacia mucho frio en sus clases por la mañana, pero valío la pena la mañaneada.";
+    let result = filter.analyze(text_word);
+    assert!(!result.is_inappropriate, "Should pass clean text: {}", text_word);
+
+    let text_word = "apasionado";
+    let result = filter.analyze(text_word);
+    assert!(!result.vulgar_words_found, "Should pass clean text: {}", text_word);
+
     Ok(())
 }

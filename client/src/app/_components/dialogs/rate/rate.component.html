@@ -90,7 +90,7 @@
       [ngClass]="{
         'disabled-btn': !isDataValid()
       } "
-      mat-dialog-close (click)="onSubmit()" [disabled]="!isDataValid()">
+      (click)="onSubmit()" [disabled]="!isDataValid()">
       Guardar
     </button>
   </div>

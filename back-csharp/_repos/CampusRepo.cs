@@ -23,8 +23,14 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
 
     public async Task<Campus> GetShortCampus(string name)
     {
-        name = name.Replace("+", " ").Trim().ToLower();
-        var campus = await _context.Set<Campus>().FirstOrDefaultAsync(c => c.Name.ToLower().Equals(name));
+        name = name
+            .Replace("+", " ")
+            .ToLower();
+        var campus = await _context.Set<Campus>()
+            .Where(r => EF.Functions.ILike(
+                TeachersContext.Unaccent(r.Name).Trim(),
+                "%" + TeachersContext.Unaccent(name.Trim()) + "%"))
+            .FirstOrDefaultAsync(c => c.Name.ToLower().Equals(name));
         return campus;
     }
 
@@ -88,10 +94,13 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
             .Trim()
             .ToLower()
             .RemoveDiacritics();
-        var campus = await _context.Set<Campus>().FromSqlInterpolated(
-                $"SELECT * FROM Campus c WHERE LOWER(UNACCENT(c.Name)) LIKE '%' || {search} || '%' LIMIT {MAX_RESULTS}"
-            )
+        var campus = await _context.Campuses
             .AsNoTracking()
+            .Where(u => EF.Functions.ILike(
+                TeachersContext.Unaccent(u.Name).Trim().ToLower(),
+                "%" + search + "%"))
+            .OrderBy(u => u.Name)
+            .Take(MAX_RESULTS)
             .ToListAsync();
         var res = campus?.Select(x =>
             new Vessel { Id = x.CampusId, Value = x.Name });

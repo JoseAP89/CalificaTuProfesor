@@ -28,6 +28,7 @@ export class CampusService {
   }
 
   public getShortCampusByName(campusName: string): Observable<Campus>{
+    campusName = campusName.replaceAll(/\s+/g,"+");
     const url = `${this.baseUrl}/${campusName}`;
     return this.http.get<Campus>(url);
   }
@@ -44,6 +45,7 @@ export class CampusService {
   }
 
   public getCampusSearch(value: string): Observable<Vessel[]>{
+    value = value.replaceAll(/\s+/g,"+");
     const url = `${this.baseUrl}/search/${value}`;
     return this.http.get<Vessel[]>(url);
   }

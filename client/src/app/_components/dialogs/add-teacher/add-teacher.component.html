@@ -31,12 +31,10 @@
           matInput
           formControlName="campusName"
           #CampusElement
-          (blur)="onSelectCampus()"
-          (select)="onSelectCampus()"
           [matAutocomplete]="campus"
         />
         <mat-autocomplete autoActiveFirstOption #campus="matAutocomplete">
-          <mat-option *ngFor="let option of campusSearchOptions | async" [value]="option.value">
+          <mat-option *ngFor="let option of campusSearchOptions | async" [value]="option.value"  (onSelectionChange)="onSelectionChange(option)">
             {{option.value}}
           </mat-option>
         </mat-autocomplete>
@@ -53,7 +51,7 @@
     <button mat-button mat-raised-button class="cancel-btn" mat-dialog-close>Cerrar</button>
     <button mat-button mat-raised-button class="ok-btn"
       [ngClass]="{'disabled-btn': !teacherForm.valid || campusError}"
-      [mat-dialog-close]="closeDialog" (click)="onSubmit()" [disabled]="!teacherForm.valid || campusError">
+      (click)="onSubmit()" [disabled]="!teacherForm.valid || campusError">
       Guardar
     </button>
   </div>
