@@ -16,56 +16,6 @@ impl GibberishDetector {
         }
     }
 
-    fn calculate_diversity_score(&self, word: &str) -> f64 {
-        let chars: HashSet<char> = word.chars().collect();
-        let unique_chars = chars.len();
-        let len = word.len();
-        
-        // Only apply to longer words where high diversity is suspicious
-        if len >= 4 {
-            let diversity_ratio = unique_chars as f64 / len as f64;
-            if diversity_ratio > 0.9 {
-                0.6  // Very high diversity
-            } else if diversity_ratio > 0.8 {
-                0.3  // High diversity
-            } else {
-                0.0
-            }
-        } else {
-            0.0
-        }
-    }
-
-    pub fn remove_diacritics(c: char) -> char {
-        // Convert to lowercase first for consistency
-        let c_lower = c.to_ascii_lowercase();
-        // Handle common accented characters
-        match c_lower {
-            'á' | 'à' | 'â' | 'ä' | 'ã' | 'å' | 'ā' => 'a',
-            'é' | 'è' | 'ê' | 'ë' | 'ē' | 'ė' | 'ę' => 'e',
-            'í' | 'ì' | 'î' | 'ï' | 'ī' | 'į' => 'i',
-            'ó' | 'ò' | 'ô' | 'ö' | 'õ' | 'ō' | 'ø' => 'o',
-            'ú' | 'ù' | 'û' | 'ü' | 'ū' => 'u',
-            'ý' | 'ÿ' => 'y',
-            'ç' | 'č' | 'ć' => 'c',
-            'ñ' | 'ń' => 'n',
-            'š' | 'ś' => 's',
-            'ž' | 'ż' => 'z',
-            'ß' => 's',
-            'ð' => 'd',
-            'þ' => 't',
-            'æ' => 'a',
-            'œ' => 'o',
-            'ł' => 'l',
-            'ř' => 'r',
-            'ť' => 't',
-            'ď' => 'd',
-            'ḧ' => 'h',
-            'ẍ' => 'x',
-            _ => c_lower
-        }
-    }
-
     pub fn contains_gibberish(&self, text: &str) -> bool {
         let words = text.split_whitespace();
         for word in words {
@@ -84,6 +34,26 @@ impl GibberishDetector {
             }
         }
         false
+    }
+
+    fn calculate_diversity_score(&self, word: &str) -> f64 {
+        let chars: HashSet<char> = word.chars().collect();
+        let unique_chars = chars.len();
+        let len = word.len();
+        
+        // Only apply to longer words where high diversity is suspicious
+        if len >= 4 {
+            let diversity_ratio = unique_chars as f64 / len as f64;
+            if diversity_ratio > 0.9 {
+                0.6  // Very high diversity
+            } else if diversity_ratio > 0.8 {
+                0.3  // High diversity
+            } else {
+                0.0
+            }
+        } else {
+            0.0
+        }
     }
 
     fn calculate_score(&self, word: &str) -> f64 {
