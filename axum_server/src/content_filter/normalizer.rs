@@ -21,8 +21,7 @@ pub struct WordNormalizer;
 
 impl WordNormalizer {
     pub fn normalize(word: &str) -> String {
-        let word_lower = word.to_lowercase();
-        let mut normalized: String = WordNormalizer::remove_diacritics(&word_lower)
+        let mut normalized: String = WordNormalizer::remove_diacritics(&word)
             .chars()
             .filter(|c| c.is_ascii_alphanumeric() || *c == '.' || *c == '*' || *c == ' ')
             .collect();
@@ -33,18 +32,32 @@ impl WordNormalizer {
         normalized
     }
 
+    /*  Removes diacritics and normalize it into lower_case */
     pub fn remove_diacritics(word: &str) -> String {
-        word
+        word.to_lowercase()
             .chars()
             .map(|c| match c {
-                'á' | 'à' | 'â' | 'ä' | 'ã' | 'å' => 'a',
-                'é' | 'è' | 'ê' | 'ë' => 'e',
-                'í' | 'ì' | 'î' | 'ï' => 'i',
-                'ó' | 'ò' | 'ô' | 'ö' | 'õ' | 'ø' => 'o',
-                'ú' | 'ù' | 'û' | 'ü' => 'u',
-                'ñ' => 'n',
-                'ç' => 'c',
+                'á' | 'à' | 'â' | 'ä' | 'ã' | 'å' | 'ā' => 'a',
+                'é' | 'è' | 'ê' | 'ë' | 'ē' | 'ė' | 'ę' => 'e',
+                'í' | 'ì' | 'î' | 'ï' | 'ī' | 'į' => 'i',
+                'ó' | 'ò' | 'ô' | 'ö' | 'õ' | 'ō' | 'ø' => 'o',
+                'ú' | 'ù' | 'û' | 'ü' | 'ū' => 'u',
                 'ý' | 'ÿ' => 'y',
+                'ç' | 'č' | 'ć' => 'c',
+                'ñ' | 'ń' => 'n',
+                'š' | 'ś' => 's',
+                'ž' | 'ż' => 'z',
+                'ß' => 's',
+                'ð' => 'd',
+                'þ' => 't',
+                'æ' => 'a',
+                'œ' => 'o',
+                'ł' => 'l',
+                'ř' => 'r',
+                'ť' => 't',
+                'ď' => 'd',
+                'ḧ' => 'h',
+                'ẍ' => 'x',
                 _ => c,
             })
             .collect()

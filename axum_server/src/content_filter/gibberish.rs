@@ -1,5 +1,6 @@
 use regex::Regex;
 use std::collections::HashSet;
+use crate::content_filter::WordNormalizer;
 use crate::constants::{UNUSUAL_TRIGRAMS, UNUSUAL_CLUSTERS, COMMON_TRIGRAMS};
 
 pub struct GibberishDetector {
@@ -68,15 +69,15 @@ impl GibberishDetector {
     pub fn contains_gibberish(&self, text: &str) -> bool {
         let words = text.split_whitespace();
         for word in words {
-            let clean_word = &word.chars()
+            let clean_word = WordNormalizer::normalize(&word)
+                .chars()
                 .filter(|c| c.is_alphabetic() || c == &' ' )
-                .map(|c| GibberishDetector::remove_diacritics(c))
                 .collect::<String>()
                 .split_whitespace()
                 .collect::<Vec<_>>()
                 .join(" ");
             if clean_word.len() >= self.min_word_length {
-                let score = self.calculate_score(clean_word);
+                let score = self.calculate_score(&clean_word);
                 if score > self.threshold {
                     return true;
                 }
