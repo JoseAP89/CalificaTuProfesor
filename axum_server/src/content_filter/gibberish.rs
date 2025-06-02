@@ -19,13 +19,7 @@ impl GibberishDetector {
     pub fn contains_gibberish(&self, text: &str) -> bool {
         let words = text.split_whitespace();
         for word in words {
-            let clean_word = WordNormalizer::normalize(&word)
-                .chars()
-                .filter(|c| c.is_alphabetic() || c == &' ' )
-                .collect::<String>()
-                .split_whitespace()
-                .collect::<Vec<_>>()
-                .join(" ");
+            let clean_word = WordNormalizer::normalize(&word);
             if clean_word.len() >= self.min_word_length {
                 let score = self.calculate_score(&clean_word);
                 if score > self.threshold {
