@@ -9,12 +9,31 @@ fn test_full_filter() -> Result<(), Box<dyn std::error::Error>> {
     
     let text_word = "p3ndej0" ;
     let result = filter.analyze(text_word);
-    assert!(result.vulgar_words_found, "Should flag vulgar words");
+    assert!(result.vulgar_words_found, "Should flag vulgar words: {}", text_word);
     
+    let text_word = "p3ndej0$" ;
+    let result = filter.analyze(text_word);
+    assert!(result.vulgar_words_found, "Should flag vulgar words: {}", text_word);
+    
+    let text_word = "pendejita" ;
+    let result = filter.analyze(text_word);
+    assert!(result.vulgar_words_found, "Should flag vulgar words: {}", text_word);
+
+    let text_word = "p3ndej170" ;
+    let result = filter.analyze(text_word);
+    assert!(result.vulgar_words_found, "Should flag vulgar words: {}", text_word);
+
     let text_word = "this is puto" ;
     let result = filter.analyze(text_word);
     assert!(result.vulgar_words_found, "Should flag vulgar words: {}", text_word);
 
+    let text_word = "this is putó" ;
+    let result = filter.analyze(text_word);
+    assert!(result.vulgar_words_found, "Should flag vulgar words: {}", text_word);
+
+    let text_word = "this is PUtÓ" ;
+    let result = filter.analyze(text_word);
+    assert!(result.vulgar_words_found, "Should flag vulgar words: {}", text_word);
 
     let text_word = "this is 9ut0";
     let result = filter.analyze(text_word);

@@ -21,15 +21,32 @@ pub struct WordNormalizer;
 
 impl WordNormalizer {
     pub fn normalize(word: &str) -> String {
-        let cleaned: String = word.chars()
+        let word_lower = word.to_lowercase();
+        let mut normalized: String = WordNormalizer::remove_diacritics(&word_lower)
+            .chars()
             .filter(|c| c.is_ascii_alphanumeric() || *c == '.' || *c == '*' || *c == ' ')
             .collect();
         
-        let mut normalized = cleaned.to_lowercase();
         for (re, replacement) in LEET_SUBSTITUTIONS.iter() {
             normalized = re.replace_all(&normalized, *replacement).to_string();
         }
-        
         normalized
+    }
+
+    pub fn remove_diacritics(word: &str) -> String {
+        word
+            .chars()
+            .map(|c| match c {
+                'á' | 'à' | 'â' | 'ä' | 'ã' | 'å' => 'a',
+                'é' | 'è' | 'ê' | 'ë' => 'e',
+                'í' | 'ì' | 'î' | 'ï' => 'i',
+                'ó' | 'ò' | 'ô' | 'ö' | 'õ' | 'ø' => 'o',
+                'ú' | 'ù' | 'û' | 'ü' => 'u',
+                'ñ' => 'n',
+                'ç' => 'c',
+                'ý' | 'ÿ' => 'y',
+                _ => c,
+            })
+            .collect()
     }
 }
