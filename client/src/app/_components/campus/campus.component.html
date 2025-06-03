@@ -52,10 +52,12 @@
 
   </div>
   <div class="top-board-tile">
-    <app-top-ranking-list 
-      [title]="'Top 10 Ranking'"
-      [rankTeacherList]="rankTeacherList"
-      [showCampusName]="false"
-    ></app-top-ranking-list>
+      <ng-container *ngIf="rankTeacherList && rankTeacherList.length > 0">
+        <app-top-ranking-list 
+          [title]="'Top 10 Ranking'"
+          [rankTeacherList]="rankTeacherList"
+          [showCampusName]="false"
+        ></app-top-ranking-list>
+      </ng-container>
   </div>
 </section>

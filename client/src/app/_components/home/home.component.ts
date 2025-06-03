@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, debounceTime, delay, fromEvent, map, of } from 'rxjs';
 import { RankingTopTeacher, Vessel } from 'src/app/_models/business';
@@ -33,6 +33,7 @@ export class HomeComponent implements OnInit {
     private rosterService: RosterService,
     private router: Router,
     private ratingService: RatingService,
+    private renderer: Renderer2
   ) {
     this.options = of([]);
     this.searchValue = '';
@@ -49,6 +50,9 @@ export class HomeComponent implements OnInit {
     this.ratingService.getRankingTopTeacherList(10, 0, null, true).subscribe({
       next: res => {
         this.rankTeacherList = res.data;
+        setTimeout(() => {
+          this.updateStylingTeacherRankList();  
+        });
       }
     }) ;
   }
@@ -103,4 +107,15 @@ export class HomeComponent implements OnInit {
       this.router.navigate([`/campus/${this.selectedOption.signature}`]);
     }
   }
+
+  updateStylingTeacherRankList(){
+    const rankingContainer = document.querySelector(".campus-main-grid");
+    if (rankingContainer) {
+      const gridTemplateColumns = this.rankTeacherList && this.rankTeacherList.length > 0 ?
+        '2fr 1fr':
+        '1fr'
+      this.renderer.setStyle(rankingContainer, 'grid-template-columns', gridTemplateColumns);
+    }
+  }
+
 }

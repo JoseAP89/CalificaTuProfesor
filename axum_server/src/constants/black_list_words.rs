@@ -316,4 +316,6 @@ pub const BLACK_LIST_WORDS: phf::Set<&'static str> = phf_set! {
     "pendejada",
     "idiotez",
     "idiotes",
+    "puñal",
+    "pueñeta",
 };

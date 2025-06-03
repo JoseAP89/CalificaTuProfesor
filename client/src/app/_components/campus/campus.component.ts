@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Campus, CampusTeacherList, RankingTopTeacher } from 'src/app/_models/business';
@@ -28,7 +28,8 @@ export class CampusComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private campusService: CampusService,
     private ratingService: RatingService,
-    private router: Router
+    private router: Router,
+    private renderer: Renderer2
   ) {
     this.search = "";
     this.pageSize = this.pageSizeOptions[0];
@@ -40,6 +41,9 @@ export class CampusComponent implements OnInit, AfterViewInit {
     this.ratingService.getRankingTopTeacherList(10, 0, this.campusRecordId, true).subscribe({
       next: res => {
         this.rankTeacherList = res.data;
+        setTimeout(() => {
+          this.updateStylingTeacherRankList();  
+        });
       }
     }) ;
     this.campusService.getCampusByRecordId(this.campusRecordId).subscribe({
@@ -48,6 +52,16 @@ export class CampusComponent implements OnInit, AfterViewInit {
       }
     });
 
+  }
+
+  updateStylingTeacherRankList(){
+    const rankingContainer = document.querySelector(".campus-main-grid");
+    if (rankingContainer) {
+      const gridTemplateColumns = this.rankTeacherList && this.rankTeacherList.length > 0 ?
+        '2fr 1fr':
+        '1fr'
+      this.renderer.setStyle(rankingContainer, 'grid-template-columns', gridTemplateColumns);
+    }
   }
 
   ngAfterViewInit() {

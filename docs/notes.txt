@@ -1,6 +1,5 @@
 **** Notes about the tasks to be done ****
 
-+	If top ranking table has no teachers, do not show it
 +   build a http error listener service for the front end to show useful info to the user
 ++	There is a need for an error middleware on the backend to better improve the messages sent to the client,
 	also I need to add an ApiException class to handle business logic errors in the app.
