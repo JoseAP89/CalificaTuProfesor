@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import {MatRadioModule} from '@angular/material/radio';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { HomeComponent } from './_components/home/home.component';
 import { NavbarComponent } from './_components/navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -35,6 +35,7 @@ import { AlertMessageComponent } from './_shared/alert-message/alert-message.com
 import { StarComponent } from './_shared/star/star.component';
 import { AboutUsComponent } from './_components/about-us/about-us.component';
 import { FooterComponent } from './_components/footer/footer.component';
+import { HttpErrorInterceptor } from './_services/http-error.interceptor';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,13 @@ import { FooterComponent } from './_components/footer/footer.component';
     MatPaginatorModule,
     MatBadgeModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

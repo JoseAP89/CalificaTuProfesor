@@ -36,9 +36,6 @@ export class AddUniversityComponent implements OnInit {
         next: res => {
           this.snackbarService.showSuccessMessage(`La universidad '${res.name}' fue agregada correctamente.`);
           this.dialogRef.close();
-        },
-        error: e => {
-          this.snackbarService.showErrorMessage(`Hubo un error agregando la universidad: ${e?.error}`);
         }
       });
     }

@@ -58,9 +58,6 @@ export class AddTeacherComponent implements OnInit {
         next: res => {
           this.snackbarService.showSuccessMessage(`Maestro ${res.teacherName} ${res.teacherLastname1} ${res.teacherLastname2} fue agregado correctamente.`);
           this.dialogRef.close();
-        },
-        error: error => {
-          this.snackbarService.showErrorMessage(`Hubo un error agregando al maestro. ${error}`);
         }
       });
     }

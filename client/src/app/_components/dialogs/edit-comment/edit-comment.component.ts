@@ -39,9 +39,6 @@ export class EditCommentComponent {
       next: _res => {
         this.dialogRef.close(newComment);
         this.snackbarService.showSuccessMessage("Comentario editado exitosamente.")
-      }, 
-      error: e => {
-        this.snackbarService.showErrorMessage(getHttpErrorMessage(e, "Hubo un error modificanto el comentario."))
       }
     })
   }

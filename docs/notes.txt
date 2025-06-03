@@ -1,14 +1,13 @@
 **** Notes about the tasks to be done ****
 
-+   build a http error listener service for the front end to show useful info to the user
 ++	There is a need for an error middleware on the backend to better improve the messages sent to the client,
 	also I need to add an ApiException class to handle business logic errors in the app.
-+	Add a diagram to show how the services interact with each other on the docker network.
 +	Delete RosterScale table
-+   Notifications functionality (front, backend, and table)
++   Notifications functionality (front, backend, and table) for reporting inappropiate comments
 +   Change Roster table name to Teacher, it is no longer a roster but a simple teacher table,
 	an all the modifications that that name change will entail
 ++  Change compose.yaml to remove the jaavscript file executed post-start and serve the
 	rust server
++	Add a diagram to show how the services interact with each other on the docker network.
 .	Only thing remaining is over time add words to the black_word_list and the white_word_list,
 	thus, it would be an always active task (ALWAYS ACTIVE)

@@ -171,9 +171,6 @@ export class RateComponent implements OnInit {
         next: res => {
           this.snackbarService.showSuccessMessage("Comentario agregado exitosamente.");
           this.dialogRef.close(res);
-        },
-        error: error => {
-          this.snackbarService.showErrorMessage(getHttpErrorMessage(error), 8_000);
         }
       });
     }

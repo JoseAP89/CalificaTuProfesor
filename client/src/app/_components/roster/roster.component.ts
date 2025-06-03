@@ -145,9 +145,6 @@ export class RosterComponent implements OnInit, AfterViewInit{
           this.currentUserId = res.userId;
         }
         this.getComments();
-      },
-      error: e => {
-        this.snackbarService.showErrorMessage(e?.message || "Hubó un error creando el voto.");
       }
     });
   }
@@ -251,9 +248,6 @@ export class RosterComponent implements OnInit, AfterViewInit{
                 this.buildRoster();
                 this.snackbarService.showSuccessMessage(`El comentario fue borrado exitosamente.`);
               }
-            },
-            error: e => {
-                this.snackbarService.showErrorMessage(getHttpErrorMessage(e));
             }
           });
         }
