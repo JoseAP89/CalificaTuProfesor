@@ -1,3 +1,7 @@
+use std::cell::RefCell;
+use std::collections::HashSet;
+use std::time::Instant;
+
 use phf::Set;
 
 use crate::content_filter::{
@@ -11,6 +15,7 @@ use crate::constants::{WHITE_LIST_WORDS, BLACK_LIST_WORDS};
 pub struct ContentFilter {
     vulgar_words: Set<&'static str>,
     gibberish_detector: GibberishDetector,
+    positive_cache: RefCell<HashSet<String>>
 }
 
 impl ContentFilter {
@@ -23,12 +28,19 @@ impl ContentFilter {
         Ok(Self {
             vulgar_words,
             gibberish_detector,
+            positive_cache: RefCell::new(HashSet::new())
         })
     }
 
     pub fn analyze(&self, text: &str) -> AnalysisResult {
+        let start = Instant::now();
         let vulgar_words_found = self.contains_vulgar_words(text);
+        let duration = start.elapsed();
+        println!("\n*** Vulgar Execution time: {:?}\n", duration);
+        let start = Instant::now();
         let gibberish_detected = self.gibberish_detector.contains_gibberish(text);
+        let duration = start.elapsed();
+        println!("\n*** Gibberish Execution time: {:?}\n", duration);
         
         AnalysisResult::new(vulgar_words_found, gibberish_detected)
     }
@@ -47,12 +59,16 @@ impl ContentFilter {
             if ContentFilter::contains_plural_singular_spanish(black_list, &normalized) {
                 return true;
             }
+            if self.positive_cache.borrow().contains(&normalized) {
+                continue;
+            }
             // if passed the previous tests, then check for more advanced patterns
             for pattern in &self.vulgar_words {
                 if WordMatcher::is_match(&normalized, pattern) {
                     return true;
-                }
+                } 
             }
+            self.positive_cache.borrow_mut().insert(normalized);
         }
         false
     }
