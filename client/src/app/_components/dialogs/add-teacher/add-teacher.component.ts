@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Observable, catchError, debounceTime, firstValueFrom, from, fromEvent, of, tap } from 'rxjs';
+import { Observable, catchError, debounceTime, finalize, firstValueFrom, from, fromEvent, of, tap } from 'rxjs';
 import { Campus, RosterDB, UniversityArea, Vessel } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 import { RosterService } from 'src/app/_services/roster.service';
@@ -18,6 +18,7 @@ export class AddTeacherComponent implements OnInit {
   public campusSearchOptions: Observable<Vessel[]>
   public campusError: boolean = false;
   public campusSelected: Vessel;
+  public isProcessing: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -52,9 +53,16 @@ export class AddTeacherComponent implements OnInit {
 
   onSubmit(){
     if (this.teacherForm.valid && !this.campusError) {
+      this.isProcessing = true;
       let teacher: RosterDB = Object.assign(new RosterDB(), this.teacherForm.value);
       teacher.campusId = this.campusSelected.id;
-      this.rosterService.addRoster(teacher).subscribe({
+      this.rosterService.addRoster(teacher)
+        .pipe(
+          finalize( () => {
+            this.isProcessing = false;
+          })
+        ) 
+      .subscribe({
         next: res => {
           this.snackbarService.showSuccessMessage(`Maestro ${res.teacherName} ${res.teacherLastname1} ${res.teacherLastname2} fue agregado correctamente.`);
           this.dialogRef.close();

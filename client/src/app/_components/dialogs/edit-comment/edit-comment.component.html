@@ -20,7 +20,11 @@
 </div>
 <div mat-dialog-actions>
     <button class="cancel-btn" mat-button mat-raised-button mat-dialog-close [mat-dialog-close]="null">Cancel</button>
-    <button class="ok-btn" mat-button mat-raised-button cdkFocusInitial [disabled]="isProcessing" (click)="onOk()">
+    <button class="ok-btn" mat-button mat-raised-button cdkFocusInitial 
+        (click)="onOk()"
+        [disabled]="isProcessing || !content"
+        [ngStyle]="{'background-color': isProcessing || !content? 'grey' : '#3cb371'}"
+    >
         Ok
     </button>
 </div>

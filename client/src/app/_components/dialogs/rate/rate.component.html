@@ -90,6 +90,8 @@
       [ngClass]="{
         'disabled-btn': !isDataValid()
       } "
+      [disabled]="isProcessing || !isDataValid()"
+      [ngStyle]="{'background-color': isProcessing || !isDataValid()? 'grey' : '#3cb371'}"
       (click)="onSubmit()" [disabled]="!isDataValid()">
       Guardar
     </button>

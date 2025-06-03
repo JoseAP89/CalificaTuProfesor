@@ -51,6 +51,8 @@
     <button mat-button mat-raised-button class="cancel-btn" mat-dialog-close>Cerrar</button>
     <button mat-button mat-raised-button class="ok-btn"
       [ngClass]="{'disabled-btn': !teacherForm.valid || campusError}"
+      [disabled]="isProcessing || !teacherForm.valid"
+      [ngStyle]="{'background-color': isProcessing || !teacherForm.valid? 'grey' : '#3cb371'}"
       (click)="onSubmit()" [disabled]="!teacherForm.valid || campusError">
       Guardar
     </button>

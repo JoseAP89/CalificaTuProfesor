@@ -318,4 +318,5 @@ pub const BLACK_LIST_WORDS: phf::Set<&'static str> = phf_set! {
     "idiotes",
     "puñal",
     "pueñeta",
+    "putisima",
 };

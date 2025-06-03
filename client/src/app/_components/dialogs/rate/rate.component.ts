@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { firstValueFrom } from 'rxjs';
+import { finalize, firstValueFrom } from 'rxjs';
 import { CommentDTO, Grade, Roster, RosterDB, Scale, StudyField, UniversityArea, Vote } from 'src/app/_models/business';
 import { RatingService } from 'src/app/_services/rating.service';
 import { ScaleService } from 'src/app/_services/scale.service';
@@ -27,6 +27,7 @@ export class RateComponent implements OnInit {
   public roster: RosterDB;
   public currentUserId: string;
   public universityAreas: UniversityArea[] = [];
+  public isProcessing: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: RosterDB,
@@ -145,6 +146,7 @@ export class RateComponent implements OnInit {
 
   async onSubmit(){
     if (this.isDataValid()) {
+      this.isProcessing = true;
       let comment = new CommentDTO();
       comment.recordId = null;
       comment.content = this.comment;
@@ -167,7 +169,13 @@ export class RateComponent implements OnInit {
         // Add them to the Comment
         comment.grades.push(grade);
       }
-      this.ratingService.addComment(comment).subscribe({
+      this.ratingService.addComment(comment)
+        .pipe(
+          finalize( () => {
+            this.isProcessing = false;
+          })
+        ) 
+      .subscribe({
         next: res => {
           this.snackbarService.showSuccessMessage("Comentario agregado exitosamente.");
           this.dialogRef.close(res);

@@ -5,6 +5,7 @@ import { MAX_LEN_COMMENT, MIN_LEN_COMMENT } from '../../constants';
 import { SnackbarService } from 'src/app/_services/snackbar.service';
 import { RatingService } from 'src/app/_services/rating.service';
 import { getHttpErrorMessage } from 'src/app/_helpers/miscelaneous';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-edit-comment',
@@ -35,7 +36,14 @@ export class EditCommentComponent {
       this.snackbarService.showErrorMessage("Comentario tiene que tener contenido.");
       return;
     }
-    this.ratingService.editComment(newComment).subscribe({
+    this.isProcessing = true;
+    this.ratingService.editComment(newComment)
+      .pipe(
+        finalize( () => {
+          this.isProcessing = false;
+        })
+      ) 
+    .subscribe({
       next: _res => {
         this.dialogRef.close(newComment);
         this.snackbarService.showSuccessMessage("Comentario editado exitosamente.")

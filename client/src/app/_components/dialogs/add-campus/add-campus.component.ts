@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Observable, catchError, debounceTime, firstValueFrom, fromEvent, map, of, tap } from 'rxjs';
+import { Observable, catchError, debounceTime, finalize, firstValueFrom, fromEvent, map, of, tap } from 'rxjs';
 import { Campus, NewCampus, NewUniversity, Vessel } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 import { SnackbarService } from 'src/app/_services/snackbar.service';
@@ -21,6 +21,7 @@ export class AddCampusComponent implements OnInit {
   public uniSearchOptions: Observable<Vessel[]>
   public uniError?: boolean = false;
   public uniSelected: Vessel;
+  public isProcessing: boolean = false;
 
 
   constructor(
@@ -71,9 +72,16 @@ export class AddCampusComponent implements OnInit {
 
   async onSubmit(){
     if (this.campusForm.valid && !this.uniError) {
+      this.isProcessing = true;
       let campus: NewCampus = Object.assign(new NewCampus(), this.campusForm.value);
       campus.universityId = this.uniSelected.id;
-      this.campusService.addCampus(campus).subscribe({
+      this.campusService.addCampus(campus)
+        .pipe(
+          finalize( () => {
+            this.isProcessing = false;
+          })
+        ) 
+      .subscribe({
         next: res => {
           this.snackbarService.showSuccessMessage(`Campus '${res.name}' fue agregado correctamente.`);
           this.dialogRef.close();
