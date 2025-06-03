@@ -3,6 +3,7 @@ using back_csharp._contracts;
 using back_csharp._data;
 using back_csharp._repos;
 using back_csharp._services;
+using back_csharp.Middleware;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 var builder = WebApplication.CreateBuilder(args);
@@ -57,6 +58,8 @@ builder.Services.AddCors(opt => {
 });
 builder.Services.AddAutoMapper(typeof(AutoMapperConfigs));
 var app = builder.Build();
+// Configure error handling middleware
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

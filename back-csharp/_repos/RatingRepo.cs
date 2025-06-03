@@ -5,6 +5,7 @@ using back_csharp._dtos;
 using back_csharp._enums;
 using back_csharp._helpers;
 using back_csharp._models;
+using back_csharp.Middleware.models;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -30,11 +31,9 @@ public class RatingRepo: IRatingRepo
 
     public async Task<RosterRatingDTO> GetRosterRatingInfoAsync(int rosterId)
     {
-        try
-        {
-            using var connection = new NpgsqlConnection(_connectionString);
-            // Create a query that retrieves all authors"    
-            var sql = @$"
+        using var connection = new NpgsqlConnection(_connectionString);
+        // Create a query that retrieves all authors"    
+        var sql = @$"
                 select g.scaleid, MAX(s.code) as code, round(CAST(avg(g.stars) as numeric),{DECIMAL_DIGITS}) as stars 
                 from roster r 
                 inner join comment c on r.rosterid=c.rosterid 
@@ -44,22 +43,17 @@ public class RatingRepo: IRatingRepo
                 group by g.scaleid
                 order by g.scaleid asc
             ";
-            // Use the Query method to execute the query and return a list of objects
-            List<GradeDTO> grades = (await connection.QueryAsync<GradeDTO>(sql)).ToList();
-            var rating = new RosterRatingDTO
-            {
-                RosterId = rosterId,
-                Grades = grades.OrderBy(g => g.ScaleId).ToList(),
-                AverageGrade = grades.Count > 0 ? 
-                    Math.Round(grades.Where(g => g.Code != "DI").Average(g => g.Stars), DECIMAL_DIGITS) :
-                    0.0,
-            };
-            return rating;
-        }
-        catch (Exception)
+        // Use the Query method to execute the query and return a list of objects
+        List<GradeDTO> grades = (await connection.QueryAsync<GradeDTO>(sql)).ToList();
+        var rating = new RosterRatingDTO
         {
-            return null;
-        }
+            RosterId = rosterId,
+            Grades = grades.OrderBy(g => g.ScaleId).ToList(),
+            AverageGrade = grades.Count > 0 ?
+                Math.Round(grades.Where(g => g.Code != "DI").Average(g => g.Stars), DECIMAL_DIGITS) :
+                0.0,
+        };
+        return rating;
     }
 
     public async Task<bool> CanComment(string userId, int teacherId)
@@ -88,7 +82,7 @@ public class RatingRepo: IRatingRepo
         var comment = _mapper.Map<Comment>(commentDTO);
         if (!( await CanComment(comment.UserId.ToString(), comment.RosterId))) 
         {
-            throw new Exception($"Ya has comentado con anterioridad al profesor. Deben pasar almenos {MIN_MONTHS_TO_COMMENT} meses para publicar otro comentario.");
+            throw new ApiException($"Ya has comentado con anterioridad al profesor. Deben pasar almenos {MIN_MONTHS_TO_COMMENT} meses para publicar otro comentario.");
         }
         // it only carries one vote, the one of the user who created it, initially his vote is null
         comment.Votes = comment.Votes.Select( v => 
@@ -105,7 +99,7 @@ public class RatingRepo: IRatingRepo
     public async Task<int> DeleteCommentByIdAsync(int commentId)
     {
         var comment = await _context.Comments.FirstOrDefaultAsync(c => c.CommentId == commentId)
-            ?? throw new Exception("El comentario no existe.");
+            ?? throw new ApiException("El comentario no existe.");
         var votes = await _context.Votes.Where(v => v.CommentId == commentId).ToListAsync();
         var grades = await _context.Grades.Where(v => v.CommentId == commentId).ToListAsync();
         _context.Grades.RemoveRange(grades);
@@ -118,8 +112,8 @@ public class RatingRepo: IRatingRepo
     public async Task<Comment> EditCommentContentAsync(CommentContentDTO commentDTO)
     {
         var comment = await _context.Comments.FirstOrDefaultAsync( c => c.CommentId == commentDTO.CommentId) 
-            ?? throw new Exception("El comentatio no existe.");
-        if (comment.Content == commentDTO.Content) throw new Exception("El comentario no contiene cambios.");
+            ?? throw new ApiException("El comentatio no existe.");
+        if (comment.Content == commentDTO.Content) throw new ApiException("El comentario no contiene cambios.");
         comment.ModifiedAt = DateTime.Now;
         comment.Content = commentDTO.Content;
         _context.Comments.Update(comment);
@@ -129,216 +123,202 @@ public class RatingRepo: IRatingRepo
 
     public async Task<TableData<CommentDTO>> GetCommentsByRosterAsync(int rosterId, int pageSize = 10, SortPaginator pag = SortPaginator.DateDesc, int pageNumber = 0, Guid? currentUserId = null)
     {
-        try
-        {
-            if (currentUserId == null) currentUserId = Guid.NewGuid();
-            var comments = await _context.Comments
-                .Where(c => c.RosterId == rosterId)
-                .Select(c => new Comment
-                {
-                    CommentId = c.CommentId,
-                    RecordId = c.RecordId,
-                    RosterId = c.RosterId,
-                    StudyFieldId = c.StudyFieldId,
-                    SubjectName = c.SubjectName,
-                    Content = c.Content,
-                    CreatedAt = c.CreatedAt,
-                    ModifiedAt = c.ModifiedAt,
-                    UserId = c.UserId,
-                    Grades = c.Grades.Select(g => new Grade
-                    {
-                        GradeId = g.GradeId,
-                        Stars = g.Stars,
-                        ScaleId = g.ScaleId
-                    }).ToList(),
-                    Votes = c.Votes.Select(v => new Vote
-                    {
-                        VoteId = v.VoteId,
-                        UserId = v.UserId,
-                        Approval = v.Approval
-                    }).ToList(),
-                    StudyField = new StudyField
-                    {
-                        StudyFieldId = c.StudyField.StudyFieldId,
-                        Name = c.StudyField.Name,
-                        Code = c.StudyField.Code,
-                        UniversityArea = new UniversityArea
-                        {
-                             UniversityAreaId =c.StudyField.UniversityArea.UniversityAreaId,
-                             Name =c.StudyField.UniversityArea.Name,
-                             Code =c.StudyField.UniversityArea.Code
-                        }
-                    }
-                })
-                .AsSplitQuery()
-                .AsNoTracking()
-                .ToListAsync();
-
-            var commentsSorted = _mapper.Map<List<CommentDTO>>(comments).AsEnumerable();
-            commentsSorted = commentsSorted.Select(c =>
+        if (currentUserId == null) currentUserId = Guid.NewGuid();
+        var comments = await _context.Comments
+            .Where(c => c.RosterId == rosterId)
+            .Select(c => new Comment
             {
-                foreach (var v in c.Votes)
+                CommentId = c.CommentId,
+                RecordId = c.RecordId,
+                RosterId = c.RosterId,
+                StudyFieldId = c.StudyFieldId,
+                SubjectName = c.SubjectName,
+                Content = c.Content,
+                CreatedAt = c.CreatedAt,
+                ModifiedAt = c.ModifiedAt,
+                UserId = c.UserId,
+                Grades = c.Grades.Select(g => new Grade
                 {
-                    if (v.Approval == true)
+                    GradeId = g.GradeId,
+                    Stars = g.Stars,
+                    ScaleId = g.ScaleId
+                }).ToList(),
+                Votes = c.Votes.Select(v => new Vote
+                {
+                    VoteId = v.VoteId,
+                    UserId = v.UserId,
+                    Approval = v.Approval
+                }).ToList(),
+                StudyField = new StudyField
+                {
+                    StudyFieldId = c.StudyField.StudyFieldId,
+                    Name = c.StudyField.Name,
+                    Code = c.StudyField.Code,
+                    UniversityArea = new UniversityArea
                     {
-                        c.Likes++;
-                    }
-                    else if (v.Approval == false)
-                    {
-                        c.Dislikes++;
-                    }
-                    if (currentUserId.ToString() == v.UserId)
-                    {
-                        c.currentUserVote = v.Approval;
+                        UniversityAreaId = c.StudyField.UniversityArea.UniversityAreaId,
+                        Name = c.StudyField.UniversityArea.Name,
+                        Code = c.StudyField.UniversityArea.Code
                     }
                 }
-                c.Votes = null; // to avoid send a large amount of votes per comment unnecessarily
-                return c;
-            });
-            switch (pag)
-            {
-                case SortPaginator.DateAsc:
-                    commentsSorted = commentsSorted.OrderBy(c => c.CreatedAt);
-                    break;
-                case SortPaginator.DateDesc:
-                    commentsSorted = commentsSorted.OrderByDescending(c => c.CreatedAt);
-                    break;
-                case SortPaginator.MostLiked:
-                    commentsSorted = commentsSorted.OrderByDescending(c => c.Likes).ThenByDescending(c => c.CreatedAt);
-                    break;
-                case SortPaginator.MostDisliked:
-                    commentsSorted = commentsSorted.OrderByDescending(c => c.Dislikes).ThenByDescending(c => c.CreatedAt);
-                    break;
-                case SortPaginator.SubjectAsc:
-                    commentsSorted = commentsSorted.OrderBy(c => c.SubjectName);
-                    break;
-                case SortPaginator.SubjectDesc:
-                    commentsSorted = commentsSorted.OrderByDescending(c => c.SubjectName);
-                    break;
-                default:
-                    break;
-            }
-            commentsSorted = commentsSorted.ToList();
-            var table = new TableData<CommentDTO>
-            {
-                PageNumber = pageNumber,
-                PageSize = pageSize,
-                TotalElements = comments.Count,
-                Data = commentsSorted
-                    .Skip(pageSize * pageNumber)
-                    .Take(pageSize)
-                    .ToList()
-            };
-            return table;
+            })
+            .AsSplitQuery()
+            .AsNoTracking()
+            .ToListAsync();
 
-        }
-        catch (Exception _e)
+        var commentsSorted = _mapper.Map<List<CommentDTO>>(comments).AsEnumerable();
+        commentsSorted = commentsSorted.Select(c =>
         {
-            return null;
+            foreach (var v in c.Votes)
+            {
+                if (v.Approval == true)
+                {
+                    c.Likes++;
+                }
+                else if (v.Approval == false)
+                {
+                    c.Dislikes++;
+                }
+                if (currentUserId.ToString() == v.UserId)
+                {
+                    c.currentUserVote = v.Approval;
+                }
+            }
+            c.Votes = null; // to avoid send a large amount of votes per comment unnecessarily
+            return c;
+        });
+        switch (pag)
+        {
+            case SortPaginator.DateAsc:
+                commentsSorted = commentsSorted.OrderBy(c => c.CreatedAt);
+                break;
+            case SortPaginator.DateDesc:
+                commentsSorted = commentsSorted.OrderByDescending(c => c.CreatedAt);
+                break;
+            case SortPaginator.MostLiked:
+                commentsSorted = commentsSorted.OrderByDescending(c => c.Likes).ThenByDescending(c => c.CreatedAt);
+                break;
+            case SortPaginator.MostDisliked:
+                commentsSorted = commentsSorted.OrderByDescending(c => c.Dislikes).ThenByDescending(c => c.CreatedAt);
+                break;
+            case SortPaginator.SubjectAsc:
+                commentsSorted = commentsSorted.OrderBy(c => c.SubjectName);
+                break;
+            case SortPaginator.SubjectDesc:
+                commentsSorted = commentsSorted.OrderByDescending(c => c.SubjectName);
+                break;
+            default:
+                break;
         }
+        commentsSorted = commentsSorted.ToList();
+        var table = new TableData<CommentDTO>
+        {
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalElements = comments.Count,
+            Data = commentsSorted
+                .Skip(pageSize * pageNumber)
+                .Take(pageSize)
+                .ToList()
+        };
+        return table;
+
     }
 
     public async Task<TableData<RankingTopTeacherDTO>> GetRankingTopTeacherAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0, bool sortByRank = false, string search = null)
     {
-        try
+        var ranksQuery = (
+            from r in _context.Rosters
+            join k in _context.Campuses on r.CampusId equals k.CampusId
+            join c in _context.Comments on r.RosterId equals c.RosterId into commentsJoin
+            from c in commentsJoin.DefaultIfEmpty()
+            join g in _context.Grades on c.CommentId equals g.CommentId into gradesJoin
+            from g in gradesJoin.DefaultIfEmpty()
+            join s in _context.Scales on g.ScaleId equals s.ScaleId into scalesJoin
+            from s in scalesJoin.DefaultIfEmpty()
+            group new
+            {
+                CommentId = c != null ? c.CommentId : 0,
+                r.TeacherName,
+                r.TeacherLastname1,
+                r.TeacherLastname2,
+                Stars = g != null ? g.Stars : 0,
+                k.CampusId,
+                CampusName = k.Name,
+                ScaleCode = s.Code,
+                CampusRecordId = k.RecordId,
+                RosterRecordId = r.RecordId
+            }
+            by new { r.RecordId, k.CampusId } into ranking
+            select new RankingTopTeacherDTO
+            {
+                TeacherRecordId = ranking.First().RosterRecordId.ToString(),
+                Name = ranking.First().TeacherName,
+                FirstLastName = ranking.First().TeacherLastname1,
+                SecondLastName = ranking.First().TeacherLastname2,
+                AverageGrade = ranking.Where(row => row.ScaleCode != "DI").Average(row => row.Stars),
+                CampusName = ranking.First().CampusName,
+                CampusId = ranking.First().CampusId,
+                Rank = 0,
+                TotalComments = ranking
+                    .Where(x => x.CommentId > 0)
+                    .Select(x => x.CommentId).Distinct().Count(),
+                CampusRecordId = ranking.First().CampusRecordId.ToString(),
+                RosterRecordId = ranking.First().RosterRecordId.ToString(),
+            }
+        );
+
+        if (campusRecordId != Guid.Empty)
         {
-            var ranksQuery = (
-                from r in _context.Rosters
-                join k in _context.Campuses on r.CampusId equals k.CampusId
-                join c in _context.Comments on r.RosterId equals c.RosterId into commentsJoin
-                from c in commentsJoin.DefaultIfEmpty()
-                join g in _context.Grades on c.CommentId equals g.CommentId into gradesJoin
-                from g in gradesJoin.DefaultIfEmpty()
-                join s in _context.Scales on g.ScaleId equals s.ScaleId  into scalesJoin
-                from s in scalesJoin.DefaultIfEmpty()
-                group new
-                {
-                    CommentId = c != null ? c.CommentId : 0,
-                    r.TeacherName,
-                    r.TeacherLastname1,
-                    r.TeacherLastname2,
-                    Stars = g != null ? g.Stars : 0,
-                    k.CampusId,
-                    CampusName = k.Name,
-                    ScaleCode = s.Code,
-                    CampusRecordId = k.RecordId,
-                    RosterRecordId = r.RecordId
-                }
-                by new { r.RecordId, k.CampusId } into ranking
-                select new RankingTopTeacherDTO
-                {
-                    TeacherRecordId = ranking.First().RosterRecordId.ToString(),
-                    Name = ranking.First().TeacherName,
-                    FirstLastName = ranking.First().TeacherLastname1,
-                    SecondLastName = ranking.First().TeacherLastname2,
-                    AverageGrade = ranking.Where(row => row.ScaleCode != "DI").Average(row => row.Stars),
-                    CampusName = ranking.First().CampusName,
-                    CampusId = ranking.First().CampusId,
-                    Rank = 0,
-                    TotalComments = ranking
-                        .Where(x => x.CommentId > 0)
-                        .Select(x => x.CommentId).Distinct().Count(),
-                    CampusRecordId = ranking.First().CampusRecordId.ToString(),
-                    RosterRecordId = ranking.First().RosterRecordId.ToString(),
-                }
-            );
-
-            if (campusRecordId != Guid.Empty)
-            {
-                ranksQuery = ranksQuery.Where(r => r.CampusRecordId == campusRecordId.ToString());    
-            }
-
-            if(!string.IsNullOrEmpty(search))
-            {
-                ranksQuery = ranksQuery
-                    .Where(r => EF.Functions.ILike(
-                        TeachersContext.Unaccent(r.Name + " " + r.FirstLastName + " " + r.SecondLastName).Trim(),
-                        "%" + TeachersContext.Unaccent(search.Trim()) + "%"))
-                    .OrderBy(r => r.FirstLastName)
-                    .ThenBy(r => r.SecondLastName)
-                    .ThenBy(r => r.Name);
-            }
-            else if (sortByRank)
-            {
-                ranksQuery = ranksQuery.OrderByDescending(r => r.AverageGrade )
-                    .ThenBy(r => r.Name);
-            } 
-            else
-            {
-                ranksQuery = ranksQuery.OrderBy(r => r.FirstLastName)
-                    .ThenBy(r => r.SecondLastName)
-                    .ThenBy(r => r.Name);
-            }
-
-            var ranks = await ranksQuery
-                .AsNoTracking()
-                .ToListAsync();
-            var totalElements = ranks?.Count ?? 0;
-            ranks = ranks
-                .Skip(pageNumber * pageSize)
-                .Take(pageSize)
-                .ToList();
-            if (sortByRank && (ranks?.Count ?? 0) >0)
-            {
-                int rankNumber = 1;
-                foreach (var item in ranks)
-                {
-                    item.Rank = rankNumber;
-                    rankNumber++;
-                }
-            }
-            return new TableData<RankingTopTeacherDTO>
-            {
-                Data = ranks,
-                PageNumber = pageNumber,
-                PageSize = pageSize,    
-                TotalElements = totalElements
-            };
-
+            ranksQuery = ranksQuery.Where(r => r.CampusRecordId == campusRecordId.ToString());
         }
-        catch (Exception e)
+
+        if (!string.IsNullOrEmpty(search))
         {
-            return null;
+            ranksQuery = ranksQuery
+                .Where(r => EF.Functions.ILike(
+                    TeachersContext.Unaccent(r.Name + " " + r.FirstLastName + " " + r.SecondLastName).Trim(),
+                    "%" + TeachersContext.Unaccent(search.Trim()) + "%"))
+                .OrderBy(r => r.FirstLastName)
+                .ThenBy(r => r.SecondLastName)
+                .ThenBy(r => r.Name);
         }
+        else if (sortByRank)
+        {
+            ranksQuery = ranksQuery.OrderByDescending(r => r.AverageGrade)
+                .ThenBy(r => r.Name);
+        }
+        else
+        {
+            ranksQuery = ranksQuery.OrderBy(r => r.FirstLastName)
+                .ThenBy(r => r.SecondLastName)
+                .ThenBy(r => r.Name);
+        }
+
+        var ranks = await ranksQuery
+            .AsNoTracking()
+            .ToListAsync();
+        var totalElements = ranks?.Count ?? 0;
+        ranks = ranks
+            .Skip(pageNumber * pageSize)
+            .Take(pageSize)
+            .ToList();
+        if (sortByRank && (ranks?.Count ?? 0) > 0)
+        {
+            int rankNumber = 1;
+            foreach (var item in ranks)
+            {
+                item.Rank = rankNumber;
+                rankNumber++;
+            }
+        }
+        return new TableData<RankingTopTeacherDTO>
+        {
+            Data = ranks,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalElements = totalElements
+        };
+
     }
 }

@@ -19,15 +19,7 @@ public class AxumController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<AxumApiResponse>> AnalyzeWords(AxumFilterRequest request)
     {
-        try
-        {
-            var response = await _uow.AxumService.AnalyzeWordsAsync(request);
-            return Ok(response);
-        }
-        catch (Exception e)
-        {
-            return BadRequest($"Hubo un error de comunicación.");
-        }
-
+        var response = await _uow.AxumService.AnalyzeWordsAsync(request);
+        return Ok(response);
     }
 }

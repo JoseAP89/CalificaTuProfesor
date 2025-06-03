@@ -28,62 +28,41 @@ public class RatingController : ControllerBase
     [HttpGet("can-comment")]
     public async Task<ActionResult<CommentDTO>> CanComment(string userId, int teacherId)
     {
-        try
-        {
-            var res = await _uow.Ratings.CanComment(userId, teacherId);
-            return Ok(res);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
+        var res = await _uow.Ratings.CanComment(userId, teacherId);
+        return Ok(res);
     }
 
     [HttpPost("comment")]
     public async Task<ActionResult<CommentDTO>> AddComment(CommentDTO commentDTO)
     {
-        try
-        {
-            var wordsToAnalyze = new List<string> {
+        var wordsToAnalyze = new List<string> {
                 commentDTO.Content,
                 commentDTO.SubjectName
             };
-            var axumResponse = await _uow.AxumService.AnalyzeWordsAsync(new AxumFilterRequest
-            {
-                Words = wordsToAnalyze
-            });
-            if (axumResponse?.IsInappropiate ?? true)
-            {
-                return BadRequest(axumResponse?.Message ?? "Hubo un error analizando el contenido de las palabras.");
-            }
-            var res = await _uow.Ratings.AddCommentAsync(commentDTO);
-            if (res == null)
-            {
-                return BadRequest("Hubo un error agregando el comentario.");
-            }
-            return Ok(_mapper.Map<CommentDTO>(res));
-        }
-        catch (Exception e)
+        var axumResponse = await _uow.AxumService.AnalyzeWordsAsync(new AxumFilterRequest
         {
-            return BadRequest(e.Message);
+            Words = wordsToAnalyze
+        });
+        if (axumResponse?.IsInappropiate ?? true)
+        {
+            return BadRequest(axumResponse?.Message ?? "Hubo un error analizando el contenido de las palabras.");
         }
+        var res = await _uow.Ratings.AddCommentAsync(commentDTO);
+        if (res == null)
+        {
+            return BadRequest("Hubo un error agregando el comentario.");
+        }
+        return Ok(_mapper.Map<CommentDTO>(res));
     }
 
     [HttpDelete("comment/{commentId}")]
     public async Task<ActionResult<int>> DeleteComment(int commentId)
     {
         int res = -1;
-        try
+        res = await _uow.Ratings.DeleteCommentByIdAsync(commentId);
+        if (res == -1)
         {
-            res = await _uow.Ratings.DeleteCommentByIdAsync(commentId);
-            if (res == -1)
-            {
-                return BadRequest("Hubo un error borrando el comentario.");
-            }
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
+            return BadRequest("Hubo un error borrando el comentario.");
         }
         return Ok(res);
     }

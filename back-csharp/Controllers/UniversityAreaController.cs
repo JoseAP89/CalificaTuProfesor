@@ -31,44 +31,26 @@ namespace back_csharp.Controllers
         [HttpGet("{uniAreaId}")]
         public async Task<ActionResult<Vessel>> GetUniversityArea(int uniAreaId)
         {
-            try
+            var res = await _uow.UniversityAreas.GetUniversityAreaVesselAsync(uniAreaId);
+            if (res == null)
             {
-                var res = await _uow.UniversityAreas.GetUniversityAreaVesselAsync(uniAreaId);
-                if (res==null)
-                {
-                    return NotFound();
-                }
-                return Ok(res);
-
+                return NotFound();
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            return Ok(res);
         }
-        
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UniversityAreaDTO>>> GetUniversityAreas()
         {
-            try
+            var res = await _uow.UniversityAreas.GetAllUniversityAreaVesselsAsync();
+            if (res == null)
             {
-                var res = await _uow.UniversityAreas.GetAllUniversityAreaVesselsAsync();
-                if (res==null)
-                {
-                    return NotFound();
-                }
-                var unis = _mapper.Map<List<UniversityAreaDTO>>(res);
-                return Ok(unis);
-
+                return NotFound();
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            var unis = _mapper.Map<List<UniversityAreaDTO>>(res);
+            return Ok(unis);
         }
-        
-        
+
+
     }
 }

@@ -3,6 +3,7 @@ using back_csharp._contracts;
 using back_csharp._data;
 using back_csharp._dtos;
 using back_csharp._models;
+using back_csharp.Middleware.models;
 using Microsoft.EntityFrameworkCore;
 
 namespace back_csharp._repos;
@@ -33,7 +34,7 @@ public class VoteRepo: IVoteRepo
         var comment = await _context.Comments.FirstOrDefaultAsync( c => c.CommentId == voteDto.CommentId);
         if (comment.UserId == vote.UserId)
         {
-            throw new Exception("No puedes votar tu propio comentario.");
+            throw new ApiException("No puedes votar tu propio comentario.");
         }
         var userVote = await GetByUserAndCommentId(vote.UserId, vote.CommentId);
         if (userVote!=null)

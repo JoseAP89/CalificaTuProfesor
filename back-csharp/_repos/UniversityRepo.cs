@@ -4,6 +4,7 @@ using back_csharp._dtos;
 using back_csharp._helpers;
 using Microsoft.EntityFrameworkCore;
 using back_csharp._data;
+using back_csharp.Middleware.models;
 
 namespace back_csharp._repos;
 
@@ -16,30 +17,23 @@ public class UniversityRepo: CommonRepo<University>, IUniversityRepo
 
     public async Task<IEnumerable<Vessel>> Search(string text)
     {
-        try
-        {
-            const int MAX_RESULTS = 20;
-            text = text
-                .Replace("+", " ")
-                .Trim()
-                .ToLower()
-                .RemoveDiacritics();
-            var query = _context.Universities
-                    .AsNoTracking()
-                    .Where(u => EF.Functions.ILike(
-                        TeachersContext.Unaccent(u.Name).Trim().ToLower(),
-                        "%" + text + "%"))
-                    .OrderBy(u => u.Name)
-                    .Take(MAX_RESULTS);
-            var res = (await query.ToListAsync())?.Select(x =>
-                new Vessel { Id = x.UniversityId, Value = x.Name }).ToList();
-            return res;
+        const int MAX_RESULTS = 20;
+        text = text
+            .Replace("+", " ")
+            .Trim()
+            .ToLower()
+            .RemoveDiacritics();
+        var query = _context.Universities
+                .AsNoTracking()
+                .Where(u => EF.Functions.ILike(
+                    TeachersContext.Unaccent(u.Name).Trim().ToLower(),
+                    "%" + text + "%"))
+                .OrderBy(u => u.Name)
+                .Take(MAX_RESULTS);
+        var res = (await query.ToListAsync())?.Select(x =>
+            new Vessel { Id = x.UniversityId, Value = x.Name }).ToList();
+        return res;
 
-        }
-        catch (Exception e)
-        {
-            return null;
-        }
     }
 
     public async Task<University> Add(UniversityDto entitydto)
@@ -51,7 +45,7 @@ public class UniversityRepo: CommonRepo<University>, IUniversityRepo
             .ToListAsync();
         if (universities.Count>0 )
         {
-            throw new BadHttpRequestException("No puede agregarse ya que ya existe una Universidad con ese nombre.");
+            throw new ApiException("No puede agregarse ya que ya existe una Universidad con ese nombre.");
         }
         var university = new University
         {

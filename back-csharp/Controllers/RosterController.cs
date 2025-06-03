@@ -70,42 +70,34 @@ namespace back_csharp.Controllers
         [HttpPost]
         public async Task<ActionResult<RosterDto>> AddRoster(CreateRosterDto rosterDto)
         {
-            try
-            {
-                var wordsToAnalyze = new List<string> {
+            var wordsToAnalyze = new List<string> {
                     rosterDto.TeacherName,
                     rosterDto.TeacherLastname1,
                     rosterDto.TeacherLastname2,
                     rosterDto.SubjectName ?? ""
                 };
-                var axumResponse = await _uow.AxumService.AnalyzeWordsAsync(new AxumFilterRequest
-                {
-                    Words = wordsToAnalyze
-                });
-                if (axumResponse?.IsInappropiate ?? true)
-                {
-                    return BadRequest(axumResponse?.Message ?? "Hubo un error analizando el contenido de las palabras.");
-                }
-                var roster = await _uow.Roster.AddRoster(rosterDto);
-                if (roster == null)
-                {
-                    return BadRequest();
-                }
-                await _uow.Save();
-
-                return CreatedAtAction(
-                    nameof(GetRoster),
-                    new { id = roster.RosterId},
-                    roster
-                );
-            }
-            catch (Exception e)
+            var axumResponse = await _uow.AxumService.AnalyzeWordsAsync(new AxumFilterRequest
             {
-                Console.WriteLine(e);
-                return BadRequest($"Hubo un error al agregar al Profesor {rosterDto.TeacherName + " " + rosterDto.TeacherLastname1 + " " + (rosterDto.TeacherLastname2 ?? "")}.");
+                Words = wordsToAnalyze
+            });
+            if (axumResponse?.IsInappropiate ?? true)
+            {
+                return BadRequest(axumResponse?.Message ?? "Hubo un error analizando el contenido de las palabras.");
             }
+            var roster = await _uow.Roster.AddRoster(rosterDto);
+            if (roster == null)
+            {
+                return BadRequest();
+            }
+            await _uow.Save();
+
+            return CreatedAtAction(
+                nameof(GetRoster),
+                new { id = roster.RosterId },
+                roster
+            );
 
         }
-        
+
     }
 }

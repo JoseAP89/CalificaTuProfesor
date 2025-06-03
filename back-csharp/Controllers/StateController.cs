@@ -26,21 +26,12 @@ public class StateController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Vessel>>> GetStates()
     {
-        try
+        var res = await _uow.States.GetAllInVessels();
+        if (res == null)
         {
-            var res = await _uow.States.GetAllInVessels();
-            if (res==null)
-            {
-                return NoContent();
-            }
-            return Ok(res);
+            return NoContent();
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return BadRequest($"Hubo un error al obtener la lista de los Estados.");
-        }
+        return Ok(res);
     }
-    
-    
+
 }

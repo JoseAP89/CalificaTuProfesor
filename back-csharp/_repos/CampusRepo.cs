@@ -5,6 +5,7 @@ using back_csharp._helpers;
 using Microsoft.EntityFrameworkCore;
 using back_csharp._data;
 using Npgsql;
+using back_csharp.Middleware.models;
 
 namespace back_csharp._repos;
 
@@ -139,7 +140,7 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
             .FirstOrDefaultAsync(u => u.Name == campusDto.UniversityName);
         if (university == null)
         {
-            throw new BadHttpRequestException($"No puede agregarse ya que no existe una universidad con el nombre '{campusDto.UniversityName}'.");
+            throw new ApiException($"No puede agregarse ya que no existe una universidad con el nombre '{campusDto.UniversityName}'.");
         }
         var name = campusDto.Name.ToLower().Trim().RemoveDiacritics();
         var campuses = await _context.Set<Campus>().FromSqlInterpolated<Campus>(
@@ -148,7 +149,7 @@ public class CampusRepo: CommonRepo<Campus>, ICampusRepo
             .ToListAsync();
         if (campuses.Count > 0)
         {
-            throw new BadHttpRequestException("No puede agregarse ya que ya existe un Campus con ese nombre.");
+            throw new ApiException("No puede agregarse ya que ya existe un Campus con ese nombre.");
         }
         var campus = new Campus
         {

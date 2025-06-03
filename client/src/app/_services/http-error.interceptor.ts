@@ -38,14 +38,12 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   }
 
   private handleError(error: HttpErrorResponse, method: string): void {
-    console.log("error:", error);
     let apiError: ApiError = {
       status : error?.status?.toString(),
       message : getHttpErrorMessage(error),
       method,
       url: error?.url ?? undefined
     };
-    console.log("* apierror:", apiError);
     // differentiate based on method
     switch (method) {
       case 'POST':

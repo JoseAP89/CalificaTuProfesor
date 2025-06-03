@@ -26,21 +26,13 @@ public class ScaleController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ScaleDTO>>> GetScales()
     {
-        try
+        var res = await _uow.Scale.GetAll();
+        if (res == null)
         {
-            var res = await _uow.Scale.GetAll();
-            if (res==null)
-            {
-                return NotFound();
-            }
-            var scales =_mapper.Map<List<ScaleDTO>>(res);
-            return Ok(scales);
+            return NotFound();
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return BadRequest($"Hubo un error al obtener la lista de las Escalas.");
-        }
+        var scales = _mapper.Map<List<ScaleDTO>>(res);
+        return Ok(scales);
     }
-    
+
 }

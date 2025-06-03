@@ -32,42 +32,25 @@ namespace back_csharp.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<IEnumerable<UniversityDto>>> GetUniversity(int id)
         {
-            try
+            var university = await _uow.Universities.GetById(id);
+            if (university == null)
             {
-                var university = await _uow.Universities.GetById(id);
-                if (university==null)
-                {
-                    return NoContent();
-                }
-                return Ok(university);
+                return NoContent();
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return BadRequest($"Hubo un error al solicitar la búsqueda de la universidad con id {id}.");
-            }
-
+            return Ok(university);
         }
-        
+
         [HttpGet("all/{numOfResults?}")]
         public async Task<ActionResult<IEnumerable<UniversityDto>>> GetUniversities(int? numOfResults)
         {
-            try
+            var universities = await _uow.Universities.GetAll(x => x.Name, numOfResults);
+            if (universities == null)
             {
-                var universities = await _uow.Universities.GetAll(x => x.Name, numOfResults);
-                if (universities==null)
-                {
-                    return NoContent();
-                }
-                return Ok(universities);
+                return NoContent();
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return BadRequest($"Hubo un error al buscar todas las universidades.");
-            }
+            return Ok(universities);
         }
-        
+
         [HttpGet("search/{search}")]
         public async Task<ActionResult<IEnumerable<Vessel>>> GetUniversitySearch(string search)
         {
@@ -82,32 +65,23 @@ namespace back_csharp.Controllers
         [HttpPost]
         public async Task<ActionResult<UniversityDto>> AddUniversity(UniversityDto universitydto)
         {
-            try
+            var wordsToAnalyze = new List<string> { universitydto.Name };
+            var axumResponse = await _uow.AxumService.AnalyzeWordsAsync(new AxumFilterRequest
             {
-                var wordsToAnalyze = new List<string> {universitydto.Name};
-                var axumResponse = await _uow.AxumService.AnalyzeWordsAsync(new AxumFilterRequest
-                {
-                    Words = wordsToAnalyze
-                });
-                if (axumResponse?.IsInappropiate ?? true)
-                {
-                    return BadRequest(axumResponse?.Message ?? "Hubo un error analizando el contenido de las palabras.");
-                }
-                var university = await _uow.Universities.Add(universitydto);
-                await _uow.Universities.AddImage(universitydto);
-                await _uow.Save();
-                return CreatedAtAction(
-                    nameof(GetUniversity),
-                    new { id = universitydto.UniversityId},
-                    university
-                );
-            }
-            catch (Exception e)
+                Words = wordsToAnalyze
+            });
+            if (axumResponse?.IsInappropiate ?? true)
             {
-                Console.WriteLine(e);
-                return BadRequest($"Hubo un error al agregar la universidad '{universitydto.Name}'.");
+                return BadRequest(axumResponse?.Message ?? "Hubo un error analizando el contenido de las palabras.");
             }
-
+            var university = await _uow.Universities.Add(universitydto);
+            await _uow.Universities.AddImage(universitydto);
+            await _uow.Save();
+            return CreatedAtAction(
+                nameof(GetUniversity),
+                new { id = universitydto.UniversityId },
+                university
+            );
         }
     }
 }

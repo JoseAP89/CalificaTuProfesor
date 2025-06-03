@@ -84,37 +84,29 @@ namespace back_csharp.Controllers
         [HttpPost]
         public async Task<ActionResult<Campus>> AddCampus(CampusDto campusDto)
         {
-            try
+            var wordsToAnalyze = new List<string> { campusDto.Name };
+            var axumResponse = await _uow.AxumService.AnalyzeWordsAsync(new AxumFilterRequest
             {
-                var wordsToAnalyze = new List<string> {campusDto.Name};
-                var axumResponse = await _uow.AxumService.AnalyzeWordsAsync(new AxumFilterRequest
-                {
-                    Words = wordsToAnalyze
-                });
-                if (axumResponse?.IsInappropiate ?? true)
-                {
-                    return BadRequest(axumResponse?.Message ?? "Hubo un error analizando el contenido de las palabras.");
-                }
-                var campus = await _uow.Campus.AddCampus(campusDto);
-                if (campus == null)
-                {
-                    return BadRequest();
-                } 
-                await _uow.Save();
+                Words = wordsToAnalyze
+            });
+            if (axumResponse?.IsInappropiate ?? true)
+            {
+                return BadRequest(axumResponse?.Message ?? "Hubo un error analizando el contenido de las palabras.");
+            }
+            var campus = await _uow.Campus.AddCampus(campusDto);
+            if (campus == null)
+            {
+                return BadRequest();
+            }
+            await _uow.Save();
 
-                return CreatedAtAction(
-                    nameof(GetCampus),
-                    new { id = campusDto.CampusId},
-                    campus
-                );
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return BadRequest($"Hubo un error al agregar el campus {campusDto.Name}.");
-            }
+            return CreatedAtAction(
+                nameof(GetCampus),
+                new { id = campusDto.CampusId },
+                campus
+            );
 
         }
-        
+
     }
 }
