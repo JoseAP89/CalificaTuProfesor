@@ -1,23 +1,15 @@
 **** Notes about the tasks to be done ****
 
++	If top ranking table has no teachers, do not show it
 +   build a http error listener service for the front end to show useful info to the user
 ++	There is a need for an error middleware on the backend to better improve the messages sent to the client,
 	also I need to add an ApiException class to handle business logic errors in the app.
 +	Add a diagram to show how the services interact with each other on the docker network.
-+	Add a badge comments filter by UniversityArea-StudyField on the Roster Page, that would be a great
-	and useful addition.
-+	RosterScale table was made to create a cache-like table for roster-scale grades, but it is a work
-	in progress still, although an effective way to stop storing Scales X Comments on the Grade table would
-	be a better solution, taking into consideration the possibility to remove comments and updating the
-	grades per roster.
-++	Build a logger
++	Delete RosterScale table
 +   Notifications functionality (front, backend, and table)
-+   If I delete the userId from localstorage and decide to add/vote then a userId is generated automatically on the backend, make sure that
-    that new id is being assinged correctly on the frontend to the user.
-+   Show a better validation for the comment-grade form.
-+   Show the default value for the sorting type on the comment's page.
 +   Change Roster table name to Teacher, it is no longer a roster but a simple teacher table,
 	an all the modifications that that name change will entail
-++ Change compose.yaml to remove the jaavscript file executed post-start and serve the rust server
-+	only thing remaining is over time add words to the black_word_list and the white_word_list,
+++  Change compose.yaml to remove the jaavscript file executed post-start and serve the
+	rust server
+.	Only thing remaining is over time add words to the black_word_list and the white_word_list,
 	thus, it would be an always active task (ALWAYS ACTIVE)
