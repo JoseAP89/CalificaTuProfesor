@@ -1,11 +1,13 @@
 use regex::Regex;
+use std::cell::RefCell;
 use std::collections::HashSet;
 use crate::content_filter::WordNormalizer;
-use crate::constants::{UNUSUAL_TRIGRAMS, UNUSUAL_CLUSTERS, COMMON_TRIGRAMS};
+use crate::constants::{UNUSUAL_TRIGRAMS, UNUSUAL_CLUSTERS, COMMON_TRIGRAMS, WHITE_LIST_WORDS};
 
 pub struct GibberishDetector {
     threshold: f64,  // Note we're using f64 here
     min_word_length: usize,
+    positive_cache: RefCell<HashSet<String>>
 }
 
 impl GibberishDetector {
@@ -13,6 +15,7 @@ impl GibberishDetector {
         Self {
             threshold,
             min_word_length,
+            positive_cache: RefCell::new(WHITE_LIST_WORDS.iter().map(|s| s.to_string()).collect())
         }
     }
 
@@ -21,9 +24,14 @@ impl GibberishDetector {
         for word in words {
             let clean_word = WordNormalizer::normalize(&word, true);
             if clean_word.len() >= self.min_word_length {
+                if self.positive_cache.borrow().contains(&clean_word) {
+                    continue;
+                }
                 let score = self.calculate_score(&clean_word);
                 if score > self.threshold {
                     return true;
+                } else {
+                    self.positive_cache.borrow_mut().insert(clean_word);
                 }
             }
         }

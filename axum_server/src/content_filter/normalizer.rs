@@ -30,7 +30,6 @@ impl WordNormalizer {
         for (re, replacement) in LEET_SUBSTITUTIONS.iter() {
             normalized = re.replace_all(&normalized, *replacement).to_string();
         }
-        println!("normalized -> {}", normalized);
         normalized
     }
 
