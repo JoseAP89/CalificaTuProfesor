@@ -6,7 +6,6 @@ use phf::Set;
 
 use crate::content_filter::{
     normalizer::WordNormalizer,  // Fixed import path
-    matcher::WordMatcher,        // Fixed import path
     gibberish::GibberishDetector, // Fixed import path
     models::AnalysisResult,
 };
@@ -50,6 +49,7 @@ impl ContentFilter {
         let white_list = &WHITE_LIST_WORDS;
         let black_list = &self.vulgar_words;
         for word in words {
+            if word.len() < 3 { continue;}
             let normalized = WordNormalizer::normalize(word, false);
             // Check whitelist 
             if  ContentFilter::contains_plural_singular_spanish(white_list, &normalized) {
@@ -63,8 +63,8 @@ impl ContentFilter {
                 continue;
             }
             // if passed the previous tests, then check for more advanced patterns
-            for pattern in &self.vulgar_words {
-                if WordMatcher::is_match(&normalized, pattern) {
+            for bad_word in &self.vulgar_words {
+                if normalized.contains(bad_word) {
                     return true;
                 } 
             }

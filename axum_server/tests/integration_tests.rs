@@ -64,6 +64,14 @@ fn test_full_filter() -> Result<(), Box<dyn std::error::Error>> {
     let result = filter.analyze(text_word);
     assert!(result.vulgar_words_found, "Should detect vulgar words: {}", text_word);
 
+    let text_word = "esto es para xccputosxc engañar al algoritmo";
+    let result = filter.analyze(text_word);
+    assert!(result.vulgar_words_found, "Should detect vulgar words: {}", text_word);
+
+    let text_word = "esto es para xcc9ut0sxc engañar al algoritmo";
+    let result = filter.analyze(text_word);
+    assert!(result.vulgar_words_found, "Should detect vulgar words: {}", text_word);
+
     //  gibberish words test section
 
     let text_word = "kjhba test";
@@ -111,14 +119,14 @@ fn test_full_filter() -> Result<(), Box<dyn std::error::Error>> {
 
     let text_word = "apasionado";
     let result = filter.analyze(text_word);
-    assert!(!result.vulgar_words_found, "Should pass clean text: {}", text_word);
+    assert!(!result.is_inappropriate, "Should pass clean text: {}", text_word);
 
     let text_word = "la clase del profesor, a decir vdd, es bastante buena, se nota que el prof
     es muy apasionado con lo que hace y le mete corazon a todas sus lecciones, se sale un poco de tema pero
     tambien aprendemos de las cosas que dice, relaciona sus experiencias vividas con su trabajo y con eso 
     aprendemos mucho de cada palabra que sale de su boca, muy recomendado bandita.";
     let result = filter.analyze(text_word);
-    assert!(!result.vulgar_words_found, "Should pass clean text: {}", text_word);
+    assert!(!result.is_inappropriate, "Should pass clean text: {}", text_word);
 
     Ok(())
 }
