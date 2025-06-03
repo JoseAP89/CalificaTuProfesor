@@ -4,6 +4,7 @@ using back_csharp._data;
 using back_csharp._repos;
 using back_csharp._services;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http.Headers;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,7 +16,25 @@ builder.Services.AddDbContext<TeachersContext>(opt =>{
     opt.UseNpgsql(connString);
 });
 
+// Register the AxumService with typed HttpClient
+
 // DI SERVICES
+var axumUrl = builder.Configuration["Servers:Axum"];
+builder.Services.AddHttpClient<IAxumService, AxumService>(client =>
+{
+    try
+    {
+        client.BaseAddress = new Uri(axumUrl.Trim());
+        client.Timeout = TimeSpan.FromSeconds(30);
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
+    }
+    catch (UriFormatException ex)
+    {
+        throw new ApplicationException($"Invalid Axum URL format: '{axumUrl}'", ex);
+    }
+});
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllers()

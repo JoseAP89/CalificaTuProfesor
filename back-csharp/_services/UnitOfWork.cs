@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace back_csharp._services;
 
-public class UnitOfWork: IUnitOfWork
+public class UnitOfWork : IUnitOfWork
 {
     private readonly TeachersContext _context;
     private readonly IConfiguration _config;
@@ -19,12 +19,14 @@ public class UnitOfWork: IUnitOfWork
     private IScaleRepo _scale;
     private IRatingRepo _rating;
     private IVoteRepo _vote;
+    private IAxumService _axumService;
 
-    public UnitOfWork(TeachersContext context, IConfiguration config, IMapper mapper)
+    public UnitOfWork(TeachersContext context, IConfiguration config, IMapper mapper, IAxumService axum)
     {
         _context = context;
         _config = config;
         _mapper = mapper;
+        _axumService = axum;
     }
 
     public IUniversityRepo Universities => _universities ??= new UniversityRepo(_context, _config);
@@ -35,6 +37,7 @@ public class UnitOfWork: IUnitOfWork
     public IScaleRepo Scale => _scale ??= new ScaleRepo(_context, _config);
     public IRatingRepo Ratings => _rating ??= new RatingRepo(_context, _config, _mapper);
     public IVoteRepo Votes => _vote ??= new VoteRepo(_context, _config, _mapper);
+    public IAxumService AxumService => _axumService;
 
     public async Task Save()
     {

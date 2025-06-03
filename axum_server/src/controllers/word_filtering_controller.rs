@@ -9,7 +9,7 @@ use serde::{Serialize, Deserialize};
 use crate::AppState;
 
 #[derive(Serialize)]
-struct ApiResponse {
+struct AxumApiResponse {
     message: String,
     is_inappropiate: Option<bool>,
 }
@@ -24,7 +24,7 @@ pub fn router() -> Router<AppState> {
         .route("/api/filter", post(analyze_words))
 }
 
-async fn analyze_words(ExtractJson(payload): ExtractJson<FilterRequest>) -> Json<ApiResponse> {
+async fn analyze_words(ExtractJson(payload): ExtractJson<FilterRequest>) -> Json<AxumApiResponse> {
     // Here you would implement your actual filtering logic
     let filtered_words = payload.words.iter()
         .cloned()
@@ -45,7 +45,7 @@ async fn analyze_words(ExtractJson(payload): ExtractJson<FilterRequest>) -> Json
             break; 
         }
     }
-    Json(ApiResponse {
+    Json(AxumApiResponse {
         message: match is_inappropiate {
            true => format!("No podemos procesar la información porque uno o más campos contienen contenido inapropiado. Por favor, modifícalos para continuar. {}", motive).to_string(),
            _ => "Todos los mensajes son apropiados.".to_string() 

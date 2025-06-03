@@ -12,5 +12,6 @@ public interface IUnitOfWork
     IScaleRepo Scale { get; }
     IRatingRepo Ratings { get; }
     IVoteRepo Votes { get; }
+    IAxumService AxumService { get; }   
     Task Save();
 }
