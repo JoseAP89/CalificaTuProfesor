@@ -1,5 +1,4 @@
 use phf::Set;
-use std::collections::HashSet;
 
 use crate::content_filter::{
     normalizer::WordNormalizer,  // Fixed import path
@@ -39,14 +38,14 @@ impl ContentFilter {
         let white_list = &WHITE_LIST_WORDS;
         let black_list = &self.vulgar_words;
         for word in words {
-            let normalized = WordNormalizer::normalize(word);
-            // Check blacklist first
-            if self.contains_plural_singular_spanish(black_list, &normalized) {
-                return true;
-            }
+            let normalized = WordNormalizer::normalize(word, false);
             // Check whitelist 
             if  self.contains_plural_singular_spanish(white_list, &normalized) {
                 continue;
+            }
+            // Check blacklist
+            if self.contains_plural_singular_spanish(black_list, &normalized) {
+                return true;
             }
             // if passed the previous tests, then check for more advanced patterns
             for pattern in &self.vulgar_words {

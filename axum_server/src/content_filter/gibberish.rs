@@ -19,7 +19,7 @@ impl GibberishDetector {
     pub fn contains_gibberish(&self, text: &str) -> bool {
         let words = text.split_whitespace();
         for word in words {
-            let clean_word = WordNormalizer::normalize(&word);
+            let clean_word = WordNormalizer::normalize(&word, true);
             if clean_word.len() >= self.min_word_length {
                 let score = self.calculate_score(&clean_word);
                 if score > self.threshold {
@@ -139,12 +139,12 @@ impl GibberishDetector {
     }
 
     fn calculate_repeat_score(&self, word: &str) -> f64 {  // Changed return type to f64
-        let mut score: f64 = 0.0;  // Explicitly typed as f64
-        let mut prev_char = '\0';
+        let mut score: f64 = 0.0;
+        let mut prev_char = None;  // Use Option<char> to properly handle initialization
         let mut repeat_count = 0;
         
         for c in word.chars() {
-            if c == prev_char {
+            if Some(c) == prev_char {
                 repeat_count += 1;
                 if repeat_count >= 2 {
                     score += 0.3;
@@ -152,10 +152,10 @@ impl GibberishDetector {
             } else {
                 repeat_count = 0;
             }
-            prev_char = c;
+            prev_char = Some(c);
         }
         
-        score.min(1.0)  // Now the type is clear
+        score.min(1.0)
     }
 
     fn calculate_consonant_ratio(&self, word: &str, len: usize) -> f64 {
