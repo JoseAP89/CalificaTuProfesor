@@ -1,6 +1,5 @@
 use std::cell::RefCell;
 use std::collections::HashSet;
-use std::time::Instant;
 
 use phf::Set;
 
@@ -32,14 +31,8 @@ impl ContentFilter {
     }
 
     pub fn analyze(&self, text: &str) -> AnalysisResult {
-        let start = Instant::now();
         let vulgar_words_found = self.contains_vulgar_words(text);
-        let duration = start.elapsed();
-        println!("\n*** Vulgar Execution time: {:?}\n", duration);
-        let start = Instant::now();
         let gibberish_detected = self.gibberish_detector.contains_gibberish(text);
-        let duration = start.elapsed();
-        println!("\n*** Gibberish Execution time: {:?}\n", duration);
         
         AnalysisResult::new(vulgar_words_found, gibberish_detected)
     }

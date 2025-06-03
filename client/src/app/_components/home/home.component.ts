@@ -5,8 +5,6 @@ import { RankingTopTeacher, Vessel } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 import { RatingService } from 'src/app/_services/rating.service';
 import { RosterService } from 'src/app/_services/roster.service';
-import { SnackbarService } from 'src/app/_services/snackbar.service';
-import { WasmFilterService } from 'src/app/_services/wasmFilter.service';
 
 export enum TypeOfSearch {
   Profesor = 1,

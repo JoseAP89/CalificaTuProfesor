@@ -297,15 +297,9 @@ export class RosterComponent implements OnInit, AfterViewInit{
     ref.afterClosed().subscribe({
       next: res => {
         if (res!=null && res.content != comment.content) {
-          this.ratingService.editComment(res).subscribe({
-            next: _res => {
-              this.getComments();
-              this.snackbarService.showSuccessMessage("Comentario editado exitosamente.")
-            }, 
-            error: e => {
-              this.snackbarService.showErrorMessage(getHttpErrorMessage(e, "Hubo un error modificanto el comentario."))
-            }
-          })
+          setTimeout(() => {
+            this.getComments();
+          }, 100);
         } 
       }
     })

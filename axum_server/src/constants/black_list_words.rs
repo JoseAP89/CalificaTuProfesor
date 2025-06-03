@@ -307,5 +307,13 @@ pub const BLACK_LIST_WORDS: phf::Set<&'static str> = phf_set! {
     "verijudo",
     "versátil",
     "zorrazo",
-    "zángana"
+    "zángana",
+    "puteria",
+    "joteria",
+    "mariconeria",
+    "choteria",
+    "puñaleria",
+    "pendejada",
+    "idiotez",
+    "idiotes",
 };

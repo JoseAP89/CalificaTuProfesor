@@ -44,6 +44,18 @@ public class RatingController : ControllerBase
     {
         try
         {
+            var wordsToAnalyze = new List<string> {
+                commentDTO.Content,
+                commentDTO.SubjectName
+            };
+            var axumResponse = await _uow.AxumService.AnalyzeWordsAsync(new AxumFilterRequest
+            {
+                Words = wordsToAnalyze
+            });
+            if (axumResponse?.IsInappropiate ?? true)
+            {
+                return BadRequest(axumResponse?.Message ?? "Hubo un error analizando el contenido de las palabras.");
+            }
             var res = await _uow.Ratings.AddCommentAsync(commentDTO);
             if (res == null)
             {
@@ -79,6 +91,17 @@ public class RatingController : ControllerBase
     [HttpPatch("comment")]
     public async Task<ActionResult<CommentDTO>> EditCommentContent(CommentContentDTO commentDTO)
     {
+        var wordsToAnalyze = new List<string> {
+            commentDTO.Content
+        };
+        var axumResponse = await _uow.AxumService.AnalyzeWordsAsync(new AxumFilterRequest
+        {
+            Words = wordsToAnalyze
+        });
+        if (axumResponse?.IsInappropiate ?? true)
+        {
+            return BadRequest(axumResponse?.Message ?? "Hubo un error analizando el contenido de las palabras.");
+        }
         var res = await _uow.Ratings.EditCommentContentAsync(commentDTO);
         if (res == null)
         {

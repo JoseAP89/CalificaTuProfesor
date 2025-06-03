@@ -72,6 +72,20 @@ namespace back_csharp.Controllers
         {
             try
             {
+                var wordsToAnalyze = new List<string> {
+                    rosterDto.TeacherName,
+                    rosterDto.TeacherLastname1,
+                    rosterDto.TeacherLastname2,
+                    rosterDto.SubjectName ?? ""
+                };
+                var axumResponse = await _uow.AxumService.AnalyzeWordsAsync(new AxumFilterRequest
+                {
+                    Words = wordsToAnalyze
+                });
+                if (axumResponse?.IsInappropiate ?? true)
+                {
+                    return BadRequest(axumResponse?.Message ?? "Hubo un error analizando el contenido de las palabras.");
+                }
                 var roster = await _uow.Roster.AddRoster(rosterDto);
                 if (roster == null)
                 {

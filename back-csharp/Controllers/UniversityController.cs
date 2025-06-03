@@ -84,6 +84,15 @@ namespace back_csharp.Controllers
         {
             try
             {
+                var wordsToAnalyze = new List<string> {universitydto.Name};
+                var axumResponse = await _uow.AxumService.AnalyzeWordsAsync(new AxumFilterRequest
+                {
+                    Words = wordsToAnalyze
+                });
+                if (axumResponse?.IsInappropiate ?? true)
+                {
+                    return BadRequest(axumResponse?.Message ?? "Hubo un error analizando el contenido de las palabras.");
+                }
                 var university = await _uow.Universities.Add(universitydto);
                 await _uow.Universities.AddImage(universitydto);
                 await _uow.Save();
