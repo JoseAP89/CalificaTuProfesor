@@ -43,7 +43,7 @@
   <section class='comments-container'>
     <div class='comment-block' *ngFor="let comment of comments">
       <div class='teacher-logo-block'>
-        <mat-icon class="user-logo"> person_pin</mat-icon>
+        <mat-icon class="user-logo" [ngStyle]="{ 'color': isOwner(comment)? '#1a85f0':'' }"> person_pin</mat-icon>
       </div>
       <div class='info-block'>
         <div class='info-content'>
