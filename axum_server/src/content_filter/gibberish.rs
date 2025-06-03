@@ -3,6 +3,7 @@ use std::cell::RefCell;
 use std::collections::HashSet;
 use crate::content_filter::WordNormalizer;
 use crate::constants::{UNUSUAL_TRIGRAMS, UNUSUAL_CLUSTERS, COMMON_TRIGRAMS, WHITE_LIST_WORDS};
+use crate::ContentFilter;
 
 pub struct GibberishDetector {
     threshold: f64,  // Note we're using f64 here
@@ -15,7 +16,7 @@ impl GibberishDetector {
         Self {
             threshold,
             min_word_length,
-            positive_cache: RefCell::new(WHITE_LIST_WORDS.iter().map(|s| s.to_string()).collect())
+            positive_cache: RefCell::new(HashSet::new())
         }
     }
 
@@ -24,6 +25,9 @@ impl GibberishDetector {
         for word in words {
             let clean_word = WordNormalizer::normalize(&word, true);
             if clean_word.len() >= self.min_word_length {
+                if ContentFilter::contains_plural_singular_spanish(&WHITE_LIST_WORDS, &clean_word){
+                    continue;
+                }
                 if self.positive_cache.borrow().contains(&clean_word) {
                     continue;
                 }

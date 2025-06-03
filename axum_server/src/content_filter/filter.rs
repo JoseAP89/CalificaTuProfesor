@@ -40,11 +40,11 @@ impl ContentFilter {
         for word in words {
             let normalized = WordNormalizer::normalize(word, false);
             // Check whitelist 
-            if  self.contains_plural_singular_spanish(white_list, &normalized) {
+            if  ContentFilter::contains_plural_singular_spanish(white_list, &normalized) {
                 continue;
             }
             // Check blacklist
-            if self.contains_plural_singular_spanish(black_list, &normalized) {
+            if ContentFilter::contains_plural_singular_spanish(black_list, &normalized) {
                 return true;
             }
             // if passed the previous tests, then check for more advanced patterns
@@ -57,7 +57,7 @@ impl ContentFilter {
         false
     }
 
-    pub fn contains_plural_singular_spanish(&self, list: &Set<&'static str>, word: &str) -> bool {
+    pub fn contains_plural_singular_spanish(list: &Set<&'static str>, word: &str) -> bool {
         // Early return if exact match exists
         if list.contains(word) {
             return true;
