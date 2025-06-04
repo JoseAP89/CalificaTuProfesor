@@ -7,22 +7,26 @@ import { CampusComponent } from './_components/campus/campus.component';
 import { AboutUsComponent } from './_components/about-us/about-us.component';
 
 const routes: Routes = [
-  {path: '', component: HomeComponent},
-  {path: 'agregar', component: AddItemsComponent},
-  {path: 'maestro/:recordId', component: RosterComponent},
-  {path: 'campus/:recordId', component: CampusComponent},
-  {path: 'acerca-de-nosotros', component: AboutUsComponent},
-/*
   {
     path: '',
-    runGuardsAndResolvers: 'always',
-    canActivate: [AuthGuard],
-    children: [
-      {path: 'usuarios-sistema', component: UsuariosSistemaComponent},
-      {path: 'ciclos', component: CiclosComponent},
-    ]
+    loadChildren: () => import('./_components/home/home.module').then(m => m.HomeComponentModule)
   },
-  {path: '**', component: InicioComponent, pathMatch: 'full'} */
+  {
+    path: 'agregar',
+    loadChildren: () => import('./_components/add-items/add-items.module').then(m => m.AddItemsComponentModule)
+  },
+  {
+    path: 'maestro/:recordId',
+    loadChildren: () => import('./_components/roster/roster.module').then(m => m.RosterComponentModule)
+  },
+  {
+    path: 'campus/:recordId',
+    loadChildren: () => import('./_components/campus/campus.module').then(m => m.CampusComponentModule)
+  },
+  {
+    path: 'acerca-de-nosotros',
+    loadChildren: () => import('./_components/about-us/about-us.module').then(m => m.AboutUsComponentModule)
+  }
 ];
 
 @NgModule({

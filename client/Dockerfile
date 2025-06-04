@@ -1,12 +1,31 @@
-FROM node:20-alpine
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY . .
+# Copy package files first for better caching
+COPY package*.json ./
+COPY angular.json ./
+COPY tsconfig*.json ./
 
+# Install dependencies
 RUN npm install -g @angular/cli && \
     npm install
 
-EXPOSE 4200
+# Copy all source files
+COPY . .
 
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+# Build the Angular app in production mode
+RUN ng build --configuration production
+
+# Final stage - for serving the built files (optional)
+FROM nginx:alpine
+
+# Copy built assets from builder stage
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Copy nginx config (if you have custom one)
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+# Nginx starts automatically by the base image

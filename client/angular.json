@@ -37,6 +37,11 @@
           },
           "configurations": {
             "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -54,8 +59,7 @@
                   "maximumWarning": "6kb",
                   "maximumError": "10kb"
                 }
-              ],
-              "outputHashing": "all"
+              ]
             },
             "development": {
               "buildOptimizer": false,
