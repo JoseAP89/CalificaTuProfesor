@@ -8,7 +8,7 @@ namespace back_csharp._repos;
 
 public class UniversityAreaRepo: CommonRepo<UniversityArea>, IUniversityAreaRepo
 {
-    private readonly TeachersContext _context;
+    private new readonly TeachersContext _context;
 
     public UniversityAreaRepo(TeachersContext context, IConfiguration config) : base(context, config)
     {

@@ -47,7 +47,7 @@ public class VoteRepo: IVoteRepo
             {
                 userVote.Approval = vote.Approval;
             }
-            userVote.ModifiedAt = DateTime.Now;
+            userVote.ModifiedAt = DateTime.UtcNow;
             _context.Update(userVote);
         } 
         else

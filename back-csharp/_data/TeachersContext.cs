@@ -66,8 +66,10 @@ namespace back_csharp._data
                 entity.Property(e => e.StateId )
                     .HasColumnName("stateid");
                 entity.Property(e => e.CreatedAt )
+                    .HasColumnType("timestamptz")
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt )
+                    .HasColumnType("timestamptz")
                     .HasColumnName("modifiedat");
 
                 entity.HasIndex(e => new { e.Name, e.UniversityId, e.StateId }, "campus_name_university_id_state_id_key")
@@ -123,8 +125,10 @@ namespace back_csharp._data
                 entity.Property(e => e.UserId )
                     .HasColumnName("userid");
                 entity.Property(e => e.CreatedAt)
+                    .HasColumnType("timestamptz")
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt)
+                    .HasColumnType("timestamptz")
                     .HasColumnName("modifiedat");
 
                 entity.Property(e => e.SubjectName)
@@ -170,16 +174,12 @@ namespace back_csharp._data
                 entity.Property(e => e.Stars)
                     .HasColumnName("stars");
                 entity.Property(e => e.CreatedAt)
+                    .HasColumnType("timestamptz")
+                    .HasDefaultValueSql("now()")
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt)
+                    .HasColumnType("timestamptz")
                     .HasColumnName("modifiedat");
-
-                entity.Property(e => e.CreatedAt)
-                    .HasColumnType("timestamp without time zone")
-                    .HasDefaultValueSql("now()");
-
-                entity.Property(e => e.ModifiedAt)
-                    .HasColumnType("timestamp without time zone");
 
                 entity.Property(e => e.Stars)
                     .HasDefaultValueSql("0");
@@ -216,8 +216,10 @@ namespace back_csharp._data
                 entity.Property(e => e.TeacherLastname2)
                     .HasColumnName("teacherlastname2");
                 entity.Property(e => e.CreatedAt)
+                    .HasColumnType("timestamptz")
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt)
+                    .HasColumnType("timestamptz")
                     .HasColumnName("modifiedat");
 
                 entity.HasIndex(e => new { e.CampusId, e.TeacherName, e.TeacherLastname1, e.TeacherLastname2 }, "roster_campus_id_teacher_name_teacher_lastname12_key")
@@ -267,14 +269,14 @@ namespace back_csharp._data
                 entity.Property(e => e.ScaleId);
 
                 entity.Property(e => e.CreatedAt)
-                    .HasColumnType("timestamp without time zone")
+                    .HasColumnType("timestamptz")
                     .HasDefaultValueSql("now()");
 
                 entity.Property(e => e.Description)
                     .HasMaxLength(250);
 
                 entity.Property(e => e.ModifiedAt)
-                    .HasColumnType("timestamp without time zone");
+                    .HasColumnType("timestamptz");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(30);
@@ -290,8 +292,10 @@ namespace back_csharp._data
                 entity.Property(e => e.Name)
                     .HasColumnName("name");
                 entity.Property(e => e.CreatedAt)
+                    .HasColumnType("timestamptz")
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt)
+                    .HasColumnType("timestamptz")
                     .HasColumnName("modifiedat");
 
                 entity.Property(e => e.StateId);
@@ -319,8 +323,10 @@ namespace back_csharp._data
                 entity.Property(e => e.Code)
                     .HasColumnName("code");
                 entity.Property(e => e.CreatedAt)
+                    .HasColumnType("timestamptz")
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt)
+                    .HasColumnType("timestamptz")
                     .HasColumnName("modifiedat");
 
                 entity.Property(e => e.Code)
@@ -353,17 +359,15 @@ namespace back_csharp._data
                 entity.Property(e => e.UniversityAreaId)
                     .HasColumnName("universityareaid");
                 entity.Property(e => e.CreatedAt)
+                    .HasColumnType("timestamptz")
+                    .HasDefaultValueSql("now()")
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt)
+                    .HasColumnType("timestamptz")
                     .HasColumnName("modifiedat");
 
                 entity.Property(e => e.Code)
                     .HasMaxLength(4);
-                entity.Property(e => e.CreatedAt)
-                    .HasColumnType("timestamp without time zone")
-                    .HasDefaultValueSql("now()");
-                entity.Property(e => e.ModifiedAt)
-                    .HasColumnType("timestamp without time zone");
                 entity.Property(e => e.Name)
                     .HasMaxLength(300);
 
@@ -388,8 +392,10 @@ namespace back_csharp._data
                 entity.Property(e => e.Name)
                     .HasColumnName("name");
                 entity.Property(e => e.CreatedAt)
+                    .HasColumnType("timestamptz")
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt)
+                    .HasColumnType("timestamptz")
                     .HasColumnName("modifiedat");
 
                 entity.HasIndex(e => e.Name, "university_name_key")
@@ -420,18 +426,15 @@ namespace back_csharp._data
                 entity.Property(e => e.Approval)
                     .HasColumnName("approval");
                 entity.Property(e => e.CreatedAt)
+                    .HasColumnType("timestamptz")
+                    .HasDefaultValueSql("now()")
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt)
+                    .HasColumnType("timestamptz")
                     .HasColumnName("modifiedat");
 
                 entity.Property(e => e.Approval)
                     .IsRequired(false);
-                entity.Property(e => e.CreatedAt)
-                    .HasColumnType("timestamp without time zone")
-                    .HasDefaultValueSql("now()");
-
-                entity.Property(e => e.ModifiedAt)
-                    .HasColumnType("timestamp without time zone");
 
                 entity.HasOne(d => d.Comment)
                     .WithMany(p => p.Votes)
@@ -499,6 +502,7 @@ namespace back_csharp._data
                 entity.Property(e => e.UserId)
                     .HasColumnName("userid");
                 entity.Property(e => e.CreatedAt)
+                    .HasColumnType("timestamptz")
                     .HasColumnName("createdat");
 
                 entity.Property(e => e.NotificationId)

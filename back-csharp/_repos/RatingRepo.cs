@@ -67,7 +67,7 @@ public class RatingRepo: IRatingRepo
             // there is one comment already, business rule is to allow more comments for one user
             // for the same teacher/roster if and only if it has passed MIN_MONTHS_TO_COMMENT or more months since his
             // last comment.
-            double monthsPassed = DateTime.Now.Subtract(userComments.CreatedAt).Days / (365.2425 / 12.0);
+            double monthsPassed = DateTime.UtcNow.Subtract(userComments.CreatedAt).Days / (365.2425 / 12.0);
             if (monthsPassed < MIN_MONTHS_TO_COMMENT)
             {
                 return false;
@@ -114,7 +114,7 @@ public class RatingRepo: IRatingRepo
         var comment = await _context.Comments.FirstOrDefaultAsync( c => c.CommentId == commentDTO.CommentId) 
             ?? throw new ApiException("El comentatio no existe.");
         if (comment.Content == commentDTO.Content) throw new ApiException("El comentario no contiene cambios.");
-        comment.ModifiedAt = DateTime.Now;
+        comment.ModifiedAt = DateTime.UtcNow;
         comment.Content = commentDTO.Content;
         _context.Comments.Update(comment);
         await _context.SaveChangesAsync();
