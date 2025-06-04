@@ -4,8 +4,6 @@
 +   Notifications functionality (front, backend, and table) for reporting inappropiate comments
 +   Change Roster table name to Teacher, it is no longer a roster but a simple teacher table,
 	an all the modifications that that name change will entail
-++  Change compose.yaml to remove the jaavscript file executed post-start and serve the
-	rust server
 +	Add a diagram to show how the services interact with each other on the docker network.
 +++ Deploy in the web with an anctual DNS
 ++  Build a CI/CD pipeline, if possible
