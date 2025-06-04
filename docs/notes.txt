@@ -1,6 +1,5 @@
 **** Notes about the tasks to be done ****
 
-+	Delete RosterScale table
 +   Notifications functionality (front, backend, and table) for reporting inappropiate comments
 +   Change Roster table name to Teacher, it is no longer a roster but a simple teacher table,
 	an all the modifications that that name change will entail

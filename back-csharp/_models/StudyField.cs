@@ -11,8 +11,8 @@ public class StudyField
         public string Name { get; set; } = null!;
         public string Code { get; set; } = null!;
         public int UniversityAreaId { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime? ModifiedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? ModifiedAt { get; set; } = DateTime.UtcNow;
 
         public UniversityArea UniversityArea { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }

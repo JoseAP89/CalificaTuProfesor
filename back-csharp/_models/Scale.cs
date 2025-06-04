@@ -14,8 +14,8 @@ namespace back_csharp._models
         public string Code { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime? ModifiedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? ModifiedAt { get; set; } = DateTime.UtcNow;
 
         public virtual ICollection<Grade> Grades { get; set; }
     }

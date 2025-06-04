@@ -1,5 +1,5 @@
 -- dropping tables
-DROP TABLE IF EXISTS RosterScale;
+DROP TABLE IF EXISTS NotificationType;
 DROP TABLE IF EXISTS Grade;
 DROP TABLE IF EXISTS Scale;
 DROP TABLE IF EXISTS Vote;
@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS State;
 DROP TABLE IF EXISTS University;
 DROP TABLE IF EXISTS StudyField;
 DROP TABLE IF EXISTS UniversityArea;
+DROP TABLE IF EXISTS Notification;
 
 -- extentions
 CREATE EXTENSION IF NOT EXISTS unaccent;
@@ -20,8 +21,8 @@ CREATE TABLE UniversityArea (
     UniversityAreaId SERIAL PRIMARY KEY,
     Name VARCHAR(300) NOT NULL,
     Code VARCHAR(4) NOT NULL,
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP
+    CreatedAt TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    ModifiedAt TIMESTAMP WITH TIME ZONE
 );
 
 CREATE TABLE StudyField (
@@ -29,8 +30,8 @@ CREATE TABLE StudyField (
     Name VARCHAR(300) NOT NULL,
     Code VARCHAR(4) NOT NULL,
     UniversityAreaId int NOT NULL,
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP,
+    CreatedAt TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    ModifiedAt TIMESTAMP WITH TIME ZONE,
 	FOREIGN KEY (UniversityAreaId)
         REFERENCES UniversityArea (UniversityAreaId)
 );
@@ -38,16 +39,16 @@ CREATE TABLE StudyField (
 CREATE TABLE State (
     StateId SERIAL PRIMARY KEY,
     Name varchar(80),
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP
+    CreatedAt TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    ModifiedAt TIMESTAMP WITH TIME ZONE
 );
 
 CREATE TABLE University (
     UniversityId SERIAL PRIMARY KEY,
 	RecordId uuid DEFAULT gen_random_uuid(),
     Name varchar(250) NOT NULL UNIQUE,
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP
+    CreatedAt TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    ModifiedAt TIMESTAMP WITH TIME ZONE
 );
 
 CREATE TABLE Campus (
@@ -56,14 +57,16 @@ CREATE TABLE Campus (
     Name varchar(250) NOT NULL,
     UniversityId int NOT NULL,
     StateId int NOT NULL,
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP,
+    CreatedAt TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    ModifiedAt TIMESTAMP WITH TIME ZONE,
     UNIQUE(Name, UniversityId, StateId),
     FOREIGN KEY (UniversityId)
         REFERENCES University (UniversityId),
     FOREIGN KEY (StateId)
         REFERENCES State (StateId)
 );
+
+CREATE INDEX idx_campus_universityid ON Campus(UniversityId);
 
 CREATE TABLE Roster (
     RosterId SERIAL PRIMARY KEY,
@@ -72,12 +75,14 @@ CREATE TABLE Roster (
     TeacherName varchar(100),
     TeacherLastname1 varchar(100),
     TeacherLastname2 varchar(100),
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP,
+    CreatedAt TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    ModifiedAt TIMESTAMP WITH TIME ZONE,
     UNIQUE(CampusId, TeacherName, TeacherLastname1, TeacherLastname2),
     FOREIGN KEY (CampusId)
         REFERENCES Campus (CampusId)
 );
+
+CREATE INDEX idx_roster_campusid ON Roster(CampusId);
 
 CREATE TABLE Comment (
     CommentId SERIAL PRIMARY KEY,
@@ -87,32 +92,36 @@ CREATE TABLE Comment (
     SubjectName varchar(100),
     Content varchar(600) NOT NULL,
     UserId uuid not null,
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP,
+    CreatedAt TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    ModifiedAt TIMESTAMP WITH TIME ZONE,
     FOREIGN KEY (RosterId)
         REFERENCES Roster (RosterId),
     FOREIGN KEY (StudyFieldId)
         REFERENCES StudyField (StudyFieldId)
 );
 
+CREATE INDEX idx_comment_rosterid ON Comment(RosterId);
+
 CREATE TABLE Vote (
     VoteId SERIAL PRIMARY KEY,
     CommentId int NOT NULL,
     UserId uuid not null,
     Approval boolean NULL,
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP,
+    CreatedAt TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    ModifiedAt TIMESTAMP WITH TIME ZONE,
     FOREIGN KEY (CommentId)
         REFERENCES Comment (CommentId)
 );
+
+CREATE INDEX idx_vote_commentid ON Vote(CommentId);
 
 CREATE TABLE Scale (
     ScaleId SERIAL PRIMARY KEY,
     Code varchar(3) UNIQUE,
     Name varchar(30) UNIQUE,
     Description varchar(250),
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP
+    CreatedAt TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    ModifiedAt TIMESTAMP WITH TIME ZONE
 );
 
 CREATE TABLE Grade (
@@ -120,26 +129,45 @@ CREATE TABLE Grade (
     ScaleId int NOT NULL,
     CommentId int NOT NULL,
     Stars float(1) DEFAULT 0 CHECK (Stars between 0.0 and 5.0),
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP,
+    CreatedAt TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    ModifiedAt TIMESTAMP WITH TIME ZONE,
     FOREIGN KEY (ScaleId)
         REFERENCES Scale (ScaleId),
     FOREIGN KEY (CommentId)
         REFERENCES Comment (CommentId)
 );
 
-CREATE TABLE RosterScale (
-    RosterScaleId SERIAL PRIMARY KEY,
-    RosterId int NOT NULL,
-    ScaleId int NOT NULL,
-    Grade float(4) DEFAULT 0 CHECK (Grade between 0 and 5),
-    CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-    ModifiedAt TIMESTAMP,
-    FOREIGN KEY (RosterId)
-        REFERENCES Roster (RosterId),
-    FOREIGN KEY (ScaleId)
-        REFERENCES Scale (ScaleId)
+CREATE INDEX idx_grade_commentid ON Grade(CommentId);
+
+CREATE TABLE NotificationType (
+    Notificationtypeid SERIAL PRIMARY KEY,
+    Code VARCHAR(3) UNIQUE,
+    Name VARCHAR(100) NOT NULL
+    Description VARCHAR(200) NOT NULL
 );
+
+CREATE TABLE Notification (
+    Notificationid SERIAL PRIMARY KEY,
+    Commentid INTEGER,
+    Notificationtypeid INTEGER NOT NULL,
+    Message VARCHAR(300),
+    Userid UUID DEFAULT gen_random_uuid(),
+    Createdat TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    UNIQUE(CommentId, UserId),
+    CONSTRAINT fk_notificationtype
+        FOREIGN KEY (NotificationTypeid) 
+        REFERENCES Notificationtype(Notificationtypeid)
+);
+
+CREATE INDEX idx_notification_notificationtypeid ON Notification(NotificationTypeid);
+
+-- filling notifycationtype table
+
+INSERT INTO NotificationType (Name, Code, Description) VALUES
+  ('Vulgar','V', 'Contiene palabras ofensivas y/o consideradas inapropiadas'),
+  ('Sin sentido','SS', 'Contiene texto sin sentido lógico alguno'),
+  ('Inexacto','I', 'Contiene texto que es considerado como falso, inexacto o simplemente mentiras')
+;
 
 -- filling university area table
 

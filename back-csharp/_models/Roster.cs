@@ -16,8 +16,8 @@ namespace back_csharp._models
         public string TeacherName { get; set; }
         public string TeacherLastname1 { get; set; }
         public string TeacherLastname2 { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime? ModifiedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? ModifiedAt { get; set; } = DateTime.UtcNow;
 
         public virtual Campus Campus { get; set; } = null!;
         public virtual ICollection<Comment> Comments { get; set; }

@@ -9,8 +9,8 @@ namespace back_csharp._models
         public int CommentId { get; set; }
         public Guid UserId { get; set; }
         public bool? Approval { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime? ModifiedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? ModifiedAt { get; set; } = DateTime.UtcNow;
 
         public virtual Comment Comment { get; set; } = null!;
     }

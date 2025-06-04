@@ -30,6 +30,8 @@ namespace back_csharp._data
         public virtual DbSet<StudyField> StudyFields { get; set; } = null!;
         public virtual DbSet<University> Universities { get; set; } = null!;
         public virtual DbSet<Vote> Votes { get; set; } = null!;
+        public virtual DbSet<NotificationType> NotificationTypes { get; set; } = null!;
+        public virtual DbSet<Notification> Notifications { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder opt)
         {
@@ -435,6 +437,70 @@ namespace back_csharp._data
                     .WithMany(p => p.Votes)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("vote_comment_id_fkey");
+            });
+
+            // NotificationType 
+            modelBuilder.Entity<NotificationType>(entity =>
+            {
+                entity.ToTable("notificationtype");
+
+                entity.HasKey(e => e.NotificationTypeId)
+                      .HasName("pk_notificationtype");
+
+                entity.Property(e => e.NotificationTypeId)
+                      .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Name)
+                      .IsRequired()
+                      .HasMaxLength(100);
+
+                entity.Property(e => e.Code)
+                      .HasMaxLength(3);
+
+                entity.HasIndex(e => e.Code)
+                      .IsUnique()
+                      .HasDatabaseName("ix_notificationtype_code");
+
+                entity.Property(e => e.Description)
+                      .HasMaxLength(500);
+
+                entity.HasMany(e => e.Notifications)
+                      .WithOne(e => e.NotificationType)
+                      .HasForeignKey(e => e.NotificationTypeId)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasConstraintName("fk_notification_notificationtype");
+            });
+
+            // Notification Configuration
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.ToTable("notification");
+
+                entity.HasKey(e => e.NotificationId)
+                      .HasName("pk_notification");
+
+                entity.Property(e => e.NotificationId)
+                      .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.CommentId)
+                      .IsRequired();
+
+                entity.Property(e => e.Message)
+                      .IsRequired()
+                      .HasMaxLength(300);
+
+                entity.Property(e => e.UserId)
+                      .IsRequired()
+                      .HasDefaultValueSql("gen_random_uuid()");
+
+                entity.Property(e => e.CreatedAt)
+                      .IsRequired()
+                      .HasDefaultValueSql("NOW()");
+
+                // Composite unique index
+                entity.HasIndex(e => new { e.CommentId, e.UserId })
+                      .IsUnique()
+                      .HasDatabaseName("ix_notification_commentid_userid");
             });
 
 
