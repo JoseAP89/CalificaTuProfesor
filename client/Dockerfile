@@ -15,13 +15,13 @@ RUN npm install -g @angular/cli && \
 COPY . .
 
 # Build the Angular app in production mode
-RUN ng build --configuration production
+RUN npm run build -- --configuration production
 
 # Final stage - for serving the built files (optional)
 FROM nginx:alpine
 
 # Copy built assets from builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/dist/client /usr/share/nginx/html
 
 # Copy nginx config (if you have custom one)
 # COPY nginx.conf /etc/nginx/conf.d/default.conf

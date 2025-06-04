@@ -3,6 +3,9 @@ name = "axum_server"
 version = "0.1.0"
 edition = "2024"
 
+[[bin]]
+name = "axum_server"
+
 [dependencies]
 axum = "0.8.4"
 regex = "1.0"
