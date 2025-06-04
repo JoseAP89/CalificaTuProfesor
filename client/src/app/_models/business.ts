@@ -209,3 +209,28 @@ export interface RankingTopTeacher extends CampusTeacherList {
   campusRecordId?: string;
   rosterRecordId?: string;
 }
+
+export interface NotificationDTO {
+  notificationId: number;
+  commentId: number;
+  notificationTypeId: number;
+  message: string;
+  userId: string;
+}
+
+export interface NotificationTypeDTO {
+    notificationTypeId: number;
+    name: string;
+    code: string;
+    description: string;
+}
+
+export interface NewNotificationDTO {
+    notificationId: number;
+    commentId: number;
+    notificationTypeId: number;
+    message: string;
+    userId: string;
+}
+
+
