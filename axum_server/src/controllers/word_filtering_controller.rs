@@ -21,7 +21,7 @@ struct FilterRequest {
 
 pub fn router() -> Router<AppState> {
     Router::new()
-        .route("/api/filter", post(analyze_words))
+        .route("/axum/filter", post(analyze_words))
 }
 
 async fn analyze_words(ExtractJson(payload): ExtractJson<FilterRequest>) -> Json<AxumApiResponse> {

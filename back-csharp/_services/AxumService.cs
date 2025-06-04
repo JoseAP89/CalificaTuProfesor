@@ -22,7 +22,7 @@ public class AxumService : IAxumService
         {
             throw new ApiException("La solicitud de filtrado no puede estar vacia.");
         }
-        var response = await _httpClient.PostAsJsonAsync("/api/filter", request);
+        var response = await _httpClient.PostAsJsonAsync("/axum/filter", request);
         response.EnsureSuccessStatusCode();
 
         return await response?.Content?.ReadFromJsonAsync<AxumApiResponse>() ??
