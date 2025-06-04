@@ -9,3 +9,5 @@
 ++  Build a CI/CD pipeline, if possible
 .	Only thing remaining is over time add words to the black_word_list and the white_word_list,
 	thus, it would be an always active task (ALWAYS ACTIVE)
+	
+	170.857MiB in total of MEM USAGE
