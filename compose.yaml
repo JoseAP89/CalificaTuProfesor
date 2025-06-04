@@ -17,8 +17,6 @@ services:
             - ./client/node_modules
         - action: rebuild
           path: ./client/package.json
-    depends_on:
-      - proxyserver-service
     networks:
       - app_network
 
@@ -84,16 +82,17 @@ services:
       - APP_NAME=proxyserver-app
     depends_on:
       - backend-service
-      - client-service
       - axum-server
     volumes:
-      - ./client/dist:/usr/share/nginx/html:ro
+      - client-service:/usr/share/nginx/html:ro
       - ./proxyserver/nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
       - app_network
 
 volumes:
   postgres_data:
+  client-service:
+    external: false
 
 networks:
   app_network:
