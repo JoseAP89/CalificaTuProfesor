@@ -34,6 +34,7 @@ services:
       - APP_NAME=backend-app
       - ASPNETCORE_ENVIRONMENT=PRODUCTION
       - ConnectionStrings__TeachersDB=Host=postgres-db;Database=teachers;Username=joseap;Password=J1o2s3e4
+      - Servers__Axum=http://axum-server:3000
     depends_on:
       - postgres-db
     develop:
