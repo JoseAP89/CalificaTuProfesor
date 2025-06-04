@@ -165,8 +165,8 @@ CREATE INDEX idx_notification_notificationtypeid ON Notification(NotificationTyp
 
 INSERT INTO NotificationType (Name, Code, Description) VALUES
   ('Vulgar','V', 'Contiene palabras ofensivas y/o consideradas inapropiadas'),
-  ('Sin sentido','SS', 'Contiene texto sin sentido lógico alguno'),
-  ('Inexacto','I', 'Contiene texto que es considerado como falso, inexacto o simplemente mentiras')
+  ('Absurda','SS', 'No tiene un significado lógico o comprensible'),
+  ('Calumnia','C', 'Acusación falsa, hecha maliciosamente para causar daño')
 ;
 
 -- filling university area table

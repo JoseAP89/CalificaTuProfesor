@@ -28,4 +28,21 @@ public class AxumService : IAxumService
         return await response?.Content?.ReadFromJsonAsync<AxumApiResponse>() ??
             throw new InvalidOperationException("Error en deserializar la respuesta.");
     }
+
+    public async Task<AxumApiResponse> AnalyzeWordsAsync(params string[] words)
+    {
+        if (words == null || words.Length == 0)
+        {
+            throw new ApiException("La solicitud de filtrado no puede estar vacia.");
+        }
+        var request = new AxumFilterRequest
+        {
+            Words = words.ToList()
+        };
+        var response = await _httpClient.PostAsJsonAsync("/axum/filter", request);
+        response.EnsureSuccessStatusCode();
+
+        return await response?.Content?.ReadFromJsonAsync<AxumApiResponse>() ??
+            throw new InvalidOperationException("Error en deserializar la respuesta.");
+    }
 }

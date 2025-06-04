@@ -3,6 +3,7 @@ using back_csharp._contracts;
 using back_csharp._dtos;
 using back_csharp._enums;
 using back_csharp._models;
+using back_csharp.Middleware.models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

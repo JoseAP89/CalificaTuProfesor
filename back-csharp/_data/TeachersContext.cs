@@ -450,6 +450,15 @@ namespace back_csharp._data
                 entity.Property(e => e.NotificationTypeId)
                       .ValueGeneratedOnAdd();
 
+                entity.Property(e => e.NotificationTypeId)
+                    .HasColumnName("notificationtypeid");
+                entity.Property(e => e.Name)
+                    .HasColumnName("name");
+                entity.Property(e => e.Code)
+                    .HasColumnName("code");
+                entity.Property(e => e.Description)
+                    .HasColumnName("description");
+
                 entity.Property(e => e.Name)
                       .IsRequired()
                       .HasMaxLength(100);
@@ -478,6 +487,19 @@ namespace back_csharp._data
 
                 entity.HasKey(e => e.NotificationId)
                       .HasName("pk_notification");
+
+                entity.Property(e => e.NotificationId)
+                    .HasColumnName("notificationid");
+                entity.Property(e => e.CommentId)
+                    .HasColumnName("commentid");
+                entity.Property(e => e.NotificationTypeId)
+                    .HasColumnName("notificationtypeid");
+                entity.Property(e => e.Message)
+                    .HasColumnName("message");
+                entity.Property(e => e.UserId)
+                    .HasColumnName("userid");
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnName("createdat");
 
                 entity.Property(e => e.NotificationId)
                       .ValueGeneratedOnAdd();

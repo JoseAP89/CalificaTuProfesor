@@ -19,6 +19,7 @@ public class UnitOfWork : IUnitOfWork
     private IScaleRepo _scale;
     private IRatingRepo _rating;
     private IVoteRepo _vote;
+    private INotificationRepo _notification;
     private IAxumService _axumService;
 
     public UnitOfWork(TeachersContext context, IConfiguration config, IMapper mapper, IAxumService axum)
@@ -37,6 +38,7 @@ public class UnitOfWork : IUnitOfWork
     public IScaleRepo Scale => _scale ??= new ScaleRepo(_context, _config);
     public IRatingRepo Ratings => _rating ??= new RatingRepo(_context, _config, _mapper);
     public IVoteRepo Votes => _vote ??= new VoteRepo(_context, _config, _mapper);
+    public INotificationRepo Notifications => _notification ??= new NotificationRepo(_context);
     public IAxumService AxumService => _axumService;
 
     public async Task Save()

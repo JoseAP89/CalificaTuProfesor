@@ -13,5 +13,6 @@ public interface IUnitOfWork
     IRatingRepo Ratings { get; }
     IVoteRepo Votes { get; }
     IAxumService AxumService { get; }   
+    INotificationRepo Notifications { get; }   
     Task Save();
 }
