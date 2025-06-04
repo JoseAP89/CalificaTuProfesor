@@ -8,7 +8,6 @@ namespace back_csharp._models
         public Roster()
         {
             Comments = new List<Comment>();
-            RosterScales = new List<RosterScale>();
         }
 
         public int RosterId { get; set; }
@@ -22,6 +21,5 @@ namespace back_csharp._models
 
         public virtual Campus Campus { get; set; } = null!;
         public virtual ICollection<Comment> Comments { get; set; }
-        public virtual ICollection<RosterScale> RosterScales { get; set; }
     }
 }

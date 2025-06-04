@@ -30,7 +30,6 @@ namespace back_csharp._data
         public virtual DbSet<StudyField> StudyFields { get; set; } = null!;
         public virtual DbSet<University> Universities { get; set; } = null!;
         public virtual DbSet<Vote> Votes { get; set; } = null!;
-        public virtual DbSet<RosterScale> RosterScales { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder opt)
         {
@@ -438,46 +437,6 @@ namespace back_csharp._data
                     .HasConstraintName("vote_comment_id_fkey");
             });
 
-            // ROSTER_SCALE
-            modelBuilder.Entity<RosterScale>(entity =>
-            {
-                entity.ToTable("rosterscale");
-
-                entity.Property(e => e.RosterScaleId)
-                    .HasColumnName("rosterscaleid");
-                entity.Property(e => e.RosterId)
-                    .HasColumnName("rosterid");
-                entity.Property(e => e.ScaleId)
-                    .HasColumnName("scaleid");
-                entity.Property(e => e.Grade)
-                    .HasColumnName("grade");
-                entity.Property(e => e.CreatedAt)
-                    .HasColumnName("createdat");
-                entity.Property(e => e.ModifiedAt)
-                    .HasColumnName("modifiedat");
-
-                entity.Property(e => e.CreatedAt)
-                    .HasColumnType("timestamp without time zone")
-                    .HasDefaultValueSql("now()");
-
-                entity.Property(e => e.ModifiedAt)
-                    .HasColumnType("timestamp without time zone");
-
-                entity.Property(e => e.Grade)
-                    .HasDefaultValueSql("0");
-
-                entity.HasOne(d => d.Roster)
-                    .WithMany(p => p.RosterScales)
-                    .HasForeignKey(d => d.RosterId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("rosterscale_roster_id_fkey");
-
-                entity.HasOne(d => d.Scale)
-                    .WithMany(p => p.RosterScales)
-                    .HasForeignKey(d => d.ScaleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("rosterscale_scale_id_fkey");
-            });
 
             OnModelCreatingPartial(modelBuilder);
         }
