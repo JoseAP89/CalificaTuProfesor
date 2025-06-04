@@ -51,7 +51,11 @@ const string POLICY = "AllowAll";
 builder.Services.AddCors(opt => {
     opt.AddPolicy(POLICY,
         policy => policy
-            .WithOrigins("http://localhost:3000", "http://localhost:4200")
+            .WithOrigins(
+                "http://localhost:3000", // axum server
+                "http://localhost:4200", // angular dev server
+                "http://localhost:8080" // nginx
+            )
             .AllowAnyHeader()
             .AllowAnyMethod()
     );

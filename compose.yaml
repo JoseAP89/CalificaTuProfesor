@@ -4,6 +4,8 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile
+      args:
+        - NODE_ENV=production
     environment:
       - APP_NAME=client-service
       - PRODUCTION=true
