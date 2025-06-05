@@ -1,6 +1,6 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, debounceTime, delay, fromEvent, map, of } from 'rxjs';
+import { Observable, debounceTime, delay, finalize, fromEvent, map, of } from 'rxjs';
 import { RankingTopTeacher, Vessel } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 import { RatingService } from 'src/app/_services/rating.service';
@@ -47,14 +47,19 @@ export class HomeComponent implements OnInit {
     ).subscribe( (event: any) => {
       this.onSearch(event);
     });
-    this.ratingService.getRankingTopTeacherList(10, 0, null, true).subscribe({
-      next: res => {
-        this.rankTeacherList = res.data;
-        setTimeout(() => {
-          this.updateStylingTeacherRankList();  
-        });
-      }
-    }) ;
+    this.ratingService.getRankingTopTeacherList(10, 0, null, true)
+      .pipe(
+        finalize( ()=> {
+          setTimeout(() => {
+            this.updateStylingTeacherRankList();  
+          });
+        })
+      )
+      .subscribe({
+        next: res => {
+          this.rankTeacherList = res.data;
+        }
+      }) ;
   }
 
 
@@ -100,7 +105,6 @@ export class HomeComponent implements OnInit {
   }
 
   onSubmit(){
-
     if (this.selectedOption?.id!=null && this.selectedOption.id != 0 && this.typeOfSearch == TypeOfSearch.Profesor) {
       this.router.navigate([`/maestro/${this.selectedOption.signature}`]);
     } else if (this.selectedOption?.id!=null && this.selectedOption.id != 0 && this.typeOfSearch == TypeOfSearch.Campus) {
@@ -109,7 +113,7 @@ export class HomeComponent implements OnInit {
   }
 
   updateStylingTeacherRankList(){
-    const rankingContainer = document.querySelector(".campus-main-grid");
+    const rankingContainer = document.querySelector(".home-main-tile");
     if (rankingContainer) {
       const gridTemplateColumns = this.rankTeacherList && this.rankTeacherList.length > 0 ?
         '2fr 1fr':

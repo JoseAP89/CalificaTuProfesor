@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
+import { finalize } from 'rxjs';
 import { Campus, CampusTeacherList, RankingTopTeacher } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 import { RatingService } from 'src/app/_services/rating.service';
@@ -38,12 +39,17 @@ export class CampusComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.campusRecordId = this.route.snapshot.paramMap.get('recordId') ?? "";
     this.getTeacherList();
-    this.ratingService.getRankingTopTeacherList(10, 0, this.campusRecordId, true).subscribe({
+    this.ratingService.getRankingTopTeacherList(10, 0, this.campusRecordId, true)
+      .pipe(
+        finalize( ()=> {
+          setTimeout(() => {
+            this.updateStylingTeacherRankList();  
+          });
+        })
+      )
+    .subscribe({
       next: res => {
         this.rankTeacherList = res.data;
-        setTimeout(() => {
-          this.updateStylingTeacherRankList();  
-        });
       }
     }) ;
     this.campusService.getCampusByRecordId(this.campusRecordId).subscribe({

@@ -67,6 +67,7 @@ namespace back_csharp._data
                     .HasColumnName("stateid");
                 entity.Property(e => e.CreatedAt )
                     .HasColumnType("timestamptz")
+                    .HasDefaultValueSql("now()")
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt )
                     .HasColumnType("timestamptz")
@@ -74,14 +75,6 @@ namespace back_csharp._data
 
                 entity.HasIndex(e => new { e.Name, e.UniversityId, e.StateId }, "campus_name_university_id_state_id_key")
                     .IsUnique();
-
-
-                entity.Property(e => e.CreatedAt)
-                    .HasColumnType("timestamp without time zone")
-                    .HasDefaultValueSql("now()");
-
-                entity.Property(e => e.ModifiedAt)
-                    .HasColumnType("timestamp without time zone");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(250)
@@ -211,6 +204,7 @@ namespace back_csharp._data
                     .HasColumnName("teacherlastname2");
                 entity.Property(e => e.CreatedAt)
                     .HasColumnType("timestamptz")
+                    .HasDefaultValueSql("now()")
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt)
                     .HasColumnType("timestamptz")
@@ -218,13 +212,6 @@ namespace back_csharp._data
 
                 entity.HasIndex(e => new { e.CampusId, e.TeacherName, e.TeacherLastname1, e.TeacherLastname2 }, "roster_campus_id_teacher_name_teacher_lastname12_key")
                     .IsUnique();
-
-                entity.Property(e => e.CreatedAt)
-                    .HasColumnType("timestamp without time zone")
-                    .HasDefaultValueSql("now()");
-
-                entity.Property(e => e.ModifiedAt)
-                    .HasColumnType("timestamp without time zone");
 
                 entity.Property(e => e.TeacherLastname1)
                     .HasMaxLength(100);
@@ -256,21 +243,15 @@ namespace back_csharp._data
                 entity.Property(e => e.Description)
                     .HasColumnName("description");
                 entity.Property(e => e.CreatedAt)
+                    .HasColumnType("timestamptz")
+                    .HasDefaultValueSql("now()")
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt)
-                    .HasColumnName("modifiedat");
-
-                entity.Property(e => e.ScaleId);
-
-                entity.Property(e => e.CreatedAt)
                     .HasColumnType("timestamptz")
-                    .HasDefaultValueSql("now()");
+                    .HasColumnName("modifiedat");
 
                 entity.Property(e => e.Description)
                     .HasMaxLength(250);
-
-                entity.Property(e => e.ModifiedAt)
-                    .HasColumnType("timestamptz");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(30);
@@ -291,15 +272,6 @@ namespace back_csharp._data
                 entity.Property(e => e.ModifiedAt)
                     .HasColumnType("timestamptz")
                     .HasColumnName("modifiedat");
-
-                entity.Property(e => e.StateId);
-
-                entity.Property(e => e.CreatedAt)
-                    .HasColumnType("timestamp without time zone")
-                    .HasDefaultValueSql("now()");
-
-                entity.Property(e => e.ModifiedAt)
-                    .HasColumnType("timestamp without time zone");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(80);
@@ -387,6 +359,7 @@ namespace back_csharp._data
                     .HasColumnName("name");
                 entity.Property(e => e.CreatedAt)
                     .HasColumnType("timestamptz")
+                    .HasDefaultValueSql("now()")
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt)
                     .HasColumnType("timestamptz")
@@ -394,13 +367,6 @@ namespace back_csharp._data
 
                 entity.HasIndex(e => e.Name, "university_name_key")
                     .IsUnique();
-
-                entity.Property(e => e.CreatedAt)
-                    .HasColumnType("timestamp without time zone")
-                    .HasDefaultValueSql("now()");
-
-                entity.Property(e => e.ModifiedAt)
-                    .HasColumnType("timestamp without time zone");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(250);

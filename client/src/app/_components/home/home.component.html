@@ -42,12 +42,10 @@
         </div>
       </div>
     </div>
-    <div class="home-right-tile">
-      <ng-container *ngIf="rankTeacherList && rankTeacherList.length > 0">
-        <app-top-ranking-list [title]="'Top 10 Ranking'" [rankTeacherList]="rankTeacherList"
-          [showCampusName]="true">
-        </app-top-ranking-list>
-      </ng-container>
+    <div class="home-right-tile" *ngIf="rankTeacherList && rankTeacherList.length > 0">
+      <app-top-ranking-list [title]="'Top 10 Ranking'" [rankTeacherList]="rankTeacherList"
+        [showCampusName]="true">
+      </app-top-ranking-list>
     </div>
   
   </div>
