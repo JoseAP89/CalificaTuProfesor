@@ -10,15 +10,6 @@ services:
       - APP_NAME=client-service
       - PRODUCTION=true
       - API_URL=http://localhost
-    develop:
-      watch: 
-        - action: sync
-          path: ./client  
-          target: /app
-          ignore: 
-            - ./client/node_modules
-        - action: rebuild
-          path: ./client/package.json
     networks:
       - app_network
 
@@ -37,13 +28,6 @@ services:
       - Servers__Axum=http://axum-server:3000
     depends_on:
       - postgres-db
-    develop:
-      watch: 
-        - action: rebuild
-          path: ./back-csharp
-          target: /app
-        - action: rebuild
-          path: ./back-csharp/back-csharp.csproj
     networks:
       - app_network
 
