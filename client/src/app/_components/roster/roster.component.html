@@ -8,7 +8,7 @@
       <div class='title-box'>DATOS GLOBALES</div>
       <div class='label-brief'>Calificación General</div>
       <div class="global-avg-grade">
-        <app-star [averageGrade]="globalAverageGrade" [fontSize]="70"></app-star>
+        <app-star [averageGrade]="globalAverageGrade" [fontSize]="averageGradeStarSize"></app-star>
       </div>
       <div class='label-brief'>Puntuación total</div>
       <div class='content-brief'>{{rosterRating?.averageGrade ?? 0}}</div>
@@ -29,7 +29,7 @@
   </section>
 
   <section class="score-box">
-    <button mat-raised-button color="accent" [disabled]="!canComment" (click)="openRateTeacherDialog()">Calificar al Maestro</button>
+    <button class="grade-teacher-btn" mat-raised-button color="accent" [disabled]="!canComment" (click)="openRateTeacherDialog()">Calificar al Maestro</button>
     <ng-container *ngIf="!canComment">
       <app-alert-message [type]="1" [title]="'Notificación'">
         Ya has comentado al maestro en un periodo menor a 3 meses. Gracias por tu participación. 
@@ -48,8 +48,15 @@
       <div class='info-block'>
         <div class='info-content'>
           <div class='info-item'>
-            <div><span class='info-title'>Materia:</span> {{comment.subjectName | uppercase}}</div>
-            <div class="extra-info"><span>{{comment.studyField.universityArea.name| titlecase}}</span><span class=''> &#10095; {{comment.studyField.name | titlecase}}</span></div>
+            <div class="info-header">
+              <span class='info-title'>Materia:</span> <span>{{comment.subjectName | uppercase}}</span>
+            </div>
+            <div class="extra-info">
+              <span>
+                {{comment.studyField.universityArea.name| titlecase}}
+              </span>
+              <span class=''> &#10095; {{comment.studyField.name | titlecase}}</span>
+            </div>
             <div class="individual-score">
               <app-star [averageGrade]="getAverageCommentGrade(comment)"></app-star>
             </div>

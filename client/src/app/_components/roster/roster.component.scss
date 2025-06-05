@@ -1,7 +1,13 @@
 @use "sass:list";
+
+:root {
+  --dynamic-star-font-size: 70;
+}
+
+
 .roster-info-box {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   gap: 10px;
 
@@ -27,7 +33,6 @@
   }
 
   .box-info {
-    width: auto;
     margin-top: 20px;
     padding: 14px;
     font-size: 1.3rem;
@@ -67,39 +72,6 @@
   .paginator-item {
     margin-top: 20px;
     font-size: 1.1rem;
-  }
-}
-
-@media (max-width: 690px) {
-  .box-info{
-    .average-grade.average-grade.average-grade {
-      $starSize : 70px;
-      font-size: $starSize;
-      line-height: $starSize;
-    }
-  }
-}
-@media (max-width: 1840px) {
-  .roster-info-box {
-    grid-template-columns: 1fr;
-  }
-}
-@media (max-width: 995px) {
-  .box-info {
-    .skills-box {
-      display: grid;
-      grid-template-columns: 1fr 1fr !important;
-      gap: 0;
-    }
-  }
-}
-@media (max-width: 480px) {
-  .box-info {
-    .skills-box {
-      display: grid;
-      grid-template-columns: 1fr !important;
-      gap: 0;
-    }
   }
 }
 
@@ -230,5 +202,82 @@
         color: #116b15;
       }
     }
+  }
+}
+
+@media (max-width: 690px) {
+  .box-info{
+    .average-grade.average-grade.average-grade {
+      $starSize : 70px;
+      font-size: $starSize;
+      line-height: $starSize;
+    }
+  }
+}
+@media (max-width: 1840px) {
+  .roster-info-box {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 995px) {
+  .box-info {
+    .skills-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 0;
+    }
+  }
+}
+@media (max-width: 750px) {
+  .comments-container {
+    .comment-block {
+      .user-logo {
+        font-size: 30px !important;
+      }
+      .text-block, .extra-info span, .info-header span {
+        font-size: 0.95rem;
+      }
+      .created-at {
+        margin-left: 6px;
+        font-size: 1.0rem;
+      }
+    }
+  }
+}
+@media (max-width: 480px) {
+  .roster-info-box .box-info .content-brief {
+      font-size: 1.1rem ;
+  }
+  .score-box .grade-teacher-btn {
+    font-size: 1.2rem;
+  }
+  .box-info {
+    .skills-box {
+      display: grid;
+      grid-template-columns: 1fr !important;
+      gap: 0;
+    }
+  }
+  .comments-container {
+    .comment-block {
+      .user-logo {
+        font-size: 20px !important;
+      }
+      .text-block, .extra-info span, .info-header span {
+        font-size: 0.75rem;
+      }
+      .created-at {
+        margin-left: 6px;
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+@media (max-width: 380px) {
+  .roster-info-box .box-info .content-brief {
+      font-size: 0.9rem;
+  }
+  .score-box .grade-teacher-btn {
+    font-size: 0.9rem;
   }
 }

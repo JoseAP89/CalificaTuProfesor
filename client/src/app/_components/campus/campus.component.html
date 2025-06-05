@@ -6,7 +6,7 @@
 <!-- http://localhost:4200/campus/f591544f-e366-4c3e-bc34-6060a63d65c6 -->
 <section>
   <div class="search-input-box">
-    <mat-form-field>
+    <mat-form-field class="mat-form-field-box">
       <mat-label>Buscar profesor</mat-label>
       <input matInput type="search" [(ngModel)]="search" name="search" (ngModelChange)="onSearchChange($event)"/>
       <button mat-icon-button matSuffix aria-label="Buscar" (click)="onDeleteSearch()">

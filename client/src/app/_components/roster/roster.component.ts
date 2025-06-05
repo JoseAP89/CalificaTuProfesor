@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, firstValueFrom, iif } from 'rxjs';
@@ -23,6 +23,12 @@ import { NotificationService } from 'src/app/_services/notification.service';
 })
 export class RosterComponent implements OnInit, AfterViewInit{
 
+  averageGradeStarSize: number = 70;
+  screenWidth: number = window?.innerWidth;
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.updateAverageStarSize();
+  }
   public currentUserId: string;
   public readonly sortPaginatorValues: Vessel[];
   public rosterId: number;
@@ -67,6 +73,7 @@ export class RosterComponent implements OnInit, AfterViewInit{
   }
 
   ngOnInit(): void {
+    console.log("here")
     this.getCurrentUserId();
     this.paginator._intl.itemsPerPageLabel="Comentarios por página - ";
     this.paginator._intl.nextPageLabel="página siguiente";
@@ -83,6 +90,7 @@ export class RosterComponent implements OnInit, AfterViewInit{
       this.paginator._intl.lastPageLabel = 'Ultima página';
       this.paginator._intl.firstPageLabel = 'Primera página';
       this.paginator._intl.changes.next(); // Trigger update
+      this.updateAverageStarSize();
     }, 100);
   }
 
@@ -402,6 +410,15 @@ export class RosterComponent implements OnInit, AfterViewInit{
 
   getStarkRank(num: number): number {
     return Math.ceil(num);
+  }
+
+  updateAverageStarSize(){
+    this.screenWidth = window?.innerWidth;
+    if (this.screenWidth <= 400) {
+      this.averageGradeStarSize = 40;
+    } else {
+      this.averageGradeStarSize = 70;
+    }
   }
 
 }
