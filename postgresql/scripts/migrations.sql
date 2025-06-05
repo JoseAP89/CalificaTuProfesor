@@ -142,7 +142,7 @@ CREATE INDEX idx_grade_commentid ON Grade(CommentId);
 CREATE TABLE NotificationType (
     Notificationtypeid SERIAL PRIMARY KEY,
     Code VARCHAR(3) UNIQUE,
-    Name VARCHAR(100) NOT NULL
+    Name VARCHAR(100) NOT NULL,
     Description VARCHAR(200) NOT NULL
 );
 
