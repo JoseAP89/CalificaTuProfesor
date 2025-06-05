@@ -1,6 +1,5 @@
 **** Notes about the tasks to be done ****
 
-+   Notifications functionality (front) for reporting inappropiate comments
 +   Change Roster table name to Teacher, it is no longer a roster but a simple teacher table,
 	an all the modifications that that name change will entail
 +	Add a diagram to show how the services interact with each other on the docker network.
@@ -10,3 +9,6 @@
 	thus, it would be an always active task (ALWAYS ACTIVE)
 	
 	170.857MiB in total of MEM USAGE
+	
+	
+3.2375
