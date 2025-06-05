@@ -102,8 +102,10 @@ public class RatingRepo: IRatingRepo
             ?? throw new ApiException("El comentario no existe.");
         var votes = await _context.Votes.Where(v => v.CommentId == commentId).ToListAsync();
         var grades = await _context.Grades.Where(v => v.CommentId == commentId).ToListAsync();
+        var notifications = await _context.Notifications.Where(v => v.CommentId == commentId).ToListAsync();
         _context.Grades.RemoveRange(grades);
         _context.Votes.RemoveRange(votes);
+        _context.Notifications.RemoveRange(notifications);
         _context.Comments.Remove(comment);
         await _context.SaveChangesAsync();
         return commentId;  
