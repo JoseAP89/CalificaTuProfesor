@@ -1,0 +1,50 @@
+<h1 mat-dialog-title>Levanta una Notificación</h1>
+<div mat-dialog-content class="notification-body">
+
+    <mat-form-field appearance="outline">
+        <mat-label>Motivo</mat-label>
+        <mat-select [(ngModel)]="selectedNotificationTypeId" name="notificationType">
+            <mat-option *ngFor="let option of notificationTypes" [value]="option.notificationTypeId">
+                {{ option.name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="form-box">
+        <mat-label>Descripción detallada del problema</mat-label>
+        <textarea matInput
+            class="txt-area"
+            minRows="5"
+            maxRows="40"
+            [minlength]="MIN_LEN_COMMENT"
+            [maxlength]="MAX_LEN_COMMENT"
+            [(ngModel)] = "content"
+        >{{content}}</textarea>
+    <div class="comment-data" [ngClass]="{
+            'bad-comment': content.length<MIN_LEN_COMMENT,
+            'good-comment': content.length>=MIN_LEN_COMMENT && content.length<MAX_LEN_COMMENT,
+            'warning-comment': content.length==MAX_LEN_COMMENT
+          }">
+        {{content.length}}/{{MAX_LEN_COMMENT}}
+    </div>
+    </mat-form-field>
+
+    <div *ngIf="selectedNotificationTypeId && selectedNotificationTypeId > 0">
+        <mat-checkbox [(ngModel)]="isChecked">
+            <p>Estoy de acuerdo que mi notificación es debido al siguiente motivo: 
+            {{getNotificationType(selectedNotificationTypeId)?.description}}
+            </p>
+        </mat-checkbox>
+        
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button class="cancel-btn" mat-button mat-raised-button mat-dialog-close [mat-dialog-close]="null">Cancel</button>
+    <button class="ok-btn" mat-button mat-raised-button 
+        (click)="onOk()"
+        [disabled]="!isValid()"
+        [ngStyle]="{'background-color': isProcessing || !isValid()? 'grey' : '#3cb371'}"
+    >
+        Ok
+    </button>
+</div>

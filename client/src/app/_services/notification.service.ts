@@ -20,11 +20,9 @@ export class NotificationService {
     return this.http.get<NotificationTypeDTO[]>(url);
   }
 
-  public getNotificationByUserRecordId(userRecordId: string): Observable<NotificationDTO> {
-    const url = `${this.baseUrl}`;
-    let params = new HttpParams()
-      .set("userRecordId", userRecordId);
-    return this.http.get<NotificationDTO>(url, {params});
+  public getNotificationsByUserRecordId(userRecordId: string): Observable<NotificationDTO[]> {
+    const url = `${this.baseUrl}/${userRecordId}`;
+    return this.http.get<NotificationDTO[]>(url);
   }
 
   public postNotification(body: NewNotificationDTO): Observable<NotificationDTO> {

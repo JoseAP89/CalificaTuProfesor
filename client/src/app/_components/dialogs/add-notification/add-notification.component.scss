@@ -1,0 +1,16 @@
+.notification-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+.bad-comment {
+    color: red;
+}
+
+.good-comment {
+    color: green;
+}
+
+.warning-comment {
+    color: #da9100;
+}

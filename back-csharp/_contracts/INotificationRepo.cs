@@ -7,5 +7,5 @@ public interface INotificationRepo
 {
     Task<List<NotificationType>> GetAllNotificationTypesAsync();
     Task<Notification> PostNotificationAsync(NewNotificationDTO data);
-    Task<Notification> GetNotificationByUserRecordIdAsync(string recordId);
+    Task<List<Notification>> GetNotificationsByUserRecordIdAsync(string recordId);
 }

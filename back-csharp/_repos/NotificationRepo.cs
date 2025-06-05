@@ -23,7 +23,7 @@ public class NotificationRepo: INotificationRepo
             .ToListAsync();  
     }
 
-    public async Task<Notification> GetNotificationByUserRecordIdAsync(string recordId)
+    public async Task<List<Notification>> GetNotificationsByUserRecordIdAsync(string recordId)
     {
         if (string.IsNullOrEmpty(recordId))
         {
@@ -31,7 +31,7 @@ public class NotificationRepo: INotificationRepo
         }
         var res =  await _context.Notifications
             .Where(n => n.UserId.ToString() == recordId)
-            .FirstOrDefaultAsync();
+            .ToListAsync();
         return res;
     }
 

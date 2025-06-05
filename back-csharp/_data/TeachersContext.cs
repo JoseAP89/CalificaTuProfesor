@@ -126,6 +126,7 @@ namespace back_csharp._data
                     .HasColumnName("userid");
                 entity.Property(e => e.CreatedAt)
                     .HasColumnType("timestamptz")
+                    .HasDefaultValueSql("now()")
                     .HasColumnName("createdat");
                 entity.Property(e => e.ModifiedAt)
                     .HasColumnType("timestamptz")
@@ -136,13 +137,6 @@ namespace back_csharp._data
 
                 entity.Property(e => e.RecordId)
                     .HasDefaultValueSql("gen_random_uuid()");
-
-                entity.Property(e => e.CreatedAt)
-                    .HasColumnType("timestamp without time zone")
-                    .HasDefaultValueSql("now()");
-
-                entity.Property(e => e.ModifiedAt)
-                    .HasColumnType("timestamp without time zone");
 
                 entity.Property(e => e.UserId)
                     .HasMaxLength(40);

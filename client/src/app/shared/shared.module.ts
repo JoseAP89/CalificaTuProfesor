@@ -18,6 +18,7 @@ import { TopRankingListComponent } from './top-ranking-list/top-ranking-list.com
 import { StarComponent } from './star/star.component';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 
 const materialModules = [
@@ -34,6 +35,7 @@ const materialModules = [
     MatExpansionModule,
     MatPaginatorModule,
     MatBadgeModule,
+    MatCheckboxModule
 ];
 
 @NgModule({

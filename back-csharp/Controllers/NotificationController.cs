@@ -26,6 +26,7 @@ public class NotificationController : ControllerBase
         }
         return Ok(res.Select( n => new NotificationTypeDTO
         {
+            NotificationTypeId = n.NotificationTypeId,
             Name = n.Name,
             Code = n.Code,
             Description = n.Description
@@ -33,21 +34,21 @@ public class NotificationController : ControllerBase
     }
 
     [HttpGet("{userRecordId}")]
-    public async Task<ActionResult<NotificationDTO>> GetNotificationByUserRecordId(string userRecordId)
+    public async Task<ActionResult<NotificationDTO>> GetNotificationsByUserRecordId(string userRecordId)
     {
-        var res = await _uow.Notifications.GetNotificationByUserRecordIdAsync(userRecordId);
+        var res = await _uow.Notifications.GetNotificationsByUserRecordIdAsync(userRecordId);
         if (res == null)
         {
             return NotFound();
         }
-        return Ok(new NotificationDTO
+        return Ok(res.Select( n => new NotificationDTO
         {
-            NotificationId = res.NotificationId,
-            Message = res.Message,
-            CommentId = res.CommentId,
-            UserId = res.UserId.ToString(),
-            NotificationTypeId = res.NotificationTypeId,
-        });
+            NotificationId = n.NotificationId,
+            Message = n.Message,
+            CommentId = n.CommentId,
+            UserId =n.UserId.ToString(),
+            NotificationTypeId = n.NotificationTypeId,
+        }).ToList());
     }
 
     [HttpPost()]

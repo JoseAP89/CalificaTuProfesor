@@ -30,6 +30,7 @@ import { AlertMessageComponent } from './shared/alert-message/alert-message.comp
 import { FooterComponent } from './_components/footer/footer.component';
 import { HttpErrorInterceptor } from './_services/http-error.interceptor';
 import { SharedModule } from './shared/shared.module';
+import { AddNotificationComponent } from './_components/dialogs/add-notification/add-notification.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { SharedModule } from './shared/shared.module';
     EditCommentComponent,
     CancelAcceptComponent,
     FooterComponent,
+    AddNotificationComponent,
   ],
   imports: [
     BrowserModule,

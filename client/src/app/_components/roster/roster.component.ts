@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, Renderer2, ViewChild } from '@angular
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, firstValueFrom, iif } from 'rxjs';
-import { CommentContentDTO, CommentDTO, RosterDB, RosterRating, Scale, SortPaginator, UniversityArea, Vessel, VoteDTO } from 'src/app/_models/business';
+import { CommentContentDTO, CommentDTO, NotificationDTO, RosterDB, RosterRating, Scale, SortPaginator, UniversityArea, Vessel, VoteDTO } from 'src/app/_models/business';
 import { RosterService } from 'src/app/_services/roster.service';
 import { RateComponent } from '../dialogs/rate/rate.component';
 import { RatingService } from 'src/app/_services/rating.service';
@@ -13,6 +13,8 @@ import { SnackbarService } from 'src/app/_services/snackbar.service';
 import { EditCommentComponent } from '../dialogs/edit-comment/edit-comment.component';
 import { AcceptCancelData } from '../dialogs/cancel-accept/cancel-accept.component';
 import { getHttpErrorMessage } from 'src/app/_helpers/miscelaneous';
+import { AddNotificationComponent, NotificationDialogData } from '../dialogs/add-notification/add-notification.component';
+import { NotificationService } from 'src/app/_services/notification.service';
 
 @Component({
   selector: 'app-roster',
@@ -28,6 +30,7 @@ export class RosterComponent implements OnInit, AfterViewInit{
   public rosterRating: RosterRating;
   public scales: Scale[];
   public comments: CommentDTO[] = [];
+  public userNotifications: NotificationDTO[] = [];
   public canComment: boolean = false;
 
   private pageEvent: PageEvent;
@@ -48,7 +51,8 @@ export class RosterComponent implements OnInit, AfterViewInit{
     private voteService: VoteService,
     private dialog: MatDialog,
     private snackbarService: SnackbarService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private notificationService: NotificationService,
   ) {
     this.scales = [];
     this.comments = [];
@@ -134,6 +138,7 @@ export class RosterComponent implements OnInit, AfterViewInit{
     }
   }
 
+
   async voteComment(comment: CommentDTO, approval: boolean){
     if (!!this.currentUserId && comment.userId == this.currentUserId) {
       this.snackbarService.showErrorMessage("No puedes votar tu propio comentario.");
@@ -152,7 +157,6 @@ export class RosterComponent implements OnInit, AfterViewInit{
         }
         this.ratingService.getComment(comment.commentId).subscribe({
           next: updatedComment => {
-            console.log("new comment:", updatedComment);
             for (let i = 0; i < this.comments.length; i++) {
               const cmt = this.comments[i];
               if (cmt.commentId === updatedComment.commentId) {
@@ -234,6 +238,7 @@ export class RosterComponent implements OnInit, AfterViewInit{
         this.pageSize = res.pageSize;
         this.totalLength = res.totalElements;
         setTimeout(() => {
+          this.fetchUserNotifications();
           this.comments.forEach(comment => {
             this.paintThumbBtns(comment, comment.currentUserVote);
           });
@@ -313,12 +318,62 @@ export class RosterComponent implements OnInit, AfterViewInit{
     ref.afterClosed().subscribe({
       next: res => {
         if (res!=null && res.content != comment.content) {
-          setTimeout(() => {
-            this.getComments();
-          }, 100);
+          for (let i = 0; i < this.comments.length; i++) {
+            const element = this.comments[i];
+            if (element.commentId === res.commentId) {
+              this.comments[i].content = res.content;
+              return;
+            }
+            
+          }
         } 
       }
     })
+  }
+
+  openAddNotificationDialog(comment: CommentDTO, enterAnimationDuration: string = '100ms', exitAnimationDuration: string= '100ms'): void {
+    if ((this.getUserNotificationByCommentId(comment.commentId)?.notificationId ?? 0 )> 0) {
+      return;
+    }
+    let ref = this.dialog.open<AddNotificationComponent, NotificationDialogData, NotificationDTO>(AddNotificationComponent, {
+      data: {
+        commentId: comment.commentId, 
+        userRecordId: this.currentUserId
+      },
+      enterAnimationDuration,
+      exitAnimationDuration,
+      disableClose: true,
+      width:'700px',
+      panelClass: 'dialog-box'
+    });
+    ref.afterClosed().subscribe({
+      next: res => {
+        if (res!=null && res.notificationId) {
+          this.fetchUserNotifications();
+        } 
+      }
+    })
+  }
+
+  getUserNotificationByCommentId(commentId: number): NotificationDTO {
+    if (this.userNotifications && this.userNotifications.length > 0) {
+      for (const element of this.userNotifications) {
+        if (element.commentId === commentId) {
+          return element;
+        }
+      }
+    }
+    return null;
+  }
+
+  fetchUserNotifications(){
+    if (this.currentUserId) {
+      this.notificationService.getNotificationsByUserRecordId(this.currentUserId).subscribe({
+        next: res => {
+          this.userNotifications = res;
+        }
+      })
+    }
   }
 
   handlePageEvent(e: PageEvent) {

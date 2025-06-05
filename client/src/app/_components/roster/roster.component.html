@@ -68,7 +68,7 @@
         <mat-icon [id]="'thumbs-down-icon-' + comment.commentId" class="btn" [matBadge]="comment.dislikes" matBadgeColor="warn" (click)="voteComment(comment, false)" >thumb_down</mat-icon>
         <mat-icon class="btn edit-icon" *ngIf="isOwner(comment)" (click)="openEditCommentDialog(comment)">edit</mat-icon>
         <mat-icon class="btn delete-icon" *ngIf="isOwner(comment)" (click)="openAcceptCancelDialogWindow(comment.commentId)">delete</mat-icon>
-        <mat-icon class="report-it btn" >add_alert</mat-icon>
+        <mat-icon class="report-it btn" (click)="openAddNotificationDialog(comment)" [ngClass]="{ 'disabled-icon': this.getUserNotificationByCommentId(comment.commentId)?.notificationId? 'grey':'' }">add_alert</mat-icon>
       </div>
     </div>
   </section>
