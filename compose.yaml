@@ -9,7 +9,7 @@ services:
     environment:
       - APP_NAME=client-service
       - PRODUCTION=true
-      - API_URL=http://localhost
+      - API_URL=http://137.184.91.177
     networks:
       - app_network
 
@@ -64,7 +64,7 @@ services:
       context: ./proxyserver
       dockerfile: Dockerfile
     ports:
-      - 8080:80
+      - 80:80
     environment:
       - APP_NAME=proxyserver-app
     depends_on:
