@@ -55,6 +55,17 @@ public class RatingController : ControllerBase
         return Ok(_mapper.Map<CommentDTO>(res));
     }
 
+    [HttpGet("comment/{commentId}")]
+    public async Task<ActionResult<CommentDTO>> GetComment(int commentId)
+    {
+        var res = await _uow.Ratings.GetCommentAsync(commentId);
+        if (res == null)
+        {
+            return NotFound("No hay ningun comentario con ese id.");
+        }
+        return Ok(res);
+    }
+
     [HttpDelete("comment/{commentId}")]
     public async Task<ActionResult<int>> DeleteComment(int commentId)
     {
@@ -88,6 +99,7 @@ public class RatingController : ControllerBase
         }
         return Ok(_mapper.Map<CommentDTO>(res));
     }
+
 
     [HttpGet("roster/fullComments/{rosterId}")]
     public async Task<ActionResult<TableData<CommentDTO>>> GetFullComments(int rosterId, int pageSize = 10, SortPaginator sortPage = SortPaginator.DateDesc, int pageNumber = 0, Guid? currentUserId = null)

@@ -63,6 +63,11 @@ export class RatingService implements OnDestroy {
     return this.http.get<boolean>(url, {params});
   }
 
+  public getComment(commentId: number): Observable<CommentDTO> {
+    const url = `${this.baseUrl}/comment/${commentId}`;
+    return this.http.get<CommentDTO>(url);
+  }
+
   public addComment(comment: CommentDTO): Observable<CommentDTO> {
     const url = `${this.baseUrl}/comment`;
     return this.http.post<CommentDTO>(url, comment);

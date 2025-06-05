@@ -111,19 +111,25 @@ export class RosterComponent implements OnInit, AfterViewInit{
   }
 
   paintThumbBtns(comment: CommentDTO, approval?: boolean){
-    if(approval == null) return;
+    const thumbsUpElement = document.querySelector(`#thumbs-up-icon-${comment.commentId}`);
+    const thumbsDownElement = document.querySelector(`#thumbs-down-icon-${comment.commentId}`);
+    if (approval == null) {
+      this.renderer.removeClass(thumbsUpElement, 'thumbs-up-icon');
+      this.renderer.removeClass(thumbsDownElement, 'thumbs-down-icon');
+      return;
+    }
     // chose right color
     if (approval) {
-      const thumbsUpElement = document.querySelector(`#thumbs-up-icon-${comment.commentId}`);
-      if (thumbsUpElement) {
+      if (thumbsUpElement && thumbsDownElement) {
         this.renderer.removeClass(thumbsUpElement, 'disable-btn');
         this.renderer.addClass(thumbsUpElement, 'thumbs-up-icon');
+        this.renderer.removeClass(thumbsDownElement, 'thumbs-down-icon');
       }
     } else {
-      const thumbsDownElement = document.querySelector(`#thumbs-down-icon-${comment.commentId}`);
-      if (thumbsDownElement) {
+      if (thumbsDownElement && thumbsUpElement) {
         this.renderer.removeClass(thumbsDownElement, 'disable-btn');
         this.renderer.addClass(thumbsDownElement, 'thumbs-down-icon');
+        this.renderer.removeClass(thumbsUpElement, 'thumbs-up-icon');
       }
     }
   }
@@ -144,7 +150,23 @@ export class RosterComponent implements OnInit, AfterViewInit{
           this.ratingService.setCurrentUserId(res.userId);
           this.currentUserId = res.userId;
         }
-        this.getComments();
+        this.ratingService.getComment(comment.commentId).subscribe({
+          next: updatedComment => {
+            console.log("new comment:", updatedComment);
+            for (let i = 0; i < this.comments.length; i++) {
+              const cmt = this.comments[i];
+              if (cmt.commentId === updatedComment.commentId) {
+                approval = cmt.likes + cmt.dislikes > updatedComment.likes + updatedComment.dislikes?
+                  null: // user removed his vote
+                  approval; 
+                this.comments[i].likes = updatedComment.likes; 
+                this.comments[i].dislikes = updatedComment.dislikes; 
+                this.paintThumbBtns(this.comments[i], approval);
+              }
+            }
+            
+          }
+        })
       }
     });
   }

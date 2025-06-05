@@ -11,6 +11,7 @@ public interface IRatingRepo
     Task<Comment> EditCommentContentAsync(CommentContentDTO commentDTO);
     Task<int> DeleteCommentByIdAsync(int commentId);
     Task<RosterRatingDTO> GetRosterRatingInfoAsync(int rosterId);
+    Task<CommentDTO> GetCommentAsync(int commentId);
     Task<TableData<CommentDTO>> GetCommentsByRosterAsync(int rosterId, int pageSize, SortPaginator pag, int pageNumber = 0, Guid? currentUserId = null);
     /// <summary>
     /// Gets the list of teachers with option to convert the list in a ranking list

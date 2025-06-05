@@ -121,6 +121,58 @@ public class RatingRepo: IRatingRepo
         return comment;  
     }
 
+    public async Task<CommentDTO> GetCommentAsync(int commentId)
+    {
+        var comment = await _context.Comments
+            .Where(c => c.CommentId == commentId)
+            .Select(c => new Comment
+            {
+                CommentId = c.CommentId,
+                RecordId = c.RecordId,
+                RosterId = c.RosterId,
+                StudyFieldId = c.StudyFieldId,
+                SubjectName = c.SubjectName,
+                Content = c.Content,
+                CreatedAt = c.CreatedAt,
+                ModifiedAt = c.ModifiedAt,
+                UserId = c.UserId,
+                Grades = c.Grades.Select(g => new Grade
+                {
+                    GradeId = g.GradeId,
+                    Stars = g.Stars,
+                    ScaleId = g.ScaleId
+                }).ToList(),
+                Votes = c.Votes.Select(v => new Vote
+                {
+                    VoteId = v.VoteId,
+                    UserId = v.UserId,
+                    Approval = v.Approval
+                }).ToList(),
+            })
+            .AsSplitQuery()
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        if (comment == null)
+        {
+            return null;
+        }
+        var commentdto = _mapper.Map<CommentDTO>(comment);
+        foreach (var v in commentdto.Votes)
+        {
+            if (v.Approval == true)
+            {
+                commentdto.Likes++;
+            }
+            else if (v.Approval == false)
+            {
+                commentdto.Dislikes++;
+            }
+        }
+        return commentdto;
+
+    }
+
     public async Task<TableData<CommentDTO>> GetCommentsByRosterAsync(int rosterId, int pageSize = 10, SortPaginator pag = SortPaginator.DateDesc, int pageNumber = 0, Guid? currentUserId = null)
     {
         if (currentUserId == null) currentUserId = Guid.NewGuid();
