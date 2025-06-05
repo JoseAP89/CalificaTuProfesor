@@ -52,6 +52,10 @@ builder.Services.AddCors(opt => {
     opt.AddPolicy(POLICY,
         policy => policy
             .WithOrigins(
+                "http://137.184.91.177", // Your droplet IP (HTTP)
+                "https://137.184.91.177", // Your droplet IP (HTTPS)
+                "http://localhost:4200",  // Angular dev server
+                "http://client-service:80", // Docker container name
                 "http://localhost:3000", // axum server
                 "http://localhost:4200", // angular dev server
                 "http://localhost:8080" // nginx
