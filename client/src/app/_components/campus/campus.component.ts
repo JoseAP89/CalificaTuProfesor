@@ -109,6 +109,7 @@ export class CampusComponent implements OnInit, AfterViewInit {
   }
 
   handlePageEvent(e: PageEvent) {
+    if(!e) return;
     this.totalLength = e.length;
     this.pageSize = e.pageSize;
     this.pageNumber = e.pageIndex;

@@ -377,6 +377,7 @@ export class RosterComponent implements OnInit, AfterViewInit{
   }
 
   handlePageEvent(e: PageEvent) {
+    if(!e) return;
     this.pageEvent = e;
     this.totalLength = e.length;
     this.pageSize = e.pageSize;
