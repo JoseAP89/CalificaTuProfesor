@@ -19,7 +19,11 @@ def main():
     run("npm run build -- --configuration production", cwd=client_dir)
 
     print("🚀 Starting Docker Compose...")
-    run("docker compose up -d --build")
+    try:
+        run("docker compose up -d --build")
+    except subprocess.CalledProcessError as e:
+        print(f"\n🔧 Running alternative: {command}")
+        run("docker-compose -f compose.yaml up -d --build")
     print("✅ Complete successfully...")
 
 if __name__ == "__main__":
