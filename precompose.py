@@ -20,9 +20,10 @@ def main():
 
     print("🚀 Starting Docker Compose...")
     try:
-        run("docker compose up -d --build")
+        command = "docker compose up -d --build"
+        subprocess.run(command, shell=True, check=True, cwd=None)
     except subprocess.CalledProcessError as e:
-        print(f"\n🔧 Running alternative: {command}")
+        print(f"\n🔧 Running alternative")
         run("docker-compose -f compose.yaml up -d --build")
     print("✅ Complete successfully...")
 
