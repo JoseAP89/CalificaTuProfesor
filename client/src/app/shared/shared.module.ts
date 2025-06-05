@@ -48,6 +48,7 @@ const materialModules = [
   ],
   exports: [
     ...materialModules, AlertMessageComponent, TopRankingListComponent, StarComponent,
+    CommonModule,
     FormsModule,
     RouterModule,
   ]
