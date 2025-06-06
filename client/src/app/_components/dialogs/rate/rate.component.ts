@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { finalize, firstValueFrom } from 'rxjs';
@@ -28,6 +28,16 @@ export class RateComponent implements OnInit {
   public currentUserId: string;
   public universityAreas: UniversityArea[] = [];
   public isProcessing: boolean = false;
+  public averageGradeStarSize: number = 25;
+  
+  screenWidth: number = window?.innerWidth;
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    if (!event) {
+      return;
+    }
+    this.updateAverageStarSize();
+  }
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: RosterDB,
@@ -62,6 +72,7 @@ export class RateComponent implements OnInit {
     this.universityAreaService.getAllUniversityAreas().subscribe({
       next: res => {
         this.universityAreas = res;  
+        this.updateAverageStarSize();
       }
     })
   }
@@ -181,6 +192,15 @@ export class RateComponent implements OnInit {
           this.dialogRef.close(res);
         }
       });
+    }
+  }
+
+  updateAverageStarSize(){
+    this.screenWidth = window?.innerWidth;
+    if(this.screenWidth <= 520) {
+      this.averageGradeStarSize = 20;
+    } else {
+      this.averageGradeStarSize = 25;
     }
   }
 

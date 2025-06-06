@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, firstValueFrom, iif } from 'rxjs';
 import { CommentContentDTO, CommentDTO, NotificationDTO, RosterDB, RosterRating, Scale, SortPaginator, UniversityArea, Vessel, VoteDTO } from 'src/app/_models/business';
@@ -23,10 +23,17 @@ import { NotificationService } from 'src/app/_services/notification.service';
 })
 export class RosterComponent implements OnInit, AfterViewInit{
 
-  averageGradeStarSize: number = 70;
-  screenWidth: number = window?.innerWidth;
+  public averageGradeStarSize: number = 70;
+  public rateTeacherDialogWidth: number = 378; // px
+  public rateTeacherDialogHeight: number = 650; // px
+  public refOpenRateTeacherDialog: any;
+
+  private screenWidth: number = window?.innerWidth;
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
+    if (!event) {
+      return;
+    }
     this.updateAverageStarSize();
   }
   public currentUserId: string;
@@ -291,17 +298,20 @@ export class RosterComponent implements OnInit, AfterViewInit{
   }
 
   openRateTeacherDialog(enterAnimationDuration: string = '100ms', exitAnimationDuration: string= '100ms'): void {
-    let ref = this.dialog.open<RateComponent, RosterDB, CommentDTO>(RateComponent, {
+    setTimeout(() => {
+      this.updateAverageStarSize();
+    }, 100);
+    this.refOpenRateTeacherDialog = this.dialog.open<RateComponent, RosterDB, CommentDTO>(RateComponent, {
       data: this.roster,
       enterAnimationDuration,
       exitAnimationDuration,
       disableClose: true,
-      width: "900px",
-      height: "650px",
+      width: `${this.rateTeacherDialogWidth}px`,
+      height: `${this.rateTeacherDialogHeight}px`,
       panelClass: 'dialog-box'
     });
-    ref.afterClosed().subscribe({
-      next: res => {
+    this.refOpenRateTeacherDialog.afterClosed().subscribe({
+      next: (res: CommentDTO) => {
         if(res == null) return;
         setTimeout(() => {
           this.buildRoster();
@@ -414,6 +424,8 @@ export class RosterComponent implements OnInit, AfterViewInit{
 
   updateAverageStarSize(){
     this.screenWidth = window?.innerWidth;
+    this.rateTeacherDialogWidth = this.screenWidth;
+    this.refOpenRateTeacherDialog?.updateSize(this.rateTeacherDialogWidth + 40, this.rateTeacherDialogHeight);
     if (this.screenWidth <= 400) {
       this.averageGradeStarSize = 40;
     } else {

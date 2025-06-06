@@ -45,6 +45,7 @@
   .title-container{
     display: grid;
     grid-template-columns: 1fr 1fr;
+    justify-items: center;
     .right-box{
       .average-rate{
         font-size: 30px;
@@ -58,4 +59,33 @@
       line-height: 30px;
     }
   }
+}
+
+@media (max-width: 700px){
+  ::ng-deep mat-form-field.mat-mdc-form-field.subjectName-box {
+    width: 100% !important;
+  }
+  .left-box {
+    text-align: center;
+  }
+  .dialog-box .title-container {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+  ::ng-deep mat-expansion-panel-header {
+    display: flex !important;
+    height: 120px !important;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column !important;
+  }
+  ::ng-deep mat-expansion-panel-header .mat-content{
+    display: flex !important;
+    align-items: center;
+    flex-direction: column !important;
+  }
+  ::ng-deep mat-panel-description {
+    margin-top: 0px;
+  }
+
 }
