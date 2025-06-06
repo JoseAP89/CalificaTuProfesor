@@ -150,6 +150,10 @@ export class CommentDTO {
   modifiedAt: string;
 }
 
+export interface UserCommentNotification extends CommentDTO{
+  hasUserNotified: boolean;
+}
+
 export class VoteDTO {
   voteId: number;
   commentId: number;

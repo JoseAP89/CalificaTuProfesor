@@ -2,7 +2,7 @@ import { AfterViewInit, Component, HostListener, OnInit, Renderer2, ViewChild } 
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, firstValueFrom, iif } from 'rxjs';
-import { CommentContentDTO, CommentDTO, NotificationDTO, RosterDB, RosterRating, Scale, SortPaginator, UniversityArea, Vessel, VoteDTO } from 'src/app/_models/business';
+import { CommentContentDTO, CommentDTO, NotificationDTO, RosterDB, RosterRating, Scale, SortPaginator, UniversityArea, UserCommentNotification, Vessel, VoteDTO } from 'src/app/_models/business';
 import { RosterService } from 'src/app/_services/roster.service';
 import { RateComponent } from '../dialogs/rate/rate.component';
 import { RatingService } from 'src/app/_services/rating.service';
@@ -35,12 +35,11 @@ export class RosterComponent implements OnInit, AfterViewInit{
   }
   public currentUserId: string;
   public readonly sortPaginatorValues: Vessel[];
-  public rosterId: number;
   public roster: RosterDB;
   public rosterRating: RosterRating;
   public scales: Scale[];
-  public comments: CommentDTO[] = [];
-  public userNotifications: NotificationDTO[] = [];
+  public comments: UserCommentNotification[] = [];
+  public userCommentNotificationIds: Set<number> = new Set()
   public canComment: boolean = false;
 
   private pageEvent: PageEvent;
@@ -77,7 +76,6 @@ export class RosterComponent implements OnInit, AfterViewInit{
   }
 
   ngOnInit(): void {
-    console.log("here")
     this.getCurrentUserId();
     this.paginator._intl.itemsPerPageLabel="Comentarios por página - ";
     this.paginator._intl.nextPageLabel="página siguiente";
@@ -244,13 +242,25 @@ export class RosterComponent implements OnInit, AfterViewInit{
 
   getComments(){
     this.ratingService.getFullComments(this.roster.rosterId, this.pageSize, this.sortPage, this.pageNumber, this.currentUserId).subscribe({
-      next: res => {
-        this.comments = res.data;
+      next: async res => {
+        const notificationsByUser = await firstValueFrom(this.notificationService.getNotificationsByUserRecordId(this.currentUserId))
+        this.comments = res.data as UserCommentNotification[];
+        for (let j = 0; j < notificationsByUser.length; j++) {
+          const notif = notificationsByUser[j];
+          for (let i = 0; i < this.comments.length; i++) {
+            const comt = this.comments[i];
+              if (notif.commentId === comt.commentId) { // user has already notified this comment
+                this.comments[i].hasUserNotified = true;
+                break;
+              }
+            
+          }
+          
+        }
         this.pageNumber = res.pageNumber;
         this.pageSize = res.pageSize;
         this.totalLength = res.totalElements;
         setTimeout(() => {
-          this.fetchUserNotifications();
           this.comments.forEach(comment => {
             this.paintThumbBtns(comment, comment.currentUserVote);
           });
@@ -303,8 +313,6 @@ export class RosterComponent implements OnInit, AfterViewInit{
       enterAnimationDuration,
       exitAnimationDuration,
       disableClose: true,
-/*       width: `${this.rateTeacherDialogWidth}px`,
-      height: `${this.rateTeacherDialogHeight}px`, */
       width: "90vw",
       maxWidth: "850px",
       height: "621px",
@@ -330,8 +338,9 @@ export class RosterComponent implements OnInit, AfterViewInit{
       enterAnimationDuration,
       exitAnimationDuration,
       disableClose: true,
-      width:'600px',
-      height:'600px',
+      width: "90vw",
+      maxWidth: "600px",
+      height: "273px",
       panelClass: 'dialog-box'
     });
     ref.afterClosed().subscribe({
@@ -350,8 +359,8 @@ export class RosterComponent implements OnInit, AfterViewInit{
     })
   }
 
-  openAddNotificationDialog(comment: CommentDTO, enterAnimationDuration: string = '100ms', exitAnimationDuration: string= '100ms'): void {
-    if ((this.getUserNotificationByCommentId(comment.commentId)?.notificationId ?? 0 )> 0) {
+  openAddNotificationDialog(comment: UserCommentNotification, enterAnimationDuration: string = '100ms', exitAnimationDuration: string= '100ms'): void {
+    if (comment.hasUserNotified) { // user has raised a notification already in this comment
       return;
     }
     let ref = this.dialog.open<AddNotificationComponent, NotificationDialogData, NotificationDTO>(AddNotificationComponent, {
@@ -368,31 +377,10 @@ export class RosterComponent implements OnInit, AfterViewInit{
     ref.afterClosed().subscribe({
       next: res => {
         if (res!=null && res.notificationId) {
-          this.fetchUserNotifications();
+          this.getComments();
         } 
       }
     })
-  }
-
-  getUserNotificationByCommentId(commentId: number): NotificationDTO {
-    if (this.userNotifications && this.userNotifications.length > 0) {
-      for (const element of this.userNotifications) {
-        if (element.commentId === commentId) {
-          return element;
-        }
-      }
-    }
-    return null;
-  }
-
-  fetchUserNotifications(){
-    if (this.currentUserId) {
-      this.notificationService.getNotificationsByUserRecordId(this.currentUserId).subscribe({
-        next: res => {
-          this.userNotifications = res;
-        }
-      })
-    }
   }
 
   handlePageEvent(e: PageEvent) {
