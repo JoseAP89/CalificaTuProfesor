@@ -1,5 +1,9 @@
 **** Notes about the tasks to be done ****
 
++	when adding a notification, if there is no currentUserId then proceed to use the one generate 
+	by the add notification result
++	solve the issues when long processes are set as methods in ngFors on the teacher template,
+	some changes in the backend may be needed to optimize it
 +   Change Roster table name to Teacher, it is no longer a roster but a simple teacher table,
 	an all the modifications that that name change will entail
 +	Add a diagram to show how the services interact with each other on the docker network.

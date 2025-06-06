@@ -1,17 +1,19 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddTeacherComponent } from '../dialogs/add-teacher/add-teacher.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddUniversityComponent } from '../dialogs/add-university/add-university.component';
 import { AddCampusComponent } from '../dialogs/add-campus/add-campus.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-add-items',
   templateUrl: './add-items.component.html',
   styleUrls: ['./add-items.component.scss']
 })
-export class AddItemsComponent implements OnInit {
+export class AddItemsComponent implements OnInit, OnDestroy {
 
+  private destroy$ = new Subject<void>();
   public itemDialogWidth: number = 378; // px
   public itemDialogHeight: number = 200; // px
   public refOpenNewTeacherDialog: any;
@@ -30,6 +32,11 @@ export class AddItemsComponent implements OnInit {
     private fb: FormBuilder,
   ) {}
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   ngOnInit(): void {
   }
 
@@ -43,9 +50,11 @@ export class AddItemsComponent implements OnInit {
       height: "321px",
       panelClass: 'dialog-box'
     });
-    this.refOpenNewTeacherDialog.afterClosed().subscribe(() =>{
-      this.refOpenNewTeacherDialog = null;
-    });
+    this.refOpenNewTeacherDialog.afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() =>{
+        this.refOpenNewTeacherDialog = null;
+      });
   }
 
   openAddCampusDialog(enterAnimationDuration: string = '500ms', exitAnimationDuration: string= '500ms'): void {
@@ -58,9 +67,11 @@ export class AddItemsComponent implements OnInit {
       height: "395px",
       panelClass: 'dialog-box'
     });
-    this.refOpenNewCampusDialog.afterClosed().subscribe(() =>{
-      this.refOpenNewCampusDialog = null;
-    });
+    this.refOpenNewCampusDialog.afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() =>{
+        this.refOpenNewCampusDialog = null;
+      });
     
   }
 
@@ -74,9 +85,11 @@ export class AddItemsComponent implements OnInit {
       height: "225px",
       panelClass: 'dialog-box'
     });
-    this.refOpenNewUniversityDialog.afterClosed().subscribe(() =>{
-      this.refOpenNewUniversityDialog = null;
-    });
+    this.refOpenNewUniversityDialog.afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() =>{
+        this.refOpenNewUniversityDialog = null;
+      });
   }
 
 

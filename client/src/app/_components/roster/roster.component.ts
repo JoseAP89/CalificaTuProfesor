@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, firstValueFrom, iif } from 'rxjs';
+import { Observable, Subject, firstValueFrom, iif, takeUntil } from 'rxjs';
 import { CommentContentDTO, CommentDTO, NotificationDTO, RosterDB, RosterRating, Scale, SortPaginator, UniversityArea, UserCommentNotification, Vessel, VoteDTO } from 'src/app/_models/business';
 import { RosterService } from 'src/app/_services/roster.service';
 import { RateComponent } from '../dialogs/rate/rate.component';
@@ -15,15 +15,17 @@ import { AcceptCancelData } from '../dialogs/cancel-accept/cancel-accept.compone
 import { getHttpErrorMessage } from 'src/app/_helpers/miscelaneous';
 import { AddNotificationComponent, NotificationDialogData } from '../dialogs/add-notification/add-notification.component';
 import { NotificationService } from 'src/app/_services/notification.service';
+import { UseridService } from 'src/app/_services/userid.service';
 
 @Component({
   selector: 'app-roster',
   templateUrl: './roster.component.html',
   styleUrls: ['./roster.component.scss']
 })
-export class RosterComponent implements OnInit, AfterViewInit{
+export class RosterComponent implements OnInit, AfterViewInit, OnDestroy{
 
   public averageGradeStarSize: number = 70;
+  private destroy$ = new Subject<void>();
 
   private screenWidth: number = window?.innerWidth;
   @HostListener('window:resize', ['$event'])
@@ -62,6 +64,7 @@ export class RosterComponent implements OnInit, AfterViewInit{
     private snackbarService: SnackbarService,
     private renderer: Renderer2,
     private notificationService: NotificationService,
+    private useridService: UseridService,
   ) {
     this.scales = [];
     this.comments = [];
@@ -69,6 +72,11 @@ export class RosterComponent implements OnInit, AfterViewInit{
     this.pageSize = this.pageSizeOptions[0];
     this.sortPaginatorValues = [];
     this.getOrderSelect();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   get fullName(): string {
@@ -111,12 +119,14 @@ export class RosterComponent implements OnInit, AfterViewInit{
   }
 
   getCurrentUserId(){
-    this.ratingService.currentUserId.subscribe({
-      next: r => {
-        this.currentUserId = r;
-        return r;
-      }
-    });
+    this.useridService.currentUserId
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: r => {
+          this.currentUserId = r;
+          return r;
+        }
+      });
   }
 
   isOwner(comment: CommentDTO): boolean {
@@ -160,9 +170,9 @@ export class RosterComponent implements OnInit, AfterViewInit{
     vote.userId = this.currentUserId;
     this.voteService.addVote(vote).subscribe({
       next: async res => {
-        let userId = await firstValueFrom(this.ratingService.checkSetAndGetCurrentUserID());
+        let userId = await firstValueFrom(this.useridService.checkSetAndGetCurrentUserID());
         if (!!!userId || !(typeof userId === 'string')) {
-          this.ratingService.setCurrentUserId(res.userId);
+          this.useridService.setCurrentUserId(res.userId);
           this.currentUserId = res.userId;
         }
         this.ratingService.getComment(comment.commentId).subscribe({
@@ -270,6 +280,7 @@ export class RosterComponent implements OnInit, AfterViewInit{
   }
 
   getTeacherScaleGrade(scaleId: number): number{
+    console.log("running 1 ...");
     return this.rosterRating?.grades?.find(g => g.scaleId === scaleId)?.stars ?? 0;
   }
 
@@ -288,20 +299,22 @@ export class RosterComponent implements OnInit, AfterViewInit{
       okBtnName: "Borrar",
       cancelBtnName: "Cancelar"
     }
-    this.snackbarService.openCancelAcceptDialog(data).subscribe({
-      next: res => {
-        if (res) {
-          this.ratingService.deleteComment(commentId).subscribe({ 
-            next: res => {
-              if (res>0) {
-                this.buildRoster();
-                this.snackbarService.showSuccessMessage(`El comentario fue borrado exitosamente.`);
+    this.snackbarService.openCancelAcceptDialog(data)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: res => {
+          if (res) {
+            this.ratingService.deleteComment(commentId).subscribe({ 
+              next: res => {
+                if (res>0) {
+                  this.buildRoster();
+                  this.snackbarService.showSuccessMessage(`El comentario fue borrado exitosamente.`);
+                }
               }
-            }
-          });
+            });
+          }
         }
-      }
-    });
+      });
   }
 
   openRateTeacherDialog(enterAnimationDuration: string = '100ms', exitAnimationDuration: string= '100ms'): void {
@@ -318,18 +331,20 @@ export class RosterComponent implements OnInit, AfterViewInit{
       height: "621px",
       panelClass: 'dialog-box'
     });
-    refOpenRateTeacherDialog.afterClosed().subscribe({
-      next: (res: CommentDTO) => {
-        if(res == null) return;
-        setTimeout(() => {
-          this.buildRoster();
-          // if a comment was created, then the backend creates an uuid for the user (userId), which will be used for future references
-          if (res.userId) {
-            this.ratingService.setCurrentUserId(res.userId);
-          }
-        }, 500);
-      }
-    })
+    refOpenRateTeacherDialog.afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: CommentDTO) => {
+          if(res == null) return;
+          setTimeout(() => {
+            this.buildRoster();
+            // if a comment was created, then the backend creates an uuid for the user (userId), which will be used for future references
+            if (res.userId) {
+              this.useridService.setCurrentUserId(res.userId);
+            }
+          }, 500);
+        }
+      });
   }
 
   openEditCommentDialog(comment: CommentDTO, enterAnimationDuration: string = '100ms', exitAnimationDuration: string= '100ms'): void {
@@ -343,20 +358,22 @@ export class RosterComponent implements OnInit, AfterViewInit{
       height: "273px",
       panelClass: 'dialog-box'
     });
-    ref.afterClosed().subscribe({
-      next: res => {
-        if (res!=null && res.content != comment.content) {
-          for (let i = 0; i < this.comments.length; i++) {
-            const element = this.comments[i];
-            if (element.commentId === res.commentId) {
-              this.comments[i].content = res.content;
-              return;
+    ref.afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: res => {
+          if (res!=null && res.content != comment.content) {
+            for (let i = 0; i < this.comments.length; i++) {
+              const element = this.comments[i];
+              if (element.commentId === res.commentId) {
+                this.comments[i].content = res.content;
+                return;
+              }
+              
             }
-            
-          }
-        } 
-      }
-    })
+          } 
+        }
+      })
   }
 
   openAddNotificationDialog(comment: UserCommentNotification, enterAnimationDuration: string = '100ms', exitAnimationDuration: string= '100ms'): void {
@@ -374,13 +391,18 @@ export class RosterComponent implements OnInit, AfterViewInit{
       width:'700px',
       panelClass: 'dialog-box'
     });
-    ref.afterClosed().subscribe({
-      next: res => {
-        if (res!=null && res.notificationId) {
-          this.getComments();
-        } 
-      }
-    })
+    ref.afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: res => {
+          if (res!=null && res.notificationId) { // notification was created successfully
+            if (!this.useridService.exist()) {
+              this.useridService.setCurrentUserId(res.userId);
+            }
+            this.getComments();
+          } 
+        }
+      });
   }
 
   handlePageEvent(e: PageEvent) {

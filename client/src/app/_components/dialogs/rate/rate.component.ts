@@ -1,7 +1,7 @@
-import { Component, HostListener, Inject, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { finalize, firstValueFrom } from 'rxjs';
+import { finalize, firstValueFrom, Subject, takeUntil } from 'rxjs';
 import { CommentDTO, Grade, Roster, RosterDB, Scale, StudyField, UniversityArea, Vote } from 'src/app/_models/business';
 import { RatingService } from 'src/app/_services/rating.service';
 import { ScaleService } from 'src/app/_services/scale.service';
@@ -9,13 +9,14 @@ import { SnackbarService } from 'src/app/_services/snackbar.service';
 import { MAX_LEN_COMMENT, MIN_LEN_COMMENT } from '../../constants';
 import { getHttpErrorMessage } from 'src/app/_helpers/miscelaneous';
 import { UniversityAreaService } from 'src/app/_services/universityArea.service';
+import { UseridService } from 'src/app/_services/userid.service';
 
 @Component({
   selector: 'app-rate',
   templateUrl: './rate.component.html',
   styleUrls: ['./rate.component.scss']
 })
-export class RateComponent implements OnInit {
+export class RateComponent implements OnInit, OnDestroy {
 
   public readonly MAX_LEN_COMMENT = MAX_LEN_COMMENT;
   public readonly MIN_LEN_COMMENT = MIN_LEN_COMMENT;
@@ -29,6 +30,7 @@ export class RateComponent implements OnInit {
   public universityAreas: UniversityArea[] = [];
   public isProcessing: boolean = false;
   public averageGradeStarSize: number = 25;
+  private destroy$ = new Subject<void>();
   
   screenWidth: number = window?.innerWidth;
   @HostListener('window:resize', ['$event'])
@@ -47,14 +49,22 @@ export class RateComponent implements OnInit {
     private ratingService: RatingService,
     private universityAreaService: UniversityAreaService,
     private snackbarService: SnackbarService,
+    private useridService: UseridService,
   ) {
     this._scales = []
     this.scaleDescriptionStates = []
     this.roster = Object.assign(new RosterDB(), data);
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   ngOnInit(): void {
-    this.ratingService.currentUserId.subscribe({next: res => this.currentUserId = res})
+    this.useridService.currentUserId
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({next: res => this.currentUserId = res})
     this.rateForm = this.fb.group({
       subjectName: ['', Validators.required],
       comment: ['', Validators.required],
@@ -164,7 +174,7 @@ export class RateComponent implements OnInit {
       comment.rosterId = this.roster.rosterId!;
       comment.subjectName = this.subjectName.value;
       comment.studyFieldId = this.studyFieldId.value;
-      comment.userId = await firstValueFrom(this.ratingService.checkSetAndGetCurrentUserID());
+      comment.userId = await firstValueFrom(this.useridService.checkSetAndGetCurrentUserID());
       comment.grades = [];
       for (let i = 0; i < this._scales.length; i++) {
         const esc = this._scales[i];
