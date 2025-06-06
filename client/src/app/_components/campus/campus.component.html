@@ -41,13 +41,13 @@
       </table>
   
       <div class="paginator-box">
-        <mat-paginator class="paginator-item" [pageSizeOptions]="pageSizeOptions"
+        <mat-paginator id="mat-paginator-box" class="paginator-item" [pageSizeOptions]="pageSizeOptions"
           itemsPerPageLabel="tamaño de página: " nextPageLabel="siguiente" previousPageLabel="anterior"
           (page)="handlePageEvent($event)" [length]="totalLength" [pageSize]="pageSize" [pageSizeOptions]=""
           [showFirstLastButtons]='true' aria-label="Slecciona la página">
         </mat-paginator>
-  
       </div>
+
     </div>
 
   </div>
