@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Observable, catchError, debounceTime, finalize, firstValueFrom, from, fromEvent, of, tap } from 'rxjs';
+import { Observable, catchError, debounceTime, finalize, firstValueFrom, from, fromEvent, map, of, tap } from 'rxjs';
 import { Campus, RosterDB, UniversityArea, Vessel } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 import { RosterService } from 'src/app/_services/roster.service';
@@ -15,7 +15,7 @@ import { SnackbarService } from 'src/app/_services/snackbar.service';
 export class AddTeacherComponent implements OnInit {
 
   public teacherForm: FormGroup;
-  public campusSearchOptions: Observable<Vessel[]>
+  public campusSearchOptions: Observable<Array<Vessel[]>>
   public campusError: boolean = false;
   public campusSelected: Vessel;
   public isProcessing: boolean = false;
@@ -48,7 +48,15 @@ export class AddTeacherComponent implements OnInit {
 
   onSearchCampus(search: string){
     this.campusError = false;
-    this.campusSearchOptions = this.campusService.getCampusSearch(search);
+    this.campusSearchOptions = this.campusService.getCampusWithUniversity(search)
+      .pipe(
+        map( res => {
+          return res.map( cu => [
+            new Vessel(cu.campusId, cu.name), 
+            new Vessel(cu.university.universityId, cu.university.name)
+          ]) ;
+        })
+      );
   }
 
   onSubmit(){

@@ -33,9 +33,10 @@
           #CampusElement
           [matAutocomplete]="campus"
         />
-        <mat-autocomplete autoActiveFirstOption #campus="matAutocomplete">
-          <mat-option *ngFor="let option of campusSearchOptions | async" [value]="option.value"  (onSelectionChange)="onSelectionChange(option)">
-            {{option.value}}
+        <mat-autocomplete id="autocomplete-campus" autoActiveFirstOption #campus="matAutocomplete">
+          <mat-option *ngFor="let option of campusSearchOptions | async" [value]="option[0].value"  (onSelectionChange)="onSelectionChange(option[0])">
+            <p class="option-campus">{{option[0].value}}</p>
+            <p class="option-university">{{option[1].value}}</p>
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>

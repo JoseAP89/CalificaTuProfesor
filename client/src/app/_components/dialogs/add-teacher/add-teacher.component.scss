@@ -13,6 +13,20 @@
   }
 }
 
+::ng-deep mat-option {
+  $font-size: 14px;
+  .option-campus {
+    margin-bottom: 4px;
+    font-size: $font-size;
+  }
+  .option-university {
+    color: grey;
+    margin-left: 8px;
+    font-size: $font-size - 3px;
+
+  }
+}
+
 @media screen and (max-width: 1000px){
   .dialog-box {
     width: 350px !important;
