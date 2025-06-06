@@ -281,3 +281,16 @@
     font-size: 0.9rem;
   }
 }
+
+@media(max-width: 770px){
+  .paginator-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+@media(max-width: 400px){
+  ::ng-deep .mat-mdc-select-min-line {
+    font-size: 12px;
+  }
+}
