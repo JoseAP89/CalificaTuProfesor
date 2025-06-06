@@ -1,9 +1,36 @@
 .dialog-box {
-  width: 700px !important;
   form {
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
     padding: 4px;
+  }
+}
+@media(max-width: 658px){
+  $fontSize: 0.75rem;
+  #university-search-input {
+    font-size: $fontSize;
+  }
+  ::ng-deep .mat-mdc-option,
+  ::ng-deep .mat-mdc-select-min-line,
+  ::ng-deep .mat-mdc-input-element{
+    font-size: $fontSize !important;
+  }
+  ::ng-deep mat-label {
+    font-size: $fontSize;
+  }
+}
+@media(max-width: 560px){
+  $fontSize: 0.60rem;
+  #university-search-input {
+    font-size: $fontSize;
+  }
+  ::ng-deep .mat-mdc-option,
+  ::ng-deep .mat-mdc-select-min-line,
+  ::ng-deep .mat-mdc-input-element{
+    font-size: $fontSize !important;
+  }
+  ::ng-deep mat-label {
+    font-size: $fontSize;
   }
 }

@@ -1,5 +1,5 @@
 <section class="dialog-box">
-  <h1 mat-dialog-title>Agrega tu Campus</h1>
+  <div mat-dialog-title>Agrega tu Campus</div>
   <div mat-dialog-content>
     <form [formGroup]="campusForm">
 
@@ -52,7 +52,7 @@
 
     </form>
   </div>
-  <div mat-dialog-actions>
+  <div mat-dialog-actions  class="dialog-actions-box">
     <button mat-button mat-raised-button class="cancel-btn" mat-dialog-close>Cerrar</button>
     <button mat-button mat-raised-button class="ok-btn"
       [ngClass]="{'disabled-btn': !campusForm.valid}"

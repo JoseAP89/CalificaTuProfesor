@@ -1,6 +1,5 @@
 **** Notes about the tasks to be done ****
 
-+   Work resolutions for 378 x 819 in home and campus
 +   Change Roster table name to Teacher, it is no longer a roster but a simple teacher table,
 	an all the modifications that that name change will entail
 +	Add a diagram to show how the services interact with each other on the docker network.
@@ -9,8 +8,3 @@
 .	Only thing remaining is over time add words to the black_word_list and the white_word_list,
 	thus, it would be an always active task (ALWAYS ACTIVE)
 	
-	170.857MiB in total of MEM USAGE
-	
-	
-http://137.184.91.177/api/api/roster/campus/cam0
-					/api/api/campus/search/cam0

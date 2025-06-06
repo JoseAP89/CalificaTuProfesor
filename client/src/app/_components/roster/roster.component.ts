@@ -24,9 +24,6 @@ import { NotificationService } from 'src/app/_services/notification.service';
 export class RosterComponent implements OnInit, AfterViewInit{
 
   public averageGradeStarSize: number = 70;
-  public rateTeacherDialogWidth: number = 378; // px
-  public rateTeacherDialogHeight: number = 650; // px
-  public refOpenRateTeacherDialog: any;
 
   private screenWidth: number = window?.innerWidth;
   @HostListener('window:resize', ['$event'])
@@ -301,16 +298,19 @@ export class RosterComponent implements OnInit, AfterViewInit{
     setTimeout(() => {
       this.updateAverageStarSize();
     }, 100);
-    this.refOpenRateTeacherDialog = this.dialog.open<RateComponent, RosterDB, CommentDTO>(RateComponent, {
+    const refOpenRateTeacherDialog = this.dialog.open<RateComponent, RosterDB, CommentDTO>(RateComponent, {
       data: this.roster,
       enterAnimationDuration,
       exitAnimationDuration,
       disableClose: true,
-      width: `${this.rateTeacherDialogWidth}px`,
-      height: `${this.rateTeacherDialogHeight}px`,
+/*       width: `${this.rateTeacherDialogWidth}px`,
+      height: `${this.rateTeacherDialogHeight}px`, */
+      width: "90vw",
+      maxWidth: "850px",
+      height: "621px",
       panelClass: 'dialog-box'
     });
-    this.refOpenRateTeacherDialog.afterClosed().subscribe({
+    refOpenRateTeacherDialog.afterClosed().subscribe({
       next: (res: CommentDTO) => {
         if(res == null) return;
         setTimeout(() => {
@@ -331,6 +331,7 @@ export class RosterComponent implements OnInit, AfterViewInit{
       exitAnimationDuration,
       disableClose: true,
       width:'600px',
+      height:'600px',
       panelClass: 'dialog-box'
     });
     ref.afterClosed().subscribe({
@@ -424,8 +425,6 @@ export class RosterComponent implements OnInit, AfterViewInit{
 
   updateAverageStarSize(){
     this.screenWidth = window?.innerWidth;
-    this.rateTeacherDialogWidth = this.screenWidth;
-    this.refOpenRateTeacherDialog?.updateSize(this.rateTeacherDialogWidth + 40, this.rateTeacherDialogHeight);
     if (this.screenWidth <= 400) {
       this.averageGradeStarSize = 40;
     } else {
