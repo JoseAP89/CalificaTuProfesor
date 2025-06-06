@@ -108,9 +108,9 @@ export class RosterComponent implements OnInit, AfterViewInit, OnDestroy{
     this.rosterService.getRosterInfoByRecordId(this._recordId).subscribe({
       next: (res: RosterDB) => {
         this.roster = res;
-        this.getScales();
-        this.getComments();
         this.getRosterRating();
+        this.getComments();
+        this.getScales();
         this.ratingService.canComment(this.currentUserId, this.roster.rosterId).subscribe({
           next: value => { this.canComment = value;}
         });
@@ -267,7 +267,6 @@ export class RosterComponent implements OnInit, AfterViewInit, OnDestroy{
   }
 
   getTeacherScaleGrade(scaleId: number): number{
-    console.log("running 1 ...");
     return this.rosterRating?.grades?.find(g => g.scaleId === scaleId)?.stars ?? 0;
   }
 
@@ -413,6 +412,7 @@ export class RosterComponent implements OnInit, AfterViewInit, OnDestroy{
     let numerator = 0;
     if(!comment?.grades) return 0;
     const difficultyScale = this.scales?.filter(s => s.code == "DI")[0];
+    if(!difficultyScale) return 0;
     const grades = comment.grades.filter(g => g.scaleId !== difficultyScale.scaleId);
     for (const grade of grades) {
       numerator+= grade.stars;
