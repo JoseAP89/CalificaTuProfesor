@@ -76,7 +76,8 @@
         <mat-icon class="btn edit-icon" *ngIf="isOwner(comment)" (click)="openEditCommentDialog(comment)">edit</mat-icon>
         <mat-icon class="btn delete-icon" *ngIf="isOwner(comment)" (click)="openAcceptCancelDialogWindow(comment.commentId)">delete</mat-icon>
         <mat-icon class="report-it btn" *ngIf="!isOwner(comment)" 
-          (click)="openAddNotificationDialog(comment)" [ngClass]="{ 'disabled-icon': comment.hasUserNotified ? 'grey':'' }">add_alert</mat-icon>
+          (click)="openAddNotificationDialog(comment)" 
+          [ngClass]="{ 'disabled-icon': hasUserRaisedANotification(comment)? 'grey':'' }">add_alert</mat-icon>
         
       </div>
     </div>

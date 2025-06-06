@@ -102,7 +102,7 @@ public class RatingController : ControllerBase
 
 
     [HttpGet("roster/fullComments/{rosterId}")]
-    public async Task<ActionResult<TableData<CommentDTO>>> GetFullComments(int rosterId, int pageSize = 10, SortPaginator sortPage = SortPaginator.DateDesc, int pageNumber = 0, Guid? currentUserId = null)
+    public async Task<ActionResult<TableData<FullCommentDTO>>> GetFullComments(int rosterId, int pageSize = 10, SortPaginator sortPage = SortPaginator.DateDesc, int pageNumber = 0, Guid? currentUserId = null)
     {
         var res = await _uow.Ratings.GetCommentsByRosterAsync(rosterId, pageSize, sortPage, pageNumber, currentUserId);
         if (res == null)

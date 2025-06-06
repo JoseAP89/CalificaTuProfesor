@@ -17,6 +17,8 @@ public class CommentDTO
     public StudyFieldDTO StudyField { get; set; }
     public IEnumerable<GradeDTO> Grades { get; set; }
     public IEnumerable<VoteDTO> Votes { get; set; }
+    public IEnumerable<NotificationDTO> Notifications { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? ModifiedAt { get; set; }
 }
+

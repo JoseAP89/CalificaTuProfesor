@@ -40,7 +40,7 @@ export class RosterComponent implements OnInit, AfterViewInit, OnDestroy{
   public roster: RosterDB;
   public rosterRating: RosterRating;
   public scales: Scale[];
-  public comments: UserCommentNotification[] = [];
+  public comments: CommentDTO[] = [];
   public userCommentNotificationIds: Set<number> = new Set()
   public canComment: boolean = false;
 
@@ -253,20 +253,7 @@ export class RosterComponent implements OnInit, AfterViewInit, OnDestroy{
   getComments(){
     this.ratingService.getFullComments(this.roster.rosterId, this.pageSize, this.sortPage, this.pageNumber, this.currentUserId).subscribe({
       next: async res => {
-        const notificationsByUser = await firstValueFrom(this.notificationService.getNotificationsByUserRecordId(this.currentUserId))
-        this.comments = res.data as UserCommentNotification[];
-        for (let j = 0; j < notificationsByUser.length; j++) {
-          const notif = notificationsByUser[j];
-          for (let i = 0; i < this.comments.length; i++) {
-            const comt = this.comments[i];
-              if (notif.commentId === comt.commentId) { // user has already notified this comment
-                this.comments[i].hasUserNotified = true;
-                break;
-              }
-            
-          }
-          
-        }
+        this.comments = res.data;
         this.pageNumber = res.pageNumber;
         this.pageSize = res.pageSize;
         this.totalLength = res.totalElements;
@@ -376,8 +363,12 @@ export class RosterComponent implements OnInit, AfterViewInit, OnDestroy{
       })
   }
 
-  openAddNotificationDialog(comment: UserCommentNotification, enterAnimationDuration: string = '100ms', exitAnimationDuration: string= '100ms'): void {
-    if (comment.hasUserNotified) { // user has raised a notification already in this comment
+  hasUserRaisedANotification(comment: CommentDTO): boolean {
+    return comment?.notifications?.some(n => n.userId === this.currentUserId) ?? false ;
+  }
+
+  openAddNotificationDialog(comment: CommentDTO, enterAnimationDuration: string = '100ms', exitAnimationDuration: string= '100ms'): void {
+    if (this.hasUserRaisedANotification(comment)) { // user has raised a notification already in this comment
       return;
     }
     let ref = this.dialog.open<AddNotificationComponent, NotificationDialogData, NotificationDTO>(AddNotificationComponent, {

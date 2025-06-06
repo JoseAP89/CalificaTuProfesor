@@ -23,5 +23,6 @@ namespace back_csharp._models
         public virtual StudyField StudyField { get; set; } = null!;
         public virtual ICollection<Grade> Grades { get; set; }
         public virtual ICollection<Vote> Votes { get; set; } = null!;
+        public virtual ICollection<Notification> Notifications { get; set; } = null!;
     }
 }

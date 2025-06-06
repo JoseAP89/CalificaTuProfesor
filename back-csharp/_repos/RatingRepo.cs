@@ -214,7 +214,15 @@ public class RatingRepo: IRatingRepo
                         Name = c.StudyField.UniversityArea.Name,
                         Code = c.StudyField.UniversityArea.Code
                     }
-                }
+                },
+                Notifications = c.Notifications.Select( n => new Notification
+                {
+                    CommentId = n.CommentId,    
+                    Message = n.Message,    
+                    NotificationId = n.NotificationId,    
+                    NotificationTypeId = n.NotificationTypeId,    
+                    UserId = n.UserId
+                }).ToList()
             })
             .AsSplitQuery()
             .AsNoTracking()

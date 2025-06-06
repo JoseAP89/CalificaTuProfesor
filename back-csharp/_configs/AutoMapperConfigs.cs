@@ -9,6 +9,8 @@ public class AutoMapperConfigs: Profile
     public AutoMapperConfigs()
     {
         // ***
+        CreateMap<Notification, NotificationDTO>();
+        CreateMap<NotificationDTO, Notification>();
         CreateMap<Vote, VoteDTO>();
         CreateMap<VoteDTO, Vote>();
         CreateMap<StudyFieldDTO, StudyField>();

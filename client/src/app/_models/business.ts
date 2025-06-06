@@ -142,6 +142,7 @@ export class CommentDTO {
   userId: string;
   grades: Array<Grade>;
   votes: Array<Vote>;
+  notifications: Array<Vote>;
   studyField: StudyField;
   likes: number;
   dislikes: number;

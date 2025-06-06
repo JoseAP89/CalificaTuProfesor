@@ -483,6 +483,12 @@ namespace back_csharp._data
                       .IsRequired()
                       .HasDefaultValueSql("NOW()");
 
+                entity.HasOne(d => d.Comment)
+                    .WithMany(p => p.Notifications)
+                    .HasForeignKey(d => d.CommentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("notification_comment_id_fkey");
+
                 // Composite unique index
                 entity.HasIndex(e => new { e.CommentId, e.UserId })
                       .IsUnique()
