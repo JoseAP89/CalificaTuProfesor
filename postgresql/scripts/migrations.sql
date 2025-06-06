@@ -213,7 +213,7 @@ INSERT INTO StudyField (Name, Code, UniversityAreaId) VALUES
 ('Farmacia', 'FARM', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CBQS')),
 ('Bioquímica', 'BIOQ', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CBQS')),
 ('Nutrición', 'NUTR', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CBQS')),
-('Genética', 'GENET', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CBQS')),
+('Genética', 'GENE', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CBQS')),
 ('Veterinaria', 'VETE', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CBQS')),
 ('Biomedicina', 'BIOM', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CBQS')),
 ('Fisioterapia', 'FIST', (SELECT UniversityAreaId FROM UniversityArea WHERE Code = 'CBQS')),
