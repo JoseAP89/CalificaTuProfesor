@@ -20,7 +20,9 @@ export class TopRankingListComponent {
   getColorStar(rank: RankingTopTeacher) {
     let colorClass;
     const starGrade = rank.averageGrade;
-    if (starGrade < 1.25) {
+    if (starGrade == 0) {
+      colorClass = 'star-null';
+    } else if (starGrade < 1.25) {
       colorClass = 'star-bad';
     } else if (starGrade < 2.5) {
       colorClass = 'star-medium';

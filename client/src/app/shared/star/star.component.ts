@@ -38,7 +38,9 @@ export class StarComponent implements AfterViewInit, OnChanges {
     if (this.reverseColors) {
       starGrade = 5.0 - starGrade;
     }
-    if (starGrade < 1.25) {
+    if(this.averageGrade == 0) {
+      this.starColor = 'star star-null';
+    } else if (starGrade < 1.25) {
       this.starColor = 'star star-bad';
     } else if (starGrade < 2.5) {
       this.starColor = 'star star-medium';
