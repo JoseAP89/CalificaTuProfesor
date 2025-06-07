@@ -68,7 +68,7 @@
         {{comment.content}}
       </div>
       <div class='created-at'>
-        {{ comment.createdAt | date: 'dd/MM/yyyy HH:mm'}}
+        {{ transformDate(comment.createdAt) }}
       </div>
       <div class='buttons-block'>
         <mat-icon [id]="'thumbs-up-icon-' + comment.commentId" class="btn" [matBadge]="comment.likes" matBadgeColor="primary" matBadgePosition="above before" (click)="voteComment(comment, true)">thumb_up</mat-icon>

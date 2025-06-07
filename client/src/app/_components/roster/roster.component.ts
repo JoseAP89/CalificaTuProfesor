@@ -16,6 +16,7 @@ import { getHttpErrorMessage } from 'src/app/_helpers/miscelaneous';
 import { AddNotificationComponent, NotificationDialogData } from '../dialogs/add-notification/add-notification.component';
 import { NotificationService } from 'src/app/_services/notification.service';
 import { UseridService } from 'src/app/_services/userid.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-roster',
@@ -264,6 +265,11 @@ export class RosterComponent implements OnInit, AfterViewInit, OnDestroy{
         });
       }
     })
+  }
+
+  transformDate(dateString: string): string {
+    const date = new Date(dateString);
+    return new DatePipe('es-MX').transform(date, 'dd-MMM-YY') || '';
   }
 
   getTeacherScaleGrade(scaleId: number): number{

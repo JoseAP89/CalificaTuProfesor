@@ -31,7 +31,11 @@ import { FooterComponent } from './_components/footer/footer.component';
 import { HttpErrorInterceptor } from './_services/http-error.interceptor';
 import { SharedModule } from './shared/shared.module';
 import { AddNotificationComponent } from './_components/dialogs/add-notification/add-notification.component';
+import { registerLocaleData } from '@angular/common';
+import localeEsMX from '@angular/common/locales/es-MX';
 
+// Register the locale data
+registerLocaleData(localeEsMX, 'es-MX');
 @NgModule({
   declarations: [
     AppComponent,
