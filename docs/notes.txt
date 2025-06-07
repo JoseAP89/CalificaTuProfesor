@@ -1,6 +1,6 @@
 **** Notes about the tasks to be done ****
 
-
++	add inputs to top-ranking-list to set height and width more easily
 +	solve the issues when long processes are set as methods in ngFors on the teacher template,
 	some changes in the backend may be needed to optimize it:
 	 - getAverageCommentGrade in roster

@@ -1,5 +1,4 @@
 .home-container {
-  height: fit-content !important;
   background-color: black;
   background-image: url("/assets/images/chalkboard.jpg");
   color: white;
@@ -29,6 +28,7 @@
     }
   }
   .search-container {
+    z-index: 1000;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -89,6 +89,7 @@
     }
   }
   .home-main-tile{
+    height: 100vh;
     display: grid;
     grid-template-columns: 2fr 1fr;
   }
@@ -97,10 +98,9 @@
 @media (max-width: 884px) {
   .home-main-tile{
     display: grid !important;
-    gap: 60vh;
     grid-template-columns: 1fr !important;
-    .home-left-tile{
-      width: 90vw;
+    .home-right-tile{
+      display: none;
     }
     .search-container {
       width: 90vw;
