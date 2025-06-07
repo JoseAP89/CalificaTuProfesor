@@ -20,8 +20,17 @@
   position: relative;
 }
 
-.star.full {
-  color: orange;
+.star-bad {
+  color:#FF3B30;
+}
+.star-medium {
+  color:#FFE082;
+}
+.star-good {
+  color:#34C759;
+}
+.star-excellent {
+  color: #D4AF37;
 }
 
 .star.empty {

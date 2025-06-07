@@ -1,3 +1,5 @@
+@use 'src/app/shared/star/star.component';
+
 $border-radius: 10px;
 .ranking-container {
     border-radius: $border-radius;
@@ -33,10 +35,14 @@ $border-radius: 10px;
         display: grid;
         grid-template-columns: 1fr 1fr 5fr;
 
-        .item-grade::before {
-            content: "⭐";
-            margin-right: 5px;
-            font-size: 12px;
+        .item-grade {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .average-score {
+                margin-left: 3px;
+                height: 100%;
+            }
         }
 
         .item-user-icon {
@@ -107,6 +113,20 @@ $border-radius: 10px;
         color: rgb(18, 125, 212);
     }
 }
+
+.star-bad {
+  fill:#FF3B30;
+}
+.star-medium {
+  fill:#FFE082;
+}
+.star-good {
+  fill:#34C759;
+}
+.star-excellent {
+  fill: #D4AF37;
+}
+
 @media (max-width: 970px) {
     .ranking-body .link-title-item, .mat-typography{
         font-size: 0.8rem !important;

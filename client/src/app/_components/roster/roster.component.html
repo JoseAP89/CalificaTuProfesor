@@ -22,7 +22,7 @@
       <div class='skills-box'>
         <ng-container *ngFor="let scale of scales">
           <div class='label-brief'>{{scale.name}}</div>
-          <app-star [averageGrade]="getTeacherScaleGrade(scale.scaleId)" [fontSize]="40"></app-star>
+          <app-star [averageGrade]="getTeacherScaleGrade(scale.scaleId)" [fontSize]="40" [reverseColors]="scale.code === 'DI'"></app-star>
         </ng-container>
       </div>
     </div>

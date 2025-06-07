@@ -1,12 +1,13 @@
 <div class="star-rating-container">
     <div class="stars" >
         <!-- Full stars -->
-        <span *ngFor="let _ of [].constructor(fullStars)" class="star full">★</span>
+        <span *ngFor="let _ of [].constructor(fullStars)" 
+            [ngClass]="starColor">★</span>
 
         <!-- Partial star -->
         <span *ngIf="hasPartialStar" class="star partial-container">
             <span class="partial-mask" [style.width.%]="partialStarWidth">
-                <span class="star full">★</span>
+                <span [ngClass]="starColor">★</span>
             </span>
             <span class="star empty">★</span>
         </span>
