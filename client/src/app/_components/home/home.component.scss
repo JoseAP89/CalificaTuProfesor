@@ -28,7 +28,6 @@
     }
   }
   .search-container {
-    z-index: 1000;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -91,17 +90,24 @@
   .home-main-tile{
     height: 100vh;
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr;
+    .search-lbl-container {
+      margin-top: 12px;
+      margin-bottom: 4px;
+      .search-lbl {
+        font-size: 1.2rem;
+        a {
+          color: #4d94ff;
+          font-weight: 700;
+          text-decoration: none;
+        }
+      }
+    }
   }
 }
 
 @media (max-width: 884px) {
   .home-main-tile{
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    .home-right-tile{
-      display: none;
-    }
     .search-container {
       width: 90vw;
       .search-form-field {

@@ -23,7 +23,6 @@ export class HomeComponent implements OnInit {
   public options: Observable<Vessel[][]>;
   public showOptions: boolean = false;
   public typeOfSearch: TypeOfSearch = TypeOfSearch.Profesor;
-  public rankTeacherList: Array<RankingTopTeacher> = [];
 
   /**
    *
@@ -47,19 +46,6 @@ export class HomeComponent implements OnInit {
     ).subscribe( (event: any) => {
       this.onSearch(event);
     });
-    this.ratingService.getRankingTopTeacherList(10, 0, null, true)
-      .pipe(
-        finalize( ()=> {
-          setTimeout(() => {
-            this.updateStylingTeacherRankList();  
-          });
-        })
-      )
-      .subscribe({
-        next: res => {
-          this.rankTeacherList = res.data;
-        }
-      }) ;
   }
 
 
@@ -104,21 +90,14 @@ export class HomeComponent implements OnInit {
     this.searchValue = "";
   }
 
-  onSubmit(){
+  onSubmit(event: Event){
+    if (event) {
+      event.stopPropagation();
+    }
     if (this.selectedOption?.id!=null && this.selectedOption.id != 0 && this.typeOfSearch == TypeOfSearch.Profesor) {
       this.router.navigate([`/maestro/${this.selectedOption.signature}`]);
     } else if (this.selectedOption?.id!=null && this.selectedOption.id != 0 && this.typeOfSearch == TypeOfSearch.Campus) {
       this.router.navigate([`/campus/${this.selectedOption.signature}`]);
-    }
-  }
-
-  updateStylingTeacherRankList(){
-    const rankingContainer = document.querySelector(".home-main-tile");
-    if (rankingContainer) {
-      const gridTemplateColumns = this.rankTeacherList && this.rankTeacherList.length > 0 ?
-        '2fr 1fr':
-        '1fr'
-      this.renderer.setStyle(rankingContainer, 'grid-template-columns', gridTemplateColumns);
     }
   }
 

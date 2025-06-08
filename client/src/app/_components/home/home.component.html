@@ -8,7 +8,7 @@
         <mat-radio-group #SearchType aria-labelledby="example-radio-group-label" class="radio-group"
           [(ngModel)]="typeOfSearch" color="primary">
           <mat-radio-button class="radio-btn" [value]="1">
-            <p class="radio-txt">Por Profesor</p>
+            <p class="radio-txt">Por  Maestro</p>
           </mat-radio-button>
           <mat-radio-button class="radio-btn" [value]="2">
             <p class="radio-txt">Por Campus</p>
@@ -17,8 +17,13 @@
       </div>
       <div class="search-container">
         <!-- CAMPO DE BUSQUEDA -->
+        <div class="search-lbl-container">
+          <p class="search-lbl">
+            Busca a tu {{typeOfSearch == 1 ? "Maestro" : "Campus"}}. Si no lo encuentras, 
+            agregalo <span><a [routerLink]="'/agregar'" >aqui</a></span>
+          </p>
+        </div>
         <mat-form-field class="search-form-field">
-          <mat-label>{{typeOfSearch == 1 ? "Buscar Profesor" : "Buscar Campus"}}</mat-label>
           <input matInput id="search-value" #SearchVal type="search" [(ngModel)]="searchValue" autocomplete="off"
             (focus)="changeShowOptions(true)">
           <button class="close-options-btn" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearchValue()"
@@ -27,7 +32,7 @@
           </button>
           <!--SEARCH BTN -->
           <div class="search-btn">
-            <button mat-raised-button color="primary" (click)="onSubmit()">Buscar</button>
+            <button mat-raised-button color="primary" (click)="onSubmit($event)">Buscar</button>
           </div>
         </mat-form-field>
         <!-- CONTENEDOR DE OPCIONES -->
@@ -42,11 +47,5 @@
         </div>
       </div>
     </div>
-    <div class="home-right-tile" *ngIf="rankTeacherList && rankTeacherList.length > 0">
-      <app-top-ranking-list [title]="'Top 10 Ranking'" [rankTeacherList]="rankTeacherList"
-        [showCampusName]="true">
-      </app-top-ranking-list>
-    </div>
-  
   </div>
 </section>
