@@ -37,7 +37,7 @@ namespace back_csharp.Controllers
         [HttpGet("info/{id:int}")]
         public async Task<ActionResult<RosterDto>> GetRosterInfo(int id)
         {
-            var res = await _uow.Roster.GetRosterDTO(id);
+            var res = await _uow.Roster.GetFullInfoRosterAsync(id);
             if (res==null)
             {
                 return NotFound();
@@ -48,7 +48,7 @@ namespace back_csharp.Controllers
         [HttpGet("info/recordid/{recordId}")]
         public async Task<ActionResult<RosterDto>> GetRosterInfo(Guid recordId)
         {
-            var res = await _uow.Roster.GetRosterDTO(recordId);
+            var res = await _uow.Roster.GetFullInfoRosterAsync(recordId);
             if (res==null)
             {
                 return NotFound();

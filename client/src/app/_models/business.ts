@@ -37,6 +37,11 @@ export class RosterDB {
   campusId: number;
   campusName?: string;
   recordId: string;
+  universityId: number;
+  universityName: string;
+  stateId: number;
+  stateName: string;
+
 
   get fullName(): string {
     return `${this.teacherName} ${this.teacherLastname1} ${this.teacherLastname2}`.trim();

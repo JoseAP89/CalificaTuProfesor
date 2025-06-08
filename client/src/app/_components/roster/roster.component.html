@@ -16,6 +16,13 @@
       <div class='content-brief'>{{getStarkRank(rosterRating?.averageGrade ?? 1)}}-star</div>
       <div class='label-brief'>Campus</div>
       <div class='content-brief'>{{roster?.campusName}}</div>
+      <ng-container *ngIf="roster && roster.campusName !== roster.universityName">
+        <div class='label-brief'>Universidad</div>
+        <div class='content-brief'>{{roster?.universityName}}</div>
+      </ng-container>
+      <div class='label-brief'>Estado</div>
+      <div class='content-brief'>{{roster?.stateName}}</div>
+      
     </div>
     <div class='box-info'>
       <div class='title-box'>Habilidades</div>

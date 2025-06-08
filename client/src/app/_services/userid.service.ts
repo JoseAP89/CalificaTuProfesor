@@ -19,8 +19,6 @@ export class UseridService implements OnDestroy {
 
   public setUserIdIfNotFound() {
     let userId = localStorage.getItem(this._name);
-    console.log("userid:",userId)
-    console.log("userid:",!!userId)
     if (!!userId) {
       this.setCurrentUserId(userId);
     } else { // it generates a new userId if there is none

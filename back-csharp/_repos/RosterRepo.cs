@@ -4,6 +4,8 @@ using back_csharp._dtos;
 using back_csharp._helpers;
 using Microsoft.EntityFrameworkCore;
 using back_csharp._data;
+using System.Data;
+using back_csharp.Middleware.models;
 
 namespace back_csharp._repos;
 
@@ -13,57 +15,55 @@ public class RosterRepo: CommonRepo<Roster>, IRosterRepo
     {
     }
 
-    public async Task<RosterDto> GetRosterDTO(Guid signature)
+    public async Task<RosterDto> GetFullInfoRosterAsync(Guid signature)
     {
-        var roster = from c in _context.Set<Roster>()
-            join m in _context.Set<Campus>() on c.CampusId equals m.CampusId 
-            where c.RecordId == signature select new
-            {
-                RosterId = c.RosterId,
-                RecordId = c.RecordId,
-                TeacherName = c.TeacherName,
-                TeacherLastname1 = c.TeacherLastname1,
-                TeacherLastname2 = c.TeacherLastname2,
-                CampusId = c.CampusId,
-                CampusName = m.Name
-            };
-        var res = (await roster.AsNoTracking().ToListAsync())?.Select( x => 
-            new RosterDto
-            {
-                RosterId = x.RosterId,
-                TeacherName = x.TeacherName,
-                TeacherLastname1 = x.TeacherLastname1,
-                TeacherLastname2 = x.TeacherLastname2,
-                CampusId = x.CampusId,
-                CampusName = x.CampusName,
-                RecordId = x.RecordId
-            }).SingleOrDefault();
-        return res;
+        if (signature == Guid.Empty)
+        {
+            throw new Exception("RecordId es requerido.");
+        }
+        var rosterId = await _context.Rosters.FirstOrDefaultAsync(r => r.RecordId == signature);
+        if (rosterId == null)
+        {
+            throw new ApiException("No existe el maestro.");
+        }
+        return await GetFullInfoRosterAsync(rosterId.RosterId);
     }
 
 
-    public async Task<RosterDto> GetRosterDTO(int id)
+    public async Task<RosterDto> GetFullInfoRosterAsync(int id)
     {
-        var roster = from c in _context.Set<Roster>()
-            join m in _context.Set<Campus>() on c.CampusId equals m.CampusId 
-            where c.RosterId == id select new
+        var roster = from r in _context.Rosters
+            join c in _context.Campuses on r.CampusId equals c.CampusId 
+            join s in _context.States on c.StateId equals s.StateId
+            join u in _context.Universities on c.UniversityId equals u.UniversityId
+            where r.RosterId == id select new
             {
-                RosterId = c.RosterId,
-                TeacherName = c.TeacherName,
-                TeacherLastname1 = c.TeacherLastname1,
-                TeacherLastname2 = c.TeacherLastname2,
-                CampusId = c.CampusId,
-                CampusName = m.Name
+                RosterId = r.RosterId,
+                RecordId = r.RecordId,
+                TeacherName = r.TeacherName,
+                TeacherLastname1 = r.TeacherLastname1,
+                TeacherLastname2 = r.TeacherLastname2,
+                CampusId = r.CampusId,
+                CampusName = c.Name,
+                StateName = s.Name,
+                StateId = s.StateId,
+                UniversityName = u.Name,
+                UniversityId = u.UniversityId
             };
         var res = (await roster.AsNoTracking().ToListAsync())?.Select( x => 
             new RosterDto
             {
                 RosterId = x.RosterId,
+                RecordId = x.RecordId,
                 TeacherName = x.TeacherName,
                 TeacherLastname1 = x.TeacherLastname1,
                 TeacherLastname2 = x.TeacherLastname2,
                 CampusId = x.CampusId,
                 CampusName = x.CampusName,
+                StateName = x.StateName,
+                StateId = x.StateId,
+                UniversityName = x.UniversityName,
+                UniversityId = x.UniversityId
             }).SingleOrDefault();
         return res;
     }
