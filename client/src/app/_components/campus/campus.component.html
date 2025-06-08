@@ -29,7 +29,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of teacherList" [id]="item.teacherRecordId" class="teacher-row"
+          <tr *ngFor="let item of teacherList" [id]="item.rosterRecordId" class="teacher-row"
             (dblclick)="onRowDoubleClick(item)">
             <td>{{ item.firstLastName}}</td>
             <td>{{ item.secondLastName}}</td>

@@ -287,7 +287,7 @@ public class RatingRepo: IRatingRepo
 
     }
 
-    public async Task<TableData<RankingTopTeacherDTO>> GetRankingTopTeacherAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0, bool sortByRank = false, string search = null)
+    public async Task<TableData<CampusTeacherListDTO>> GetRankingTopTeacherAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0, bool sortByRank = false, string search = null)
     {
         var ranksQuery = (
             from r in _context.Rosters
@@ -312,7 +312,7 @@ public class RatingRepo: IRatingRepo
                 RosterRecordId = r.RecordId
             }
             by new { r.RecordId, k.CampusId } into ranking
-            select new RankingTopTeacherDTO
+            select new CampusTeacherListDTO
             {
                 TeacherRecordId = ranking.First().RosterRecordId.ToString(),
                 Name = ranking.First().TeacherName,
@@ -374,7 +374,7 @@ public class RatingRepo: IRatingRepo
                 rankNumber++;
             }
         }
-        return new TableData<RankingTopTeacherDTO>
+        return new TableData<CampusTeacherListDTO>
         {
             Data = ranks,
             PageNumber = pageNumber,

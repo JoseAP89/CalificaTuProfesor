@@ -319,4 +319,12 @@ pub const BLACK_LIST_WORDS: phf::Set<&'static str> = phf_set! {
     "puñal",
     "pueñeta",
     "putisima",
+    "punetas",
+    "petisima",
+    "pendejisimo",
+    "mariconisomo",
+    "putana",
+    "chupapanocha",
+    "putisimo",
+    "laconchadetumadre",
 };

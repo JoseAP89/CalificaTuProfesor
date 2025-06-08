@@ -1,7 +1,7 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, debounceTime, delay, finalize, fromEvent, map, of } from 'rxjs';
-import { RankingTopTeacher, Vessel } from 'src/app/_models/business';
+import { Vessel } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 import { RatingService } from 'src/app/_services/rating.service';
 import { RosterService } from 'src/app/_services/roster.service';

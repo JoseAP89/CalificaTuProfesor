@@ -199,20 +199,16 @@ export interface RankingDTO {
 }
 
 export interface CampusTeacherList {
-  teacherRecordId: string;
+  rosterRecordId: string;
   name: string;
   firstLastName: string;
   secondLastName: string;
   totalComments: number;
   averageGrade: number;
-}
-
-export interface RankingTopTeacher extends CampusTeacherList {
   campusId: number;
   campusName: string;
   rank: number;
   campusRecordId?: string;
-  rosterRecordId?: string;
 }
 
 export interface NotificationDTO {

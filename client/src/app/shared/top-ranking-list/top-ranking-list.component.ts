@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { RankingTopTeacher } from 'src/app/_models/business';
+import { CampusTeacherList } from 'src/app/_models/business';
 
 @Component({
   selector: 'app-top-ranking-list',
@@ -9,7 +9,7 @@ import { RankingTopTeacher } from 'src/app/_models/business';
 export class TopRankingListComponent {
   @Input() title: string= "Top Ranking";
   @Input() showCampusName = true;
-  @Input() rankTeacherList: Array<RankingTopTeacher> = [];
+  @Input() rankTeacherList: Array<CampusTeacherList> = [];
 
   /**
    *
@@ -17,7 +17,7 @@ export class TopRankingListComponent {
   constructor(private renderer: Renderer2) {
   }
 
-  getColorStar(rank: RankingTopTeacher) {
+  getColorStar(rank: CampusTeacherList) {
     let colorClass;
     const starGrade = rank.averageGrade;
     if (starGrade == 0) {

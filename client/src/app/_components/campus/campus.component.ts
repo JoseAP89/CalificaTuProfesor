@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, Renderer2, ViewChild } from '@angular
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs';
-import { Campus, CampusTeacherList, RankingTopTeacher } from 'src/app/_models/business';
+import { Campus, CampusTeacherList } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 import { RatingService } from 'src/app/_services/rating.service';
 
@@ -18,7 +18,7 @@ export class CampusComponent implements OnInit, AfterViewInit {
   public search: string;
   public campusInfo: Campus;
   public teacherList: Array<CampusTeacherList> = [];
-  public rankTeacherList: Array<RankingTopTeacher> = [];
+  public rankTeacherList: Array<CampusTeacherList> = [];
 
   public pageSizeOptions = [3,5,10,20];
   public totalLength = 0;
@@ -95,8 +95,8 @@ export class CampusComponent implements OnInit, AfterViewInit {
   }
 
   onRowDoubleClick(row: CampusTeacherList){
-    if(row?.teacherRecordId)
-      this.router.navigate([`/maestro/${row.teacherRecordId}`]); 
+    if(row?.rosterRecordId)
+      this.router.navigate([`/maestro/${row.rosterRecordId}`]); 
   }
 
   getTeacherList(){

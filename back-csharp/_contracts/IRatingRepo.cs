@@ -21,5 +21,5 @@ public interface IRatingRepo
     /// <param name="pageNumber"></param>
     /// <param name="sortByRank"></param>
     /// <returns></returns>
-    Task<TableData<RankingTopTeacherDTO>> GetRankingTopTeacherAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0, bool sortByRank = false, string search = null);
+    Task<TableData<CampusTeacherListDTO>> GetRankingTopTeacherAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0, bool sortByRank = false, string search = null);
 }
