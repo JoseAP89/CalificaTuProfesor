@@ -1,6 +1,6 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, debounceTime, delay, finalize, fromEvent, map, of } from 'rxjs';
+import { Observable, Subject, Subscription, debounceTime, delay, finalize, fromEvent, map, of, takeUntil } from 'rxjs';
 import { Vessel } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 import { RatingService } from 'src/app/_services/rating.service';
@@ -16,8 +16,10 @@ export enum TypeOfSearch {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
+  private destroy$ = new Subject<void>();
+  private keyupSubscription: Subscription;
   public searchValue: string;
   public selectedOption: Vessel;
   public options: Observable<Vessel[][]>;
@@ -31,18 +33,26 @@ export class HomeComponent implements OnInit {
     private compusService: CampusService,
     private rosterService: RosterService,
     private router: Router,
-    private ratingService: RatingService,
-    private renderer: Renderer2
+    private elRef: ElementRef
   ) {
     this.options = of([]);
     this.searchValue = '';
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    if (this.keyupSubscription) {
+      this.keyupSubscription.unsubscribe();
+    }
+  }
+
   ngOnInit(): void {
-    let searchValueInput = document.querySelector("#search-value");
+    let searchValueInput = this.elRef.nativeElement.querySelector("#search-value");
     const keyup$ = fromEvent(searchValueInput, 'keyup');
-    keyup$.pipe(
-      debounceTime(400)
+    this.keyupSubscription = keyup$.pipe(
+      debounceTime(400),
+      takeUntil(this.destroy$)
     ).subscribe( (event: any) => {
       this.onSearch(event);
     });
@@ -51,7 +61,6 @@ export class HomeComponent implements OnInit {
 
   onSearch(input: any) {
     this.searchValue = input.target.value;
-    //this.searchValue = input;
     this.showOptions = true;
     if (this.typeOfSearch == TypeOfSearch.Profesor) {
       this.options = this.rosterService.getTeacherCampus(this.searchValue).pipe(

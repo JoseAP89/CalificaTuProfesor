@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import { finalize } from 'rxjs';
+import { debounceTime, finalize, fromEvent, Subject, Subscription, takeUntil } from 'rxjs';
 import { Campus, CampusTeacherList } from 'src/app/_models/business';
 import { CampusService } from 'src/app/_services/campus.service';
 import { RatingService } from 'src/app/_services/rating.service';
@@ -11,9 +11,11 @@ import { RatingService } from 'src/app/_services/rating.service';
   templateUrl: './campus.component.html',
   styleUrls: ['./campus.component.scss']
 })
-export class CampusComponent implements OnInit, AfterViewInit {
+export class CampusComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  private keyupSubscription: Subscription;
+  private destroy$ = new Subject<void>();
   private campusRecordId: string;
   public search: string;
   public campusInfo: Campus;
@@ -30,13 +32,30 @@ export class CampusComponent implements OnInit, AfterViewInit {
     private campusService: CampusService,
     private ratingService: RatingService,
     private router: Router,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private elRef: ElementRef
   ) {
     this.search = "";
     this.pageSize = this.pageSizeOptions[0];
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    if (this.keyupSubscription) {
+      this.keyupSubscription.unsubscribe();
+    }
+  }
+
   ngOnInit(): void {
+    let searchValueInput = this.elRef.nativeElement.querySelector("#search-value");
+    const keyup$ = fromEvent(searchValueInput, 'keyup');
+    this.keyupSubscription = keyup$.pipe(
+      debounceTime(400),
+      takeUntil(this.destroy$)
+    ).subscribe( (event: any) => {
+      this.onSearch(event);
+    });
     this.campusRecordId = this.route.snapshot.paramMap.get('recordId') ?? "";
     this.getTeacherList();
     this.ratingService.getRankingTopTeacherList(10, 0, this.campusRecordId, true)
@@ -61,7 +80,7 @@ export class CampusComponent implements OnInit, AfterViewInit {
   }
 
   updateStylingTeacherRankList(){
-    const rankingContainer = document.querySelector(".campus-main-grid");
+    const rankingContainer = this.elRef.nativeElement.querySelector(".campus-main-grid");
     if (rankingContainer) {
       const gridTemplateColumns = this.rankTeacherList && this.rankTeacherList.length > 0 ?
         '2fr 1fr':
@@ -81,16 +100,15 @@ export class CampusComponent implements OnInit, AfterViewInit {
     }, 100);
   }
 
-  onSearchChange(search: string){
-    this.ratingService.getRankingTopTeacherList(20, 0, this.campusRecordId, false, search).subscribe({
-      next: res => {
-        this.teacherList = res.data;
-      }
-    });
+  onSearch(input: any){
+    this.search = input.target.value;
+    this.pageNumber = 0;
+    this.getTeacherList();
   }
 
   onDeleteSearch(){
     this.search = "";
+    this.pageNumber = 0;
     this.getTeacherList();
   }
 
@@ -104,6 +122,12 @@ export class CampusComponent implements OnInit, AfterViewInit {
       next: res => {
         this.teacherList = res.data;
         this.totalLength = res.totalElements;
+        this.pageSize = res.pageSize;
+        this.pageNumber = res.pageNumber;
+        if (this.paginator) {
+          this.paginator.pageIndex = this.pageNumber;
+          this.paginator.pageSize = this.pageSize;
+        }
       }
     });
   }

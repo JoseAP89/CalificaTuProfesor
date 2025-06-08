@@ -7,8 +7,8 @@
 <section>
   <div class="search-input-box">
     <mat-form-field class="mat-form-field-box">
-      <mat-label>Buscar profesor</mat-label>
-      <input matInput type="search" [(ngModel)]="search" name="search" (ngModelChange)="onSearchChange($event)"/>
+      <mat-label>Buscar maestro</mat-label>
+      <input #teacherSearch matInput id="search-value" type="search" [(ngModel)]="search" name="search"/>
       <button mat-icon-button matSuffix aria-label="Buscar" (click)="onDeleteSearch()">
         <mat-icon>{{'close'}}</mat-icon>
       </button>
@@ -45,7 +45,7 @@
       <div class="paginator-box">
         <mat-paginator id="mat-paginator-box" class="paginator-item" [pageSizeOptions]="pageSizeOptions"
           itemsPerPageLabel="tamaño de página: " nextPageLabel="siguiente" previousPageLabel="anterior"
-          (page)="handlePageEvent($event)" [length]="totalLength" [pageSize]="pageSize" [pageSizeOptions]=""
+          (page)="handlePageEvent($event)" [length]="totalLength" [pageSize]="pageSize"
           [showFirstLastButtons]='true' aria-label="Slecciona la página">
         </mat-paginator>
       </div>
