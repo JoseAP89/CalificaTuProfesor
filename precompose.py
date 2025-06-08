@@ -37,12 +37,22 @@ def install_cargo():
 
 def main():
     # Check and install dependencies
+    opt_delete_volumes = ""
+    if len(sys.argv) > 1 and (sys.arg[1] == "v" or sys.arg[1] == "-v" ):
+        opt_delete_volumes = "-v"
+    
+    root = os.getcwd()
+    client_dir = os.path.join(root, "client")
+
+    print("\n🛠️ Removing dangling images...\n")
+    run('docker rmi $(docker images -f "dangling=true" -q)', cwd=root)
+    print(f"\n🛠️ Stopping and removing containers{ '.' if opt_delete_volumes == '' else ' and deleting volumes' }...\n")
+    run(f"docker compose down {opt_delete_volumes}", cwd=root)
+
     install_npm()
     install_cargo()
 
     print("\n🛠️ Building Angular project...\n")
-    root = os.getcwd()
-    client_dir = os.path.join(root, "client")
 
     run("npm install", cwd=client_dir)
     run("npm run build -- --configuration production", cwd=client_dir)
