@@ -16,6 +16,10 @@ const routes: Routes = [
     loadChildren: () => import('./_components/add-items/add-items.module').then(m => m.AddItemsComponentModule)
   },
   {
+    path: 'maestros',
+    loadChildren: () => import('./_components/teachers-list/teachers-list.module').then(m => m.TeachersListModule)
+  },
+  {
     path: 'maestro/:recordId',
     loadChildren: () => import('./_components/roster/roster.module').then(m => m.RosterComponentModule)
   },

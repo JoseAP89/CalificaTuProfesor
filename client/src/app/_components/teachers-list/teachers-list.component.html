@@ -1,0 +1,61 @@
+<div class="section-title">
+  <p>Tus Maestros</p>
+  <p class="subtitle">Lista completa</p>
+</div>
+
+<!-- http://localhost:4200/campus/f591544f-e366-4c3e-bc34-6060a63d65c6 -->
+<section>
+  <div class="search-input-box">
+    <mat-form-field class="mat-form-field-box">
+      <mat-label>Buscar profesor</mat-label>
+      <input matInput type="search" [(ngModel)]="search" name="search" (ngModelChange)="onSearchChange($event)"/>
+      <button mat-icon-button matSuffix aria-label="Buscar" (click)="onDeleteSearch()">
+        <mat-icon>{{'close'}}</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+</section>
+<section class="campus-main-grid">
+  <div class="teachers-tile">
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th><span class="header-icon">👤</span>Apellido Paterno</th>
+            <th>Apellido Materno</th>
+            <th>Nombre</th>
+            <th><span class="header-icon">💬</span># Comentarios</th>
+            <th><span class="header-icon">⭐</span>Puntaje promedio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of teacherList" [id]="item.teacherRecordId" class="teacher-row"
+            (dblclick)="onRowDoubleClick(item)">
+            <td>{{ item.firstLastName}}</td>
+            <td>{{ item.secondLastName}}</td>
+            <td>{{ item.name }}</td>
+            <td class="comments-cell">{{ item.totalComments}}</td>
+            <td class="grade-cell grade-A">{{ item.averageGrade}}</td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <div class="paginator-box">
+        <mat-paginator id="mat-paginator-box" class="paginator-item" [pageSizeOptions]="pageSizeOptions"
+          itemsPerPageLabel="tamaño de página: " nextPageLabel="siguiente" previousPageLabel="anterior"
+          (page)="handlePageEvent($event)" [length]="totalLength" [pageSize]="pageSize" [pageSizeOptions]=""
+          [showFirstLastButtons]='true' aria-label="Slecciona la página">
+        </mat-paginator>
+      </div>
+
+    </div>
+
+  </div>
+  <div class="top-board-tile" *ngIf="rankTeacherList && rankTeacherList.length > 0">
+    <app-top-ranking-list 
+      [title]="'Top 10 Ranking Global'"
+      [rankTeacherList]="rankTeacherList"
+      [showCampusName]="false"
+    ></app-top-ranking-list>
+  </div>
+</section>

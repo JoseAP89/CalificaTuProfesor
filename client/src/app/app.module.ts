@@ -33,6 +33,7 @@ import { SharedModule } from './shared/shared.module';
 import { AddNotificationComponent } from './_components/dialogs/add-notification/add-notification.component';
 import { registerLocaleData } from '@angular/common';
 import localeEsMX from '@angular/common/locales/es-MX';
+import { TeachersListComponent } from './_components/teachers-list/teachers-list.component';
 
 // Register the locale data
 registerLocaleData(localeEsMX, 'es-MX');

@@ -1,0 +1,208 @@
+.search-input-box {
+    margin-top: 10px;
+    padding: 12px;
+    .mat-form-field-box {
+        width: 50vw;
+    }
+}
+.campus-main-grid {
+    display: flex;
+    gap: 4px;
+
+    .top-board-tile, .teachers-tile {
+        margin-top: 2px;
+    }
+
+    .teachers-tile {
+        flex: 2;
+        padding: 14px;
+        flex-shrink: 1;
+
+        :root {
+            --university-primary: #003366;
+            --university-secondary: #E6F2FF;
+            --accent-color: #FF6600;
+            --text-dark: #333333;
+            --text-light: #FFFFFF;
+            --border-color: #DDDDDD;
+            --success-color: #28A745;
+            --warning-color: #FFC107;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #F8F9FA;
+            color: var(--text-dark);
+        }
+
+        .table-container {
+            width: 100%;
+            margin: 0 auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            background-color: white;
+            overflow-x: auto;
+            display: flex;
+            flex-shrink: 2;
+            flex-direction: column;
+            // mat-mdc-paginator-page-size
+            // mat-mdc-paginator-range-actions
+            tr.teacher-row:hover {
+                background-color: #E3F2FD;
+                cursor: pointer;
+            }
+        }
+
+        h1 {
+            color: var(--university-primary);
+            text-align: center;
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        thead {
+            background-color: var(--university-primary);
+            color: var(--text-light);
+        }
+
+        th {
+            padding: 16px 12px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+        }
+
+        tbody tr:hover {
+            background-color: var(--university-secondary);
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        td {
+            padding: 14px 12px;
+            color: var(--text-dark);
+        }
+
+        .grade-cell {
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .grade-A {
+            color: var(--success-color);
+        }
+
+        .grade-B {
+            color: #17A2B8;
+        }
+
+        .grade-C {
+            color: var(--warning-color);
+        }
+
+        .grade-D {
+            color: #DC3545;
+        }
+
+        .comments-cell {
+            text-align: center;
+        }
+
+        .header-icon {
+            margin-right: 8px;
+        }
+    }
+
+    .top-board-tile {
+        flex:1;
+        padding: 14px;
+    }
+
+}
+@media (max-width: 950px) {
+    .teachers-tile {
+        flex: 1 !important;
+    }
+    .top-board-tile {
+        flex: 1;
+    }
+    
+}
+@media (max-width: 850px) {
+    .campus-main-grid{
+        flex-direction: column;
+    }
+    .mat-form-field-box {
+        width: 92vw !important;
+    }
+    $font-size: 0.8rem;
+    .table-container {
+        th, td {
+            font-size: $font-size;
+        }
+        overflow-x: scroll !important;
+        /* Force scrollbar */
+        -webkit-overflow-scrolling: touch;
+        /* Smooth scrolling on iOS */
+    }
+    .paginator .paginator-item{
+        font-size: $font-size;
+    }
+
+}
+@media (max-width: 600px) {
+    $font-size: 0.6rem;
+    .campus-main-grid {
+        padding: 5px;
+    }
+    .table-container {
+        th, td {
+            font-size: $font-size;
+        }
+    }
+    ::ng-deep .mat-mdc-paginator-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 2px;
+    }
+    ::ng-deep mat-paginator .mat-mdc-paginator-range-actions {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-content: center;
+        flex-wrap: wrap-reverse;
+        gap: 2px;
+    }
+    ::ng-deep .mat-mdc-paginator-page-size {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+        flex-wrap: wrap;
+        gap: 2px;
+    }
+    ::ng-deep mat-paginator .mat-mdc-paginator-page-size {
+        width: 100%;
+    }
+}
