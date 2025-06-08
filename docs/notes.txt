@@ -1,6 +1,9 @@
 **** Notes about the tasks to be done ****
 
-+	add inputs to top-ranking-list to set height and width more easily
++	Add inputs to top-ranking-list to set height and width more easily
++	Add stored procedures to remove teachers, campus, universities, comments and alerts
+	in a simple way possible
++ 	Update the image containing the full database with its tables and relationships
 +       Add a page where it is focused on displaying global rankings and a complete list of teachers
 +	solve the issues when long processes are set as methods in ngFors on the teacher template,
 	some changes in the backend may be needed to optimize it:
