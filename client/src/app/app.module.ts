@@ -34,6 +34,7 @@ import { AddNotificationComponent } from './_components/dialogs/add-notification
 import { registerLocaleData } from '@angular/common';
 import localeEsMX from '@angular/common/locales/es-MX';
 import { TeachersListComponent } from './_components/teachers-list/teachers-list.component';
+import { LoadingInterceptor } from './_interceptors/loading.interceptor';
 
 // Register the locale data
 registerLocaleData(localeEsMX, 'es-MX');
@@ -64,7 +65,8 @@ registerLocaleData(localeEsMX, 'es-MX');
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
       multi: true
-    }
+    },
+     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

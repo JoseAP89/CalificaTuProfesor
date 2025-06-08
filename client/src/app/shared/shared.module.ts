@@ -19,6 +19,7 @@ import { StarComponent } from './star/star.component';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { LoadingComponent } from './loading/loading.component';
 
 
 const materialModules = [
@@ -39,7 +40,7 @@ const materialModules = [
 ];
 
 @NgModule({
-  declarations: [AlertMessageComponent, TopRankingListComponent, StarComponent],
+  declarations: [AlertMessageComponent, TopRankingListComponent, StarComponent, LoadingComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -48,6 +49,7 @@ const materialModules = [
   ],
   exports: [
     ...materialModules, AlertMessageComponent, TopRankingListComponent, StarComponent,
+    LoadingComponent,
     CommonModule,
     FormsModule,
     RouterModule,
