@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddUniversityComponent } from '../dialogs/add-university/add-university.component';
 import { AddCampusComponent } from '../dialogs/add-campus/add-campus.component';
 import { Subject, takeUntil } from 'rxjs';
+import { UseridService } from 'src/app/_services/userid.service';
 
 @Component({
   selector: 'app-add-items',
@@ -30,7 +31,10 @@ export class AddItemsComponent implements OnInit, OnDestroy {
   constructor(
     private dialog: MatDialog,
     private fb: FormBuilder,
-  ) {}
+    private useridService: UseridService,
+  ) {
+    this.useridService.setUserIdIfNotFound();
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();

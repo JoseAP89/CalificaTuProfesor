@@ -1,5 +1,6 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
+import { CommonService } from './common.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,14 +11,35 @@ export class UseridService implements OnDestroy {
   private _userId : BehaviorSubject<string> ;
 
   constructor(
+    private commonService: CommonService
   ) {
     this._userId = new BehaviorSubject<string>(null);
+    this.setUserIdIfNotFound();
+  }
+
+  public setUserIdIfNotFound() {
     let userId = localStorage.getItem(this._name);
+    console.log("userid:",userId)
+    console.log("userid:",!!userId)
     if (!!userId) {
       this.setCurrentUserId(userId);
     } else { // it generates a new userId if there is none
-      this.setCurrentUserId(crypto.randomUUID());
+      this.generateNewUserId();
     }
+
+  }
+
+  generateNewUserId() {
+    if (!!window?.crypto?.randomUUID) {
+      this.setCurrentUserId(crypto.randomUUID());
+    } else {
+      this.commonService.generateUserId().subscribe({
+        next: res => {
+          this.setCurrentUserId(res);
+        }
+      })
+    }
+
   }
 
   ngOnDestroy(): void {
@@ -40,7 +62,7 @@ export class UseridService implements OnDestroy {
     this._userId.next(value);
   }
 
-  public checkSetAndGetCurrentUserID(): Observable<string>{
+  public checkCurrentUserIdFromLocalStorage(): Observable<string>{
     let userId = localStorage.getItem(this._name);
     this._userId.next(userId);
     return this.currentUserId;

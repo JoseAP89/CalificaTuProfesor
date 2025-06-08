@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subject, firstValueFrom, iif, takeUntil } from 'rxjs';
+import { Observable, Subject, firstValueFrom, iif, takeUntil, timer } from 'rxjs';
 import { CommentContentDTO, CommentDTO, NotificationDTO, RosterDB, RosterRating, Scale, SortPaginator, UniversityArea, UserCommentNotification, Vessel, VoteDTO } from 'src/app/_models/business';
 import { RosterService } from 'src/app/_services/roster.service';
 import { RateComponent } from '../dialogs/rate/rate.component';
@@ -171,7 +171,7 @@ export class RosterComponent implements OnInit, AfterViewInit, OnDestroy{
     vote.userId = this.currentUserId;
     this.voteService.addVote(vote).subscribe({
       next: async res => {
-        let userId = await firstValueFrom(this.useridService.checkSetAndGetCurrentUserID());
+        let userId = await firstValueFrom(this.useridService.checkCurrentUserIdFromLocalStorage());
         if (!!!userId || !(typeof userId === 'string')) {
           this.useridService.setCurrentUserId(res.userId);
           this.currentUserId = res.userId;
@@ -251,8 +251,21 @@ export class RosterComponent implements OnInit, AfterViewInit, OnDestroy{
     })
   }
 
-  getComments(){
-    this.ratingService.getFullComments(this.roster.rosterId, this.pageSize, this.sortPage, this.pageNumber, this.currentUserId).subscribe({
+  async getComments(){
+    if (this.currentUserId) {
+      this.getFullComments();
+    } else {
+      timer(2_000)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(async () => {
+          this.currentUserId = await firstValueFrom(this.useridService.currentUserId);
+          this.getFullComments(this.currentUserId);
+        })
+    }
+  }
+
+  getFullComments(userId: string = null) {
+    this.ratingService.getFullComments(this.roster.rosterId, this.pageSize, this.sortPage, this.pageNumber, userId || this.currentUserId).subscribe({
       next: async res => {
         this.comments = res.data;
         this.pageNumber = res.pageNumber;

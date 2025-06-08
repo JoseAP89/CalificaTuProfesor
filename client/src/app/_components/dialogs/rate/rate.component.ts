@@ -174,7 +174,7 @@ export class RateComponent implements OnInit, OnDestroy {
       comment.rosterId = this.roster.rosterId!;
       comment.subjectName = this.subjectName.value;
       comment.studyFieldId = this.studyFieldId.value;
-      comment.userId = await firstValueFrom(this.useridService.checkSetAndGetCurrentUserID());
+      comment.userId = await firstValueFrom(this.useridService.checkCurrentUserIdFromLocalStorage());
       comment.grades = [];
       for (let i = 0; i < this._scales.length; i++) {
         const esc = this._scales[i];
