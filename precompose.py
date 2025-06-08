@@ -61,15 +61,10 @@ def main():
     rust_dir = os.path.join(root, "axum_server")
     run("cargo build --release", cwd=rust_dir)
 
-    print("\n🚀 Starting Bake Docker Compose...\n")
+    print("\n🚀 Starting Docker Compose...\n")
     try:
-        try:
-            command = "COMPOSE_BAKE=true docker compose up -d --build"
-            subprocess.run(command, shell=True, check=True, cwd=client_dir)
-        except subprocess.CalledProcessError as e:
-            print(f"\n🔧 Running docker compose without COMPOSE_BAKE\n")
-            command = "docker compose up -d --build"
-            subprocess.run(command, shell=True, check=True, cwd=client_dir)
+        command = "COMPOSE_BAKE=true docker compose up -d --build"
+        subprocess.run(command, shell=True, check=True, cwd=client_dir)
     except subprocess.CalledProcessError as e:
         print(f"\n🔧 Running docker-compose alternative\n")
         run("docker-compose -f compose.yaml up -d --build")
