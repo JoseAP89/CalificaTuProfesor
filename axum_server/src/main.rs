@@ -1,6 +1,5 @@
 use axum::{http::Method, Router};
 use tower_http::cors::{CorsLayer, Any};
-use std::net::SocketAddr;
 
 mod controllers;
 
