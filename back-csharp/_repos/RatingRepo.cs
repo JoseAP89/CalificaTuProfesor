@@ -347,7 +347,9 @@ public class RatingRepo: IRatingRepo
         }
         else if (sortByRank)
         {
-            ranksQuery = ranksQuery.OrderByDescending(r => r.AverageGrade)
+            ranksQuery = ranksQuery
+                .Where(r => r.AverageGrade > 0)
+                .OrderByDescending(r => r.AverageGrade)
                 .ThenBy(r => r.Name);
         }
         else
