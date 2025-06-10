@@ -4011,6 +4011,7 @@ INSERT INTO Campus(StateId, UniversityId, Name) VALUES
   (2, 40, 'BENEMÉRITA ESCUELA NORMAL URBANA FEDERAL FRONTERIZA'),
   (3, 41, 'BENEMÉRITA ESCUELA NORMAL URBANA PROFR. DOMINGO CARBALLO FÉLIX'),
   (30, 42, 'BENEMÉRITA ESCUELA NORMAL VERACRUZANA ENRIQUE C. RÉBSAMEN'),
+  (21, 43, 'BENEMÉRITA UNIVERSIDAD AUTÓNOMA DE PUEBLA - CAMPUS PUEBLA'),
   (21, 43, 'BENEMÉRITA UNIVERSIDAD AUTÓNOMA DE PUEBLA - UNIDAD REGIONAL DE HUAUCHINANGO'),
   (20, 44, 'BENEMÉRITA UNIVERSIDAD DE LA MIXTECA, SOCIEDAD CIVIL'),
   (20, 45, 'BENEMÉRITA UNIVERSIDAD DE OAXACA'),
@@ -10184,5 +10185,5 @@ INSERT INTO Scale(Code, Name, Description) VALUES
 ('EX', 'Expresión','Capacidad de comunicación clara y concisa con su clase.'),
 ('ME', 'Métodos','Uso de metodos de presentación que generan atención e interes en la clase.'),
 ('OR', 'Organización','Buena organicación de la enseñanza de los temas en la clase.'),
-('DI', 'Dificultad','La dificultad para obtener una calificación aprobatoria. No influye en el puntaje global.'),
+('DI', 'Dificultad','La dificultad para aprobar no afecta el puntaje global, pero si dos maestros empatan, el que tenga menor dificultad ocupará un rango más alto.'),
 ('RE', 'Realidad','Capacidad de explicar aplicaciones de la materia a la práctica o a su uso en el mundo laboral.');

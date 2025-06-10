@@ -8,6 +8,7 @@ public class CampusTeacherListDTO
     public string SecondLastName { get; set; }
     public int TotalComments { get; set; }
     public double AverageGrade { get; set; }
+    public double AverageDifficulty { get; set; }
     public int CampusId { get; set; }
     public string CampusName { get; set; }
     public int Rank { get; set; }

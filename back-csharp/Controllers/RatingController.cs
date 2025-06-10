@@ -127,7 +127,7 @@ public class RatingController : ControllerBase
     public async Task<ActionResult<TableData<CampusTeacherListDTO>>> GetRankingTopTeacherList(string campusRecordIdStr = "", int pageSize = 20, int pageNumber = 0, bool sortByRank = false, string search = null)
     {
         Guid campusRecordId = string.IsNullOrEmpty(campusRecordIdStr)? Guid.Empty : new Guid(campusRecordIdStr);
-        var res = await _uow.Ratings.GetRankingTopTeacherAsync(campusRecordId, pageSize, pageNumber, sortByRank, search);
+        var res = await _uow.Ratings.GetTeachersTableAsync(campusRecordId, pageSize, pageNumber, sortByRank, search);
         if (res == null)
         {
             return NotFound("Hubo un error obteniendo la lista de rankings.");

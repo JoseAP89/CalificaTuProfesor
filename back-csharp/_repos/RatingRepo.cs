@@ -9,6 +9,7 @@ using back_csharp.Middleware.models;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using System.Linq;
 
 namespace back_csharp._repos;
 
@@ -287,7 +288,7 @@ public class RatingRepo: IRatingRepo
 
     }
 
-    public async Task<TableData<CampusTeacherListDTO>> GetRankingTopTeacherAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0, bool sortByRank = false, string search = null)
+    public async Task<TableData<CampusTeacherListDTO>> GetTeachersTableAsync(Guid campusRecordId, int pageSize = 20, int pageNumber = 0, bool sortByRank = false, string search = null)
     {
         var ranksQuery = (
             from r in _context.Rosters
@@ -318,7 +319,16 @@ public class RatingRepo: IRatingRepo
                 Name = ranking.First().TeacherName,
                 FirstLastName = ranking.First().TeacherLastname1,
                 SecondLastName = ranking.First().TeacherLastname2,
-                AverageGrade = ranking.Where(row => row.ScaleCode != "DI").Average(row => row.Stars),
+                AverageGrade = ranking
+                    .Where(row => row.ScaleCode != "DI")
+                    .Any()
+                    ? ranking.Where(row => row.ScaleCode != "DI").Average(row => row.Stars)
+                    : 0.0,
+                AverageDifficulty = ranking
+                    .Where(row => row.ScaleCode == "DI")
+                    .Any()  // Check if any "DI" rows exist
+                    ? ranking.Where(row => row.ScaleCode == "DI").Average(row => row.Stars)
+                    : 0.0,
                 CampusName = ranking.First().CampusName,
                 CampusId = ranking.First().CampusId,
                 Rank = 0,
@@ -350,6 +360,7 @@ public class RatingRepo: IRatingRepo
             ranksQuery = ranksQuery
                 .Where(r => r.AverageGrade > 0)
                 .OrderByDescending(r => r.AverageGrade)
+                .ThenBy(r => r.AverageDifficulty) // if a tie, the teacher with less difficulty passes
                 .ThenBy(r => r.Name);
         }
         else

@@ -210,6 +210,7 @@ export interface CampusTeacherList {
   secondLastName: string;
   totalComments: number;
   averageGrade: number;
+  averageDifficulty: number;
   campusId: number;
   campusName: string;
   rank: number;
