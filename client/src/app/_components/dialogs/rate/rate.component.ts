@@ -182,7 +182,7 @@ export class RateComponent implements OnInit, OnDestroy {
         let grade = new Grade();
         grade.scaleId = esc.scaleId;
         let value = this.getScale(i) / (2.0 * 10.0);
-        grade.stars = Number(value.toFixed(1));
+        grade.stars = Number(value.toFixed(2));
         // Create Vote
         let vote = new Vote();
         vote.approval = null;

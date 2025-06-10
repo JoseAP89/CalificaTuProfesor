@@ -44,8 +44,13 @@ def main():
     root = os.getcwd()
     client_dir = os.path.join(root, "client")
 
-    print("\n🛠️ Removing dangling images...\n")
-    run('docker rmi $(docker images -f "dangling=true" -q)', cwd=root)
+     try:
+        print("\n🛠️ Removing dangling images...\n")
+        command = 'docker rmi $(docker images -f "dangling=true" -q)'
+        subprocess.run(command, shell=True, check=True, cwd=root)
+    except subprocess.CalledProcessError as e:
+        print(f"\n✅ No dangling images to remove.\n")
+
     print(f"\n🛠️ Stopping and removing containers{ '.' if opt_delete_volumes == '' else ' and deleting volumes' }...\n")
     run(f"docker compose down {opt_delete_volumes}", cwd=root)
 
