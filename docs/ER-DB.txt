@@ -1,5 +1,3 @@
-// https://dbdiagram.io/d/64d0317302bd1c4a5e53e35c
-
 Table "UniversityArea" {
   "UniversityAreaId" SERIAL [pk, increment]
   "Name" VARCHAR(300) [not null]
@@ -56,7 +54,6 @@ Table "Roster" {
   "ModifiedAt" timestamp
 }
 Ref:"Roster"."RosterId" < "Comment"."RosterId"
-Ref:"Roster"."RosterId" < "RosterScale"."RosterId"
 
 
 Table "Comment" {
@@ -102,14 +99,24 @@ Table "Scale" {
   "ModifiedAt" timestamp
 }
 Ref:"Scale"."ScaleId" < "Grade"."ScaleId"
-Ref:"Scale"."ScaleId" < "RosterScale"."ScaleId"
 
-
-Table "RosterScale" {
-  "RosterScaleId" SERIAL [pk, increment]
-  "RosterId" int [not null]
-  "ScaleId" int [not null]
-  "Grade" float(4) [default: 0]
-  "CreatedAt" timestamp [not null, default: `NOW()`]
-  "ModifiedAt" timestamp
+TABLE "NotificationType" {
+  "Notificationtypeid" SERIAL [pk, increment]
+  "Code" VARCHAR(3) [UNIQUE]
+  "Name" VARCHAR(100) [not null]
+  "Description" VARCHAR(200) [not null]
 }
+
+Ref:"NotificationType"."Notificationtypeid" < "Notification"."Notificationtypeid"
+
+TABLE "Notification" {
+  "Notificationid" SERIAL [pk, increment]
+  "Commentid" integer
+  "Notificationtypeid" INTEGER [not null]
+  "Message" VARCHAR(300)
+  "Userid" UUID [not null, default: `gen_random_uuid()`]
+  "Createdat" TIMESTAMP [not null, default: `NOW()`]
+}
+
+Ref: "Comment"."CommentId" < "Notification"."Commentid"
+
