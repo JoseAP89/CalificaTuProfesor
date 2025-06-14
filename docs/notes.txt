@@ -1,5 +1,9 @@
 **** Notes about the tasks to be done ****
 
++	solve the issues when long processes are set as methods in ngFors on the teacher template,
+	some changes in the backend may be needed to optimize it:
+	 - getAverageCommentGrade in roster
+	 - getTeacherScaleGrade in roster
 +	Add inputs to top-ranking-list to set height and width more easily
 +	Add stored procedures to remove:
 	* teachers, 
@@ -8,11 +12,7 @@
     * comments,
 	* alerts
 	in a simple way possible
-+       Add a page where it is focused on displaying global rankings and a complete list of teachers
-+	solve the issues when long processes are set as methods in ngFors on the teacher template,
-	some changes in the backend may be needed to optimize it:
-	 - getAverageCommentGrade in roster
-	 - getTeacherScaleGrade in roster
+
 +   Change Roster table name to Teacher, it is no longer a roster but a simple teacher table,
 	an all the modifications that that name change will entail
 +	Add a diagram to show how the services interact with each other on the docker network.

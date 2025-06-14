@@ -20,3 +20,5 @@ tags
 
 front/public/universities/*
 front/public/campuses/*
+
+*.env

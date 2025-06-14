@@ -10179,7 +10179,7 @@ INSERT INTO Campus(StateId, UniversityId, Name) VALUES
 
 INSERT INTO Scale(Code, Name, Description) VALUES
 ('MO', 'Modelo','Rol modelo para otros.'),
-('CL', 'Claridad','Claridad en la instrucción  y remarca puntos importantes y/o difíciles.'),
+('CL', 'Claridad','Brinda instrucciones claras y enfatiza los puntos importantes o difíciles.'),
 ('CO', 'Competencia','Dominio de los temas manejados en el curso.'),
 ('PR', 'Preparación','La preparación, atención y detalle que le da a sus clases.'),
 ('EX', 'Expresión','Capacidad de comunicación clara y concisa con su clase.'),
