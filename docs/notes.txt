@@ -1,9 +1,9 @@
 **** Notes about the tasks to be done ****
 
-+	solve the issues when long processes are set as methods in ngFors on the teacher template,
-	some changes in the backend may be needed to optimize it:
-	 - getAverageCommentGrade in roster
-	 - getTeacherScaleGrade in roster
++ 	Add Tags to describe a teacher better: 
+		- database
+		- backend
+		- frontend
 +	Add inputs to top-ranking-list to set height and width more easily
 +	Add stored procedures to remove:
 	* teachers, 
