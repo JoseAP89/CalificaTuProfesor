@@ -65,9 +65,9 @@
               <span class=''> &#10095; {{comment.studyField.name | titlecase}}</span>
             </div>
             <div class="individual-score">
-              <app-star [averageGrade]="getAverageCommentGrade(comment)"></app-star>
+              <app-star [averageGrade]="comment.averageGrade"></app-star>
             </div>
-            <div class="indv-numeric-score">{{getAverageCommentGrade(comment ) | number: '1.0-4'}}</div>
+            <div class="indv-numeric-score">{{comment.averageGrade| number: '1.0-4'}}</div>
           </div>
         </div>
       </div>

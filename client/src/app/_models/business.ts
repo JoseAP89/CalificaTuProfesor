@@ -156,6 +156,10 @@ export class CommentDTO {
   modifiedAt: string;
 }
 
+export class FullCommentDTO extends CommentDTO {
+  averageGrade?: number;
+}
+
 export interface UserCommentNotification extends CommentDTO{
   hasUserNotified: boolean;
 }

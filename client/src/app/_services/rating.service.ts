@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, ReplaySubject, firstValueFrom, iif, map, mergeMap, of, scheduled, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { CommentContentDTO, CommentDTO, CampusTeacherList, RosterRating, SortPaginator, TableData } from '../_models/business';
+import { CommentContentDTO, CommentDTO, CampusTeacherList, RosterRating, SortPaginator, TableData, FullCommentDTO } from '../_models/business';
 import { roundNumber } from '../_helpers/miscelaneous';
 
 @Injectable({
@@ -50,14 +50,14 @@ export class RatingService {
     return this.http.get<RosterRating>(url);
   }
 
-  public getFullComments(rosterId: number, pageSize: number, sortPage: SortPaginator, pageNumber: number = 0, currentUserId: string = null): Observable<TableData<CommentDTO>> {
+  public getFullComments(rosterId: number, pageSize: number, sortPage: SortPaginator, pageNumber: number = 0, currentUserId: string = null): Observable<TableData<FullCommentDTO>> {
     const url = `${this.baseUrl}/roster/fullComments/${rosterId}`;
     let params = new HttpParams()
       .set("pageSize", pageSize)
       .set("sortPage", sortPage)
       .set("pageNumber", pageNumber)
       .set("currentUserId", currentUserId);
-    return this.http.get<TableData<CommentDTO>>(url, {params});
+    return this.http.get<TableData<FullCommentDTO>>(url, {params});
   }
 
 

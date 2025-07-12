@@ -2,7 +2,7 @@ import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, Renderer2, V
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subject, firstValueFrom, iif, takeUntil, timer } from 'rxjs';
-import { CommentContentDTO, CommentDTO, NotificationDTO, RosterDB, RosterRating, Scale, SortPaginator, UniversityArea, UserCommentNotification, Vessel, VoteDTO } from 'src/app/_models/business';
+import { CommentContentDTO, CommentDTO, FullCommentDTO, NotificationDTO, RosterDB, RosterRating, Scale, SortPaginator, UniversityArea, UserCommentNotification, Vessel, VoteDTO } from 'src/app/_models/business';
 import { RosterService } from 'src/app/_services/roster.service';
 import { RateComponent } from '../dialogs/rate/rate.component';
 import { RatingService } from 'src/app/_services/rating.service';
@@ -41,7 +41,7 @@ export class RosterComponent implements OnInit, AfterViewInit, OnDestroy{
   public roster: RosterDB;
   public rosterRating: RosterRating;
   public scales: Scale[];
-  public comments: CommentDTO[] = [];
+  public comments: FullCommentDTO[] = [];
   public userCommentNotificationIds: Set<number> = new Set()
   public canComment: boolean = false;
 
@@ -271,6 +271,9 @@ export class RosterComponent implements OnInit, AfterViewInit, OnDestroy{
         this.pageNumber = res.pageNumber;
         this.pageSize = res.pageSize;
         this.totalLength = res.totalElements;
+        this.comments.forEach(comment => {
+          comment.averageGrade = this.getAverageCommentGrade(comment);
+        });
         setTimeout(() => {
           this.comments.forEach(comment => {
             this.paintThumbBtns(comment, comment.currentUserVote);
@@ -427,7 +430,7 @@ export class RosterComponent implements OnInit, AfterViewInit, OnDestroy{
     this.getComments();
   }
 
-  getAverageCommentGrade(comment: CommentDTO): number{
+  private getAverageCommentGrade(comment: CommentDTO): number{
     let numerator = 0;
     if(!comment?.grades) return 0;
     const difficultyScale = this.scales?.filter(s => s.code == "DI")[0];
