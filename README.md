@@ -99,7 +99,7 @@ It shows the looks of the teacher's comment section
 
 ## Gibberish and Rude words detection
 
-The application has a functionality in which it detects gibberish and/or rude words in the following scenarios:<br>
+The application has a functionality, built in Rust for performance, in which it detects gibberish and/or rude words in the following scenarios:<br>
 
 - When rating a teacher in the comment field
 - When editing your commentary over the teacher's comment section
