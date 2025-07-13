@@ -39,65 +39,65 @@ Rate your teachers in a safe and anonymous manner while maintaining a secure env
 ![picture alt](https://github.com/JoseAP89/CalificaTuProfesor/blob/main/docs/ER-DB.png "entidad-relacion")
 
 
-## Pages from the application
+# Pages from the application
 
 
-# Home page
+## Home page
 
 It shows the main search bar to look up your teacher or campus.
 
 ![picture alt](https://github.com/JoseAP89/CalificaTuProfesor/blob/main/docs/pictures/home-section.png "home-page")
 
 
-# Teachers page
+## Teachers page
 
 It shows the global list of teachers from all campuses
 
 ![picture alt](https://github.com/JoseAP89/CalificaTuProfesor/blob/main/docs/pictures/home-section.png "global-teacher-list-section")
 
 
-# Add items page
+## Add items page
 
 It shows three cards from which you can add a teacher, campus or a university to the system
 
 ![picture alt](https://github.com/JoseAP89/CalificaTuProfesor/blob/main/docs/pictures/add-items-section.png "add-items-section")
 
 
-# Our history page
+## Our history page
 
 It shows a brief descriotion of the project
 
 ![picture alt](https://github.com/JoseAP89/CalificaTuProfesor/blob/main/docs/pictures/our-history-section.png "our-history-section")
 
 
-# Footer page
+## Footer page
 
 It shows the footer design
 
 ![picture alt](https://github.com/JoseAP89/CalificaTuProfesor/blob/main/docs/pictures/footer-section.png "footer-section")
 
-# Teacher Info section
+## Teacher Info section
 
 It shows a general descripton of how a specific teacher performance
 
 ![picture alt](https://github.com/JoseAP89/CalificaTuProfesor/blob/main/docs/pictures/teacher-info-section.png "teacher-info-section")
 
 
-# Rate teacher section
+## Rate teacher section
 
 It shows the format where you rate a teacher, writing a comment about his performance and you grade the specific skill the app chooses to evaluate their performance
 
 ![picture alt](https://github.com/JoseAP89/CalificaTuProfesor/blob/main/docs/pictures/rate-teacher-section.png "rate-teacher-section")
 
 
-# Comment teacher section
+## Comment teacher section
 
 It shows the looks of the teacher's comment section
 
 ![picture alt](https://github.com/JoseAP89/CalificaTuProfesor/blob/main/docs/pictures/teacher-comments-section.png "teacher-comments-section")
 
 
-# Gibberish and Rude words detection
+## Gibberish and Rude words detection
 
 The application has a functionality in which it detects gibberish and rude words in the following scenarios:
     * When rating a teacher in the comment field
