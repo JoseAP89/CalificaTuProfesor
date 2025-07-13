@@ -65,7 +65,7 @@ It shows three cards from which you can add a teacher, campus or a university to
 
 ## Our history page
 
-It shows a brief descriotion of the project
+It shows a brief description of the project
 
 ![picture alt](https://github.com/JoseAP89/CalificaTuProfesor/blob/main/docs/pictures/our-history-section.png "our-history-section")
 
@@ -78,14 +78,14 @@ It shows the footer design
 
 ## Teacher Info section
 
-It shows a general descripton of how a specific teacher performance
+It shows a general descripton of a specific teacher performance
 
 ![picture alt](https://github.com/JoseAP89/CalificaTuProfesor/blob/main/docs/pictures/teacher-info-section.png "teacher-info-section")
 
 
 ## Rate teacher section
 
-It shows the format where you rate a teacher, writing a comment about his performance and you grade the specific skill the app chooses to evaluate their performance
+It shows the format where you rate a teacher, writing a comment about his class, and grade the specific skills the app uses to evaluate their performance
 
 ![picture alt](https://github.com/JoseAP89/CalificaTuProfesor/blob/main/docs/pictures/rate-teacher-section.png "rate-teacher-section")
 
