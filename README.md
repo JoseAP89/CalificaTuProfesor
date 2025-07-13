@@ -53,7 +53,7 @@ It shows the main search bar to look up your teacher or campus.
 
 It shows the global list of teachers from all campuses
 
-![picture alt](https://github.com/JoseAP89/CalificaTuProfesor/blob/main/docs/pictures/home-section.png "global-teacher-list-section")
+![picture alt](https://github.com/JoseAP89/CalificaTuProfesor/blob/main/docs/pictures/global-teacher-list-section.png "global-teacher-list-section")
 
 
 ## Add items page
@@ -99,12 +99,13 @@ It shows the looks of the teacher's comment section
 
 ## Gibberish and Rude words detection
 
-The application has a functionality in which it detects gibberish and rude words in the following scenarios:
-    * When rating a teacher in the comment field
-    * When editing your commentary over the teacher's comment section
-    * When adding the name, first and second lastname of a teacher
-    * When adding the name of the campus
-    * When adding the name of the university
+The application has a functionality in which it detects gibberish and/or rude words in the following scenarios:<br>
+
+- When rating a teacher in the comment field
+- When editing your commentary over the teacher's comment section
+- When adding the name, first and second lastname of a teacher
+- When adding the name of the campus
+- When adding the name of the university
 
 If the detector finds those kind of words it blocks the process and inform you that those words are not allowed.
 
