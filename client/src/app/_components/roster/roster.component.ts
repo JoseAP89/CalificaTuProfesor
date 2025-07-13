@@ -267,13 +267,14 @@ export class RosterComponent implements OnInit, AfterViewInit, OnDestroy{
   getFullComments(userId: string = null) {
     this.ratingService.getFullComments(this.roster.rosterId, this.pageSize, this.sortPage, this.pageNumber, userId || this.currentUserId).subscribe({
       next: async res => {
-        this.comments = res.data;
+        const comments = res.data;
+        comments.forEach(comment => {
+          comment.averageGrade = this.getAverageCommentGrade(comment);
+        });
+        this.comments = comments;
         this.pageNumber = res.pageNumber;
         this.pageSize = res.pageSize;
         this.totalLength = res.totalElements;
-        this.comments.forEach(comment => {
-          comment.averageGrade = this.getAverageCommentGrade(comment);
-        });
         setTimeout(() => {
           this.comments.forEach(comment => {
             this.paintThumbBtns(comment, comment.currentUserVote);
