@@ -110,7 +110,6 @@ export class RosterComponent implements OnInit, AfterViewInit, OnDestroy{
       next: (res: RosterDB) => {
         this.roster = res;
         this.getRosterRating();
-        this.getComments();
         this.getScales();
         this.ratingService.canComment(this.currentUserId, this.roster.rosterId).subscribe({
           next: value => { this.canComment = value;}
@@ -297,6 +296,7 @@ export class RosterComponent implements OnInit, AfterViewInit, OnDestroy{
     this.scaleService.getScales().subscribe({
       next: res => {
         this.scales = res;
+        this.getComments();
       }
     })
   }

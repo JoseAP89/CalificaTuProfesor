@@ -60,7 +60,6 @@ export class RatingService {
     return this.http.get<TableData<FullCommentDTO>>(url, {params});
   }
 
-
   public getRankingTopTeacherList(pageSize: number, pageNumber: number = 0, campusRecordIdStr: string = "" ,sortByRank: boolean = false, search: string = null): Observable<TableData<CampusTeacherList>> {
     const url = `${this.baseUrl}/teacher/ranking`;
     let params = new HttpParams()
